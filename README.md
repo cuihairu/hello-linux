@@ -39,4 +39,4 @@ npm run docs:dev
 
 ## 许可证
 
-[GPL-3.0](LICENSE)
+[Apache License 2.0](LICENSE)

@@ -222,7 +222,7 @@ export default defineConfig({
       text: '在 GitHub 上编辑此页面'
     },
     footer: {
-      message: '基于 GPL-3.0 许可发布',
+      message: '基于 Apache License 2.0 许可发布',
       copyright: '© 2024 Hello Linux'
     }
   }
