@@ -59,6 +59,7 @@
 ## 硬件篇
 
 - [硬件篇](./hardware/README.md)
+- [计算机体系结构](./hardware/architecture.md)
 - [CPU](./hardware/cpu.md)
 - [内存](./hardware/memory.md)
 - [存储设备](./hardware/storage.md)

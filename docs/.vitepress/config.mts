@@ -157,6 +157,7 @@ export default defineConfig({
           text: '硬件篇',
           items: [
             { text: '概述', link: '/hardware/' },
+            { text: '计算机体系结构', link: '/hardware/architecture' },
             { text: 'CPU', link: '/hardware/cpu' },
             { text: '内存', link: '/hardware/memory' },
             { text: '存储设备', link: '/hardware/storage' },

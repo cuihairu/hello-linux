@@ -1,124 +1,114 @@
 # 安装过程
 
-## 学习目标
+以 Ubuntu Desktop 为例，其他发行版流程类似。
 
-- 掌握 Ubuntu/Debian 的安装步骤
-- 掌握 RHEL/CentOS 的安装步骤
-- 了解两系安装的差异
-
-## 1. Ubuntu/Debian 安装
-
-### 1.1 启动安装程序
+## 1. 启动安装程序
 
 1. 插入启动盘，重启电脑
-2. 进入 BIOS/UEFI 设置，选择从 USB 启动
-3. 选择 "Install Ubuntu" 或 "Install Debian"
+2. 进入 BIOS/UEFI（开机按 Del/F2/F12）
+3. 选择从 USB 启动
+4. 选择 "Install Ubuntu"
 
-### 1.2 安装步骤
+## 2. 安装步骤
 
-1. **选择语言**：中文（简体）或 English
-2. **选择键盘布局**：默认即可
-3. **网络配置**：连接 Wi-Fi 或有线网络
-4. **安装类型**：
-   - 清除磁盘安装
-   - 其他选项（手动分区）
-5. **分区设置**：
-   - 选择 "其他选项" 进行手动分区
-   - 或使用默认的 "清除整个磁盘"
-6. **设置用户**：
-   - 输入用户名和密码
-   - 选择计算机名称
-7. **等待安装完成**
-8. **重启系统**
+### 语言和键盘
 
-### 1.3 安装后配置
+- 选择语言：中文（简体）
+- 键盘布局：默认即可
+
+### 网络
+
+- 连接 Wi-Fi 或有线网络
+- 安装过程中会下载更新
+
+### 安装类型
+
+| 选项 | 说明 | 适用场景 |
+|------|------|---------|
+| 清除磁盘安装 | 格式化整个磁盘 | 新电脑、不保留数据 |
+| 与其他系统共存 | 双系统 | 需要保留 Windows |
+| 手动分区 | 自定义分区 | 高级用户 |
+
+### 分区建议
+
+**简单方案**（新手推荐）：
+
+| 分区 | 大小 | 用途 |
+|------|------|------|
+| / | 剩余全部 | 系统和数据 |
+| swap | 内存大小 | 交换分区 |
+
+**标准方案**（服务器推荐）：
+
+| 分区 | 大小 | 用途 |
+|------|------|------|
+| /boot/efi | 512 MB | UEFI 引导（UEFI 模式） |
+| /boot | 1 GB | 引导文件 |
+| / | 20-50 GB | 系统 |
+| /home | 剩余 | 用户数据 |
+| swap | 内存大小 | 交换分区 |
+
+### 用户设置
+
+- 输入用户名和密码
+- 计算机名称（hostname）
+
+### 等待安装完成
+
+安装过程约 10-30 分钟，完成后重启。
+
+## 3. 安装后配置
+
+### 更新系统
 
 ```bash
-# 更新系统
+# Debian/Ubuntu
 sudo apt update
 sudo apt upgrade
 
-# 安装常用软件
-sudo apt install vim git curl wget htop
-
-# 配置时区
-sudo timedatectl set-timezone Asia/Shanghai
+# RHEL/CentOS/Fedora
+sudo dnf update
 ```
 
-## 2. RHEL/CentOS 安装
-
-### 2.1 启动安装程序
-
-1. 插入启动盘，重启电脑
-2. 进入 BIOS/UEFI 设置，选择从 USB 启动
-3. 选择 "Install Red Hat Enterprise Linux" 或 "Install CentOS"
-
-### 2.2 安装步骤
-
-1. **选择语言**：中文或 English
-2. **安装信息摘要**：
-   - **本地化**：日期和时间、键盘、语言支持
-   - **软件**：安装源、软件选择
-   - **系统**：安装目的地、网络和主机名
-3. **分区设置**：
-   - 自动配置分区
-   - 手动分区（自定义）
-4. **网络配置**：
-   - 启用网络接口
-   - 设置主机名
-5. **开始安装**
-6. **设置 root 密码**
-7. **创建用户**
-8. **等待安装完成**
-9. **重启系统**
-
-### 2.3 安装后配置
+### 安装常用工具
 
 ```bash
-# 更新系统
-sudo dnf update  # Fedora/RHEL 8+
-sudo yum update  # CentOS 7
+# Debian/Ubuntu
+sudo apt install vim git curl wget htop net-tools
 
-# 安装常用软件
-sudo dnf install vim git curl wget htop
+# RHEL/CentOS/Fedora
+sudo dnf install vim git curl wget htop net-tools
+```
 
-# 配置时区
+### 设置时区
+
+```bash
 sudo timedatectl set-timezone Asia/Shanghai
 ```
 
-## 3. 两系安装差异对比
+### 配置国内镜像源
 
-| 方面 | Debian/Ubuntu | RHEL/CentOS |
-|------|---------------|-------------|
-| 安装程序 | Ubiquity/Debian Installer | Anaconda |
-| 包管理 | APT | YUM/DNF |
-| 防火墙 | ufw | firewalld |
-| 网络配置 | Netplan | NetworkManager |
-| 服务管理 | systemd | systemd |
-| SELinux | 默认关闭 | 默认开启 |
+加速软件下载：
 
-## 4. 常见问题
+```bash
+# Ubuntu - 使用清华源
+sudo sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list
+sudo apt update
+```
 
-### 4.1 无法从 USB 启动
+## 4. 双系统注意事项
 
-- 检查 BIOS/UEFI 设置
-- 确认启动顺序
-- 尝试不同的 USB 端口
+安装双系统后，GRUB 会自动管理启动菜单：
 
-### 4.2 安装过程中网络连接失败
-
-- 检查网线连接
-- 确认 Wi-Fi 密码
-- 尝试手动配置网络
-
-### 4.3 分区后无法启动
-
-- 检查 BIOS/UEFI 启动模式
-- 确认 /boot 分区设置
-- 检查 GRUB 安装位置
+```bash
+# 更新 GRUB 菜单
+sudo update-grub    # Debian/Ubuntu
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg  # RHEL/CentOS
+```
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 安装 Linux](https://linux.vbird.org/linux_basic/0160startlinux.php)
+- [Ubuntu 安装教程](https://ubuntu.com/tutorials/install-ubuntu-desktop)
 - [Debian 安装手册](https://www.debian.org/releases/stable/installmanual)
 - [RHEL 安装指南](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/performing_a_standard_rhel_9_installation/index)
+- [Arch Wiki - Installation guide](https://wiki.archlinux.org/title/Installation_guide)
