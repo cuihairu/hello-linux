@@ -9,5 +9,9 @@
   },
   "devDependencies": {
     "vitepress": "^1.6.4"
+  },
+  "dependencies": {
+    "esbuild": "^0.28.2",
+    "vite": "^8.3.0"
   }
 }

@@ -2,13 +2,18 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Hello Linux',
-  description: 'Linux 学习笔记',
+  description: '从零开始学习 Linux',
   base: '/hello-linux/',
   lang: 'zh-CN',
   cleanUrls: true,
   lastUpdated: true,
   ignoreDeadLinks: true,
+  head: [
+    ['link', { rel: 'icon', href: '/hello-linux/logo.svg' }]
+  ],
   themeConfig: {
+    logo: '/logo.svg',
+    siteTitle: 'Hello Linux',
     nav: [
       { text: '首页', link: '/' },
       { text: '基础篇', link: '/basic/' },
@@ -189,7 +194,17 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/cuihairu/hello-linux' }
     ],
     search: {
-      provider: 'local'
+      provider: 'local',
+      options: {
+        translations: {
+          button: { buttonText: '搜索文档' },
+          modal: {
+            noResultsText: '没有找到结果',
+            resetButtonTitle: '清除查询',
+            footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' }
+          }
+        }
+      }
     },
     outline: {
       level: [2, 3],
@@ -201,6 +216,14 @@ export default defineConfig({
     docFooter: {
       prev: '上一篇',
       next: '下一篇'
+    },
+    editLink: {
+      pattern: 'https://github.com/cuihairu/hello-linux/edit/main/docs/:path',
+      text: '在 GitHub 上编辑此页面'
+    },
+    footer: {
+      message: '基于 GPL-3.0 许可发布',
+      copyright: '© 2024 Hello Linux'
     }
   }
 })
