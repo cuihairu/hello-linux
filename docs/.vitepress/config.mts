@@ -5,7 +5,7 @@ export default defineConfig({
   description: '从零开始学习 Linux',
   base: '/hello-linux/',
   lang: 'zh-CN',
-  cleanUrls: true,
+  cleanUrls: false,
   lastUpdated: true,
   ignoreDeadLinks: true,
   head: [
