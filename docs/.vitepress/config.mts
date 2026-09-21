@@ -16,18 +16,18 @@ export default defineConfig({
     siteTitle: 'Hello Linux',
     nav: [
       { text: '首页', link: '/' },
-      { text: '基础篇', link: '/basic/' },
-      { text: '命令篇', link: '/commands/' },
-      { text: '硬件篇', link: '/hardware/' },
-      { text: '系统管理', link: '/system-management/' },
-      { text: '网络篇', link: '/network/' }
+      { text: '基础篇', link: '/basic/overview' },
+      { text: '命令篇', link: '/commands/basic/file' },
+      { text: '硬件篇', link: '/hardware/architecture' },
+      { text: '系统管理', link: '/system-management/performance' },
+      { text: '网络篇', link: '/network/basics' }
     ],
     sidebar: {
       '/basic/': [
         {
           text: '基础篇',
           items: [
-            { text: '概述', link: '/basic/' },
+            { text: '概述', link: '/basic/overview' },
             { text: '技术概论', link: '/basic/overview' },
             {
               text: 'Linux 简介',
@@ -115,7 +115,7 @@ export default defineConfig({
         {
           text: '命令篇',
           items: [
-            { text: '概述', link: '/commands/' },
+            { text: '概述', link: '/commands/basic/file' },
             {
               text: '基本命令',
               collapsed: false,
@@ -161,7 +161,7 @@ export default defineConfig({
         {
           text: '硬件篇',
           items: [
-            { text: '概述', link: '/hardware/' },
+            { text: '概述', link: '/hardware/architecture' },
             { text: '计算机体系结构', link: '/hardware/architecture' },
             { text: 'CPU', link: '/hardware/cpu' },
             { text: '内存', link: '/hardware/memory' },
@@ -174,7 +174,7 @@ export default defineConfig({
         {
           text: '系统管理篇',
           items: [
-            { text: '概述', link: '/system-management/' },
+            { text: '概述', link: '/system-management/performance' },
             { text: '性能优化', link: '/system-management/performance' }
           ]
         }
@@ -183,7 +183,7 @@ export default defineConfig({
         {
           text: '网络篇',
           items: [
-            { text: '概述', link: '/network/' },
+            { text: '概述', link: '/network/basics' },
             { text: '网络基础', link: '/network/basics' },
             { text: '防火墙', link: '/network/firewall' }
           ]
