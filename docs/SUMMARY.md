@@ -70,6 +70,16 @@
 - [系统管理篇](./system-management/README.md)
 - [性能优化](./system-management/performance.md)
 
+## 服务器篇
+
+- [服务器篇](./server/README.md)
+- [Web 服务器](./server/web/nginx.md)
+- [数据库](./server/database/mysql.md)
+- [容器](./server/container/docker.md)
+- [监控](./server/monitoring/prometheus.md)
+- [DNS](./server/dns/bind.md)
+- [邮件](./server/mail/postfix.md)
+
 ## 网络篇
 
 - [网络篇](./network/README.md)

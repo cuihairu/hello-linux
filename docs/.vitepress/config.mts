@@ -19,6 +19,7 @@ export default defineConfig({
       { text: '基础篇', link: '/basic/overview' },
       { text: '命令篇', link: '/commands/basic/file' },
       { text: '硬件篇', link: '/hardware/architecture' },
+      { text: '服务器篇', link: '/server/web/nginx' },
       { text: '系统管理', link: '/system-management/performance' },
       { text: '网络篇', link: '/network/basics' }
     ],
@@ -186,6 +187,56 @@ export default defineConfig({
             { text: '概述', link: '/network/basics' },
             { text: '网络基础', link: '/network/basics' },
             { text: '防火墙', link: '/network/firewall' }
+          ]
+        }
+      ],
+      '/server/': [
+        {
+          text: '服务器篇',
+          items: [
+            { text: '概述', link: '/server/web/nginx' },
+            {
+              text: 'Web 服务器',
+              collapsed: false,
+              items: [
+                { text: 'Nginx', link: '/server/web/nginx' }
+              ]
+            },
+            {
+              text: '数据库',
+              collapsed: false,
+              items: [
+                { text: 'MySQL', link: '/server/database/mysql' }
+              ]
+            },
+            {
+              text: '容器',
+              collapsed: false,
+              items: [
+                { text: 'Docker', link: '/server/container/docker' }
+              ]
+            },
+            {
+              text: '监控',
+              collapsed: false,
+              items: [
+                { text: 'Prometheus + Grafana', link: '/server/monitoring/prometheus' }
+              ]
+            },
+            {
+              text: 'DNS',
+              collapsed: false,
+              items: [
+                { text: 'BIND', link: '/server/dns/bind' }
+              ]
+            },
+            {
+              text: '邮件',
+              collapsed: false,
+              items: [
+                { text: 'Postfix', link: '/server/mail/postfix' }
+              ]
+            }
           ]
         }
       ]
