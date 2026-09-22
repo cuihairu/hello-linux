@@ -73,6 +73,8 @@
 
 - [系统管理篇](./system-management/README.md)
 - [性能优化](./system-management/performance.md)
+- [备份与恢复](./system-management/backup-and-recovery.md)
+- [自动化运维](./system-management/automation.md)
 
 ## 服务器篇
 
