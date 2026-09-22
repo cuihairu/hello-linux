@@ -110,11 +110,11 @@ ls /sys/class/net/
 | 目录 | Debian/Ubuntu | RHEL/CentOS |
 |------|---------------|-------------|
 | Apache 配置 | `/etc/apache2/` | `/etc/httpd/` |
-| 网络配置 | `/etc/netplan/` | `/etc/sysconfig/network-scripts/` |
+| 网络配置 | `/etc/netplan/` | NetworkManager（RHEL 9 起 network-scripts 已移除） |
 | 日志 | `/var/log/syslog` | `/var/log/messages` |
 
 ## 参考资料
 
 - FHS 3.0 — [refspecs.linuxfoundation.org](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html)
-- Arch Wiki - File system hierarchy — [wiki.archlinux.org](https://wiki.archlinux.org/title/File_system_hierarchy)
+- Arch Wiki - File system hierarchy — [wiki.archlinux.org](https://wiki.archlinux.org/title/File_system)
 - `man hier` — Linux 手册页

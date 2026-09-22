@@ -351,6 +351,6 @@ last
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 系统信息](https://linux.vbird.org/linux_basic/0220filemanager.php#system_info)
+- [鸟哥的私房菜 - 文件与目录管理](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
 - [Arch Wiki - System maintenance](https://wiki.archlinux.org/title/System_maintenance)
 - [Linux man pages](https://man7.org/linux/man-pages/)

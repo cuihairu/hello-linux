@@ -86,11 +86,11 @@ upstream backend {
     server 192.168.1.102:8080;
 }
 
-# 使用 cookie
+# 使用 cookie（sticky 指令是 Nginx Plus 商业版特性，开源版请使用 ip_hash）
 upstream backend {
+    ip_hash;
     server 192.168.1.101:8080;
     server 192.168.1.102:8080;
-    sticky cookie srv_id expires=1h domain=.example.com path=/;
 }
 ```
 

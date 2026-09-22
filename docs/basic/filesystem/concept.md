@@ -92,8 +92,8 @@ sudo xfs_repair /dev/sdb1
 # 创建
 sudo mkfs.btrfs /dev/sdb1
 
-# 创建快照
-sudo btrfs subvolume snapshot /mnt /mnt/snapshot
+# 创建快照（目标路径不能位于被快照的子卷内）
+sudo btrfs subvolume snapshot /mnt /mnt/snapshots/my-snapshot
 ```
 
 ### 3.4 对比

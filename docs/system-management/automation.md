@@ -222,8 +222,16 @@ cap production deploy
 
 ```bash
 # Jenkins 是持续集成工具
-# 安装
+# Debian/Ubuntu：需先添加官方 apt 仓库
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt update
 sudo apt install jenkins
+
+# RHEL/CentOS：使用官方 yum 仓库
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo dnf install jenkins
 
 # 配置任务
 # 1. 创建新任务

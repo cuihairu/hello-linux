@@ -6,7 +6,7 @@ Linux 基础知识，涵盖概念、安装、文件系统、用户管理、服�
 
 ## 参考资料
 
-- [鸟哥的私房菜](https://linux.vbird.org/)
+- [鸟哥的私房菜](https://linux.vbird.org/linux_basic/centos7/)
 - [Arch Wiki](https://wiki.archlinux.org/)
 - [Debian 手册](https://www.debian.org/doc/manuals/debian-handbook/)
 - [RHEL 文档](https://docs.redhat.com/)

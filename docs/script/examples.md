@@ -114,11 +114,11 @@ DB_NAME="mydb"
 mkdir -p "$BACKUP_DIR"
 
 # 备份数据库
-mysqldump -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" | gzip > "$BACKUP_DIR/$DB_NAME_$DATE.sql.gz"
+mysqldump -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" | gzip > "$BACKUP_DIR/${DB_NAME}_$DATE.sql.gz"
 
 # 检查备份是否成功
 if [ $? -eq 0 ]; then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] 备份成功: $DB_NAME_$DATE.sql.gz"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] 备份成功: ${DB_NAME}_$DATE.sql.gz"
 else
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] 备份失败" >&2
     exit 1

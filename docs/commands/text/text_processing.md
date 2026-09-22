@@ -88,12 +88,14 @@ grep -A 3 -B 3 "pattern" file.txt
 
 ### 2.2 egrep/fgrep - 扩展搜索
 
-```bash
-# 使用扩展正则表达式
-egrep "pattern1|pattern2" file.txt
+`egrep` 和 `fgrep` 是 `grep -E` 和 `grep -F` 的别名。POSIX 已弃用（deprecated），部分新系统已移除，推荐直接用 `grep -E` / `grep -F`：
 
-# 固定字符串搜索（更快）
-fgrep "fixed string" file.txt
+```bash
+# 使用扩展正则表达式（等价于 egrep）
+grep -E "pattern1|pattern2" file.txt
+
+# 固定字符串搜索（更快，等价于 fgrep）
+grep -F "fixed string" file.txt
 ```
 
 ## 3. 文本替换
@@ -339,6 +341,6 @@ echo "hello" | tee file1.txt file2.txt
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 文本处理](https://linux.vbird.org/linux_basic/0330regularex.php)
+- [鸟哥的私房菜 - 正则表达式与文本处理](https://linux.vbird.org/linux_basic/centos7/0330regularex.php)
 - [Arch Wiki - Core utilities](https://wiki.archlinux.org/title/Core_utilities)
 - [Linux man pages](https://man7.org/linux/man-pages/)

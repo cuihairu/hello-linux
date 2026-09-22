@@ -287,13 +287,20 @@ sudo yum makecache
 ### 6.3 锁文件问题
 
 ```bash
-# APT 锁文件
-sudo rm /var/lib/dpkg/lock
-sudo rm /var/lib/apt/lists/lock
-sudo dpkg --configure -a
+# APT 锁文件问题：先确认没有 apt/dpkg 进程在运行
+ps aux | grep -E 'apt|dpkg' | grep -v grep
 
-# YUM 锁文件
-sudo rm /var/run/yum.pid
+# 如果有残留进程，结束它们
+sudo kill <PID>
+
+# 修复中断的安装
+sudo dpkg --configure -a
+sudo apt --fix-broken install
+
+# YUM 锁文件问题
+ps aux | grep yum | grep -v grep
+# 确认无进程后
+sudo rm -f /var/run/yum.pid
 ```
 
 ## 7. 两系对比
@@ -309,6 +316,6 @@ sudo rm /var/run/yum.pid
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 软件管理](https://linux.vbird.org/linux_basic/0520softwaremanager.php)
+- [鸟哥的私房菜 - 软件管理](https://linux.vbird.org/linux_basic/centos7/0520softwaremanager.php)
 - [Debian 手册 - APT](https://www.debian.org/doc/manuals/debian-handbook/apt.zh-cn.html)
 - [RHEL 文档 - DNF](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_software_with_the_dnf_tool/index)

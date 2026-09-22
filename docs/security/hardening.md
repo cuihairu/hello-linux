@@ -90,14 +90,15 @@ lcredit = -1
 ### 2.2 账户锁定
 
 ```bash
-# /etc/pam.d/common-auth
-auth required pam_tally2.so deny=5 unlock_time=900
+# /etc/pam.d/common-auth（现代发行版使用 pam_faillock，pam_tally2 已废弃）
+auth required pam_faillock.so preauth audit deny=5 unlock_time=900
+auth required pam_faillock.so authfail audit deny=5 unlock_time=900
 
 # 查看锁定账户
-sudo pam_tally2 --user username
+sudo faillock --user username
 
 # 解锁账户
-sudo pam_tally2 --user username --reset
+sudo faillock --user username --reset
 ```
 
 ### 2.3 sudo 配置
@@ -282,10 +283,13 @@ sudo cat /var/log/lynis.log
 ### 6.2 漏洞扫描
 
 ```bash
-# 安装 OpenVAS
-sudo apt install openvas
+# 安装 GVM（Greenbone Vulnerability Management，OpenVAS 后继项目）
+sudo apt install gvm
 
-# 运行扫描
+# 初始化（首次运行耗时较长）
+sudo gvm-setup
+
+# 启动
 sudo gvm-start
 
 # 访问 Web 界面

@@ -209,10 +209,10 @@ journalctl -k | grep -i oom
 # 查看进程 OOM 优先级
 cat /proc/PID/oom_score
 
-# 调整 OOM 优先级
-echo -1000 > /proc/PID/oom_adj
+# 调整 OOM 优先级（oom_score_adj 范围为 -1000 到 1000）
+echo -1000 > /proc/PID/oom_score_adj
 
-# 禁用 OOM Killer（不推荐）
+# 内核 OOM 时整机 panic（极端场景，不推荐用于服务器）
 echo 1 > /proc/sys/vm/panic_on_oom
 ```
 
@@ -243,6 +243,6 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 内存管理](https://linux.vbird.org/linux_basic/0440processcontrol.php#memory)
+- [鸟哥的私房菜 - 进程与内存管理](https://linux.vbird.org/linux_basic/centos7/0440processcontrol.php)
 - [Arch Wiki - Swap](https://wiki.archlinux.org/title/Swap)
 - [Linux man pages](https://man7.org/linux/man-pages/)

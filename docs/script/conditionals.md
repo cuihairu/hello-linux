@@ -219,11 +219,21 @@ esac
 
 ## 5. 三元运算符
 
+Bash 算术扩展 `$(( ))` 只支持数值三元，不支持字符串字面量：
+
 ```bash
-# 条件 ? 真值 : 假值
+# 数值三元（可用）
 age=20
-status=$((age >= 18 ? "成年" : "未成年"))
-echo $status
+status=$(( age >= 18 ? 1 : 0 ))
+echo "$status"   # 输出: 1
+
+# 字符串结果请用 if/else
+if [ $age -ge 18 ]; then
+    status="成年"
+else
+    status="未成年"
+fi
+echo "$status"   # 输出: 成年
 ```
 
 ## 6. 算术条件

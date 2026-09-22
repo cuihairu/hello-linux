@@ -37,6 +37,6 @@ Linux 命令参考手册，按功能分类整理，供其他章节交叉引用�
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 命令行](https://linux.vbird.org/linux_basic/0340bash.php)
+- [鸟哥的私房菜 - 命令行与 Shell](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
 - [Arch Wiki - Core utilities](https://wiki.archlinux.org/title/Core_utilities)
 - [Linux man pages](https://man7.org/linux/man-pages/)

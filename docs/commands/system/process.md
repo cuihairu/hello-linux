@@ -307,6 +307,6 @@ atrm job_number
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 进程管理](https://linux.vbird.org/linux_basic/0440processcontrol.php)
+- [鸟哥的私房菜 - 进程管理](https://linux.vbird.org/linux_basic/centos7/0440processcontrol.php)
 - [Arch Wiki - Process management](https://wiki.archlinux.org/title/Process_management)
 - [Linux man pages](https://man7.org/linux/man-pages/)

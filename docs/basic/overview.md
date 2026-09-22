@@ -258,7 +258,7 @@ shopt login_shell  # Bash
 | 源代码 | 开源（GPL） | 闭源（多数） | 闭源 |
 | 内核 | Linux 内核 | 各厂商内核 | NT 内核 |
 | 文件系统 | ext4/XFS/Btrfs | UFS/ZFS | NTFS |
-| 包管理 | APT/YUM/DNG | 各厂商工具 | MSI/EXE |
+| 包管理 | APT/DNF | 各厂商工具 | MSI/EXE |
 | Shell | Bash/Zsh | Bourne/Korn | CMD/PowerShell |
 | 权限模型 | DAC + MAC（SELinux） | DAC | ACL |
 | 配置方式 | 纯文本文件 | 纯文本文件 | 注册表 |
@@ -289,7 +289,7 @@ cat /proc/meminfo           # 内存详情
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 基础篇](https://linux.vbird.org/linux_basic/)
+- [鸟哥的私房菜 - 基础篇](https://linux.vbird.org/linux_basic/centos7/)
 - [Arch Wiki - General recommendations](https://wiki.archlinux.org/title/General_recommendations)
 - [The Linux Kernel documentation](https://www.kernel.org/doc/html/latest/)
 - [Linux man pages](https://man7.org/linux/man-pages/)

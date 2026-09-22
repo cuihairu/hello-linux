@@ -18,9 +18,7 @@ Linux 系统安全是运维和开发的基础技能，涵盖防火墙、入侵�
 | [防火墙](./firewall.md) | iptables、nftables、firewalld 配置 |
 | [入侵检测](./intrusion-detection.md) | Fail2Ban、AIDE、OSSEC |
 | [加密技术](./encryption.md) | GPG、SSL/TLS、SSH 加密 |
-| [安全加固](./hardening.md) | 系统加固、最小权限、审计 |
-| [安全审计](./audit.md) | 日志审计、合规检查、漏洞扫描 |
-| [网络安全](./network-security.md) | VPN、网络隔离、入侵防御 |
+| [安全加固](./hardening.md) | 系统加固、最小权限、审计、漏洞扫描 |
 
 ## 快速入门
 

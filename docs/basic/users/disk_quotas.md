@@ -23,6 +23,9 @@ sudo yum install quota      # RHEL/CentOS
 ### 初始化
 
 ```bash
+# 修改 fstab 后必须先重新挂载，否则 quotacheck 会失败
+sudo mount -o remount /home
+
 sudo quotacheck -cugm /home
 sudo quotaon /home
 ```

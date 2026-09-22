@@ -22,5 +22,5 @@
 
 - Patterson & Hennessy《计算机组成与设计》
 - Bryant & O'Hallaron《深入理解计算机系统》(CSAPP)
-- [Arch Wiki - Hardware](https://wiki.archlinux.org/title/Hardware)
+- [Arch Wiki - Hardware](https://wiki.archlinux.org/title/Category:Hardware)
 - [Linux Hardware Database](https://linux-hardware.org/)

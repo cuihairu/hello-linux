@@ -91,8 +91,12 @@ sudo timedatectl set-timezone Asia/Shanghai
 加速软件下载：
 
 ```bash
-# Ubuntu - 使用清华源
-sudo sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list
+# Ubuntu 24.04+（deb822 格式）
+sudo sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list.d/ubuntu.sources
+
+# 旧版 Ubuntu（单行格式）
+# sudo sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list
+
 sudo apt update
 ```
 

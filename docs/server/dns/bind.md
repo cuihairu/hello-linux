@@ -42,8 +42,11 @@ sudo apt install bind9 bind9utils bind9-doc
 sudo dnf install bind bind-utils
 
 # 启动并设置开机自启
-sudo systemctl start named
-sudo systemctl enable named
+# Debian/Ubuntu 服务名为 bind9，RHEL/CentOS 服务名为 named
+sudo systemctl start bind9      # Debian/Ubuntu
+sudo systemctl enable bind9
+# sudo systemctl start named     # RHEL/CentOS
+# sudo systemctl enable named
 ```
 
 ## 3. 配置文件

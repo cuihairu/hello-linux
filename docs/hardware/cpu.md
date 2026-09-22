@@ -145,7 +145,8 @@ cat /sys/devices/system/cpu/cpu0/cache/index0/type
 
 ```bash
 # 查看 CPU 支持的指令集扩展
-grep -o "sse\|avx\|avx2\|avx512\|aes\|vt-x\|svm" /proc/cpuinfo | sort -u
+grep -o "sse\|avx\|avx2\|avx512\|aes\|vmx\|svm" /proc/cpuinfo | sort -u
+# vmx = Intel VT-x，svm = AMD-V（/proc/cpuinfo 中没有 vt-x 这个 flag）
 
 # 查看完整 flags
 grep "flags" /proc/cpuinfo | head -1

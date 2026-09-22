@@ -9,7 +9,8 @@ Linux 服务器搭建和运维，涵盖 Web、数据库、容器、监控、DNS�
 | 章节 | 内容 |
 |------|------|
 | [Web 服务器](./web/nginx.md) | Nginx、Apache 安装配置、反向代理、HTTPS |
-| [数据库](./database/mysql.md) | MySQL、PostgreSQL 安装配置、备份恢复 |
+| [Apache](./web/apache.md) | Apache HTTP Server 详细配置 |
+| [数据库](./database/mysql.md) | MySQL 安装配置、备份恢复 |
 | [Redis](./redis.md) | Redis 安装配置、数据结构、持久化、集群 |
 | [FTP](./ftp.md) | vsftpd 安装配置、用户管理、安全设置 |
 | [容器](./container/docker.md) | Docker 安装、镜像管理、Compose、K8s 入门 |
@@ -22,7 +23,7 @@ Linux 服务器搭建和运维，涵盖 Web、数据库、容器、监控、DNS�
 | 场景 | 推荐方案 |
 |------|---------|
 | 个人博客 | Nginx + MySQL + WordPress |
-| 企业官网 | Nginx + PostgreSQL + Docker |
+| 企业官网 | Nginx + MariaDB + Docker |
 | 电商系统 | Nginx + MySQL 主从 + Redis + Docker |
 | 缓存加速 | Redis + Memcached |
 | 文件存储 | FTP + NFS + 对象存储 |

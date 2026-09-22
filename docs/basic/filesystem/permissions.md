@@ -176,4 +176,4 @@ setfacl -x u:guest file.txt
 
 - `man chmod`、`man chown`、`man getfacl`
 - Arch Wiki - File permissions and attributes — [wiki.archlinux.org](https://wiki.archlinux.org/title/File_permissions_and_attributes)
-- 鸟哥的私房菜 - 文件权限 — [linux.vbird.org](https://linux.vbird.org/linux_basic/0210filepermission.php)
+- 鸟哥的私房菜 - 文件权限 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0210filepermission.php)

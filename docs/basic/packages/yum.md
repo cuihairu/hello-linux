@@ -57,13 +57,20 @@ sudo dnf --enablerepo=epel install package_name
 
 ## 国内镜像源
 
+::: warning CentOS 7 已 EOL
+CentOS 7 于 2024-06-30 结束生命周期，官方仓库已下线。新系统请使用 Rocky Linux / AlmaLinux 9+ 或 Fedora。
+:::
+
 ```bash
 # 备份
 sudo cp -r /etc/yum.repos.d /etc/yum.repos.d.bak
 
-# 下载阿里源（CentOS 7）
-sudo wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+# CentOS 7 需切换到 vault 存档仓库（仅维护旧系统）
+sudo sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-*.repo
+sudo sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*.repo
 sudo yum makecache
+
+# Rocky Linux 9 / AlmaLinux 9 直接使用默认仓库或国内镜像即可
 ```
 
 ## YUM 与 DNF 对比

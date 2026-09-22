@@ -51,7 +51,7 @@ Unix 逐渐分裂为两大流派：
 
 ```bash
 # 查看系统是否遵循 POSIX
-getconf POSIX_VERSION
+getconf _POSIX_VERSION
 ```
 
 ## 2. GNU 运动（1983-1991）

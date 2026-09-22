@@ -79,11 +79,15 @@ find /path -mtime -7
 # 查找超过 30 天的文件
 find /path -mtime +30
 
-# 查找最近 1 小时访问的文件
+# 查找最近 1 天内访问的文件（-atime 单位为 24 小时）
 find /path -atime -1
 
-# 查找最近 10 分钟状态改变的文件
+# 查找最近 10 天内状态改变的文件（-ctime 单位为 24 小时）
 find /path -ctime -10
+
+# 按分钟查找（-amin/-cmin 单位为分钟）
+find /path -amin -60
+find /path -cmin -10
 ```
 
 ### 1.6 按权限查找

@@ -343,6 +343,6 @@ sudo tcpdump -r capture.pcap
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 网络命令](https://linux.vbird.org/linux_server/0110networkbasic.php)
+- [鸟哥的私房菜 - 网络基础](https://linux.vbird.org/linux_server/0110networkbasic.php)
 - [Arch Wiki - Network configuration](https://wiki.archlinux.org/title/Network_configuration)
 - [Linux man pages](https://man7.org/linux/man-pages/)

@@ -249,8 +249,9 @@ ln -s /path/to/dir link_name
 # 查看文件状态
 stat file.txt
 
-# 显示文件系统信息
+# 显示文件系统信息（BSD/macOS 语法；Linux 上用 `stat -f -c` 或 `df`）
 stat -f file.txt
+df -h file.txt
 ```
 
 ### 9.2 file - 查看文件类型
@@ -265,6 +266,6 @@ file -i file.txt
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 文件与目录管理](https://linux.vbird.org/linux_basic/0220filemanager.php)
+- [鸟哥的私房菜 - 文件与目录管理](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
 - [Arch Wiki - Core utilities](https://wiki.archlinux.org/title/Core_utilities)
 - [Linux man pages](https://man7.org/linux/man-pages/)

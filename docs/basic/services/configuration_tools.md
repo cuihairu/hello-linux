@@ -55,9 +55,9 @@ sudo hostnamectl set-hostname my-server
 ## 4. 防火墙
 
 ```bash
-# ufw (Debian/Ubuntu)
-sudo ufw enable
+# ufw (Debian/Ubuntu) —— 先放行 SSH 再启用，避免远程锁死
 sudo ufw allow 22/tcp
+sudo ufw enable
 sudo ufw status
 
 # firewalld (RHEL/CentOS)
@@ -78,5 +78,5 @@ sudo setenforce 0
 
 ## 参考资料
 
-- Arch Wiki - System administration — [wiki.archlinux.org](https://wiki.archlinux.org/title/System_administration)
+- Arch Wiki - System maintenance — [wiki.archlinux.org](https://wiki.archlinux.org/title/System_maintenance)
 - `man timedatectl`、`man hostnamectl`、`man nmcli`

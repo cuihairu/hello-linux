@@ -57,7 +57,8 @@ iface eth0 inet static
     gateway 192.168.1.1
     dns-nameservers 8.8.8.8 8.8.4.4
 
-# RHEL/CentOS - /etc/sysconfig/network-scripts/ifcfg-eth0
+# RHEL/CentOS 7 - /etc/sysconfig/network-scripts/ifcfg-eth0
+# 注意：RHEL 9 起 network-scripts 已移除，请改用 NetworkManager（nmcli）
 DEVICE=eth0
 BOOTPROTO=static
 ONBOOT=yes
@@ -202,7 +203,7 @@ sudo ip route change default via 192.168.1.1
 # Debian/Ubuntu - /etc/network/interfaces
 up route add -net 10.0.0.0/24 gw 192.168.1.1
 
-# RHEL/CentOS - /etc/sysconfig/network-scripts/route-eth0
+# RHEL/CentOS 7 - /etc/sysconfig/network-scripts/route-eth0（RHEL 9 起改用 nmcli）
 10.0.0.0/24 via 192.168.1.1
 
 # 使用 NetworkManager
@@ -420,8 +421,8 @@ sudo ip addr add $IP_ADDRESS/24 dev $INTERFACE
 sudo ip link set $INTERFACE up
 sudo ip route add default via $GATEWAY
 
-# 配置 DNS
-echo "nameserver $DNS" | sudo tee /etc/resolv.conf
+# 配置 DNS（每个 nameserver 必须单独一行）
+printf 'nameserver 8.8.8.8\nnameserver 8.8.4.4\n' | sudo tee /etc/resolv.conf
 
 echo "网络配置完成"
 ```

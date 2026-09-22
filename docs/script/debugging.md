@@ -201,7 +201,7 @@ MAX_FILES=5
 rotate_log() {
     local log_file=$1
     
-    if [ -f "$log_file" ] && [ $(stat -f%z "$log_file") -gt $MAX_SIZE ]; then
+    if [ -f "$log_file" ] && [ $(stat -c %s "$log_file") -gt $MAX_SIZE ]; then
         # 轮转日志文件
         for i in $(seq $((MAX_FILES-1)) -1 1); do
             if [ -f "$log_file.$i" ]; then

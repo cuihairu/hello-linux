@@ -56,12 +56,20 @@ sudo apt --fix-broken install
 
 ## 国内镜像源
 
-```bash
-# 备份
-sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+Ubuntu 24.04 起改用 deb822 格式（`/etc/apt/sources.list.d/ubuntu.sources`），旧版仍在 `/etc/apt/sources.list`：
 
-# 替换为清华源（Ubuntu 24.04）
-sudo sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list
+```bash
+# 备份（按实际文件路径选择）
+sudo cp /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.bak
+# 旧版 Ubuntu：
+# sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+
+# 替换为清华源（Ubuntu 24.04 deb822 格式）
+sudo sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list.d/ubuntu.sources
+
+# 替换为清华源（旧版单行格式）
+# sudo sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list
+
 sudo apt update
 ```
 

@@ -281,10 +281,10 @@ DATE=$(date +%Y%m%d)
 # 创建归档目录
 mkdir -p "$ARCHIVE_DIR"
 
-# 压缩旧日志
-find "$LOG_DIR" -name "*.log" -mtime +7 -exec tar -czvf "$ARCHIVE_DIR/logs_$DATE.tar.gz" {} +
+# 压缩旧日志（先打包，确认成功后再删除源文件，避免数据丢失）
+find "$LOG_DIR" -name "*.log" -mtime +7 -print0 | tar -czf "$ARCHIVE_DIR/logs_$DATE.tar.gz" --null -T -
 
-# 删除已压缩的日志
+# 确认归档完整后再删除源文件
 find "$LOG_DIR" -name "*.log" -mtime +7 -delete
 ```
 
@@ -361,8 +361,8 @@ gzip -t file.txt.gz
 bzip2 -t file.txt.bz2
 xz -t file.txt.xz
 
-# 尝试修复
-gzip -f file.txt.gz
+# gzip 无法修复损坏的压缩文件；-f 只是覆盖同名输出，不是"修复"
+# 损坏时应重新归档源数据，或用 backup 中的历史副本
 ```
 
 ### 10.2 磁盘空间不足

@@ -290,8 +290,8 @@ iptables -A INPUT -i lo -j ACCEPT
 # 允许已建立的连接
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
-# 允许 SSH（限制来源）
-iptables -A INPUT -p tcp --dport 22 -s 管理员IP -j ACCEPT
+# 允许 SSH（限制来源为管理员办公网段）
+iptables -A INPUT -p tcp --dport 22 -s 192.168.1.100/32 -j ACCEPT
 
 # 允许 HTTP/HTTPS
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
@@ -324,8 +324,8 @@ iptables -A INPUT -i lo -j ACCEPT
 # 允许已建立的连接
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
-# 允许 SSH（限制来源）
-iptables -A INPUT -p tcp --dport 22 -s 管理员IP -j ACCEPT
+# 允许 SSH（限制来源为管理员办公网段）
+iptables -A INPUT -p tcp --dport 22 -s 192.168.1.100/32 -j ACCEPT
 
 # 允许 MySQL（限制来源）
 iptables -A INPUT -p tcp --dport 3306 -s 192.168.1.0/24 -j ACCEPT

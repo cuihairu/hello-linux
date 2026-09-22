@@ -305,6 +305,6 @@ dirs
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 文件与目录管理](https://linux.vbird.org/linux_basic/0220filemanager.php)
+- [鸟哥的私房菜 - 文件与目录管理](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
 - [Arch Wiki - Core utilities](https://wiki.archlinux.org/title/Core_utilities)
 - [Linux man pages](https://man7.org/linux/man-pages/)

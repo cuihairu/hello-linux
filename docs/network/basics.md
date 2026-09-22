@@ -44,7 +44,7 @@ sudo ip route add default via 192.168.1.1
 ### 永久配置
 
 Netplan（Ubuntu）：`/etc/netplan/*.yaml`
-NetworkManager：`nmcli` 或 `/etc/sysconfig/network-scripts/`
+NetworkManager：`nmcli`（RHEL 9 起 network-scripts 已移除）
 
 ## 3. DNS
 
