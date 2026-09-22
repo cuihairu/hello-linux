@@ -48,6 +48,8 @@
 - [文本处理](./commands/text.md)
   - [文本处理命令](./commands/text/text_processing.md)
   - [文本编辑和查看工具](./commands/text/editors.md)
+- [查找与定位](./commands/find-and-locate.md)
+- [压缩与归档](./commands/compression.md)
 - [系统管理](./commands/system.md)
   - [系统信息查看](./commands/system/system_info.md)
   - [进程管理](./commands/system/process.md)
