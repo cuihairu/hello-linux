@@ -1,0 +1,44 @@
+import { ssrRenderAttrs, ssrRenderStyle } from "vue/server-renderer";
+import { useSSRContext } from "vue";
+import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
+const __pageData = JSON.parse('{"title":"ACL 权限控制","description":"","frontmatter":{},"headers":[],"relativePath":"basic/users/acl_permissions.md","filePath":"basic/users/acl_permissions.md","lastUpdated":1789972691000}');
+const _sfc_main = { name: "basic/users/acl_permissions.md" };
+function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
+  _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="acl-权限控制" tabindex="-1">ACL 权限控制 <a class="header-anchor" href="#acl-权限控制" aria-label="Permalink to &quot;ACL 权限控制&quot;">​</a></h1><p>ACL（Access Control List）提供比传统权限更细粒度的访问控制，可以为特定用户或组设置权限。</p><blockquote><p>内容参考自 Arch Wiki，见文末参考资料。</p></blockquote><h2 id="_1-为什么需要-acl" tabindex="-1">1. 为什么需要 ACL <a class="header-anchor" href="#_1-为什么需要-acl" aria-label="Permalink to &quot;1. 为什么需要 ACL&quot;">​</a></h2><p>传统权限只能设置所有者、所属组和其他人三类权限。ACL 可以为任意用户或组单独设置权限。</p><h2 id="_2-查看-acl" tabindex="-1">2. 查看 ACL <a class="header-anchor" href="#_2-查看-acl" aria-label="Permalink to &quot;2. 查看 ACL&quot;">​</a></h2><div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">getfacl</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> file.txt</span></span></code></pre></div><p>输出示例：</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span># file: file.txt</span></span>
+<span class="line"><span># owner: user</span></span>
+<span class="line"><span># group: group</span></span>
+<span class="line"><span>user::rw-</span></span>
+<span class="line"><span>user:guest:rw-</span></span>
+<span class="line"><span>group::r--</span></span>
+<span class="line"><span>mask::rw-</span></span>
+<span class="line"><span>other::r--</span></span></code></pre></div><h2 id="_3-设置-acl" tabindex="-1">3. 设置 ACL <a class="header-anchor" href="#_3-设置-acl" aria-label="Permalink to &quot;3. 设置 ACL&quot;">​</a></h2><div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 为用户设置权限</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">setfacl</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -m</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> u:username:rw</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> file.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 为组设置权限</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">setfacl</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -m</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> g:groupname:r</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> file.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 递归设置</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">setfacl</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -R</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -m</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> u:username:rw</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> directory/</span></span>
+<span class="line"></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 设置默认 ACL（新建文件继承）</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">setfacl</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -m</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> d:u:username:rw</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> directory/</span></span></code></pre></div><h2 id="_4-删除-acl" tabindex="-1">4. 删除 ACL <a class="header-anchor" href="#_4-删除-acl" aria-label="Permalink to &quot;4. 删除 ACL&quot;">​</a></h2><div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 删除特定用户 ACL</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">setfacl</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -x</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> u:username</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> file.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 删除所有 ACL</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">setfacl</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -b</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> file.txt</span></span></code></pre></div><h2 id="_5-备份与恢复" tabindex="-1">5. 备份与恢复 <a class="header-anchor" href="#_5-备份与恢复" aria-label="Permalink to &quot;5. 备份与恢复&quot;">​</a></h2><div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 备份</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">getfacl</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -R</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> directory/</span><span style="${ssrRenderStyle({ "--shiki-light": "#D73A49", "--shiki-dark": "#F97583" })}"> &gt;</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> acl_backup.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 恢复</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">setfacl</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> --restore=acl_backup.txt</span></span></code></pre></div><h2 id="参考资料" tabindex="-1">参考资料 <a class="header-anchor" href="#参考资料" aria-label="Permalink to &quot;参考资料&quot;">​</a></h2><ul><li><code>man getfacl</code>、<code>man setfacl</code></li><li>Arch Wiki - Access Control Lists — <a href="https://wiki.archlinux.org/title/Access_Control_Lists" target="_blank" rel="noreferrer">wiki.archlinux.org</a></li></ul></div>`);
+}
+const _sfc_setup = _sfc_main.setup;
+_sfc_main.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("basic/users/acl_permissions.md");
+  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
+};
+const acl_permissions = /* @__PURE__ */ _export_sfc(_sfc_main, [["ssrRender", _sfc_ssrRender]]);
+export {
+  __pageData,
+  acl_permissions as default
+};

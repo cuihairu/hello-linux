@@ -1,0 +1,26 @@
+import { ssrRenderAttrs, ssrRenderStyle } from "vue/server-renderer";
+import { useSSRContext } from "vue";
+import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
+const __pageData = JSON.parse('{"title":"安全篇","description":"","frontmatter":{},"headers":[],"relativePath":"security/README.md","filePath":"security/README.md","lastUpdated":1790050890000}');
+const _sfc_main = { name: "security/README.md" };
+function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
+  _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="安全篇" tabindex="-1">安全篇 <a class="header-anchor" href="#安全篇" aria-label="Permalink to &quot;安全篇&quot;">​</a></h1><p>Linux 系统安全是运维和开发的基础技能，涵盖防火墙、入侵检测、加密等核心主题。</p><blockquote><p>内容参考自 Arch Wiki、安全厂商文档和实际运维经验，见各章节参考资料。</p></blockquote><h2 id="学习目标" tabindex="-1">学习目标 <a class="header-anchor" href="#学习目标" aria-label="Permalink to &quot;学习目标&quot;">​</a></h2><ul><li>掌握防火墙配置和网络隔离</li><li>学会入侵检测和日志分析</li><li>了解加密技术和证书管理</li><li>掌握安全加固最佳实践</li></ul><h2 id="内容" tabindex="-1">内容 <a class="header-anchor" href="#内容" aria-label="Permalink to &quot;内容&quot;">​</a></h2><table tabindex="0"><thead><tr><th>章节</th><th>内容</th></tr></thead><tbody><tr><td><a href="./firewall.html">防火墙</a></td><td>iptables、nftables、firewalld 配置</td></tr><tr><td><a href="./intrusion-detection.html">入侵检测</a></td><td>Fail2Ban、AIDE、OSSEC</td></tr><tr><td><a href="./encryption.html">加密技术</a></td><td>GPG、SSL/TLS、SSH 加密</td></tr><tr><td><a href="./hardening.html">安全加固</a></td><td>系统加固、最小权限、审计、漏洞扫描</td></tr></tbody></table><h2 id="快速入门" tabindex="-1">快速入门 <a class="header-anchor" href="#快速入门" aria-label="Permalink to &quot;快速入门&quot;">​</a></h2><div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 检查防火墙状态</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">sudo</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> iptables</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -L</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -n</span></span>
+<span class="line"></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 检查 SSH 配置</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">sudo</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> grep</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> -E</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> &quot;^PermitRootLogin|^PasswordAuthentication&quot;</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> /etc/ssh/sshd_config</span></span>
+<span class="line"></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6A737D", "--shiki-dark": "#6A737D" })}"># 检查系统更新</span></span>
+<span class="line"><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">sudo</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> apt</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> update</span><span style="${ssrRenderStyle({ "--shiki-light": "#24292E", "--shiki-dark": "#E1E4E8" })}"> &amp;&amp; </span><span style="${ssrRenderStyle({ "--shiki-light": "#6F42C1", "--shiki-dark": "#B392F0" })}">sudo</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> apt</span><span style="${ssrRenderStyle({ "--shiki-light": "#032F62", "--shiki-dark": "#9ECBFF" })}"> list</span><span style="${ssrRenderStyle({ "--shiki-light": "#005CC5", "--shiki-dark": "#79B8FF" })}"> --upgradable</span></span></code></pre></div><h2 id="参考资料" tabindex="-1">参考资料 <a class="header-anchor" href="#参考资料" aria-label="Permalink to &quot;参考资料&quot;">​</a></h2><ul><li><a href="https://wiki.archlinux.org/title/Security" target="_blank" rel="noreferrer">Arch Wiki - Security</a></li><li><a href="https://ubuntu.com/security" target="_blank" rel="noreferrer">Ubuntu Security</a></li><li><a href="https://www.redhat.com/en/topics/security" target="_blank" rel="noreferrer">Red Hat Security</a></li><li><a href="https://www.cisecurity.org/cis-benchmarks/" target="_blank" rel="noreferrer">CIS Benchmarks</a></li></ul></div>`);
+}
+const _sfc_setup = _sfc_main.setup;
+_sfc_main.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("security/README.md");
+  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
+};
+const README = /* @__PURE__ */ _export_sfc(_sfc_main, [["ssrRender", _sfc_ssrRender]]);
+export {
+  __pageData,
+  README as default
+};
