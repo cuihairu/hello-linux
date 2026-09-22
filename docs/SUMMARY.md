@@ -47,12 +47,16 @@
   - [目录操作](./commands/basic/directory.md)
 - [文本处理](./commands/text.md)
   - [文本处理命令](./commands/text/text_processing.md)
+  - [文本编辑和查看工具](./commands/text/editors.md)
 - [系统管理](./commands/system.md)
   - [系统信息查看](./commands/system/system_info.md)
   - [进程管理](./commands/system/process.md)
   - [内存管理](./commands/system/memory.md)
+  - [配置管理工具](./commands/system/configuration-management.md)
+  - [系统监控工具](./commands/system/monitoring.md)
 - [网络管理](./commands/network.md)
   - [网络管理命令](./commands/network/network.md)
+  - [网络工具](./commands/network/network-tools.md)
 - [包管理](./commands/package.md)
   - [包管理命令](./commands/package/package.md)
 
@@ -74,14 +78,39 @@
 
 - [服务器篇](./server/README.md)
 - [Web 服务器](./server/web/nginx.md)
+- [Apache](./server/web/apache.md)
 - [数据库](./server/database/mysql.md)
 - [容器](./server/container/docker.md)
 - [监控](./server/monitoring/prometheus.md)
 - [DNS](./server/dns/bind.md)
 - [邮件](./server/mail/postfix.md)
 
+## 脚本篇
+
+- [脚本篇](./script/README.md)
+- [Bash 基础](./script/bash-basics.md)
+- [变量与数据类型](./script/variables.md)
+- [条件判断](./script/conditionals.md)
+- [循环结构](./script/loops.md)
+- [函数](./script/functions.md)
+- [文本处理](./script/text-processing.md)
+- [正则表达式](./script/regex.md)
+- [脚本调试](./script/debugging.md)
+- [实战案例](./script/examples.md)
+
+## 安全篇
+
+- [安全篇](./security/README.md)
+- [防火墙](./security/firewall.md)
+- [入侵检测](./security/intrusion-detection.md)
+- [加密技术](./security/encryption.md)
+- [安全加固](./security/hardening.md)
+
 ## 网络篇
 
 - [网络篇](./network/README.md)
 - [网络基础](./network/basics.md)
 - [防火墙](./network/firewall.md)
+- [VPN](./network/vpn.md)
+- [负载均衡](./network/load-balancing.md)
+- [网络监控](./network/network-monitoring.md)
