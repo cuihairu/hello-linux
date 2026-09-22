@@ -1,310 +1,103 @@
 # 循环结构
 
-循环用于重复执行代码块，直到满足条件为止。
+循环用于重复执行代码块，直到满足条件为止——它是「把一条命令对一百个文件执行一百次」与「写一百行重复代码」的分水岭。Bash 提供三种循环：`for`（遍历已知列表）、`while`（条件为真时重复）、`until`（条件为假时重复）。语法本身很简单，真正容易出错的是**循环的边界**：管道会开子 shell 导致变量丢失、`read` 不处理好分隔符会截断含空格的文件名、glob 不加引号会让通配符提前展开。本章按「为什么用 → 怎么用 → 常见坑」展开。
 
-> 内容参考自 Bash 手册和 Shell 编程实践，见文末参考资料。
+> 内容参考自 Bash 手册、Arch Wiki 和 Advanced Bash-Scripting Guide，见文末参考资料。
 
 ## 学习目标
 
-- 掌握 for、while、until 循环
-- 学会使用循环控制语句
-- 了解循环的优化技巧
+- 掌握 `for`（列表、范围、C 风格、文件 glob）、`while`、`until`
+- 会用 `break`/`continue` 控制循环，理解多层 `break N`
+- 理解管道子 shell 与重定向对变量作用域的影响
+- 掌握 `while read` 正确读取含空格/特殊字符的行与文件名
+- 会写批量重命名、日志统计等实用循环
 
 ## 1. for 循环
 
-### 1.1 列表循环
+### 1.1 列表遍历与数字范围
 
-```bash
-# 基本语法
-for item in item1 item2 item3; do
-    echo $item
-done
+最直观的形式是对一组已知的词依次执行：`for fruit in apple banana cherry; do ... done`。列表在循环开始时**一次性展开**——循环体内再修改「列表源」不影响本次迭代。数字范围优先用花括号展开 `{1..5}`、带步长 `{0..10..2}`，或 C 风格 `for ((i=0; i<5; i++))`（变量参与条件时更灵活）。
 
-# 示例
-for fruit in apple banana cherry; do
-    echo "水果: $fruit"
-done
-```
+**为什么优先 `{1..N}` 而非 `$(seq 1 N)`**：`seq` 是外部命令，每次循环都要 fork 一个进程；`{1..N}` 是 shell 的花括号展开，纯内建。循环上万次时差异明显。需要复杂步进或浮点时才用 `seq`。
 
-### 1.2 范围循环
+### 1.2 文件 glob 遍历
 
-```bash
-# 数字范围
-for i in {1..5}; do
-    echo $i
-done
+`for file in *.txt` 里的 `*.txt` 在 `in` 列表位置由 shell 展开；若**没有匹配文件**，默认（未开 `nullglob`）会原样保留 `*.txt` 字面量——于是循环体第一次收到的字符串就是 `*.txt` 本身，`cat *.txt` 可能报「没有那个文件」。稳健写法是 `shopt -s nullglob` 让无匹配时展开为空列表（循环零次），用完再 `shopt -u nullglob`；或先把 glob 赋给数组，检查 `${files[0]}` 是否存在再进循环。
 
-# 带步长
-for i in {0..10..2}; do
-    echo $i
-done
+**循环体内引用文件名必须加引号**：`for file in *.txt` 展开时每个文件名已是独立词（含空格的文件名在 glob 展开阶段就是安全的），但循环体里 `mv $file ...` 不加引号会在第二阶段被再次词分割——详见第 5 节。
 
-# C 风格
-for ((i=0; i<5; i++)); do
-    echo $i
-done
-```
+### 1.3 命令输出与数组遍历
 
-### 1.3 文件循环
+遍历数组的正确写法是 `for item in "${arr[@]}"`（加引号），取下标用 `for i in "${!arr[@]}"`。遍历命令输出时，**不推荐 `for x in $(cmd)`**：命令替换的结果会再经历一次词分割与 glob 展开——文件名里的空格被拆开，`*` 被展开。读「每行一条、字段可能含空格」的数据（文件名、路径、含空格的文本）请用 `while IFS= read -r`，见下节。
 
-```bash
-# 遍历文件
-for file in *.txt; do
-    echo "处理文件: $file"
-done
+## 2. while 与 until
 
-# 遍历目录
-for dir in /home/*/; do
-    echo "目录: $dir"
-done
-```
+`while (( count < 5 )); do ...; done` 做计数循环时，递增写 `count=$((count + 1))` 而非 `((count++))`——当 `count` 为 0 时 `((count++))` 的算术结果是 0（后缀自增返回旧值），`(( ))` 以此为退出码，`set -e` 会误以为失败并退出脚本。读文件用 `while IFS= read -r line; do ...; done < file.txt`：`IFS=` 清空内部字段分隔符避免行首行尾空白被吞，`-r` 禁止反斜杠转义（否则 `a\nb` 会丢掉反斜杠）——这两个选项是**默认模板**，不写就会在含空格或反斜杠的数据上出错。按 CSV 字段读则 `IFS=,`。
 
-### 1.4 命令输出循环
+`until` 与 `while` 相反：条件为假时循环，适合「等待文件出现、等端口就绪」这类「直到条件成立」的场景，比 `while ! condition` 更易读，两者可互换。无限循环两种写法：`while true` 或 `while :`（`:` 是空操作内建，永远返回 0）。
 
-```bash
-# 遍历命令输出
-for user in $(cat /etc/passwd | cut -d: -f1); do
-    echo "用户: $user"
-done
+## 3. 循环控制与嵌套
 
-# 遍历数组
-arr=("one" "two" "three")
-for item in "${arr[@]}"; do
-    echo $item
-done
-```
+`break` 跳出整个循环，`continue` 跳过本次迭代；`break 2` / `continue 2` 跳出/跳过第 N 层（1=最内层）。嵌套循环典型例子是九九乘法表：外层控制行、内层控制列，用 `printf` 不换行拼一行，外层末尾再 `echo`。循环里调用函数处理每个文件时，函数参数用 `local`，循环外的计数器也要在当前 shell 累加——若把循环放进管道右侧就会丢，见下节。`[[ -e $file ]] || continue` 是跳过不存在文件的常见守卫。
 
-## 2. while 循环
+## 4. 关键陷阱：管道子 shell 与变量丢失
 
-### 2.1 基本语法
+**这是循环章节最经典、最高频的坑**：`cat file.txt | while read -r line; do count=$((count+1)); done` 之后 `echo $count` 得到 0。**原因**：管道 `|` 的右侧会开启一个**子 shell**，循环在子 shell 里跑，对 `count` 的修改只存在于子 shell；父 shell 的 `count` 从未改变。进程结束，子 shell 里的变量随之消失。
 
-```bash
-while [ condition ]; do
-    # 代码块
-done
-```
+三种修复思路，按推荐度排序：
 
-### 2.2 示例
+1. **重定向代替管道**（最佳）：`while ...; done < file.txt`——循环留在当前 shell，计数器正常累加。
+2. **进程替换**：`while ...; done < <(cat file.txt)`——循环仍在当前 shell，适合数据来自命令而非文件。
+3. **结果写数组/文件**：循环只往数组 `results+=("$line")` 或临时文件里追加，循环结束后再读——适合既要计数又要保留明细的场景。
 
-```bash
-#!/bin/bash
+`done < file.txt` 只接受文件，`done < <(cmd)` 接受任意产生标准输出的命令。日常读文件用前者即可。**同理**：`cmd | while ...` 一律会开子 shell；只要循环体要**改当前 shell 的变量**（计数器、累加器、标记），就绝不能用管道喂给 `while`。
 
-count=0
-while [ $count -lt 5 ]; do
-    echo "计数: $count"
-    count=$((count + 1))
-done
-```
+## 5. 关键陷阱：read、空格文件名与 glob 引号
 
-### 2.3 读取文件
+### 5.1 read 的正确姿势
 
-```bash
-# 逐行读取文件
-while IFS= read -r line; do
-    echo "行: $line"
-done < file.txt
+错误示范是 `while read line`（无 `IFS=`、无 `-r`）：会丢反斜杠、吞首尾空格、遇 `\` 续行。正确模板固定写 `while IFS= read -r line; do ...; done < file.txt`。若担心末行无换行符被 `read` 吞掉（返回非零但 `line` 可能仍有数据），用 `while IFS= read -r line || [[ -n $line ]]; do ...; done` 兜底。
 
-# 读取 CSV
-while IFS=, read -r name age city; do
-    echo "姓名: $name, 年龄: $age, 城市: $city"
-done < data.csv
-```
+### 5.2 处理含空格的文件名
 
-### 2.4 无限循环
+`for file in $(ls)` 会按空格拆分文件名——危险。正确做法是直接 glob `for file in *`（单词已安全），或用 `while IFS= read -r file` 读「一行一个文件名」的列表（Here Document 或进程替换）。处理任意路径列表时同样用 read，避免词分割。
 
-```bash
-# 方法 1
-while true; do
-    echo "运行中..."
-    sleep 1
-done
+### 5.3 glob 不加引号的两阶段展开
 
-# 方法 2
-while :; do
-    echo "运行中..."
-    sleep 1
-done
-```
+Shell 处理命令行分两个阶段：**扩展阶段**（变量、命令替换、glob）和**词分割阶段**。`file="my file.txt"` 时 `cat $file` 扩展得完整字符串，词分割成 `my` 和 `file.txt` 两个参数；`cat "$file"` 整体一个参数。`target="*.txt"` 时 `echo $target` 会 glob 展开成实际文件列表，`echo "$target"` 输出字面量 `*.txt`。**规则总结**：变量、`$@`、`"${arr[@]}"`、命令替换在作为参数时一律加双引号；glob 模式（`*`、`?`）在**期望展开**的位置（如 `for ... in *.txt`、`rm *.log`）**不要**加引号，否则会当成字面量。
 
-## 3. until 循环
+## 6. 实战案例设计思路
 
-### 3.1 基本语法
+**批量重命名（安全版）**：`nullglob` 防无匹配时循环一次字面量；`mv -n` 防覆盖（或先 `[[ -e $new_name ]]` 跳过）；`--` 终止选项解析（防文件名以 `-` 开头被当成选项）；计数用 `count=$((count + 1))`。先 `DRY_RUN=1` 打印将执行的 `mv` 而不动文件，确认后再实跑——破坏性操作的金标准。真实输出会看到 `重命名: my notes.txt → my notes.md` 这类含空格文件名被正确处理的行。
 
-```bash
-until [ condition ]; do
-    # 代码块
-done
-```
+**统计日志错误数**：用 `while IFS= read -r line` 逐行读，`[[ $line == *ERROR* ]]` 计数；注意 `((errors++))` 在 errors 为 0 时退出码为 1，`set -e` 下需要 `|| true` 兜底（或改用 `errors=$((errors+1))`）。逐行 read 比 `grep -c` 慢，但一旦需要按行做复杂分支就只能这样写；单纯计数直接用 `grep -c` 更快。
 
-### 3.2 示例
+**定时监控**：`while true; do ...; sleep 5; done` 演示结构即可，但生产监控建议直接用 `mpstat`、`sar` 或 `node_exporter`——自己算 `/proc/stat` 差分容易错，且长驻脚本不如 cron/systemd timer 易管理。
 
-```bash
-#!/bin/bash
+## 7. 本章常见坑
 
-count=0
-until [ $count -ge 5 ]; do
-    echo "计数: $count"
-    count=$((count + 1))
-done
-```
+1. **管道喂 `while` 导致计数器归零**。`cmd | while read` 在子 shell 执行，变量回不来。改用 `while read ... done < file` 或进程替换 `done < <(cmd)`。
 
-## 4. 循环控制
+2. **`for x in $(cmd)` 拆碎含空格的数据**。文件名、路径一律 `while IFS= read -r` 或用数组 glob。
 
-### 4.1 break
+3. **`read` 不写 `IFS= -r`**。丢反斜杠、吞首尾空白；模板固定写 `while IFS= read -r line`。
 
-```bash
-# 跳出循环
-for i in {1..10}; do
-    if [ $i -eq 5 ]; then
-        break
-    fi
-    echo $i
-done
-```
+4. **glob 无匹配时循环一次字面量**。`*.txt` 无匹配会原样进入循环，`mv *.txt ...` 可能报错。用 `shopt -s nullglob` 或先判存在。
 
-### 4.2 continue
+5. **循环体内 `mv $file`/`rm $target` 不加引号**。文件名含空格会被拆成两个参数，可能误删。一律 `"$file"`，并在选项后加 `--`。
 
-```bash
-# 跳过当前迭代
-for i in {1..10}; do
-    if [ $i -eq 5 ]; then
-        continue
-    fi
-    echo $i
-done
-```
+6. **`set -e` 下 `((var++))` 当 var 为 0 时脚本退出**。后缀 `++` 返回旧值 0 被当成失败。改 `var=$((var+1))`、`((++var))`，或行尾 `|| true`。
 
-### 4.3 跳出多层循环
+7. **`{1..N}` 与 `$(seq)` 混淆性能**。大范围循环用 `{1..N}` 或 `((;;))`，避免无谓的外部进程。
 
-```bash
-# 跳出外层循环
-for i in {1..3}; do
-    for j in {1..3}; do
-        if [ $j -eq 2 ]; then
-            break 2  # 跳出两层循环
-        fi
-        echo "i=$i, j=$j"
-    done
-done
-```
-
-## 5. 嵌套循环
-
-```bash
-# 九九乘法表
-for i in {1..9}; do
-    for j in {1..9}; do
-        if [ $j -le $i ]; then
-            echo -n "$j×$i=$((i*j)) "
-        fi
-    done
-    echo
-done
-```
-
-## 6. 循环与数组
-
-```bash
-# 遍历数组
-arr=("apple" "banana" "cherry")
-
-# 方法 1
-for item in "${arr[@]}"; do
-    echo $item
-done
-
-# 方法 2
-for i in "${!arr[@]}"; do
-    echo "索引 $i: ${arr[$i]}"
-done
-```
-
-## 7. 循环与函数
-
-```bash
-# 使用函数处理
-process_file() {
-    local file=$1
-    echo "处理文件: $file"
-}
-
-for file in *.txt; do
-    process_file "$file"
-done
-```
-
-## 8. 性能优化
-
-### 8.1 避免子 Shell
-
-```bash
-# 不推荐
-cat file.txt | while read line; do
-    echo $line
-done
-
-# 推荐
-while read line; do
-    echo $line
-done < file.txt
-```
-
-### 8.2 使用内置命令
-
-```bash
-# 不推荐
-for i in $(seq 1 100); do
-    echo $i
-done
-
-# 推荐
-for i in {1..100}; do
-    echo $i
-done
-```
-
-## 9. 实战案例
-
-### 9.1 批量重命名文件
-
-```bash
-#!/bin/bash
-
-for file in *.txt; do
-    new_name="${file%.txt}.md"
-    mv "$file" "$new_name"
-    echo "重命名: $file -> $new_name"
-done
-```
-
-### 9.2 监控系统资源
-
-```bash
-#!/bin/bash
-
-while true; do
-    cpu=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}')
-    mem=$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2}')
-    echo "CPU: $cpu%, 内存: $mem"
-    sleep 5
-done
-```
-
-### 9.3 批量处理日志
-
-```bash
-#!/bin/bash
-
-for log_file in /var/log/*.log; do
-    echo "处理: $log_file"
-    # 统计错误数
-    error_count=$(grep -c "ERROR" "$log_file")
-    echo "错误数: $error_count"
-done
-```
+8. **末行无换行符被 `read` 吞掉**。用 `while IFS= read -r line || [[ -n $line ]]` 兜底。
 
 ## 参考资料
 
-- `man bash` - Looping Constructs
-- [Bash 手册 - Looping Constructs](https://www.gnu.org/software/bash/manual/html_node/Looping-Constructs.html)
-- [Advanced Bash-Scripting Guide - Loops](https://tldp.org/LDP/abs/html/loops1.html)
+- `man bash` — Looping Constructs、Compound Commands
+- Bash 手册 - Looping Constructs — [gnu.org](https://www.gnu.org/software/bash/manual/html_node/Looping-Constructs.html)
+- Bash 手册 - pipelines（子 shell 语义） — [gnu.org](https://www.gnu.org/software/bash/manual/html_node/Pipelines.html)
+- Arch Wiki - Bash - Loops — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
+- 鸟哥的私房菜 - 循环 script — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
+- Advanced Bash-Scripting Guide - Loops — [tldp.org](https://tldp.org/LDP/abs/html/loops1.html)
+- Google Shell Style Guide - 读取文件 — [google.github.io](https://google.github.io/styleguide/shellguide.html)

@@ -1,328 +1,86 @@
 # 文本处理
 
-文本处理是 Shell 脚本的核心技能，grep、sed、awk 是三大利器。
+文本处理是 Shell 脚本的核心技能——Linux 系统里配置、日志、账号、进程信息几乎都以文本形式存在，脚本的日常职责就是「从文本里筛选、统计、改写信息」。`grep`、`sed`、`awk` 被称为三件套：**grep 负责找，sed 负责改，awk 负责算**。三者都内建或默认使用正则表达式，但默认方言不同（BRE/ERE/自成一派），这正是本章与 [正则表达式](./regex.md) 的衔接点。命令篇已讲过基础用法（见 [文本处理命令](../commands/text/text_processing.md)），本章聚焦**脚本语境下的组合技巧、退出码语义与跨工具选型**，避免大段重复基础参数。
 
-> 内容参考自 GNU 手册和 Shell 编程实践，见文末参考资料。
+> 内容参考自 GNU 手册、鸟哥的私房菜和 Awk 编程语言，见文末参考资料。
 
 ## 学习目标
 
-- 掌握 grep 搜索和过滤
-- 学会 sed 流编辑器
-- 掌握 awk 文本分析
-- 了解其他文本处理工具
+- 掌握 grep 在脚本中的退出码语义与常用旗标组合
+- 会用 sed 做地址限定替换、原地编辑与安全备份
+- 掌握 awk 的字段、模式、内置变量与求和去重
+- 能根据任务在 grep/sed/awk/cut/sort 间做出正确选型
+- 理解管道组合的退出码与 `pipefail` 的影响
 
-## 1. grep - 搜索过滤
+## 1. grep：搜索与过滤
 
-### 1.1 基本用法
+### 1.1 核心旗标与脚本用途
 
-```bash
-# 搜索包含 pattern 的行
-grep "pattern" file
+最常用的旗标组合：`-i` 忽略大小写，`-n` 显示行号，`-v` 反向匹配，`-c` 只输出匹配行数，`-o` 只输出匹配到的部分，`-r` 递归目录，`-E` 扩展正则 ERE，`-F` 固定字符串最快，`-w` 全词匹配，`-A`/`-B` 输出匹配行前后上下文。模式以 `-` 开头时用 `--` 终止选项解析。**`egrep`/`fgrep` 已被 POSIX 标记为弃用**，脚本里统一写 `grep -E` / `grep -F`。
 
-# 忽略大小写
-grep -i "pattern" file
+**退出码才是脚本里的关键**：0 表示找到至少一行匹配（`if grep -q ...; then` 条件成立），1 表示没有任何匹配，2 表示出错（文件不存在等）。要区分「不存在」与「出错」时不能只看非零，应取 `$?` 判断是否等于 1。幂等写配置的典型例子：`grep -q "^USE_NTP=yes" /etc/ntp.conf` 已存在则跳过，否则追加一行。
 
-# 显示行号
-grep -n "pattern" file
+**`grep -c` 无匹配时退出码是 1 不是 0**——统计脚本里「允许无匹配」时记得 `|| true` 或 `count=$(grep ... || true)`。在 `set -o pipefail` 下，管道中间的 `grep` 返回 1 会让整条管道非零，从而触发 `set -e` 退出；写进严格模式脚本前先想清楚「无匹配是不是错误」。
 
-# 反向匹配
-grep -v "pattern" file
+### 1.2 脚本常用组合
 
-# 递归搜索目录
-grep -r "pattern" directory/
+递归搜索排除版本控制目录：`grep -rn --exclude-dir={.git,node_modules} "TODO" src/`。只提取匹配部分再统计：`grep -oE 'IP 正则' access.log | sort | uniq -c | sort -rn | head`。单纯计数优先 `grep -c`，比手写 `while read` 快一个数量级——但一旦需要按行做复杂分支（多条件、累计、跳过注释），就改用循环，见 [循环结构](./loops.md)。
 
-# 只显示匹配部分
-grep -o "pattern" file
+## 2. sed：流编辑器
 
-# 统计匹配行数
-grep -c "pattern" file
-```
+sed 逐行读入模式空间，对匹配的行执行脚本命令，然后输出——它是**非交互式**的行编辑器，适合「批量、可重复、可写进脚本」的替换。核心是 `s/old/new/g`：不带 `g` 每行只替换第一处，`-i` 原地修改，`-n` 抑制默认输出配合 `p` 只打印被替换的行，`-i.bak` 原地修改并留备份（**强烈推荐**——`sed -i` 直接重写原文件，正则写错如 `s/.*//` 内容瞬间清空且无 undo）。
 
-### 1.2 正则表达式
+分隔符可以换：路径斜杠太多时用 `s|/usr/local|/opt|g` 或 `s#^http://#https://#` 更清晰。地址限定让替换只作用于部分行：行号 `5`、范围 `5,10`、到末尾 `5,$`、正则 `/^DEBUG/`、GNU 扩展 `/error/,+3`（匹配行及后 3 行）。删除用 `d`（`/^#/d` 删注释行、`/^$/d` 删空行），插入/追加用 `i\` 与 `a\`——GNU sed 与 BSD sed（macOS）语法不同，**本教程三发行版均为 GNU sed**。
 
-```bash
-# 基础正则
-grep "^start" file      # 以 start 开头
-grep "end$" file        # 以 end 结尾
-grep "^$" file          # 空行
-grep "[0-9]" file       # 包含数字
-grep "[^a-z]" file      # 非小写字母
+实用片段：提取 `key=value` 的 value 用 `-n 's/^name=//p'`；去行首行尾空白用 `s/^[[:space:]]*//;s/[[:space:]]*$//`；配合管道只改内存中的流、不碰原文件（重定向到新文件再 `mv`）是更安全的原地编辑模式。替换串里 `&` 表示整个匹配，`\1`–`\9` 表示分组——与 `grep` 只匹配不替换的语义不同。
 
-# 扩展正则（-E 或 egrep）
-grep -E "cat|dog" file  # cat 或 dog
-grep -E "go+d" file     # 一个或多个 o
-grep -E "go*d" file     # 零个或多个 o
-grep -E "go?d" file     # 零个或一个 o
-grep -E "(ab)+" file    # 一个或多个 ab
-```
+## 3. awk：字段与统计
 
-### 1.3 实用示例
+awk 是「模式-动作」语言：对每一行匹配模式则执行动作，内建字段拆分（默认按空白）、算术与关联数组，天然适合**按列统计**。最常用：`{print $1}` 打印第 1 字段；`-F:` 指定分隔符；`$3 >= 1000` 条件过滤；`/error/` 正则模式；`NR == 5` 第 5 行；`NR>=10 && NR<=20` 行范围；`END {print NR}` 总行数（END 块只跑一次）。
 
-```bash
-# 查找进程
-ps aux | grep nginx
+内置变量：`NR` 已处理行数，`NF` 当前行字段数，`FS`/`OFS` 输入/输出分隔符，`FILENAME` 当前文件名，`FNR` 当前文件内行号（多文件时区别于 NR），`RS` 记录分隔符。`BEGIN {FS=":"}` 可在读入前改分隔符。
 
-# 查找文件内容
-grep -r "TODO" *.py
+统计三板斧：**求和** `'{sum += $3} END {printf "sum=%.2f", sum}'`；**去重** `!seen[$0]++`（首次 `seen[$0]` 为 0 假值，`!0` 为真故打印，随后自增；再次遇到 `!1` 为假不打印——一行完成「保留首次出现」）；**频率** 抽字段后 `sort | uniq -c | sort -rn`。格式化输出用 `printf "%-20s %10d\n"`；多文件时 `FNR==1 {print "=== " FILENAME " ==="}` 打分隔头。
 
-# 排除目录
-grep -r --exclude-dir=".git" "pattern" .
+**awk 默认字段分隔是「任意空白」**，连续空格不会产生空字段；要按单个空格或 CSV 解析需显式 `FS`。含空格的 CSV 别用 `-F,` 硬拆，考虑更严谨的解析。中英文混排时优先 `[[:space:]]` 比 `[ \t]` 可移植。
 
-# 显示匹配上下文
-grep -A 3 -B 3 "error" log.txt  # 前后各3行
-```
+## 4. 其他工具与选型
 
-## 2. sed - 流编辑器
+命令篇有完整章节，这里只列脚本最高频的一行式：`cut -d: -f1,3` 按固定分隔符取列（比 awk 更轻）；`sort -k2 -n` 按列数值排序；`sort -u` 排序去重；`sort | uniq -c | sort -rn` 频率统计标准三连；`tr 'a-z' 'A-Z'` 字符级转换（仅映射，不能按列）；`wc -l` 数行。
 
-### 2.1 基本用法
+**选型口诀**：只判断「有没有/哪几行」→ `grep`；按行号或正则**改写**内容 → `sed`；按**字段**过滤、求和、格式化 → `awk`；固定分隔符取几列、不需逻辑 → `cut`；排序去重计数 → `sort`+`uniq`（awk 不擅长排序）。常见组合：TOP 10 IP 是 `awk '{print $1}' | sort | uniq -c | sort -rn | head`；每小时请求量是抽时间字段再 `cut -d: -f2 | sort | uniq -c`；实时盯错误是 `tail -f | grep --line-buffered`（不加 `--line-buffered` 时 grep 会按块缓冲，日志延迟）。
 
-```bash
-# 替换第一个匹配
-sed 's/old/new/' file
+**管道退出码提醒**：`sort | uniq | head` 这类管道，最后一条是 `head` 时，前面 `grep` 无匹配（exit 1）在无 `pipefail` 时会被掩盖；开了 `pipefail` 则整条变非零。写进 `set -euo pipefail` 的脚本前，先想清楚「无匹配是不是错误」，按需 `|| true`。
 
-# 替换所有匹配
-sed 's/old/new/g' file
+## 5. 实战：Nginx 日志分析
 
-# 原地修改文件
-sed -i 's/old/new/g' file
+设计思路：参数校验（`用法` + `[[ -r ]]`）→ 总请求数 `wc -l` → 独立 IP 数抽第 1 字段 `sort -u | wc -l` → TOP IP 与状态码分布各来一串 `sort | uniq -c | sort -rn`。全部是只读管道，无破坏性操作，可直接挂 cron 出日报。真实量级输出形如总请求 12043、独立 IP 876、状态码以 200 为主夹杂 404/502——看到 502 突增就该去查上游了。复杂分支（按状态码分桶告警、按 UA 统计爬虫）再上 `awk` 脚本或本章三件套组合。
 
-# 只显示修改的行
-sed -n 's/old/new/p' file
-```
+## 6. 本章常见坑
 
-### 2.2 地址范围
+1. **`grep -c` 无匹配时退出码是 1 不是 0**。`count=$(grep -c X f)` 在 `set -e` 下可能直接退出；写 `|| count=0`。
 
-```bash
-# 第 5 行
-sed '5s/old/new/' file
+2. **`sed -i` 不备份就原地改**。正则写错一秒清空文件。用 `sed -i.bak` 或先 `cp`。
 
-# 第 5 到 10 行
-sed '5,10s/old/new/' file
+3. **`awk` 默认字段分隔是「任意空白」**，连续空格不会产生空字段；要按单个空格或 CSV 解析需显式 `FS`。含空格的 CSV 别用 `-F,` 硬拆。
 
-# 从第 5 行到文件末尾
-sed '5,$s/old/new/' file
+4. **用 `cat file | grep` 浪费进程**。重定向 `grep pat file` 少 fork 一个 `cat`，脚本与循环里差别可观。
 
-# 匹配 pattern 的行
-sed '/pattern/s/old/new/' file
-```
+5. **`$9` 及以后在 awk 里没问题，但 shell 里提取字段别用位置参数 `$1`**——日志行不是脚本参数，用 `cut`/`awk`。
 
-### 2.3 删除和插入
+6. **在 `set -o pipefail` 下把「无匹配」当错误**。grep/sed 找不到模式返回 1，整条管道变非零；按需 `|| true`。
 
-```bash
-# 删除行
-sed '3d' file           # 删除第3行
-sed '3,5d' file         # 删除第3到5行
-sed '/pattern/d' file   # 删除匹配行
-sed '/^$/d' file        # 删除空行
+7. **中英文混排时字符类选错**。`[[:space:]]` 比 `[ \t]` 更可移植；处理 UTF-8 中文请确保 locale 为 UTF-8，否则 `.` 与字符类按字节处理。
 
-# 插入行
-sed '3i\新行' file      # 在第3行前插入
-sed '3a\新行' file      # 在第3行后插入
-sed '1i\标题' file      # 在文件开头插入
-```
-
-### 2.4 实用示例
-
-```bash
-# 删除注释行
-sed '/^#/d' file
-
-# 删除空行
-sed '/^$/d' file
-
-# 去除行首空格
-sed 's/^[[:space:]]*//' file
-
-# 去除行尾空格
-sed 's/[[:space:]]*$//' file
-
-# 提取配置值
-sed -n 's/^name=\(.*\)/\1/p' config.txt
-```
-
-## 3. awk - 文本分析
-
-### 3.1 基本语法
-
-```bash
-# 打印所有行
-awk '{print}' file
-
-# 打印第一列
-awk '{print $1}' file
-
-# 打印多列
-awk '{print $1, $3}' file
-
-# 指定分隔符
-awk -F: '{print $1}' /etc/passwd
-```
-
-### 3.2 模式匹配
-
-```bash
-# 匹配包含 pattern 的行
-awk '/pattern/ {print}' file
-
-# 条件过滤
-awk '$3 > 100 {print}' file
-
-# 多条件
-awk '$1 == "admin" && $3 > 100 {print}' file
-```
-
-### 3.3 内置变量
-
-```bash
-# NR: 当前行号
-awk '{print NR, $0}' file
-
-# NF: 当前行的字段数
-awk '{print NF, $0}' file
-
-# FS: 输入字段分隔符
-awk 'BEGIN {FS=":"} {print $1}' /etc/passwd
-
-# OFS: 输出字段分隔符
-awk 'BEGIN {OFS=","} {print $1, $2}' file
-```
-
-### 3.4 实用示例
-
-```bash
-# 统计行数
-awk 'END {print NR}' file
-
-# 求和
-awk '{sum += $3} END {print sum}' file
-
-# 去重
-awk '!seen[$0]++' file
-
-# 格式化输出
-awk '{printf "%-20s %10d\n", $1, $2}' file
-
-# 多文件处理
-awk 'FNR==1 {print "=== " FILENAME " ==="} {print}' file1 file2
-```
-
-## 4. 其他工具
-
-### 4.1 cut - 提取列
-
-```bash
-# 按分隔符提取
-cut -d: -f1 /etc/passwd
-
-# 按字符位置提取
-cut -c1-10 file
-
-# 按字节提取
-cut -b1-10 file
-```
-
-### 4.2 sort - 排序
-
-```bash
-# 基本排序
-sort file
-
-# 数字排序
-sort -n file
-
-# 逆序排序
-sort -r file
-
-# 按列排序
-sort -k2 file
-
-# 去重
-sort -u file
-```
-
-### 4.3 uniq - 去重
-
-```bash
-# 去重（需要先排序）
-sort file | uniq
-
-# 统计重复次数
-sort file | uniq -c
-
-# 只显示重复行
-sort file | uniq -d
-
-# 只显示唯一行
-sort file | uniq -u
-```
-
-### 4.4 tr - 字符转换
-
-```bash
-# 小写转大写
-tr 'a-z' 'A-Z' < file
-
-# 删除字符
-tr -d '0-9' < file
-
-# 压缩重复字符
-tr -s ' ' < file
-
-# 替换字符
-tr ',' '\t' < file
-```
-
-### 4.5 wc - 统计
-
-```bash
-# 统计行数
-wc -l file
-
-# 统计单词数
-wc -w file
-
-# 统计字符数
-wc -c file
-```
-
-## 5. 管道组合
-
-### 5.1 常用组合
-
-```bash
-# 查找最多的 IP
-awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -10
-
-# 统计每小时请求数
-awk '{print $4}' access.log | cut -d: -f2 | sort | uniq -c
-
-# 查找大文件
-find / -type f -size +100M -exec ls -lh {} \; | awk '{print $5, $9}'
-
-# 监控日志
-tail -f /var/log/syslog | grep --line-buffered "error"
-```
-
-### 5.2 实战案例
-
-```bash
-# 分析 Nginx 访问日志
-cat access.log | \
-  awk '{print $1}' | \
-  sort | uniq -c | \
-  sort -rn | head -20
-
-# 提取邮箱
-grep -oE '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' file
-
-# 统计代码行数
-find . -name "*.py" -exec wc -l {} + | tail -1
-```
+8. **与命令篇重复造轮子**。`sort`/`uniq`/`cut`/`wc` 的完整参数表见 [文本处理命令](../commands/text/text_processing.md)；本章只强调组合与退出码。
 
 ## 参考资料
 
-- `man grep`, `man sed`, `man awk`
-- [GNU Grep 手册](https://www.gnu.org/software/grep/manual/)
-- [GNU Sed 手册](https://www.gnu.org/software/sed/manual/)
-- [GNU Awk 手册](https://www.gnu.org/software/gawk/manual/)
-- [Awk 编程语言](https://ia802309.us.archive.org/25/items/pdfy-MgN0H1joIoDVoIC7/The_AWK_Programming_Language.pdf)
+- `man grep`、`man sed`、`man awk`、`man cut`、`man sort`、`man uniq`
+- GNU Grep 手册 — [gnu.org](https://www.gnu.org/software/grep/manual/)
+- GNU Sed 手册 — [gnu.org](https://www.gnu.org/software/sed/manual/)
+- GNU Awk 手册 — [gnu.org](https://www.gnu.org/software/gawk/manual/)
+- The AWK Programming Language — [awk-lang.org](https://awk-lang.org/)
+- 鸟哥的私房菜 - 文本处理器 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0330regularex.php)
+- Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
+- 命令篇 - 文本处理命令 — [docs/commands/text/text_processing.md](../commands/text/text_processing.md)

@@ -1,317 +1,82 @@
 # 条件判断
 
-条件判断是脚本逻辑控制的核心，用于根据不同条件执行不同代码。
+条件判断是脚本逻辑控制的核心——没有它，脚本只能线性地把命令从头跑到尾，无法根据「文件是否存在」「数字是否够大」「用户输的是 y 还是 n」走不同分支。Bash 提供了四套判断机制：`if` 语句配合测试表达式、`case` 模式匹配、`(( ))` 算术条件、`[[ ]]` 扩展测试。选择哪一套、用 `[ ]` 还是 `[[ ]]`、变量要不要加引号，是本章要拆清的重点。先讲清楚「为什么需要多种写法」，再讲怎么用。
 
-> 内容参考自 Bash 手册和 Shell 编程实践，见文末参考资料。
+> 内容参考自 Bash 手册、Arch Wiki 和 Advanced Bash-Scripting Guide，见文末参考资料。
 
 ## 学习目标
 
-- 掌握 if/else 语句
-- 学会使用 case 语句
-- 理解逻辑运算符和文件测试
-- 掌握条件表达式的写法
-
-## 1. if 语句
-
-### 1.1 基本语法
-
-```bash
-if [ condition ]; then
-    # 代码块
-fi
-
-# 或
-if [ condition ]; then
-    # 代码块
-else
-    # 代码块
-fi
-
-# 或
-if [ condition1 ]; then
-    # 代码块
-elif [ condition2 ]; then
-    # 代码块
-else
-    # 代码块
-fi
-```
-
-### 1.2 示例
-
-```bash
-#!/bin/bash
-
-age=18
-
-if [ $age -ge 18 ]; then
-    echo "成年人"
-else
-    echo "未成年人"
-fi
-```
-
-## 2. 条件表达式
-
-### 2.1 数值比较
-
-| 操作符 | 说明 | 示例 |
-|--------|------|------|
-| `-eq` | 等于 | `[ $a -eq $b ]` |
-| `-ne` | 不等于 | `[ $a -ne $b ]` |
-| `-gt` | 大于 | `[ $a -gt $b ]` |
-| `-ge` | 大于等于 | `[ $a -ge $b ]` |
-| `-lt` | 小于 | `[ $a -lt $b ]` |
-| `-le` | 小于等于 | `[ $a -le $b ]` |
-
-```bash
-a=10
-b=20
-
-if [ $a -lt $b ]; then
-    echo "$a 小于 $b"
-fi
-```
-
-### 2.2 字符串比较
-
-| 操作符 | 说明 | 示例 |
-|--------|------|------|
-| `=` | 等于 | `[ "$a" = "$b" ]` |
-| `!=` | 不等于 | `[ "$a" != "$b" ]` |
-| `-z` | 为空 | `[ -z "$a" ]` |
-| `-n` | 非空 | `[ -n "$a" ]` |
-| `<` | 小于（字典序） | `[[ "$a" < "$b" ]]` |
-| `>` | 大于（字典序） | `[[ "$a" > "$b" ]]` |
-
-```bash
-name="John"
-
-if [ -n "$name" ]; then
-    echo "名字不为空"
-fi
-
-if [ "$name" = "John" ]; then
-    echo "Hello John"
-fi
-```
-
-### 2.3 文件测试
-
-| 操作符 | 说明 | 示例 |
-|--------|------|------|
-| `-f` | 是文件 | `[ -f file ]` |
-| `-d` | 是目录 | `[ -d dir ]` |
-| `-e` | 存在 | `[ -e path ]` |
-| `-r` | 可读 | `[ -r file ]` |
-| `-w` | 可写 | `[ -w file ]` |
-| `-x` | 可执行 | `[ -x file ]` |
-| `-s` | 非空 | `[ -s file ]` |
-| `-L` | 是符号链接 | `[ -L link ]` |
-
-```bash
-file="/etc/passwd"
-
-if [ -f "$file" ]; then
-    echo "$file 是文件"
-fi
-
-if [ -r "$file" ]; then
-    echo "$file 可读"
-fi
-```
-
-## 3. 逻辑运算符
-
-### 3.1 与、或、非
-
-```bash
-# 与（&&）
-if [ $a -gt 5 ] && [ $a -lt 15 ]; then
-    echo "a 在 5 到 15 之间"
-fi
-
-# 或（||）
-if [ $a -lt 5 ] || [ $a -gt 15 ]; then
-    echo "a 小于 5 或大于 15"
-fi
-
-# 非（!）
-if [ ! -f "$file" ]; then
-    echo "$file 不存在"
-fi
-```
-
-### 3.2 使用 [[ ]]（Bash 扩展）
-
-```bash
-# 支持正则匹配
-if [[ "$name" =~ ^[A-Z] ]]; then
-    echo "名字以大写字母开头"
-fi
-
-# 支持模式匹配
-if [[ "$file" == *.txt ]]; then
-    echo "是文本文件"
-fi
-```
-
-## 4. case 语句
-
-### 4.1 基本语法
-
-```bash
-case $variable in
-    pattern1)
-        # 代码块
-        ;;
-    pattern2)
-        # 代码块
-        ;;
-    *)
-        # 默认代码块
-        ;;
-esac
-```
-
-### 4.2 示例
-
-```bash
-#!/bin/bash
-
-fruit="apple"
-
-case $fruit in
-    apple)
-        echo "苹果"
-        ;;
-    banana|orange)
-        echo "香蕉或橙子"
-        ;;
-    cherry)
-        echo "樱桃"
-        ;;
-    *)
-        echo "未知水果"
-        ;;
-esac
-```
-
-### 4.3 模式匹配
-
-```bash
-#!/bin/bash
-
-read -p "请输入选项 (y/n): " choice
-
-case $choice in
-    y|Y|yes|YES)
-        echo "是"
-        ;;
-    n|N|no|NO)
-        echo "否"
-        ;;
-    *)
-        echo "无效输入"
-        ;;
-esac
-```
-
-## 5. 三元运算符
-
-Bash 算术扩展 `$(( ))` 只支持数值三元，不支持字符串字面量：
-
-```bash
-# 数值三元（可用）
-age=20
-status=$(( age >= 18 ? 1 : 0 ))
-echo "$status"   # 输出: 1
-
-# 字符串结果请用 if/else
-if [ $age -ge 18 ]; then
-    status="成年"
-else
-    status="未成年"
-fi
-echo "$status"   # 输出: 成年
-```
-
-## 6. 算术条件
-
-```bash
-# 使用 (( ))
-a=10
-b=20
-
-if ((a < b)); then
-    echo "$a 小于 $b"
-fi
-
-# 支持 C 风格的运算符
-if ((a + b > 25)); then
-    echo "和大于 25"
-fi
-```
-
-## 7. 实战案例
-
-### 7.1 检查文件是否存在
-
-```bash
-#!/bin/bash
-
-file="/etc/passwd"
-
-if [ -f "$file" ]; then
-    echo "文件存在"
-    if [ -r "$file" ]; then
-        echo "文件可读"
-    else
-        echo "文件不可读"
-    fi
-else
-    echo "文件不存在"
-fi
-```
-
-### 7.2 检查服务状态
-
-```bash
-#!/bin/bash
-
-service="nginx"
-
-if systemctl is-active --quiet $service; then
-    echo "$service 正在运行"
-else
-    echo "$service 未运行"
-    read -p "是否启动? (y/n): " choice
-    if [ "$choice" = "y" ]; then
-        sudo systemctl start $service
-    fi
-fi
-```
-
-### 7.3 参数验证
-
-```bash
-#!/bin/bash
-
-if [ $# -lt 1 ]; then
-    echo "用法: $0 <filename>"
-    exit 1
-fi
-
-file=$1
-
-if [ ! -f "$file" ]; then
-    echo "错误: 文件 $file 不存在"
-    exit 1
-fi
-```
+- 掌握 `if`/`elif`/`else` 与 `case` 的语法与适用场景
+- 分清 `[ ]`、`[[ ]]`、`(( ))` 三者的职责边界
+- 掌握整数、字符串、文件三类测试操作符
+- 理解退出码与 `&&`/`||` 组合的陷阱，会正确检查命令成败
+- 能写带参数验证的真实脚本片段
+
+## 1. 为什么需要多种判断写法
+
+历史上 Shell 有多个测试命令：POSIX 的 `test`（写成 `[ ]`）、Bash 扩展的 `[[ ]]`、算术用的 `(( ))`。它们解决的问题不同：`[ ]` 是普通命令，适合整数/字符串/文件测试，但变量必须加引号、不支持 `||`、`=~`、glob；`[[ ]]` 是 Bash 内建关键字，对空变量、通配符更安全，支持正则与模式；`(( ))` 只处理数值，语法贴近 C。**选择原则**：脚本已声明 `#!/bin/bash` 时优先 `[[ ]]` 和 `(( ))`；只在需要 POSIX 兼容或刻意模拟传统 `test` 时用 `[ ]`。dash（Debian 的 `/bin/sh`）不支持 `[[ ]]`，跨发行版脚本要么 `#!/bin/bash`，要么退回加引号的 `[ ]`。
+
+## 2. if 语句
+
+基本结构是 `if 条件; then 真分支; elif 条件2; then 另一分支; else 兜底; fi`——`then` 前的分号（或换行）不可省略，它是关键字分隔符。第一个例子用 `(( age >= 18 ))` 判断是否成年并打印「成年人/未成年人」，因为比较的是整数；若用 `[[ $age -ge 18 ]]` 也可以，但 `-ge` 属于测试语法，`(( ))` 更贴近算术比较的直觉。把 `if` 想象成「命令的退出码路由」：条件位置上的命令返回 0 走 `then`，非 0 走 `else`——这也是为什么 `if command; then` 可以直接挂任何命令（`grep`、`systemctl`、自定义函数）。
+
+## 3. 条件表达式
+
+### 3.1 整数比较
+
+`-eq`/`-ne`/`-gt`/`-ge`/`-lt`/`-le` 分别对应等于、不等于、大于、大于等于、小于、小于等于，写在 `[ ]` 或 `[[ ]]` 里。同样语义用 `(( a < b ))` 更像 C，且空变量按 0 处理，不会像 `[ $a -lt 5 ]` 那样因参数个数不对而报语法错。`(( ))` 内的变量不需要 `$` 前缀（加了也对，但多余）；也支持 `a + b > 25` 这类表达式。
+
+### 3.2 字符串比较
+
+`=`/`==` 等于（`[[ ]]` 内两者等价）、`!=` 不等于、`-z` 空、`-n` 非空、`<`/`>` 字典序（仅 `[[ ]]`）、`=~` 正则匹配（仅 `[[ ]]`，ERE 方言）。**为什么 `[ ]` 里比较字符串必须给变量加引号**，而 `[[ ]]` 里可以省略：`[ ]` 是普通命令，空变量在词分割后会消失，导致 `[ = foo ]` 这种参数个数错误；`[[ ]]` 是关键字，内部不做词分割。为保持习惯统一，`[[ ]]` 里也建议加引号——尤其当值可能含 glob 字符时。正则写在 `=~` 右侧**不能加引号**（加了变成字面量），捕获结果在 `BASH_REMATCH`，详见 [正则表达式](./regex.md)。
+
+### 3.3 文件测试
+
+`-f` 普通文件、`-d` 目录、`-e` 存在、`-r`/`-w`/`-x` 可读/写/执行、`-s` 非空、`-L` 符号链接。判断符号链接时 **`-L` 必须放在 `-f`/`-d` 之前**——`test -f link` 检查的是链接目标，先测 `-f` 会跟着链接走，永远区分不出链接本身。日常检查 `/etc/passwd` 之类固定路径时注意全部加引号：`[[ -f "$file" && -r "$file" ]]`。
+
+## 4. 逻辑运算符
+
+`[[ ]]` 内直接支持 `&&`、`||`、`!`，不必拆成两个 `[ ]`。若用传统 `[ ]`，`&&` 写在两个 `]` 与 `[` **之间**，是 shell 的命令连接符，与写在 `[[ ... && ... ]]` **里面**的测试逻辑与不在同一层次——两者都合法但语义不同，初读容易晕。`(( ))` 用真正的算术比较符，`>`、`<` 不会被解释成重定向或字典序。
+
+**`case` 语句**：当分支很多且基于字符串模式匹配时，比一串 `if/elif` 清晰得多。模式支持 glob 风格通配（`*`、`?`、`[...]`），`|` 表示或，每个分支用 `;;` 结束——**漏写 `;;` 会吞掉后续分支**，这是 `case` 最常见的语法错。默认分支 `*)` 建议永远保留，否则非法输入会静默什么都不做。交互式输入处理常用 `read -rp` 读入后 `case` 匹配 `y|Y|yes|YES` 等模式。
+
+## 5. 三元运算与退出码
+
+`$(( ))` 只支持**数值**三元 `cond ? a : b`，不支持直接返回字符串字面量；字符串结果请用 `if`/`else` 赋值。每条命令执行后都留下退出码：`0` 成功、非 `0` 失败，`$?` 保存紧邻上一条的退出码。检查成败优先写 `if command; then`，让 Bash 自己消费退出码；需要存起来再判断时立刻 `ret=$?`，不要隔行取。
+
+`&&` 与 `||` 常被当成「三元」用，但有经典陷阱：`cmd1 && cmd2 || cmd3` **不**等价于「cmd1 成功则 cmd2，否则 cmd3」——若 cmd1 成功执行 cmd2，而 cmd2 失败，cmd3 也会执行。正确表达分支请用 `if`。安全的「失败即退出」惯用法是 `cd /some/dir || exit 1` 这种只跟 `||`、不涉及中间成功判断的写法。
+
+## 6. 实战片段设计思路
+
+**参数验证**：脚本开头用 `(( $# < 1 ))` 检查参数个数，打印用法到 stderr 并 `exit 1`；再用 `[[ ! -f "$file" ]]` 检查文件存在。用法错误与业务错误最好用不同退出码（如 2 与 1），便于调用方区分。真实运行时无参会看到 `用法: ./proc.sh <filename>`，文件不存在会看到 `错误: 文件 missing.txt 不存在`，且 `$?` 非 0。
+
+**服务状态检查**：`systemctl is-active --quiet "$service"` 用退出码表达状态（0=active），正是 `if` 直接吃的返回值，无需解析输出；未运行时再 `read` 询问是否启动，模式匹配用 `[[ "$choice" == [yY] ]]`。
+
+**文件类型判断**：按「链接 → 目录 → 普通文件 → 其他存在 → 不存在」顺序分支，链接分支里可以用 `readlink` 打出真实目标；目录分支统计 `ls -A | wc -l` 条目数；文件分支用 `wc -c` 字节数。顺序错了会把链接误判成普通文件——见 3.3 节。
+
+## 7. 本章常见坑
+
+1. **空变量不加引号**。`if [ $name = foo ]` 在 `name` 为空时变成 `[ = foo ]`，报 `unary operator expected`。规则：`[ ]` 内变量一律 `"$var"`；优先改用 `[[ ]]`。
+
+2. **`[ ]` 内写 `==`**。传统 `test` 用 `=`；`==` 是 Bash `[[ ]]` 的扩展。统一在 `[[ ]]` 内用 `==` 或 `=`。
+
+3. **整数比较用了 `=` 而非 `-eq`**。`[ "$a" = 5 ]` 是字符串相等，`[ "$a" -eq 5 ]` 才是数值比较。数值比较在 `[[ ]]` 里用 `-eq`，或干脆用 `(( a == 5 ))`。
+
+4. **`$?` 被中间命令覆盖**。`cmd; echo "debug"; if [[ $? -eq 0 ]]` 判断的其实是 `echo` 的退出码。要么紧贴，要么先 `ret=$?`。
+
+5. **`&&`/`||` 当 if-else**。见第 5 节，cmd2 失败时会误执行 cmd3。
+
+6. **`case` 分支漏 `;;`**。会继续落入下一个分支的模式匹配，产生难以理解的「多分支同时执行」。
+
+7. **符号链接判断顺序错**。`-L` 必须放在 `-f`/`-d` 之前，否则无法区分链接本身与其目标类型。
+
+8. **在 dash（`sh`）里用 `[[ ]]`**。Debian 的 `/bin/sh` 是 dash，不支持 `[[ ]]`。脚本要么 `#!/bin/bash`，要么退回加引号的 `[ ]`。
 
 ## 参考资料
 
-- `man bash` - Conditional Constructs
-- [Bash 手册 - Conditional Constructs](https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html)
-- [Advanced Bash-Scripting Guide - Tests](https://tldp.org/LDP/abs/html/tests.html)
+- `man bash` — Conditional Constructs、test
+- Bash 手册 - Conditional Constructs — [gnu.org](https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html)
+- Arch Wiki - Bash - Conditions — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
+- 鸟哥的私房菜 - 条件判断式 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
+- Advanced Bash-Scripting Guide - Tests — [tldp.org](https://tldp.org/LDP/abs/html/tests.html)
+- POSIX test — [pubs.opengroup.org](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/test.html)

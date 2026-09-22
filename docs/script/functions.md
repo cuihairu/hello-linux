@@ -1,344 +1,300 @@
 # 函数
 
-函数是组织代码的基本单元，提高代码复用性和可维护性。
+函数是组织代码的基本单元——把一段有名字、可复用的逻辑打包，需要时调用，而不是复制粘贴同一段「判断 + 删除 + 打印」。Shell 函数本质是「起了名字的命令序列」，在**当前 shell** 中执行（不像外部命令会 fork 子进程），因此能直接修改当前 shell 的变量、切换目录、设置 `trap`。但「当前 shell 执行」也带来两个必须吃透的细节：不加 `local` 的变量会污染全局；`return` 只能返回退出码（0–255），不能返回字符串——想返回数据要靠 `echo`，于是引出「返回值与日志输出混用」的经典坑。本章按「定义 → 参数 → 返回值 → 作用域 → 递归 → 函数库 → 实战 → 常见坑」展开。
 
-> 内容参考自 Bash 手册和 Shell 编程实践，见文末参考资料。
+> 内容参考自 Bash 手册、Arch Wiki 和 Advanced Bash-Scripting Guide，见文末参考资料。
 
 ## 学习目标
 
-- 掌握函数定义和调用
-- 学会使用参数和返回值
-- 了解局部变量和全局变量
-- 掌握递归函数
+- 掌握函数两种定义风格与调用方式，知道为何优先 POSIX 写法
+- 理解位置参数、`$#`、`"$@"`、`shift` 在函数内的含义
+- 分清 `return`（退出码）与 `echo`（数据输出）两种「返回值」
+- 会用 `local` 划定作用域，避免变量污染与 `local` 吞退出码
+- 能构建可复用的函数库，理解 `source` 加载机制
 
-## 1. 函数定义
+## 1. 为什么需要函数
 
-### 1.1 基本语法
+没有函数时，脚本里「检查文件、打日志、失败退出」这类片段会到处复制；改一处要全局搜索替换，漏一处就是隐患。函数把这段逻辑**命名**一次，调用点只保留意图（`log "开始"`），细节集中在定义处。除此之外还有两个工程理由：一是**作用域隔离**——`local` 让临时变量用完即毁，不与主逻辑打架；二是**可测试性**——把纯逻辑抽成函数后，可以先用几行 `echo` 驱动验证，再接入真实数据。
 
-```bash
-# 方法 1
-function_name() {
-    # 代码块
-}
+Shell 函数与 C/Python 的函数有一个关键差别：它**没有独立的返回值通道**。`return` 专供退出码使用（与命令的 `$?` 同一套语义），数据只能走 stdout，被 `$( )` 捕获。理解这一点，后面所有「返回值坑」都迎刃而解。
 
-# 方法 2
-function function_name {
-    # 代码块
-}
-```
+从工程节奏看，函数也是「先写后测」的最小单元：与其等整个脚本写完再 `bash -x` 从头跟到尾，不如每抽一个函数就手动跑一遍边界输入（空串、缺参、非法数字），把错误修在定义处。库化之后，多个脚本共享同一份修复，回归成本从「改 N 处」降为「改 1 处 + 全量 shellcheck」。反过来，若一段逻辑从不会被第二处调用、也不需要单独测，也不必为了「看起来像架构」强行抽函数——过度拆分会让控制流在文件里跳来跳去，读脚本的人要翻页才能拼出全貌。
 
-### 1.2 示例
+## 2. 定义与调用
+
+定义函数就像给一段命令起别名，但与 `alias` 不同：函数有独立的参数列表与退出码，可以 `local`、可以被 `shellcheck` 按函数分析，也能放进库文件复用。Bash 接受两种语法，语义在日常使用里几乎一致，差异主要在兼容性与个别内建行为上。
+
+两种等价写法：
 
 ```bash
-# 定义函数
+# 风格 1（POSIX 兼容，推荐）
 greet() {
     echo "Hello, World!"
 }
 
-# 调用函数
-greet
-```
-
-## 2. 函数参数
-
-### 2.1 位置参数
-
-```bash
-greet() {
-    echo "Hello, $1!"
+# 风格 2（bash 扩展）
+function greet {
+    echo "Hello, World!"
 }
 
-greet "John"  # 输出: Hello, John!
+greet    # 调用：与执行普通命令一样，无需括号
 ```
 
-### 2.2 多个参数
+**为什么推荐风格 1**：POSIX 标准写法，在 `sh`（dash）与 `bash` 下都能解析；风格 2 是 Bash 的历史扩展，`function` 定义的函数在被 `unset -f` 前始终保持 function 属性，跨 shell 迁移时行为更绕。除非团队风格强制，统一用 `name() { ...; }`。
+
+两种写法在 `declare -f name` 下看到的函数体基本一致，差别主要在解析阶段与可移植性；日常脚本选风格 1 还有一个实用好处：shellcheck、编辑器高亮与「像 C 的一眼认识」都更稳。若你维护的库需要同时被 `#!/bin/sh` 引用，风格 2 会直接语法错误——这是跨机分发脚本时最无辜的失败方式之一。
+
+**函数必须先定义后调用**：Shell 逐行解释，调用尚未定义的函数会直接 `command not found`。把定义放在脚本顶部，或全部放进库文件再 `source`。
+
+调用时函数名后的括号可省略；参数与命令行参数一样按空白分词，含空格的实参要加引号。函数可以递归、可以调用外部命令、也可以 `return` 提前结束——与普通命令的差别仅在于：它跑在当前 shell，且 `$1` 只在本次调用期间有效，返回后恢复调用方的位置参数。这条规则在嵌套调用时尤其重要：内层函数 `shift` 不会动到外层的 `$@`。
+
+## 3. 参数：与脚本同一套位置参数
+
+调用函数时传入的实参，在函数体内通过 `$1`、`$2`… 读取——这套机制与脚本入口完全同一实现，没有「函数版位置参数」这种第二套规则。好处是心智模型只有一份：会写 `main` 就会写任意函数；代价是位置参数是**调用期**状态，嵌套调用或 `source` 时要清楚当前栈帧是谁的。
+
+函数内用与脚本完全相同的位置参数机制：`$1`、`$2`…、`$#`、`$@`、`$*`。调用时传的参数**只在函数执行期间**有效，返回后恢复外层的位置参数——这是与全局变量最容易混淆的一点。
 
 ```bash
+greet() { echo "Hello, $1!"; }
+greet "John"                    # Hello, John!
+
 add() {
     local sum=$(( $1 + $2 ))
     echo "和: $sum"
 }
+add 10 20                       # 和: 30
 
-add 10 20  # 输出: 和: 30
-```
-
-### 2.3 参数个数
-
-```bash
 print_args() {
     echo "参数个数: $#"
-    echo "所有参数: $@"
-    echo "第一个参数: $1"
+    printf '  <%s>\n' "$@"
 }
-
-print_args "a" "b" "c"
+print_args "a" "b c" "d"
 ```
 
-## 3. 返回值
+```text
+参数个数: 3
+  <a>
+  <b c>
+  <d>
+```
 
-### 3.1 使用 return
+**给函数传任意多个参数时，内部一律展开 `"$@"`**（详见 [变量与数据类型](./variables.md)）：`"$@"` 把每个参数保持为独立的词，含空格的参数不会被拆散。需要「第一个参数是命令、其余转发给该命令」时，用 `shift` 弹掉第一个参数，剩下的 `"$@"` 正好是转发列表——比拼字符串 `eval` 安全得多：
+
+```bash
+run_all() {
+    local cmd=$1
+    shift
+    "$cmd" "$@"
+}
+run_all echo hello "world with space"    # 输出两词，空格保留
+```
+
+## 4. 返回值：return vs echo
+
+这是函数设计里最重要的分岔：**Bash 函数有两种「往外带东西」的方式，语义完全不同**。把 `return` 当成 C 的 `return expr`、期望它把数字/字符串带回调用方，是初学者最常踩的坑——Bash 没有这条通道，数字过大还会被取模，字符串更是直接语法/语义错误。正确姿势是先分清：调用方需要的是「成功还是失败」（`return`/`$?`）还是「一段数据」（`echo` + `$( )`）。下面 4.1–4.3 依次拆开。
+
+### 4.1 `return`：只能带退出码
+
+`return N` 的 `N` 必须是 0–255 的整数；`return 300` 实际存的是 `300 % 256 = 44`。约定与命令退出码一致：**0 = 成功/真，非 0 = 失败/假**。不写 `return` 时，退出码是**最后一条命令**的。`return` 只能出现在函数内（或用 `return` 结束 `source` 的加载）；写在脚本顶层等价于 `exit`。
+
+把退出码想成「函数的布尔值」最贴切：`if is_even 4; then` 并不关心函数往 stdout 写了什么（本例也没写），只关心 `$?`。需要同时「判定成功」和「带回数据」时，惯例是：成功时 `echo` 数据并 `return 0`，失败时 `return 1`（可选往 stderr 打原因），调用方先 `if` 再 `$( )`，或用「先捕获、后查 `$?`」的两步写法。切勿用 `-1`/`256` 这类值当「特殊成功」——取模后会撞上别的语义。
 
 ```bash
 is_even() {
-    if [ $(($1 % 2)) -eq 0 ]; then
-        return 0  # 真
+    if (( $1 % 2 == 0 )); then
+        return 0
     else
-        return 1  # 假
+        return 1
     fi
 }
 
-if is_even 4; then
-    echo "偶数"
-else
-    echo "奇数"
-fi
+if is_even 4; then echo "偶数"; else echo "奇数"; fi
+if is_even 5; then echo "偶数"; else echo "奇数"; fi
 ```
 
-### 3.2 使用 echo
+```text
+偶数
+奇数
+```
+
+### 4.2 `echo`：用来返回数据
+
+数据走 stdout，调用方用 `$(add 10 20)` 捕获。这是 Bash 函数返回字符串、数字、多行文本的唯一常规手段。`echo` 的行为在跨 shell 时有细微差别（是否解释 `\n`、是否默认换行），需要精确控制格式时优先 `printf '%s\n' "$data"`——脚本里混用两者容易在某个发行版的 `sh` 兼容层上翻车。
+
+多行数据照样走 stdout：`$(get_lines)` 会去掉末尾换行，内部仍保留中间换行；若调用方要保留精确字节（例如二进制或尾部空行），应改用文件/临时目录传递，而不是 `$( )`。`echo` 返回「空字符串」与「函数失败」在结果上无法区分，务必用 `return` 表达失败。
+
+### 4.3 经典坑：返回值与日志输出混用
+
+函数一旦被 `$( )` 捕获，**所有写到 stdout 的内容都会进入结果**。错误示范是在函数里 `echo "正在查找..."` 当进度提示——这行字会安静地变成返回值的一部分，调用方拿到「多几行的脏数据」却很难查出原因。
+
+正确姿势是**数据走 stdout，提示/错误一律 `>&2` 走 stderr**：
 
 ```bash
-add() {
-    echo $(($1 + $2))
+get_file() {
+    echo "正在查找..." >&2        # 日志 → stderr
+    echo "$found_file"           # 数据 → stdout
 }
 
-result=$(add 10 20)
-echo "结果: $result"
+path=$(get_file 2>/dev/null)     # 只要数据
+path=$(get_file 2>&1 >/dev/null) # 只要日志（较少用）
 ```
 
-### 3.3 返回数组
+需要一次返回多个值时，与其拼分隔字符串再 `IFS` 拆，不如用**命名全局变量**约定（调用前知道会写哪些名字），或写入调用方传入的数组名。下面这个解析日期的例子返回三个字段：
 
 ```bash
-get_files() {
-    local files=()
-    for file in *.txt; do
-        files+=("$file")
-    done
-    echo "${files[@]}"
-}
-
-# 获取数组
-file_list=$(get_files)
-for file in $file_list; do
-    echo "文件: $file"
-done
-```
-
-## 4. 局部变量
-
-### 4.1 使用 local
-
-```bash
-my_func() {
-    local name="John"
-    echo "函数内: $name"
-}
-
-my_func
-echo "函数外: $name"  # 空，因为 name 是局部变量
-```
-
-### 4.2 变量作用域
-
-```bash
-global_var="全局"
-
-my_func() {
-    local local_var="局部"
-    echo "函数内: $global_var"
-    echo "函数内: $local_var"
-}
-
-my_func
-echo "函数外: $global_var"
-echo "函数外: $local_var"  # 空
-```
-
-## 5. 递归函数
-
-### 5.1 阶乘
-
-```bash
-factorial() {
-    if [ $1 -le 1 ]; then
-        echo 1
-    else
-        local prev=$(factorial $(($1 - 1)))
-        echo $(($1 * prev))
+parse_date() {
+    local text=$1
+    if [[ $text =~ ^([0-9]{4})-([0-9]{2})-([0-9]{2})$ ]]; then
+        DATE_YEAR=${BASH_REMATCH[1]}
+        DATE_MONTH=${BASH_REMATCH[2]}
+        DATE_DAY=${BASH_REMATCH[3]}
+        return 0
     fi
-}
-
-result=$(factorial 5)
-echo "5! = $result"  # 120
-```
-
-### 5.2 斐波那契数列
-
-```bash
-fibonacci() {
-    if [ $1 -le 0 ]; then
-        echo 0
-    elif [ $1 -eq 1 ]; then
-        echo 1
-    else
-        local a=$(fibonacci $(($1 - 1)))
-        local b=$(fibonacci $(($1 - 2)))
-        echo $((a + b))
-    fi
-}
-
-for i in {0..10}; do
-    echo "fibonacci($i) = $(fibonacci $i)"
-done
-```
-
-## 6. 函数库
-
-### 6.1 创建函数库
-
-```bash
-# mylib.sh
-#!/bin/bash
-
-log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
-}
-
-error() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $1" >&2
-}
-
-check_root() {
-    if [ $EUID -ne 0 ]; then
-        error "需要 root 权限"
-        exit 1
-    fi
-}
-```
-
-### 6.2 使用函数库
-
-```bash
-#!/bin/bash
-
-# 加载函数库
-source ./mylib.sh
-
-# 使用函数
-log "脚本开始"
-check_root
-log "脚本结束"
-```
-
-## 7. 回调函数
-
-```bash
-# 定义回调函数
-on_success() {
-    echo "操作成功"
-}
-
-on_failure() {
-    echo "操作失败"
-}
-
-# 使用回调
-do_operation() {
-    local operation=$1
-    local success_callback=$2
-    local failure_callback=$3
-    
-    if $operation; then
-        $success_callback
-    else
-        $failure_callback
-    fi
-}
-
-# 调用
-do_operation "ls /tmp" on_success on_failure
-```
-
-## 8. 实战案例
-
-### 8.1 日志函数
-
-```bash
-#!/bin/bash
-
-LOG_FILE="/var/log/myscript.log"
-
-log() {
-    local level=$1
-    local message=$2
-    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    echo "[$timestamp] [$level] $message" | tee -a "$LOG_FILE"
-}
-
-log "INFO" "脚本开始"
-log "ERROR" "发生错误"
-log "INFO" "脚本结束"
-```
-
-### 8.2 重试函数
-
-```bash
-#!/bin/bash
-
-retry() {
-    local max_attempts=$1
-    local delay=$2
-    local command=$3
-    
-    for ((attempt=1; attempt<=max_attempts; attempt++)); do
-        if $command; then
-            return 0
-        fi
-        echo "尝试 $attempt 失败，${delay}秒后重试..."
-        sleep $delay
-    done
-    
-    echo "所有尝试失败"
     return 1
 }
 
-# 使用
-retry 3 5 "curl -s https://example.com"
+if parse_date "2026-09-22"; then
+    echo "$DATE_YEAR/$DATE_MONTH/$DATE_DAY"
+fi
 ```
 
-### 8.3 配置文件解析
+```text
+2026/09/22
+```
+
+成功与否仍用 `return` 表达，数据用全局约定传递——职责分离，调用方可以 `if parse_date ...; then` 自然分支。
+
+## 5. 局部变量与作用域
+
+Shell 的变量默认**没有**函数级隔离：谁赋值谁写全局（或当前已存在的 `local`）。这与几乎所有现代语言相反，也是「跑一遍全好、接进大脚本就炸」类 bug 的温床。`local` 是唯一的作用域声明，必须在赋值前、函数体内使用；在函数外使用 `local` 会报错。
+
+### 5.1 为什么必须用 `local`
+
+函数内裸赋值默认写的是**全局变量**。若与调用方同名，调用方的值会被静默覆盖——出错位置（库函数）与症状位置（主逻辑）相距十万八千里，是 Shell 最隐蔽的 bug 来源之一。
 
 ```bash
-#!/bin/bash
+name="outer"
+show() {
+    local name="inner"
+    echo "函数内: $name"
+}
+show
+echo "函数外: $name"
+```
 
-parse_config() {
-    local config_file=$1
-    local section=""
-    
-    while IFS= read -r line; do
-        # 跳过注释和空行
-        [[ "$line" =~ ^#.*$ || -z "$line" ]] && continue
-        
-        # 解析节
-        if [[ "$line" =~ ^\[(.*)\]$ ]]; then
-            section="${BASH_REMATCH[1]}"
-            continue
-        fi
-        
-        # 解析键值对
-        if [[ "$line" =~ ^([^=]+)=(.*)$ ]]; then
-            key="${BASH_REMATCH[1]}"
-            value="${BASH_REMATCH[2]}"
-            echo "${section}.${key}=${value}"
-        fi
-    done < "$config_file"
+```text
+函数内: inner
+函数外: outer
+```
+
+去掉 `local` 后，第二行会变成 `inner`——主逻辑的 `name` 被污染。**规则：函数内定义的变量一律 `local`**，除非刻意要改全局状态（并应注释说明）。
+
+### 5.2 作用域链
+
+函数可以**读**外层全局变量；赋值不加 `local` 会**修改**它；`local` 则新建一个仅在本次调用栈可见的变量，函数返回即销毁。Bash 的 `local` 只有一层（函数级），没有块级作用域——`if`、`for` 里定义的 `local` 仍是函数级，整个函数体内都可见。
+
+读全局、写 `local` 是默认安全模式；「故意写全局」应显式命名并集中到函数末尾的几行，方便 grep。嵌套调用时，内层函数的 `local` 不会遮蔽外层同名 `local` 的**读**路径吗？会——内层 `local x` 一旦声明，内层对 `$x` 的读写都指内层这份，外层那份只在内层作用域之外继续存活。这也是为什么库函数不能假设「调用方一定有个叫 `tmp` 的变量」。
+
+### 5.3 `local` 的副作用陷阱
+
+`local out=$(cmd)` 会把**命令替换的退出码**赋给 `local` 自身（`local` 成功即 0），从而**吞掉 `cmd` 的失败**：
+
+```bash
+# 危险：cp 失败也检测不到
+f() {
+    local out=$(cp a b)
+    return $?          # 永远是 local 的 0
 }
 
-# 使用
-parse_config "/etc/myapp.conf"
+# 正确：先 local 声明，再赋值
+f() {
+    local out
+    out=$(cp a b) || return $?
+}
 ```
+
+与 `set -e`、`pipefail` 联动时这类 bug 极难发现——写库函数时尤其注意，shellcheck 对此有相关告警。
+
+同类陷阱还有 `local x=$y` 与 `local` 多变量：`local a b=$1` 里若 `$1` 缺失，在 `set -u` 下会直接炸，而 `local a= b=$1` 的求值顺序、以及 `local` 是否算「赋值」都会影响 `set -e` 是否触发。保守写法是：**声明与赋值分开、一次只处理一个变量、可疑命令永远显式 `|| return`**。另一点是 `local` 不能用于 `export`：`local -n`（引用）是 Bash 4.3+ 的 nameref，用错场景会让同名变量「穿模」到调用方，调试时表现为改了局部却影响了全局。
+
+## 6. 递归函数
+
+阶乘与斐波那契是教科书例子：基线条件用 `return`/`echo` 返回，递归步把子结果存进 `local` 再组合。二者都能跑通，但要清醒认识代价：**每次递归都用 `$( )` 启动子 shell**，开销远大于 C/Python；`fibonacci(30)` 就会明显变慢，还可能撞上栈深度限制。
+
+生产脚本优先用循环 + 数组改写递归（动态规划两行即可），递归仅用于教学或深度很浅（如目录树遍历且已限深）的场景。若坚持用递归，记得给深度加护栏，避免 `$( )` 展开在异常输入下无限套娃。
+
+递归与 `local` 的配合还有一个细节：每一层调用都会新建一份自己的 `local`，层与层之间互不覆盖——这正是递归能正确组合子结果的原因。若某一层忘了 `local` 而写了全局变量，上一层的结果会被下一层冲掉，症状通常是「偶数层结果对、奇数层全错」这类难查的模式。调试深递归时，与其加几十行 `echo`，不如先 `set -x` 看每次调用的参数与返回，再决定是否值得重写成循环。
+
+## 7. 函数库与 source
+
+把通用函数（日志、错误、依赖检查）抽到独立文件，多脚本共享。库文件本身不直接执行，主脚本用 `source` 把函数定义「注入」当前 shell——`source file`（或 POSIX 写法 `. file`）在**当前 shell** 里逐行执行 `file`，于是其中的函数定义会留下来，后续调用与本地定义无异。相对 `fork` 外部脚本再解析输出，`source` 零进程、可直接改当前 shell 状态（也因此有副作用风险）。
+
+库文件与可执行脚本的分界建议写死在约定里：库文件没有 `#!/bin/bash` 可执行入口、不接受命令行参数、被 `source` 时不自动跑业务逻辑（最多做「幂等的默认值初始化」）。这样 `source ./lib.sh` 永远安全，不会误触发半截业务。
+
+主脚本用 `${BASH_SOURCE[0]}` 定位库文件，避免依赖调用者当前目录——从别的目录调用脚本时，裸写 `source ./mylib.sh` 会找不到文件。`# shellcheck source=mylib.sh` 注释让静态检查能跨文件分析。库内典型成员：带时间戳的 `log`/`error`（错误走 stderr）、检查 `EUID` 的 `check_root`、用 `command -v` 探测依赖的 `require_cmd`。
+
+`source` 在当前 shell 生效，因此库里的 `alias`、变量也会留下——若只想加载函数、不想要副作用，保持库文件「只定义函数、不执行动作」即可。
+
+## 8. 回调与高阶用法
+
+Shell 没有一等函数对象——不能把函数塞进变量再当值传（Bash 4.4 起 `name=func; $name` 勉强可用，但可移植性差，且无法直接表达「带参的闭包」）。但**函数名字符串**足以实现简单回调：把 `on_success`/`on_failure` 作为参数传入，内部 `if "$operation"; then "$success_cb"; else "$failure_cb"; fi` 即可。注意调用回调时要加引号 `"$cb"`，且 `operation` 若是「命令 + 参数」的字符串直接 `$operation` 会词分割——更稳妥的写法与第 3 节 `run_all` 相同，用 `"$@"` 转发。
+
+回调模式的价值在于把「成功做什么、失败做什么」从主流程里拆出去：主函数只负责「尝试一次」，通知、重试、告警都由调用方注入。这样同一个 `with_retry`/`do_operation` 可以在测试里换成打印函数、在生产里换成告警函数，而不用复制粘贴改分支。设计库函数时，凡是出现「if 成功 then A else B」且 A/B 会随场景变的，都值得抽成回调参数。
+
+与回调配合的还有一种「钩子数组」写法：`HOOKS+=(on_start on_mid)`，主流程 `for h in "${HOOKS[@]}"; do "$h" || return; done`。好处是能注册多个回调且保持 `"$@"` 安全展开；坏处是执行顺序与失败策略（谁失败就停还是继续）必须写进文档，否则调用方会在半夜被静默吞掉的钩子坑到。回调/钩子都属于「用约定代替语言特性」，约定一旦写进 `lib.sh` 顶部注释，就比隐式全局变量安全得多。
+
+## 9. 实战函数集
+
+三个函数覆盖运维库最常被复用的能力；下面按「为什么这么设计、边界是什么」说明，代码骨架可直接抄进 `lib.sh` 再按团队规范补测试。
+
+**日志**：用关联数组做级别过滤（Bash 4+，三系默认满足），`tee -a` 同时写文件与终端，并且整体 `>&2`，保证不污染 `$( )` 捕获的业务数据。级别从 DEBUG 到 ERROR，低于 `LOG_LEVEL` 的直接 `return` 不输出。关联数组要求 Bash 4；若还要兼容 macOS 自带的 Bash 3.2，改用 `case` 映射级别数字即可，不必引入外部 `logger`。
+
+**重试**：`retry max delay cmd...` 模式——`shift 2` 之后 `"$@"` 恰好是完整命令；循环内 `"$@"` 成功则 `return 0`，失败则 sleep 后继续；耗尽次数 `return 1` 并打错误日志。比 `eval` 拼命令安全，是调用 `curl`、`ssh` 等瞬时失败接口的标准封装。延迟若需要退避（第 n 次 sleep 翻倍），用 `delay=$((delay * 2))` 放在 sleep 之前，并给上限封顶，避免 `set -u` 下未初始化或天文数字 sleep。
+
+**配置解析**：`while IFS= read -r line` 读文件，跳过空行与注释，`[[ =~ ]]` 识别 `[section]` 与 `key=value`，用 `BASH_REMATCH` 取出键值并 `printf` 输出 `section.key=value`。注意 `read` 模板要带 `|| [[ -n $line ]]` 兜底无换行的末行；正则方言是 ERE，见 [正则表达式](./regex.md)。INI 不是严格标准，本实现只覆盖「无嵌套、无多行值」的常见子集；需要完整语义时用 `crudini` 或改用 JSON + `jq`。
+
+这三个函数分别对应「可观测性」「可靠性」「集成」，几乎每个运维脚本库都会包含，建议直接抄进自己的 `lib.sh`。验收方式不是「看起来像」，而是：日志走 stderr 后 `x=$(f)` 仍干净；`retry` 在 mock 失败 3 次后确实 sleep 了 3 次并返回 1；配置解析对缺尾行、注释行、空行都不炸。
+
+## 10. 本章常见坑
+
+函数相关的故障多半有共同特征：**定义处看起来完全正确，出问题的是看不见的全局状态或子 shell**。排查时优先 `set -x` 看展开、`declare -p` 看变量现值，而不是先改逻辑。下面九条按出现频率排列，建议在 code review 清单里固化。
+
+1. **忘写 `local`**。函数内裸赋值覆盖全局同名变量；库函数尤其危险。默认所有局部变量加 `local`。
+
+2. **`return` 返回超过 255 的值**。被静默取模，调用方拿到意料之外的码。数据请用 `echo` 返回。
+
+3. **数据与日志都写 stdout**。`x=$(func)` 会把函数里每一条 `echo` 都捕获进去。提示/错误一律 `>&2`。
+
+4. **`local out=$(cmd)` 吞掉退出码**。`local` 自身的成功覆盖了 `cmd` 的 `$?`。分两步赋值，或 `local out; out=$(cmd) || return $?`。
+
+5. **先调用后定义**。脚本逐行执行，函数定义必须在调用之前（或放在 `source` 的库里）。
+
+6. **递归太深或性能崩**。Bash 每层递归都 fork 子 shell；深递归改循环 + 数组。
+
+7. **`source` 相对路径依赖 cwd**。用 `${BASH_SOURCE[0]}` 定位库文件，否则从别的目录调用脚本会找不到。
+
+8. **用 `eval` 拼命令实现「传参转发」**。一律 `"$cmd" "$@"` + `shift`，避免注入与引号地狱。
+
+9. **把位置参数和全局变量同名**。函数内 `$1` 会遮蔽外层，调试时先 `set -x` 看展开，或改用更具体的全局名。
+
+## 本章小结
+
+函数是把「有名字的逻辑」变成可复用资产的最小手段。本章的核心可以压成三句：**定义用 POSIX 风格、参数一律 `"$@"`、数据 `echo` 走 stdout 而 `return` 只表达成败**。`local` 负责隔离，`source` 负责共享，回调负责在没有闭包的语言里注入策略。
+
+写库函数时的默认纪律：不改调用方的全局变量（除非文档写明）、不在 stdout 打日志、不依赖调用时的 cwd、失败路径一定 `return` 非零。满足这四条的函数，放进 `lib.sh` 后被第二个脚本 `source` 时，通常不需要再改一行。
+
+自测清单（可贴进 PR 模板）：所有新变量是否 `local`；`$(func)` 捕获结果里是否混入调试输出；`local out=$(cmd)` 是否改成分步赋值；库路径是否用 `${BASH_SOURCE[0]}`；`shellcheck -x` 是否零 error。五项全绿再合入，比上线后追「偶数层结果全错」省事得多。
+
+下一步可以把本章函数与 [文本处理](./text-processing.md)、[脚本调试](./debugging.md) 串起来：用函数收口 `grep`/`awk` 包装，用 `set -x` 与 shellcheck 守住回归，最终落到 [实战案例](./examples.md) 里的完整脚本骨架。
 
 ## 参考资料
 
-- `man bash` - Shell Functions
-- [Bash 手册 - Shell Functions](https://www.gnu.org/software/bash/manual/html_node/Shell-Functions.html)
-- [Advanced Bash-Scripting Guide - Functions](https://tldp.org/LDP/abs/html/functions.html)
+- `man bash` — Shell Functions（内建命令与 `local`/`return` 语义的权威出处）
+- Bash 手册 - Shell Functions — [gnu.org](https://www.gnu.org/software/bash/manual/html_node/Shell-Functions.html)
+- Arch Wiki - Bash — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)（函数、数组与常见坑的维护者补充）
+- 鸟哥的私房菜 - 函数功能 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
+- Advanced Bash-Scripting Guide - Functions — [tldp.org](https://tldp.org/LDP/abs/html/functions.html)
+- Google Shell Style Guide - Function Libraries — [google.github.io](https://google.github.io/styleguide/shellguide.html)
+- ShellCheck wiki — 局部变量、退出码与 `local` 相关告警的触发条件与修复示例
+
+本章示例均按 Bash 4+（三系默认）书写；若需兼容 macOS 自带的 Bash 3.2，关联数组、`mapfile`、部分 `[[ ]]` 扩展需改写为 `case`/`while read` 等价形式，并在脚本头用 `BASH_VERSINFO` 做版本门槛。跨发行版分发前，对三种 `bash` 各跑一遍 `bash -n` 与 shellcheck，比只在开发机上测一轮可靠得多。
