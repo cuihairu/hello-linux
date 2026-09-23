@@ -17,15 +17,10 @@ RHEL/CentOS/Rocky 家族的包管理在 2015 年经历了一次核心更替：**
 
 ```bash
 # RHEL 9 / Rocky 9：yum 实际是 dnf 的兼容入口
-$ which yum
-/usr/bin/yum
 $ rpm -qf /usr/bin/yum
-dnf-yum-4.14.0-1.el9_3.noarch      ← 来自 dnf-yum 插件包
-
-$ dnf --version
+dnf-yum-4.14.0-1.el9_3.noarch      # 来自 dnf-yum 插件包，不是老 YUM 本体
+$ dnf --version | head -1
 4.14.0
-  Installed: dnf-0:4.14.0-1.el9_3.x86_64 at 2025-11-02
-  Built    by: buildsys@rockylinux.org on 2025-10-18
 ```
 
 这意味着：**日常文档里写 `yum install` 在现代 RHEL 系上仍然有效**，但新脚本、新教程一律推荐写 `dnf`，语义更明确，也不再依赖兼容层。真正需要区分 YUM 与 DNF 行为的场景主要在 CentOS 7（纯 YUM，Python 2）与个别废弃选项上——本页所有主命令以 DNF 为准，YUM 差异随文标注。
@@ -33,67 +28,40 @@ $ dnf --version
 DNF 与底层 RPM 的分层完全对应 APT/dpkg：RPM 只负责本地包的安装、查询、卸载与校验，不解决远程依赖；DNF 在其上维护仓库索引、解析依赖、下载并按序调用 RPM 完成事务。因此遇到 `rpm -ivh` 报依赖错误时，正确反应是换 `dnf install` 让 DNF 去算，而不是继续 `--nodeps` 强装——强装会留下"数据库认为已装、实际链接缺失"的坏账。
 
 ```bash
-# DNF 做什么：依赖解析 + 仓库交互
 $ sudo dnf install nginx
-Dependencies resolved.
-================================================================================
- Package            Arch        Version            Repository        Size
-================================================================================
-Installing:
- nginx              x86_64      1.24.1-1.el9       appstream         29 k
-Installing dependencies:
- nginx-filesystem   x86_64      1.24.1-1.el9       appstream         37 k
-...
-Complete!
+ Installing:
+  nginx            x86_64   1.24.1-1.el9   appstream   29 k
+Complete!                       # 依赖由 DNF 解析后按序调用 RPM 完成事务
 
-# RPM 做什么：只看/改本地数据库
-$ rpm -q nginx
+$ rpm -q nginx                  # RPM 层：只查本地数据库
 nginx-1.24.1-1.el9.x86_64
 ```
 
 ## 2. 日常核心命令（DNF）
 
 ```bash
-# 刷新元数据缓存（对应 apt update / pacman -Sy）
 $ sudo dnf makecache
-Metadata cache created.
+Metadata cache created.         # 刷新元数据（对应 apt update / pacman -Sy）
 
-# 升级系统（YUM 时代写作 yum update；DNF 推荐 dnf upgrade）
 $ sudo dnf upgrade
-Last metadata expiration check: 0:12:34 ago on Fri 14 Mar 2026 10:02:11 AM CST.
-Dependencies resolved.
-================================================================================
- Package                 Arch   Version             Repository       Size
-================================================================================
 Upgrading:
- openssl                 x86_64 3.0.7-6.el9         baseos          1.2 M
- openssl-libs            x86_64 3.0.7-6.el9         baseos          2.1 M
-...
-Complete!
+ openssl   x86_64   3.0.7-6.el9   baseos   2.1 M
+Complete!                       # YUM 时代写作 yum update，语义被映射到 upgrade
 
-# 安装 / 卸载
-$ sudo dnf install nginx
-$ sudo dnf remove nginx
-$ sudo dnf reinstall nginx          # 同版本重装（文件损坏时用）
-
-# 搜索（默认同时匹配包名与描述）
+$ sudo dnf install nginx        # 卸载把 install 换成 remove，同版本重装用 reinstall
 $ dnf search nginx
-======================== Nginx Matched: nginx =========================
 nginx.x86_64: A high performance web server and reverse proxy server
-
-# 包详情 / 列出已装 / 列出可升级
-$ dnf info nginx
-$ dnf list installed | wc -l
-2143
-$ dnf check-update                 # 类似 apt list --upgradable
-
-# 查文件属于哪个包 / 包内文件列表（RPM 层）
-$ rpm -qf /usr/sbin/nginx
-nginx-1.24.1-1.el9.x86_64
-$ rpm -ql nginx | head -5
-/usr/sbin/nginx
-/usr/share/nginx/html
 ```
+
+查询类操作按场景收进下表，命令都能直接运行：
+
+| 场景 | 命令 | 说明 |
+|------|------|------|
+| 包详情 | `dnf info nginx` | 版本、仓库、体积、维护者 |
+| 可升级列表 | `dnf check-update` | 类似 `apt list --upgradable` |
+| 统计已装包 | `dnf list installed \| wc -l` | 输出总行数（示例机器 2143） |
+| 文件属于哪个包 | `rpm -qf /usr/sbin/nginx` | RPM 层查询 |
+| 包内文件列表 | `rpm -ql nginx` | 反查安装了哪些路径 |
 
 YUM 兼容说明：`yum update` 在 DNF 下仍可用但语义被映射为 `dnf upgrade`；`yum install`/`yum search`/`yum remove` 同理完全兼容。唯一要留意的是老教程里的 `yum clean all`、`yum makecache` 在 DNF 下分别对应 `dnf clean all`、`dnf makecache`，命令名换掉即可。
 
@@ -103,16 +71,14 @@ RHEL/Rocky 的仓库定义全部放在 `/etc/yum.repos.d/` 下的 `*.repo` 文�
 
 ```bash
 $ ls /etc/yum.repos.d/
-rocky-rockycore.repo  rocky-extras.repo  rocky-baseos.repo  rocky-appstream.repo
+rocky-baseos.repo  rocky-appstream.repo  rocky-extras.repo
 
-# 查看当前启用了哪些仓库
 $ dnf repolist
-repo id                 repo name                              status
-appstream               Rocky Linux 9 - AppStream               6,412
-baseos                  Rocky Linux 9 - BaseOS                 2,231
-extras                  Rocky Linux 9 - Extras                    51
+repo id      repo name                 status
+appstream    Rocky Linux 9 - AppStream 6,412
+baseos       Rocky Linux 9 - BaseOS    2,231
 
-# 临时启用/禁用某个仓库执行命令
+# 临时启用 / 禁用某个仓库执行一条命令
 $ sudo dnf --enablerepo=epel install htop
 $ sudo dnf --disablerepo=epel upgrade
 ```
@@ -120,13 +86,10 @@ $ sudo dnf --disablerepo=epel upgrade
 **EPEL**（Extra Packages for Enterprise Linux）是 Fedora 官方为 RHEL/Rocky 维护的扩展仓库，提供 `htop`、`nginx`（部分版本）、`ripgrep` 等不在 BaseOS/AppStream 里的软件：
 
 ```bash
-# 安装 EPEL 源（Rocky/RHEL 通用）
 $ sudo dnf install epel-release
 $ dnf repolist | grep epel
-epel           Extra Packages for Enterprise Linux 9 - x86_64    2,104
-
-# 然后正常安装
-$ sudo dnf install htop
+epel    Extra Packages for Enterprise Linux 9 - x86_64   2,104
+$ sudo dnf install htop        # 装完就能正常搜索安装
 ```
 
 **国内镜像**：清华 TUNA、阿里云、中科大均提供 Rocky/RHEL/EPEL 镜像，替换 `.repo` 里的 `baseurl` 即可（注意 `mirrorlist=` 行要一并注释，否则优先走官方 CDN）。
@@ -136,24 +99,20 @@ CentOS 7 于 2024-06-30 结束生命周期，官方镜像仓库已下线。仍�
 :::
 
 ```bash
-# 仅当必须维护 CentOS 7 时（新机器不要执行）
-$ sudo sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-*.repo
-$ sudo sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' \
-      /etc/yum.repos.d/CentOS-*.repo
+# 仅当必须维护 CentOS 7 时（新机器不要执行）：关掉 mirrorlist、改走 vault 存档
+$ sudo sed -i -e 's|^mirrorlist=|#|' \
+      -e 's|^#baseurl=http://mirror|baseurl=http://vault|' /etc/yum.repos.d/CentOS-*.repo
 $ sudo yum makecache
 ```
 
-**模块流（module stream）** 是 RHEL 8+ 引入的机制，让同一仓库可并存多个版本的应用（如不同版本的 Node.js、PHP、PostgreSQL）：
+**模块流（module stream）** 是 RHEL 8+ 引入的机制，让同一仓库可并存多个版本的应用（如不同版本的 Node.js、PHP、 PostgreSQL）：
 
 ```bash
-# 查看某应用有哪些模块流
 $ dnf module list nodejs
 Name       Stream      Profiles      Summary
 nodejs     18 [d]      common...     Javascript runtime
 nodejs     20          common...     Javascript runtime
-
-# 切换流并安装
-$ sudo dnf module enable nodejs:20
+$ sudo dnf module enable nodejs:20    # 切换到 20 这条流
 $ sudo dnf install nodejs
 ```
 
@@ -161,79 +120,50 @@ $ sudo dnf install nodejs
 
 ## 4. 缓存管理
 
-DNF 的元数据与包缓存分别位于 `/var/cache/dnf/` 与 `/var/cache/yum/`（兼容路径），清理策略与 APT 类似但命令不同：
+DNF 的元数据与包缓存分别位于 `/var/cache/dnf/` 与 `/var/cache/yum/`（兼容路径）。清理策略与 APT 类似但命令不同，核心就两条：
 
 ```bash
-# 清空所有缓存（元数据 + 已下载包）—— 排查"索引损坏"的第一步
-$ sudo dnf clean all
-142 files removed
-
-# 重建元数据
-$ sudo dnf makecache
-
-# 只清元数据 / 只清包缓存
-$ sudo dnf clean metadata
-$ sudo dnf clean packages
-
-# 查看缓存占用
-$ sudo du -sh /var/cache/dnf/
+$ sudo dnf clean all     # 清元数据 + 已下载包（如 142 files removed）
+$ sudo dnf makecache     # 重建元数据
 ```
 
-生产上 `dnf clean all && dnf makecache` 是容器镜像瘦身、缓存同步失败时的标准组合拳。与 `pacman` 对照：`pacman -Scc` 会连问两次是否清空全部包缓存，比 DNF 更激进；APT 的 `apt clean` 只删 `.deb`，不删索引（索引在 `apt clean` 后仍在，可用 `rm -rf /var/lib/apt/lists/*` 才等效于"全清"）。
+更细的粒度用 `sudo dnf clean metadata`（只清索引）与 `sudo dnf clean packages`（只清包），占用情况看 `sudo du -sh /var/cache/dnf/`。生产上 `dnf clean all && dnf makecache` 是容器镜像瘦身、缓存同步失败时的标准组合拳。与 `pacman` 对照：`pacman -Scc` 会连问两次是否清空全部包缓存，比 DNF 更激进；APT 的 `apt clean` 只删 `.deb`，不删索引（索引在 `apt clean` 后仍在，可用 `rm -rf /var/lib/apt/lists/*` 才等效于"全清"）。
 
 ## 5. 版本锁定
 
 DNF 的版本锁由 `versionlock` 插件提供（RHEL/Rocky 默认已装），锁定条目写入 `/etc/dnf/plugins/versionlock.list`：
 
 ```bash
-# 锁定当前安装的 nginx 版本
 $ sudo dnf versionlock add nginx
 Adding versions.
-
-# 查看锁定了什么
 $ dnf versionlock list
 8:nginx-1.24.1-1.el9.x86_64
-
-# 解锁
-$ sudo dnf versionlock delete nginx
+$ sudo dnf versionlock delete nginx   # 解锁单个包（clear 解锁全部）
 Deleting versions.
-
-# 解锁全部
-$ sudo dnf versionlock clear
 ```
 
 与另两系对照：APT 的 `apt-mark hold` 语义最接近"精确锁死当前版本，禁止出现在 upgrade 列表"；DNF `versionlock` 额外支持通配与版本范围表达式；Arch 的 `pacman` 没有一级锁命令，惯例是在 `/etc/pacman.conf` 写 `IgnorePkg = linux linux-headers`（跳过升级，而非锁定到某个确切版本），需要精确锁定时借助第三方 pin 脚本。做内核升级窗口管控时，三系的这个差异决定了你的自动化脚本必须分支处理。
 
 ## 6. RPM 底层命令
 
-绕过 DNF 直接操作本地包的场景：安装厂商提供的闭源 `.rpm`、离线环境、或查询文件归属。
+绕过 DNF 直接操作本地包的场景：安装厂商提供的闭源 `.rpm`、离线环境、或查询文件归属。三个动词记住就够：`-i` 安装（`-U` 升级、`-e` 卸载）、`-q` 查询、`-V` 校验。
 
 ```bash
-# 安装 / 升级 / 卸载（-i install，-U upgrade，-e erase）
-$ sudo rpm -ivh vendor-app-1.0-1.x86_64.rpm
-$ sudo rpm -Uvh vendor-app-1.1-1.x86_64.rpm
-$ sudo rpm -e vendor-app
-
-# 查询：包信息 / 已装文件 / 文件归属
-$ rpm -qi nginx
-$ rpm -ql nginx
+$ sudo rpm -ivh vendor-app-1.0-1.x86_64.rpm   # 本地闭源包直接落盘
+$ rpm -qi nginx                                # 包信息（-ql 列文件、-qf 查归属）
 $ rpm -qf /usr/sbin/nginx
 nginx-1.24.1-1.el9.x86_64
-
-# 列出所有已装包 / 校验完整性
-$ rpm -qa | wc -l
-2143
-$ rpm -V nginx          # 输出为空 = 与安装时的校验和一致
+$ rpm -V nginx                                 # 校验完整性，无输出 = 与安装时一致
 ```
 
-**常见坑**：`rpm -ivh` 遇到 `failed dependencies` 时，不要习惯性加 `--nodeps` 跳过——那会绕过 DNF 已经为你建好的依赖图，留下运行时 `undefined symbol` 之类的深坑。正确做法是改用 `dnf install ./vendor-app.rpm`，DNF 同样能装本地文件并自动解析依赖（相当于 `apt install ./xxx.deb`）。
+**常见坑**：`rpm -ivh` 遇到 `failed dependencies` 时，不要习惯性加 `--nodeps` 跳过——那会绕过 DNF 已经为你建好的依赖图，留下运行时 `undefined symbol` 之类的深坑。正确做法是改用 `dnf install ./vendor-app.rpm`，DNF 同样能装本地文件并自动解析依赖（相当于 `apt install ./xxx.deb`）。想知道系统一共装了多少个包，`rpm -qa | wc -l` 一行就够。
 
 ## 7. 与 APT、pacman 对照
 
-六类核心操作在三系上的完整对照（同一张表也收录在章节首页，便于对照记忆）：
+核心操作在三系上的完整对照（同一张表也收录在章节首页，便于对照记忆）：
 
-| 操作 | Debian/Ubuntu (`apt`) | Arch (`pacman`) | RHEL/CentOS/Rocky (`dnf`) |
-|------|----------------------|-----------------|---------------------------|
+| 场景 | Debian/Ubuntu | Arch | RHEL/CentOS/Rocky |
+|------|---------------|------|-------------------|
 | 刷新索引 | `sudo apt update` | `sudo pacman -Sy` | `sudo dnf makecache` |
 | 升级系统 | `sudo apt upgrade` | `sudo pacman -Syu`（不可拆） | `sudo dnf upgrade` |
 | 安装 | `sudo apt install pkg` | `sudo pacman -S pkg` | `sudo dnf install pkg` |

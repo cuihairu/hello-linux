@@ -34,8 +34,6 @@
 
 ```bash
 cat /proc/filesystems
-# nodev	sysfs
-# nodev	tmpfs
 #     	ext4          ← 无 nodev 前缀的是真正的磁盘文件系统
 #     	xfs
 #     	btrfs
@@ -50,10 +48,8 @@ Linux 把几乎所有资源抽象成文件接口，好处是**一套命令通吃
 ```bash
 # 一切皆文件的直观对照：设备、进程、网络都能被 ls/cat 统一操作
 ls -la /dev/sda        # 块设备（b 开头）
-ls -la /dev/tty        # 字符设备（c 开头）
 ls -la /dev/null       # 空设备——写进去的数据直接丢弃
 cat /proc/cpuinfo      # 内核现造的"文件"
-cat /proc/meminfo
 ```
 
 `/dev`、`/proc`、`/sys` 都不是"存了数据的目录"，而是内核在内存里现造的文件——它们能被 `ls` 列出、被 `cat` 读取，靠的正是 VFS 的统一接口。
@@ -74,11 +70,10 @@ cat /proc/meminfo
 
 ```bash
 sudo mkfs.ext4 /dev/sdb1
-# mke2fs 1.47.0 (28-Jan-2024)
-# Creating filesystem with 6553600 4k blocks and 1638400 inodes
-
 sudo tune2fs -l /dev/sdb1 | grep -E 'Filesystem features|Inode count'
 ```
+
+格式化输出会给出块数与 inode 数（例如 6553600 个 4k 块、1638400 个 inode），`tune2fs -l` 可随时复查特性开关与计数。
 
 代价：没有原生快照，扩容容易缩容极难（`resize2fs` 只能扩），海量小文件场景下目录项性能弱于 XFS。
 
@@ -88,11 +83,10 @@ RHEL 8 选择它做默认，看重的是大文件写入、并行 I/O 和元数�
 
 ```bash
 sudo mkfs.xfs /dev/sdb1
-# meta-data=/dev/sdb1 isize=512 agcount=4, sectsize=512
-# data bsize=4096 blocks=... imaxpct=25
-
 sudo xfs_info /dev/sdb1 | head -3
 ```
+
+`mkfs.xfs` 会打印 meta-data/data 段的 `isize`、`agcount`、`bsize` 等参数，之后用 `xfs_info` 随时复查。
 
 注意 XFS 的老限制（历史版本单文件 16TB 时代已过）当前版本上限极高，但**不支持缩容**是硬约束——规划 XFS 分区时"宁大勿小"。
 
@@ -104,7 +98,6 @@ sudo xfs_info /dev/sdb1 | head -3
 sudo mkfs.btrfs /dev/sdb1
 # 创建快照（目标路径不能位于被快照的子卷内，否则会循环嵌套）
 sudo btrfs subvolume snapshot /mnt /mnt/snapshots/my-snapshot
-# Create a snapshot of '/mnt' in '/mnt/snapshots/my-snapshot'
 ```
 
 代价：CoW 在数据库等"原地更新"负载上有写放大问题（可通过 `nodatacow` 关闭，但会失去快照能力）；碎片化在 HDD 上更明显；备份工具需按子卷理解结构。
@@ -159,14 +152,11 @@ echo $?           # 0 才算通过
 ```bash
 sudo umount /mnt
 # umount: /mnt: target is busy.        ← 最常见报错
-
-sudo fuser -vm /mnt                    # 找出占用者：cui 的 shell cd 在里面、root 的 tail 没关
-# -l 懒卸载：等占用者释放后才真正断开。应急可用但别养成习惯——
-# 它会掩盖"谁在用"的问题，且进程仍持有已删除的文件句柄
-sudo umount -l /mnt
+sudo fuser -vm /mnt                    # 找出占用进程（shell cd 在里面、tail 没关）
+sudo umount -l /mnt                    # 懒卸载：等占用者释放后才真正断开
 ```
 
-卸载失败几乎从不是文件系统坏了，而是**还有人开着这个目录**。先 `fuser` 找到进程，关掉再卸，比 `-l` 更干净。
+`-l` 应急可用但别养成习惯——它会掩盖"谁在用"的问题，且进程仍持有已删除的文件句柄。卸载失败几乎从不是文件系统坏了，而是**还有人开着这个目录**：先 `fuser` 找到进程，关掉再卸，比 `-l` 更干净。
 
 ## 5. 常见坑
 

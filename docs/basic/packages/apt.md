@@ -16,89 +16,55 @@ APT（Advanced Package Tool）是 Debian 与 Ubuntu 全家桶的官方前端，�
 `dpkg` 是 Debian Package 的缩写，从 1993 年就存在，只做本地包管理：安装、卸载、查询"哪些文件属于哪个包"，但**完全不理解依赖**——它拿到一个需要 `libssl3` 却发现系统没有时，只会把错误码抛给你。APT 在它之上补全了缺失的智能：维护远程仓库索引、构建依赖图、按需下载依赖、处理冲突与推荐包。类比关系是：`dpkg` 像仓库管理员只管入库出库，`apt` 像采购经理负责比价、凑单、补货。
 
 ```bash
-# 高层：与仓库交互（需要联网概念）
+# 高层：与仓库交互，查候选版本与来源
 $ apt policy nginx
 nginx:
-  Installed: (none)
   Candidate: 1.24.0-2ubuntu7
-  Version table:
-     1.24.0-2ubuntu7 500
-        500 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages
+  500 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages
 
-# 底层：只看本地 dpkg 数据库
+# 底层：只看本地 dpkg 数据库（ii = 已安装且状态正常）
 $ dpkg -l | grep -c ^ii
-2487          # 系统上已成功安装的包数量（ii = installed ok）
+2487
 ```
 
 日常使用几乎永远从 `apt` 开始；只有在处理本地 `.deb` 文件、修复损坏状态、或查询"这个文件是哪个包提供的"时才需要直接调用 `dpkg`。
 
 ## 2. 日常核心命令
 
+先看一次完整的"刷新索引 → 安装"流程，输出截取自真实 Ubuntu 24.04 终端（下载、解包等冗余行已裁剪，只留有信息量的部分）：
+
 ```bash
-# 刷新索引（不升级任何软件，只下载"菜单"）
 $ sudo apt update
 Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [126 kB]
-Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1406 kB]
-Fetched 3429 kB in 1s (3241 kB/s)
-Reading package lists... Done
+Fetched 3429 kB in 1s (3241 kB/s)            # 只更新索引这张"菜单"，不升级软件
 
-# 升级所有可升级的包（不移除、不安装新依赖以外的包）
-$ sudo apt upgrade
-The following packages will be upgraded:
-  curl libcurl4 openssl zlib1g
-3 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-Need to get 1420 kB of archives.
-
-# 完整升级：允许为升级而"移除"冲突的旧包（比 upgrade 更激进）
-$ sudo apt full-upgrade        # 旧称 apt-get dist-upgrade
-
-# 安装
 $ sudo apt install nginx
 The following NEW packages will be installed:
   nginx nginx-common nginx-core
-0 upgraded, 3 newly installed, 0 to remove.
-Setting up nginx (1.24.0-2ubuntu7) ...
+Setting up nginx (1.24.0-2ubuntu7) ...       # 依赖一并解包并执行 postinst
 nginx: configuration file test is successful
-
-# 卸载（保留配置文件）
-$ sudo apt remove nginx
-
-# 卸载并删除配置（purge = remove + 清 /etc 与部分 /var 残留）
-$ sudo apt purge nginx
-
-# 删除不再被任何软件依赖的包（升级后例行清理）
-$ sudo apt autoremove
-
-# 搜索（会同时搜包名与描述，注意大小写不敏感）
-$ apt search web server | head -5
-nginx/stable 1.24.0-2ubuntu7 amd64
-  small, but powerful web/proxy server
-
-# 查看包详情（版本、依赖、维护者、主页）
-$ apt show nginx
-Package: nginx
-Version: 1.24.0-2ubuntu7
-Depends: nginx-common (= ...), libc6 (>= 2.34), libssl3 ...
-Description: small, but powerful web/proxy server
-
-# 列出可升级的包
-$ apt list --upgradable
-curl/noble-updates 8.5.0-2ubuntu10 amd64 [upgradable from: 8.4.0-1build1]
-
-# 查文件属于哪个包 / 包里装了哪些文件
-$ dpkg -S /usr/sbin/nginx
-nginx: /usr/sbin/nginx
-$ dpkg -L nginx-common | head -5
-/.
-/etc
-/etc/logrotate.d/nginx
 ```
+
+其余高频操作按场景收进下表，命令都能直接运行，输出语义与上面一致，不再逐条贴：
+
+| 场景 | 命令 | 说明 |
+|------|------|------|
+| 升级已装软件 | `sudo apt upgrade` | 不移除、不安装新依赖以外的包 |
+| 完整升级 | `sudo apt full-upgrade` | 允许为升级移除冲突的旧包（旧称 `apt-get dist-upgrade`） |
+| 卸载（保留配置） | `sudo apt remove nginx` | `/etc/nginx/` 通常仍在 |
+| 彻底清除 | `sudo apt purge nginx` | remove + 清 conffile 与部分 `/var` 残留 |
+| 清理孤儿依赖 | `sudo apt autoremove` | 与 `apt clean`（删下载缓存）是两回事 |
+| 搜索 | `apt search web server` | 同时匹配包名与描述，大小写不敏感 |
+| 包详情 | `apt show nginx` | 版本、依赖、维护者、主页 |
+| 可升级列表 | `apt list --upgradable` | 被 hold 的包不会出现在这里 |
+| 文件属于哪个包 | `dpkg -S /usr/sbin/nginx` | 查 dpkg 本地数据库 |
+| 包内文件列表 | `dpkg -L nginx-common` | 反查该包装了哪些路径 |
 
 一个常被问到的区别：`apt remove` 卸载后，`/etc/nginx/` 下的配置通常仍在（因为属于独立的 `nginx-common` 包或被 dpkg 标记为 conffile），想要干净删掉用 `apt purge`。反过来，`apt autoremove` 与 `apt clean` 是两回事——前者删"不再需要的软件包"，后者删"下载下来的 `.deb` 缓存文件"。
 
 ## 3. 仓库与源配置
 
-APT 的仓库定义在两类位置：单行格式的老文件 `/etc/apt/sources.list`，以及 Debian 12+/Ubuntu 24.04+ 推荐的 **deb822 格式**（`.sources` 文件，字段分行书写、更易解析）。Ubuntu 24.04 起默认源文件已迁移到 `/etc/apt/sources.list.d/ubuntu.sources`，照着老教程改 `sources.list` 会发现改了没反应——这是该版本最高频的配置踩坑。
+APT 的仓库定义在两类位置：单行格式的老文件 `/etc/apt/sources.list`，以及 Debian 12+/Ubuntu 24.04+ 推荐的 **deb822 格式**（`.sources` 文件，字段分行书写、更易解析）。Ubuntu 24.04 起默认源文件已迁移到 `/etc/apt/sources.list.d/ubuntu.sources`，照着老教程改 `sources.list` 会发现改了没反应——这是该版本最高频的配置踩坑。PPA 与第三方仓库生成的文件也统一落在 `/etc/apt/sources.list.d/` 目录里，与默认源并存。
 
 ```bash
 # Ubuntu 24.04+ deb822 格式（默认路径）
@@ -107,65 +73,38 @@ Types: deb
 URIs: http://archive.ubuntu.com/ubuntu/
 Suites: noble noble-updates noble-backports
 Components: main restricted universe multiverse
-Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
-# 旧版单行格式（Debian 与 Ubuntu 22.04 及更早）
+# 旧版单行格式（Debian 与 Ubuntu 22.04 及更早，与上面语义等价）
 # deb http://archive.ubuntu.com/ubuntu noble main restricted universe multiverse
-
-# 额外源目录（PPA、第三方仓库都放这里）
-$ ls /etc/apt/sources.list.d/
-ubuntu.sources
 ```
 
-**切换国内镜像**（以清华 TUNA 为例，替换前务必备份）：
+**切换国内镜像**（以清华 TUNA 为例，替换前务必备份；两种格式只差文件路径）：
 
 ```bash
-# deb822 格式（Ubuntu 24.04+）
-$ sudo cp /etc/apt/sources.list.d/ubuntu.sources{,.bak}
-$ sudo sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' \
-      /etc/apt/sources.list.d/ubuntu.sources
-
-# 单行格式（旧版）
+$ M=https://mirrors.tuna.tsinghua.edu.cn
 $ sudo cp /etc/apt/sources.list{,.bak}
-$ sudo sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' \
-      /etc/apt/sources.list
-
-$ sudo apt update      # 换源后必须刷新索引
+$ sudo sed -i "s|http://archive.ubuntu.com|$M|g" /etc/apt/sources.list
+$ sudo sed -i "s|http://archive.ubuntu.com|$M|g" /etc/apt/sources.list.d/ubuntu.sources
+$ sudo apt update                              # 换源后必须刷新索引
 ```
 
 **PPA（Personal Package Archive）** 是 Ubuntu 特有的第三方仓库机制，Debian 官方体系没有对等物（Debian 用 backports 或直接从源码/第三方 `.list` 文件）：
 
 ```bash
-# 添加 PPA（需要 software-properties-common）
 $ sudo apt install software-properties-common
-$ sudo add-apt-repository ppa:deadsnakes/ppa    # 例：Python 多版本
+$ sudo add-apt-repository ppa:deadsnakes/ppa        # 添加（例：Python 多版本）
 $ sudo apt update
-
-# 移除 PPA
-$ sudo add-apt-repository --remove ppa:deadsnakes/ppa
-
-# 查看当前启用了哪些源
-$ apt policy | grep -E '^\S|release' | head -10
+$ sudo add-apt-repository --remove ppa:deadsnakes/ppa    # 移除该 PPA
 ```
 
 ## 4. 缓存管理
 
-APT 在 `/var/cache/apt/archives/` 保留已下载的 `.deb` 文件（便于重装、离线部署），索引则在 `/var/lib/apt/lists/`。两者都会随时间膨胀，需要区分清理：
+APT 在 `/var/cache/apt/archives/` 保留已下载的 `.deb` 文件（便于重装、离线部署），索引则在 `/var/lib/apt/lists/`。两者都会随时间膨胀，分工却不同：名字里带 `clean` 的管**文件**（`apt clean` 清全部下载缓存、`apt autoclean` 只清过期版本），带 `remove` 的管**包**（`apt autoremove` 删不再被依赖的软件包）。想看两处实际占用，用 `sudo du -sh /var/cache/apt/archives/ /var/lib/apt/lists/`。
 
 ```bash
-# 清空已下载的 .deb 缓存（安全，随时可重新下载）
-$ sudo apt clean
-$ du -sh /var/cache/apt/archives/
-0       /var/cache/apt/archives/
-
-# 只清理"过期版本"的 .deb（保守版，留当前可用的）
-$ sudo apt autoclean
-
-# 删除不再需要的依赖包（注意与 clean 的区别）
-$ sudo apt autoremove
-
-# 查看 APT 缓存占用
-$ sudo du -sh /var/cache/apt/archives/ /var/lib/apt/lists/
+$ sudo apt clean && du -sh /var/cache/apt/archives/   # 清缓存并验证占用
+0	/var/cache/apt/archives/
+$ sudo apt autoclean                                   # 保守版：只清过期 .deb
 ```
 
 一个实用技巧：服务器上跑完 `apt upgrade` 后习惯性接一句 `apt clean`，可以把镜像缓存占用降为 0；需要离线分发时反过来，在一台机器 `apt install --download-only` 聚齐 `.deb` 再拷走。
@@ -175,30 +114,22 @@ $ sudo du -sh /var/cache/apt/archives/ /var/lib/apt/lists/
 升级前想把某个关键包（内核、nginx 指定小版本、glibc）钉死，避免被 `apt upgrade` 顺手带上去：
 
 ```bash
-# 锁定（hold 会写入 dpkg 状态标记）
 $ sudo apt-mark hold nginx
 nginx set on hold.
-
-# 查看所有被锁定的包
-$ apt-mark showhold
+$ apt-mark showhold            # 查看所有被锁定的包
 nginx
-
-# 解锁
-$ sudo apt-mark unhold nginx
+$ sudo apt-mark unhold nginx   # 解锁
 nginx was unheld.
-
-# 对比：查看"可自动升级"与"被 hold"的差异
-$ apt list --upgradable    # 被 hold 的包不会出现在这里
 ```
 
 `hold` 是包级别的"禁止升级"标记，存在 `/var/lib/dpkg/status` 中，重装系统不保留，但同一系统内跨多次 `apt upgrade` 一直有效。与另两系对照：DNF 用 `dnf versionlock add nginx`（写入 `versionlock.list`，可精确到版本号），Arch 无对等一级命令，通常在 `/etc/pacman.conf` 配 `IgnorePkg`。
 
 ## 6. 与 DNF、pacman 对照
 
-同样六类操作在三系上的完整对照（详细展开见 [YUM/DNF](./yum.md) 与章节首页）：
+常用操作在三系上的完整对照（Debian/Ubuntu 用 `apt`、Arch 用 `pacman`、RHEL/CentOS/Rocky 用 `dnf`；详细展开见 [YUM/DNF](./yum.md) 与章节首页）：
 
-| 操作 | Debian/Ubuntu (`apt`) | Arch (`pacman`) | RHEL/Rocky (`dnf`) |
-|------|----------------------|-----------------|---------------------|
+| 场景 | Debian/Ubuntu | Arch | RHEL/CentOS/Rocky |
+|------|---------------|------|-------------------|
 | 刷新索引 | `sudo apt update` | `sudo pacman -Sy` | `sudo dnf makecache` |
 | 升级 | `sudo apt upgrade` | `sudo pacman -Su`（建议 `-Syu` 连写） | `sudo dnf upgrade` |
 | 安装 | `sudo apt install nginx` | `sudo pacman -S nginx` | `sudo dnf install nginx` |
@@ -212,23 +143,20 @@ $ apt list --upgradable    # 被 hold 的包不会出现在这里
 ## 7. dpkg 底层与修复
 
 ```bash
-# 安装本地 .deb（会因缺依赖失败——此时改用 apt install ./file.deb）
+# 直接装本地 .deb 会因缺依赖失败
 $ sudo dpkg -i nginx-common_1.24.0-2ubuntu7_all.deb
 dpkg: dependency problems prevent configuration of nginx-common:
  nginx-common depends on lsb-base (>= 3.2-14) ...
 
-# 正确姿势：让 apt 补齐依赖（deb822 之后支持本地路径）
+# 正确姿势：让 apt 先算依赖、补齐依赖，再调 dpkg
 $ sudo apt install ./nginx-common_1.24.0-2ubuntu7_all.deb
 
 # 中断后的标准修复流程（顺序很重要）
 $ sudo dpkg --configure -a          # 先完成所有"已解包未配置"的包
 $ sudo apt --fix-broken install     # 再修复依赖关系
-
-# 强制配置（慎用，仅在 dpkg 自身状态错乱时）
-$ sudo dpkg --configure -a --force-confnew
 ```
 
-`dpkg --configure -a` 处理的是"文件已复制、postinst 脚本没跑完"的半安装状态（apt 中断、断电后常见）；`apt --fix-broken install` 处理的是依赖图缺口。两者互补，修复脚本里通常按上述顺序各跑一遍。
+`dpkg --configure -a` 处理的是"文件已复制、postinst 脚本没跑完"的半安装状态（apt 中断、断电后常见）；`apt --fix-broken install` 处理的是依赖图缺口。两者互补，修复脚本里通常按上述顺序各跑一遍。`dpkg` 状态错乱到极致时才考虑 `sudo dpkg --configure -a --force-confnew`，它会丢弃旧配置重新跑脚本。
 
 ## 8. 常见坑
 

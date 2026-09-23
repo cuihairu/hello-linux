@@ -57,10 +57,10 @@ network:
 ```
 
 ```bash
-$ sudo netplan generate      # 只生成后端配置，不生效（安全检查用）
-$ sudo netplan try           # 应用并在 120 秒无确认时自动回滚——远程必用
+$ sudo netplan generate      # 只生成后端配置，不生效
+$ sudo netplan try           # 应用并 120 秒无确认自动回滚——远程必用
 $ sudo netplan apply         # 立即应用（配错会断网，请先 try）
-$ sudo netplan status        # 查看当前生效状态（Ubuntu 22.04+）
+$ sudo netplan status        # 查看生效状态（Ubuntu 22.04+）
 ```
 
 **坑**：YAML 缩进敏感，两个空格起步、禁止 Tab；远程会话改网络务必用 `netplan try` 而不是 `apply`，给自己留 120 秒后悔药。
@@ -76,10 +76,7 @@ Name=enp3s0
 
 [Network]
 DHCP=yes
-# 静态地址示例：
-# Address=192.168.10.5/24
-# Gateway=192.168.10.1
-# DNS=223.5.5.5
+# 静态地址示例：Address=192.168.10.5/24、Gateway=192.168.10.1、DNS=223.5.5.5
 ```
 
 ```bash
@@ -99,10 +96,6 @@ $ nmcli device status
 DEVICE  TYPE      STATE      CONNECTION
 enp3s0  ethernet  connected  System eth0
 lo      loopback  unmanaged  --
-
-$ nmcli connection show
-NAME         UUID                                  TYPE      DEVICE
-System eth0  5fb07b73-9c18-4e4a-b2f3-7a3e9c2d1b40  ethernet  enp3s0
 
 # 修改连接：设为 DHCP
 $ sudo nmcli connection modify "System eth0" ipv4.method auto
@@ -126,11 +119,9 @@ RHEL 8 及更早常见 `/etc/sysconfig/network-scripts/ifcfg-*` 旧格式，RHEL
 $ timedatectl
                Local time: Tue 2026-09-22 10:30:41 CST
            Universal time: Tue 2026-09-22 02:30:41 UTC
-                 RTC time: Tue 2026-09-22 02:30:41
                 Time zone: Asia/Shanghai (CST, +0800)
 System clock synchronized: yes
               NTP service: active
-          RTC in local TZ: no
 
 $ sudo timedatectl set-timezone Asia/Shanghai
 $ sudo timedatectl set-ntp true      # 开启 NTP 同步
@@ -144,11 +135,7 @@ RHEL 系实际跑的 NTP 守护进程多为 `chronyd`，Debian/Ubuntu 为 `syste
 ```bash
 $ hostnamectl
  Static hostname: web01.example.com
-       Icon name: computer-vm
-         Chassis: vm
-      Machine ID: 8f3a1c2e9b4d4a6e8c1f5d7b9e2a3c4d
-        Boot ID: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-Operating System: Debian GNU/Linux 12 (bookshelf)
+Operating System: Debian GNU/Linux 12 (bookworm)
           Kernel: Linux 6.1.0-13-amd64
     Architecture: x86-64
 

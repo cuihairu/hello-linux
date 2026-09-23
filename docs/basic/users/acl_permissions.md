@@ -18,7 +18,6 @@
 ACL 把授权对象从三类扩展到任意数量的"具名用户/组"条目，同时保持向后兼容——不支持 ACL 的老程序调用 `stat()` 拿到的仍是传统三位权限（对应 ACL 里的 `user::`、`group::`、`other::`）。三大发行版家族的文件系统默认都支持 ACL：ext4、XFS、Btrfs、tmpfs 均开箱即用，无需内核参数调整；需要安装的只是用户态工具包。
 
 ```bash
-# 三系安装 ACL 工具
 $ sudo apt install acl        # Debian/Ubuntu
 $ sudo pacman -S acl          # Arch
 $ sudo dnf install acl        # RHEL/CentOS/Rocky
@@ -26,110 +25,53 @@ $ sudo dnf install acl        # RHEL/CentOS/Rocky
 
 ## 2. 读懂 getfacl 输出
 
-先看一个未经修改的文件，ACL 与 `ls -l` 是一一对应的：
+`getfacl` 的输出与 `ls -l` 是一一对应的：`user::` 对应属主三位，`group::` 对应属组三位，`other::` 对应其他人三位；中间可能多出若干 `user:名字:` / `group:名字:` 具名条目，以及一行 `mask::`。未经修改的文件与 `ls -l` 完全一致；给具名用户授权后，多出来的就是一条**具名 ACL 条目**，同时 `mask` 会被自动抬升以容纳新权限。
 
 ```bash
 $ getfacl /srv/projects/notes.txt
 # file: srv/projects/notes.txt
-# owner: alice
-# group: devops
-user::rw-          ← 对应 ls -l 第一组 rwx（属主）
-group::r--         ← 对应第二组 r-x 的读位（属组）
-mask::rw-          ← 有效权限上限（见第 4 节）
-other::r--         ← 对应第三组 r--
-```
-
-给 `guest` 用户单独加上读写后，多出来的就是一条**具名 ACL 条目**：
-
-```bash
-$ sudo setfacl -m u:guest:rw /srv/projects/notes.txt
-$ getfacl /srv/projects/notes.txt
-# file: srv/projects/notes.txt
-# owner: alice
-# group: devops
 user::rw-
 user:guest:rw-     ← 新增：针对具名用户的授权
 group::r--
-mask::rw-          ← mask 被自动抬升，以容纳 guest 的 rw
+mask::rw-          ← 有效权限上限（见第 4 节）
 other::r--
 ```
 
-对比 `ls -l` 会发现权限位串变长了——末尾出现的 `+` 号就是"存在 ACL"的标记：
-
-```bash
-$ ls -l /srv/projects/notes.txt
--rw-rw-r--+ 1 alice devops 0 Mar 15 10:24 /srv/projects/notes.txt
-#           ↑ 有 + 号说明该文件带扩展 ACL
-```
-
-也可以直接为组授权，语义与具名用户一致，只是匹配对象换成组 GID：
-
-```bash
-$ sudo setfacl -m g:auditors:r /srv/projects/notes.txt
-```
+对比 `ls -l` 会发现权限位串变长了——末尾出现的 `+` 号就是"存在 ACL"的标记（`-rw-rw-r--+`）。也可以直接为组授权，语义与具名用户一致，只是匹配对象换成组 GID：`sudo setfacl -m g:auditors:r file.txt`。
 
 ## 3. setfacl 常用操作
 
+`setfacl -m` 修改条目，`-x` 删除单条，`-b` 清空全部扩展 ACL 只留传统三位；多条授权用逗号分隔一次写入；`-R` 递归应用到目录下**调用那一刻已经存在**的文件。
+
 ```bash
-# 修改：给用户/组设置权限
-$ sudo setfacl -m u:guest:rw file.txt
-$ sudo setfacl -m g:auditors:r file.txt
-
-# 同时给多者授权，用逗号分隔
 $ sudo setfacl -m u:guest:rw,u:carol:r file.txt
-
-# 递归应用到目录下已有的所有文件（-R）
 $ sudo setfacl -R -m u:guest:rw /srv/projects/drafts/
-
-# 删除某一条具名 ACL（-x，delete 模式）
-$ sudo setfacl -x u:guest file.txt
-$ sudo setfacl -x g:auditors file.txt
-
-# 删除全部扩展 ACL，只留传统三位（-b，remove-all）
-$ sudo setfacl -b file.txt
-
-# 修改权限掩码（见下一节）
-$ sudo setfacl -m m:r file.txt
+$ sudo setfacl -x u:guest file.txt     # 删除某一条具名 ACL
+$ sudo setfacl -b file.txt             # 删除全部扩展 ACL
+$ sudo setfacl -m m:r file.txt         # 修改权限掩码
 ```
 
-一个必须区分的细节：`-R` 只影响**调用那一刻已经存在**的文件；之后新建的文件不会自动继承 ACL。要让新文件也带上授权条目，需要设置**默认 ACL（default ACL）**——它附着在目录上，像模板一样被 `open()`/`creat()` 创建的子文件与子目录继承：
+注意 `-R` 只影响存量文件；之后新建的文件不会自动继承 ACL。要让新文件也带上授权条目，需要设置**默认 ACL（default）**——它附着在目录上，像模板一样被 `open()`/`creat()` 创建的子文件与子目录继承，`d:` 前缀只在**目录**上有效：
 
 ```bash
-# 为目录设置默认 ACL：今后在 drafts/ 下新建的文件自动继承 guest 的 rw
 $ sudo setfacl -m d:u:guest:rw /srv/projects/drafts/
-
-# 验证
 $ touch /srv/projects/drafts/new.txt
 $ getfacl /srv/projects/drafts/new.txt
-# file: ...
-user::rw-
-user:guest:rw-     ← 新文件自动带上了，无需再手动 setfacl
-group::r--
-other::r--
-
-# 清除默认 ACL
-$ sudo setfacl -k /srv/projects/drafts/
+user:guest:rw-     ← 新文件自动带上，无需再手动 setfacl
+$ sudo setfacl -k /srv/projects/drafts/   # 清除默认 ACL
 ```
 
-注意 `d:` 前缀只在**目录**上有效；对普通文件设置 default ACL 会被拒绝。另外默认 ACL 的权限受目录自身 ACL 约束，若父目录 `group::r--`，子文件也继承不出写权限——权限是逐级"与"下来的。
+默认 ACL 的权限受目录自身 ACL 约束，若父目录 `group::r--`，子文件也继承不出写权限——权限是逐级"与"下来的。
 
 ## 4. mask：最容易踩的坑
 
-mask 是 ACL 里的**有效权限上限**，它对所有非属主的 ACL 条目（具名用户、具名组、属组）做按位与运算。任何一条条目被 mask 收窄后，实际生效权限都会低于你设置的值：
+mask 是 ACL 里的**有效权限上限**，它对所有非属主的 ACL 条目（具名用户、具名组、属组）做按位与运算。任何一条条目被 mask 收窄后，实际生效权限都会低于你设置的值——`getfacl` 显示的具名行就是"与过 mask 之后"的实际生效权限。
 
 ```bash
-# 场景：先把 mask 收紧为只读
 $ sudo setfacl -m m:r file.txt
-
-# 即便之前给 guest 设了 rw，实际生效也只剩 r
 $ getfacl file.txt
-user::rw-
-user:guest:r--     ← 显示的是"实际生效"权限，已被 mask 截断
-group::r--
-mask::r--          ← 罪魁祸首
-other::r--
-
-# 验证：guest 现在写入会被拒绝
+user:guest:r--     ← 已被 mask 截断，不再是当初给的 rw
+mask::r--
 $ sudo -u guest tee -a file.txt < /dev/null
 tee: file.txt: Permission denied
 ```
@@ -153,20 +95,15 @@ tee: file.txt: Permission denied
 
 ## 6. 备份与恢复
 
-ACL 存储在文件系统元数据中，`cp` 一般不保留（除非用 `cp -a`/`--preserve=xattr`），迁移目录树时最稳妥的方式是先导出再回放：
+ACL 存储在文件系统元数据中，`cp` 一般不保留（除非用 `cp -a`/`--preserve=xattr`），迁移目录树时最稳妥的方式是先导出再回放。`getfacl -R` 的输出是可回放文本（带 `# file:` 注释行做定位），`setfacl --restore` 期望的正是这个格式：
 
 ```bash
-# 导出（-R 递归；注意导出文件本身的格式是可回放的文本）
 $ getfacl -R /srv/projects > /backup/projects.acl
-
-# 回放到新的目录树（-R 递归应用）
 $ sudo setfacl --restore=/backup/projects.acl
-
-# 或写成管道
 $ getfacl -R /srv/projects | sudo setfacl --restore=/dev/stdin
 ```
 
-`--restore` 期望的输入正是 `getfacl -R` 生成的格式，文件里带 `# file:` 注释行做定位。做完整迁移（`rsync` 到新机器）时，把 ACL 导出文件与数据一起归档，恢复顺序是"先 rsync 数据，再 setfacl --restore"，反过来会导致 ACL 条目因目标文件不存在而被跳过。
+做完整迁移（`rsync` 到新机器）时，把 ACL 导出文件与数据一起归档，恢复顺序是"先 rsync 数据，再 setfacl --restore"，反过来会导致 ACL 条目因目标文件不存在而被跳过。
 
 ## 7. 常见坑
 

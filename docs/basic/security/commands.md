@@ -14,66 +14,53 @@
 
 ## 1. 状态查看
 
+`getenforce` 只回答一个问题：内核当前处于 Enforcing、Permissive 还是 Disabled，它读的是运行时状态，`setenforce` 之后立刻就能看到变化。`sestatus` 给出更完整的画面：SELinuxfs 挂载点、根目录、加载的策略名、运行时模式与配置文件模式是否一致、策略是否启用 MLS 等。日常排障先跑一条 `getenforce` 就够；只有当你怀疑"改了配置没生效"或"有人临时关过"时，才需要 `sestatus` 里的两行模式对比。
+
 ```bash
 $ getenforce
 Enforcing
 
 $ sestatus
-SELinux status:                 enabled
-SELinuxfs mount:                /sys/fs/selinux
-SELinux root directory:         /etc/selinux
-Loaded policy name:             targeted
 Current mode:                   enforcing
 Mode from config file:          enforcing
-Policy MLS status:              enabled
-Policy deny_unknown status:     allowed
-Max kernel policy version:      33
 ```
 
 `Current mode` 是运行时模式，`Mode from config file` 是重启后的模式，两者可能不一致（刚 `setenforce` 过、或改了配置未重启）。Debian/Ubuntu 默认 AppArmor，这两条命令输出 `Disabled`/command not found 属正常，改用 `aa-status`；Arch 默认未启用 SELinux，先确认 `/sys/fs/selinux` 是否挂载。
 
 ## 2. 安全上下文
 
+每个文件和每个进程都带一段安全上下文（security context），形如 `user:role:type:level`，内核做 MAC 判断时只看 `type` 字段。`ls -Z` 看文件的 type，`ps -Z` 看进程的 type——httpd 域的进程只能碰 `httpd_sys_content_t` 一类的文件，这就是"标签不匹配即拒绝"的根源。
+
 ```bash
-# 文件上下文
 $ ls -Z /var/www/html/index.html
 system_u:object_r:httpd_sys_content_t:s0  /var/www/html/index.html
 
-# 进程上下文
 $ ps -eZ | grep nginx
-system_u:system_r:httpd_t:s0   1523 ?   00:00:01 nginx: master process
-
-# 临时修改文件上下文（重启/restorecon 后会被策略默认规则覆盖——见第 6 节）
-$ sudo chcon -t httpd_sys_content_t /data/www/new.html
-
-# 按策略默认规则恢复上下文（日常最常用的"纠正"命令）
-$ sudo restorecon -R /var/www/html/
-
-# 递归预览将要改成什么（不实际修改，-v 显示；-n 只打印不执行）
-$ sudo restorecon -R -n -v /data/www/
+system_u:system_r:httpd_t:s0   1523 ?  nginx: master process
 ```
 
-`restorecon` 的行为完全由策略文件（file contexts 配置）决定：策略说这个路径该是什么标签，它就改成什么。因此它是"恢复出厂标签"的工具；要**新增**一条永久标签规则，必须用 `semanage fcontext`（见第 6 节与[策略配置](./policy_configuration.md)）。
+改标签有两条路：`chcon` 直接写入指定 type，**不查策略**，重启或下次 `restorecon` 就会被打回原形，只适合临时验证；`restorecon` 按策略文件里的默认规则恢复"出厂标签"，是日常纠正标签漂移的标准动作；要**新增**一条永久路径→type 规则，必须先用 `semanage fcontext` 写入策略数据库，之后 `restorecon` 才能把它还原到新值（详见第 6 节与[策略配置](./policy_configuration.md)）。
+
+```bash
+$ sudo restorecon -R /var/www/html/
+$ sudo restorecon -R -n -v /data/www/    # -n 只预览不修改，-v 显示将要改成什么
+```
 
 ## 3. 布尔值（booleans）
 
-布尔值是策略预留的开关，用来在不改策略代码的前提下打开/关闭一整类授权。这是**排障时优先级最高的修复手段**——它精确、可逆、有文档：
+布尔值是策略预留的开关，用来在不改策略代码的前提下打开/关闭一整类授权。这是**排障时优先级最高的修复手段**——它精确、可逆、有文档：targeted 策略为常见服务预留了大量开关，绝大多数"合法但被拦"的场景都有现成布尔值，先用 `getsebool -a | grep 关键词` 搜一遍往往就能命中。
 
 ```bash
-# 列出全部布尔值及当前状态
 $ getsebool -a | grep httpd
 httpd_can_network_connect --> off
-httpd_can_network_connect_db --> off
 httpd_enable_cgi --> on
 
-# 持久打开（-P 写入磁盘，重启保留；不加 -P 仅当前有效）
-$ sudo setsebool -P httpd_can_network_connect on
-
+$ sudo setsebool -P httpd_can_network_connect on   # -P 写入磁盘，重启保留
 $ getsebool httpd_can_network_connect
 httpd_can_network_connect --> on
 ```
 
-常见场景速查：
+不加 `-P` 只对当前运行时生效，重启即丢失——这是"故障修好了又复发"的头号原因。常见场景速查：
 
 | 业务需求 | 布尔值 |
 |---------|--------|
@@ -82,21 +69,15 @@ httpd_can_network_connect --> on
 | httpd 写用户上传目录 | `httpd_enable_homedirs`（视策略版本，更多用 fcontext） |
 | 允许 sshd 使用 PAM home 目录 | `ssh_use_pam` |
 
-选布尔值之前先 `getsebool -a | grep 关键词` 搜一遍——targeted 策略为常见服务预留了大量开关，绝大多数"合法但被拦"的场景都有现成布尔值。
-
 ## 4. 端口标签
 
-进程要监听的端口也带标签，标签与进程 type 不匹配时，bind 会被拒（典型：nginx 改监听 8080 被拒）：
+进程要监听的端口也带标签，标签与进程 type 不匹配时，bind 会被拒（典型：nginx 改监听 8080 被拒）。`semanage port -l` 列出所有端口标签及其覆盖的端口号；若业务端口不在列表里，用 `-a` 新增一条映射（已存在则用 `-m` 修改），不需要的自定义条目用 `-d` 删除。
 
 ```bash
-# 查看端口标签
-$ sudo semanage port -l | grep -E '^http_port_t|http_port_t'
-http_port_t      tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+$ sudo semanage port -l | grep http_port_t
+http_port_t      tcp      80, 81, 443, 8008, 8443, 9000
 
-# 把 8080 加入 http_port_t（-a 新增；已存在则用 -m 修改）
 $ sudo semanage port -a -t http_port_t -p tcp 8080
-
-# 删除自定义条目
 $ sudo semanage port -d -t http_port_t -p tcp 8080
 ```
 
@@ -104,61 +85,33 @@ $ sudo semanage port -d -t http_port_t -p tcp 8080
 
 ## 5. 日志分析：ausearch 标准流程
 
-AVC 拒绝记录在 `/var/log/audit/audit.log`（RHEL 系），用 `ausearch` 查而不是裸 grep：
+AVC 拒绝记录在 `/var/log/audit/audit.log`（RHEL 系），用 `ausearch` 查而不是裸 grep：`-m avc` 按记录类型过滤，`-ts` 限定时间窗口（`recent` 约最近十分钟，另有 `today`、`now` 或明确日期时间），`-i` 把原始字段翻译成可读文本。按进程（`-x`）、用户（`-ui`）、文件（`-f`）过滤可以把范围收窄到单次故障现场。
 
 ```bash
-# 最近的 SELinux 拒绝（-m avc 匹配记录类型，-i 转换成可读文本）
 $ sudo ausearch -m avc -ts recent -i
-type=AVC msg=audit(09/22/26 14:03:11.234:412) : avc:  denied  { name_connect }
-  for  pid=1024 comm="nginx" dest=3306 scontext=system_u:system_r:httpd_t:s0
-  tcontext=system_u:object_r:mysqld_port_t:s0 tclass=tcp_socket
+type=AVC msg=audit(...) : avc:  denied  { name_connect }
+  for pid=1024 comm="nginx" dest=3306
+  scontext=system_u:system_r:httpd_t:s0
+  tcontext=system_u:object_r:mysqld_port_t:s0
 
-# 按时间窗口
-$ sudo ausearch -m avc -ts today -i
-$ sudo ausearch -m avc -ts 09/22/2026 14:00:00 -ei   # 到现在
-
-# 按进程/用户/文件过滤
 $ sudo ausearch -m avc -x nginx -i
-$ sudo ausearch -m avc -ui 1000 -i
-$ sudo ausearch -m avc -f /etc/shadow -i
-
-# 今天的全部 AVC，交给 audit2why 解读（回答"为什么被拒"）
 $ sudo ausearch -m avc -ts today | audit2why -a
 ```
 
-`audit2why` 会把原始 AVC 翻译成人话（"该 access 被 policy 的 dontaudit 规则禁止"、"缺少 allow 规则"等），是判断"该开布尔值还是该加标签"的关键辅助。
+读懂上面第一条输出就抓住了排障的核心三要素：`scontext` 是谁被拒（httpd 域的 nginx）、`tcontext` 是想碰什么（MySQL 的 3306 端口标签）、`denied { name_connect }` 是想做什么动作。`audit2why -a` 会把原始 AVC 翻译成人话（"该 access 被 policy 的 dontaudit 规则禁止"、"缺少 allow 规则"等），是判断"该开布尔值还是该加标签"的关键辅助。
 
-`sealert` 是更友好的前端（`policycoreutils` 提供），对整份 audit 日志做聚合分析：
-
-```bash
-$ sudo sealert -a /var/log/audit/audit.log
-```
-
-输出会把同类拒绝归并、给出建议（有时直接提示可用的布尔值），排障时先跑 `sealert` 看汇总，再用 `ausearch` 取单条细节。
+`sealert` 是更友好的前端（`policycoreutils` 提供），对整份 audit 日志做聚合分析，把同类拒绝归并并给出建议（有时直接提示可用的布尔值）。排障时先跑 `sealert -a /var/log/audit/audit.log` 看汇总，再用 `ausearch` 取单条细节。
 
 ### 排障标准流程（务必按顺序）
 
-```text
-① 确认模式          getenforce / sestatus
-                      ├─ Disabled/非 SELinux 系统 → 换思路，别在这里耗
-                      └─ Permissive → 日志只记录不拦，业务异常另有原因
-                      └─ Enforcing 且业务异常 → 继续②
-
-② 抓拒绝证据        sudo ausearch -m avc -ts recent -i
-                      → 记下 scontext（谁）、tcontext（目标）、tclass+denied（动作）
-
-③ 判断修复类型（按优先级，命中即停）
-                      a) 有现成布尔值？      getsebool -a | grep <关键词>
-                         → sudo setsebool -P <name> on
-                      b) 是文件标签不对？     ls -Z 正常文件 vs 异常文件
-                         → 临时: chcon -t <type> <file>
-                           持久: semanage fcontext -a ... && restorecon -R ...
-                      c) 是端口标签不对？     semanage port -l | grep <type>
-                         → semanage port -a -t <type> -p tcp <port>
-                      d) 都不是，策略真缺规则 → [策略配置] audit2allow（最后手段）
-
-④ 验证              setenforce 1（若曾临时关闭）→ 复现业务操作 → 再次 ausearch 应无新增拒绝
-```
+1. **确认模式**：`getenforce`/`sestatus`。显示 Disabled 或系统根本没启用 SELinux → 换思路，别在这里耗；Permissive → 日志只记录不拦，业务异常另有原因；Enforcing 且业务异常 → 进入第 2 步。
+2. **抓拒绝证据**：`sudo ausearch -m avc -ts recent -i`，记下 `scontext`（谁）、`tcontext`（目标）、`tclass`+`denied`（动作）。
+3. **判断修复类型**（按优先级，命中即停）：
+   - 有现成布尔值？`getsebool -a | grep <关键词>` → 命中就 `sudo setsebool -P <name> on`；
+   - 是文件标签不对？`ls -Z` 对比正常文件与异常文件 → 临时用 `chcon -t <type> <file>`，持久用 `semanage fcontext -a ...` 后 `restorecon -R ...`；
+   - 是端口标签不对？`semanage port -l | grep <type>` → `semanage port -a -t <type> -p tcp <port>`；
+   - 都不是，策略真缺规则 → 最后才考虑 [策略配置](./policy_configuration.md) 中的 `audit2allow`。
+4. **验证**：若曾临时关闭，先 `setenforce 1`，再复现业务操作，最后再次 `ausearch` 应无新增拒绝。
 
 **常见错误顺序**：一上来就 `setenforce 0` 或 `audit2allow`。前者掩盖问题且重启失效，后者可能引入过宽规则。正确姿势永远是：**先读日志，再按"布尔值 → 标签 → 端口 → 策略"的优先级做最小改动**。
 
@@ -172,25 +125,12 @@ $ sudo sealert -a /var/log/audit/audit.log
 | `restorecon` | 按策略文件里的默认规则**恢复** | ✅ 恢复的就是策略值 | 纠正被 chcon/拷贝弄乱的标签 |
 | `semanage fcontext -a` | 向策略数据库**新增**路径→type 规则 | ✅ 之后 restorecon 才能还原到这个新值 | 为自定义路径（如 `/data/www`）定义永久标签 |
 
-```bash
-# 错误但常见的写法：chcon 只是权宜之计
-$ sudo chcon -t httpd_sys_content_t /data/www/app/index.html
-$ ls -Z /data/www/app/index.html
-system_u:object_r:httpd_sys_content_t:s0  ...        # 现在对了
-
-$ sudo restorecon -R /data/www/
-$ ls -Z /data/www/app/index.html
-system_u:object_r:default_t:s0  ...                   # 又被打回原形！
-# 因为策略里根本没规定 /data/www 的标签，restorecon 只能按默认规则打 default_t
-```
-
-正确的持久化写法：
+最常见的翻车现场是：给 `/data/www` 下的新站点 `chcon -t httpd_sys_content_t`，当场好了；过两天一跑 `restorecon -R /data/www/`，标签被打回 `default_t`，因为策略里根本没规定这个路径。正确的持久化写法是先把规则写进策略数据库，再让 `restorecon` 对齐：
 
 ```bash
+$ sudo chcon -t httpd_sys_content_t /data/www/app/index.html   # 只管这一次
 $ sudo semanage fcontext -a -t httpd_sys_content_t "/data/www(/.*)?"
-$ sudo restorecon -R /data/www/
-$ ls -Z /data/www/app/index.html
-system_u:object_r:httpd_sys_content_t:s0  ...        # 这次 restorecon 也会还原成 httpd_sys_content_t
+$ sudo restorecon -R /data/www/                                # 从此每次都还原成它
 ```
 
 一句话记忆：**`chcon` 改的是"这一次"，`semanage fcontext` 改的是"每一次"，`restorecon` 负责把当前状态对齐到策略**。详见[策略配置](./policy_configuration.md)。

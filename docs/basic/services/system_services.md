@@ -22,12 +22,7 @@
 
 systemd 的解法是把"开机要做的事"统一抽象为 **unit 文件**（INI 风格的声明式配置），用 `After=`、`Wants=` 等字段显式声明依赖，允许无依赖的 unit 并行启动，并提供 `systemctl` 一个入口完成查询、启停和开机自启管理。三发行版（Debian/Ubuntu、Arch、RHEL/CentOS/Rocky）均以 systemd 为默认初始化系统，命令完全一致。
 
-```bash
-# 今天的三系都能用同一套命令
-$ systemctl status sshd
-```
-
-Debian/Ubuntu 上 SSH 服务名通常是 `ssh`（`sshd` 为别名），Arch 与 RHEL 系是 `sshd`，下文统一以 `sshd` 为例。
+Debian/Ubuntu 上 SSH 服务名通常是 `ssh`（`sshd` 为别名），Arch 与 RHEL 系是 `sshd`，下文统一以 `sshd` 为例。三发行版的命令完全一致，差别只在这种默认命名上。
 
 ## 2. systemctl 基本操作
 
@@ -39,11 +34,6 @@ $ systemctl status sshd
      Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: disabled)
      Active: active (running) since Mon 2026-09-21 08:15:03 CST; 1 day 3h ago
    Main PID: 1102 (sshd)
-      Tasks: 1 (limit: 2246)
-     Memory: 5.8M
-        CPU: 42ms
-     CGroup: /system.slice/sshd.service
-             └─1102 /usr/sbin/sshd -D $OPTIONS
 
 Sep 21 08:15:03 web01 systemd[1]: Started OpenSSH server daemon.
 ```
@@ -60,25 +50,11 @@ sudo systemctl reload sshd     # 不重启进程，仅重读配置（需服务�
 # —— 改变"开机意图"，重启后依然生效 ——
 sudo systemctl enable sshd     # 创建开机自启符号链接
 sudo systemctl disable sshd    # 删除开机自启符号链接
-
-# —— 查询 ——
-systemctl status sshd          # 综合状态（含最近日志）
-systemctl is-active sshd       # 只回答 active/inactive
-systemctl is-enabled sshd      # 只回答 enabled/disabled
-systemctl list-units --type=service        # 列出已加载（多为运行中）的服务
-systemctl list-unit-files --type=service   # 列出系统中所有可管理的服务文件
 ```
 
-`enable` 的底层实现只是创建/删除符号链接，执行时你会直接看到这一过程：
+查询类命令按用途记：`status` 给综合状态（含最近日志），`is-active` 只回答 active/inactive，`is-enabled` 只回答 enabled/disabled，`list-units --type=service` 列出已加载的服务，`list-unit-files --type=service` 列出系统中所有可管理的服务文件。
 
-```bash
-$ sudo systemctl enable sshd
-Created symlink /etc/systemd/system/multi-user.target.wants/sshd.service
-    → /usr/lib/systemd/system/sshd.service.
-
-$ sudo systemctl disable sshd
-Removed "/etc/systemd/system/multi-user.target.wants/sshd.service".
-```
+`enable` 的底层实现只是创建/删除符号链接：执行 `sudo systemctl enable sshd` 会输出 `Created symlink /etc/systemd/system/multi-user.target.wants/sshd.service → /usr/lib/systemd/system/sshd.service.`，`disable` 则显示对应的 `Removed` 行——符号链接存在与否，就是 `is-enabled` 判断的依据。
 
 ## 3. 大坑：enable ≠ start
 
@@ -93,19 +69,15 @@ Removed "/etc/systemd/system/multi-user.target.wants/sshd.service".
 组合出的四种状态都是合法且常见的，`status` 必须两行一起读：
 
 ```bash
-# enabled + active：自启且正在运行（正常生产状态）
 # enabled + inactive：自启但当前被停掉（下次开机会自动拉起）
-$ sudo systemctl stop sshd
-$ systemctl status sshd | head -3
+$ sudo systemctl stop sshd && systemctl status sshd | head -3
 ● sshd.service - OpenSSH server daemon
      Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled)
      Active: inactive (dead)
 
 # disabled + active：正在运行但重启后消失（最常见的事故状态）
-$ sudo systemctl disable sshd >/dev/null
-$ sudo systemctl start sshd
+$ sudo systemctl disable sshd && sudo systemctl start sshd
 $ systemctl status sshd | head -3
-● sshd.service - OpenSSH server daemon
      Loaded: loaded (/usr/lib/systemd/system/sshd.service; disabled)
      Active: active (running) since Tue 2026-09-22 09:41:12 CST; 2s ago
 ```
@@ -128,7 +100,6 @@ unit 文件按来源分三个目录，优先级从低到高：
 # /etc/systemd/system/sshd.service（示意，实际以发行版自带文件为准）
 [Unit]
 Description=OpenSSH server daemon
-Documentation=man:sshd(8)
 After=network.target cryptsetup.target
 Wants=sshd-keygen.service
 
@@ -159,9 +130,7 @@ sshd.service
 ├─sshd-keygen.service
 ├─system.slice
 ├─basic.target
-│ ├─...
-│ ├─network.target
-│ └─...
+│ └─network.target
 └─multi-user.target
 
 $ systemctl list-dependencies --reverse network.target
@@ -169,14 +138,12 @@ network.target
 └─sshd.service
 ```
 
-修改 unit 文件后必须让 systemd 重新读入，否则它仍按内存里的旧定义工作：
+修改 unit 文件后必须让 systemd 重新读入，否则它仍按内存里的旧定义工作。`daemon-reload` 本身不会重启任何服务，重读后还需 `restart` 让运行中的进程用上新配置，两步缺一不可：
 
 ```bash
 sudo systemctl daemon-reload   # 重读 unit 定义
 sudo systemctl restart sshd    # 让运行中的进程用上新配置
 ```
-
-`daemon-reload` 不会重启任何服务，两步缺一不可。
 
 ## 5. target：取代运行级别
 
@@ -190,31 +157,22 @@ SysV 的运行级别 0–6 被 target unit 取代，日常只需要关心两个�
 ```bash
 $ systemctl get-default
 graphical.target
-
-$ sudo systemctl set-default multi-user.target
-Removed symlink /etc/systemd/system/default.target.
-Created symlink from /etc/systemd/system/default.target
-    to /usr/lib/systemd/system/multi-user.target.
+$ sudo systemctl set-default multi-user.target   # 重建 default.target 符号链接指向 multi-user.target
 ```
 
-切换**当前**运行环境用 `isolate`（会启动/停止一整组 unit），不要对 target 用 `start`/`stop`：
-
-```bash
-sudo systemctl isolate multi-user.target   # 立即切到纯命令行
-sudo systemctl isolate graphical.target    # 立即切回图形界面
-```
+切换**当前**运行环境用 `isolate`（会启动/停止一整组 unit），不要对 target 用 `start`/`stop`：`sudo systemctl isolate multi-user.target` 立即切到纯命令行，`sudo systemctl isolate graphical.target` 立即切回图形界面。isolate 会停掉当前环境中不在目标 target 依赖树里的所有服务，远程执行前先确认不会把自己锁在门外。
 
 ## 6. timer：systemd 的定时任务
 
 每个 `.timer` 对应一个同名 `.service`，timer 负责"何时触发"，service 负责"触发后干什么"。相对 cron 的优势是：任务跑在自己的 cgroup 里、依赖可声明、执行结果自动进 journal、错过的周期可用 `Persistent=true` 补跑。
 
 ```bash
-# 查看系统已排程的 timer（真实输出节选）
 $ systemctl list-timers
-NEXT                          LEFT        LAST                          PASSED     UNIT                         ACTIVATES
-Tue 2026-09-22 00:00:00 CST  14h left    Mon 2026-09-21 00:00:01 CST  10h ago    logrotate.timer              logrotate.service
-Wed 2026-09-23 03:15:00 CST  1 day 17h  Tue 2026-09-15 03:15:01 CST  7 days ago man-db.timer                 man-db.service
+NEXT                         LEFT       UNIT             ACTIVATES
+Tue 2026-09-22 00:00:00 CST  14h left   logrotate.timer  logrotate.service
 ```
+
+输出里 `NEXT`/`LEFT` 是下次触发时刻与倒计时，`LAST`/`PASSED` 是上次触发时间，`UNIT`/`ACTIVATES` 列出 timer 及其触发的 service——排"定时任务为什么没跑"时先看这一屏。
 
 一个最常用的 timer 例子——每天凌晨 2:30 跑备份：
 
@@ -231,12 +189,9 @@ Persistent=true
 WantedBy=timers.target
 ```
 
-```bash
-sudo systemctl enable --now backup.timer   # timer 本身需要 enable，service 不需要
-systemctl list-timers backup.timer         # 确认下次触发时间
-```
+启用备份 timer 只需 `sudo systemctl enable --now backup.timer`（timer 本身需要 enable，service 不需要），再用 `systemctl list-timers backup.timer` 确认下次触发时间。
 
-用户级个人任务继续用 `crontab -e` 完全没问题；系统级、与服务生命周期绑定的任务优先选 timer。
+用户级个人任务继续用 `crontab -e` 完全没问题；系统级、与服务生命周期绑定的任务优先选 timer。timer 触发的 service 失败会照常记入 journal，用 `journalctl -u backup.service` 即可核查历次执行结果。
 
 ## 7. 三发行版默认服务与防火墙差异
 

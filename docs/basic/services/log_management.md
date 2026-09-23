@@ -49,20 +49,16 @@ Arch 默认不装 rsyslog，日志以 journal 为主；需要传统文本文件�
 `journalctl` 是排查服务问题的主力工具。记住一条经验：**服务刚启动失败，先看 unit 日志，再看配置文件**。
 
 ```bash
-# 查看指定服务的完整日志（.service 后缀可省略）
+# 查看指定服务的日志（.service 后缀可省略）
 $ journalctl -u nginx -n 20 --no-pager
-Sep 22 10:01:12 web01 systemd[1]: Starting A high performance web server...
 Sep 22 10:01:12 web01 nginx[2043]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
-Sep 22 10:01:12 web01 systemd[1]: nginx.service: Main process exited, code=exited, status=1/FAILURE
 Sep 22 10:01:12 web01 systemd[1]: Failed to start A high performance web server and reverse proxy server.
 
 # 实时跟踪（排查"边跑边报错"）
 journalctl -u nginx -f
 
-# 只看本次开机（排除历史启动的干扰）
+# 本次启动 / 上一次启动（排查"重启导致业务中断"的关键命令）
 journalctl -b -u nginx
-
-# 上一次开机的日志（排查"重启导致业务中断"时的关键命令）
 journalctl -b -1 -u nginx
 
 # 按时间窗口
@@ -93,9 +89,8 @@ journald 有两种存储位置，决定了"断电后日志还在不在"：
 $ ls -d /var/log/journal 2>/dev/null || echo "无持久化目录"
 /var/log/journal
 
-$ systemctl status systemd-journald | head -4
+$ systemctl status systemd-journald | head -3
 ● systemd-journald.service - Journal Service
-     Loaded: loaded (/usr/lib/systemd/system/systemd-journald.service; static)
      Active: active (running) since Mon 2026-09-21 08:14:58 CST; 1 day 2h ago
 ```
 
@@ -119,11 +114,9 @@ SystemMaxUse=500M
 `SystemMaxUse` 必须设置。默认上限约为所在文件系统容量的 10%（软上限 4 GiB），小分区上仍可能被日志吃满磁盘。调整后重启 systemd-journald 生效；紧急瘦身用：
 
 ```bash
-$ journalctl --disk-usage
-Archived and active journals take up 312.4M in the file system.
-
-$ sudo journalctl --vacuum-size=200M    # 归档日志压到 200M 以内
-$ sudo journalctl --vacuum-time=2weeks  # 只保留最近两周
+$ journalctl --disk-usage                  # 查看当前占用
+$ sudo journalctl --vacuum-size=200M       # 归档日志压到 200M 以内
+$ sudo journalctl --vacuum-time=2weeks     # 只保留最近两周
 ```
 
 ## 5. 查看传统文本日志

@@ -86,8 +86,7 @@ RHEL/CentOS/Rocky 认证日志走 `authpriv`，Debian/Ubuntu 走 `auth`——这
 ```bash
 # /etc/rsyslog.d/50-default.conf（节选，三系通用写法）
 auth,authpriv.*          /var/log/auth.log     # Debian/Ubuntu 认证日志
-# RHEL/CentOS/Rocky 对应：
-# authpriv.*             /var/log/secure
+# authpriv.*             /var/log/secure       # RHEL/CentOS/Rocky 对应
 
 *.emerg                  :msg:omusrmsg:*       # 紧急消息广播给所有登录用户
 cron.*                   /var/log/cron
@@ -96,8 +95,7 @@ mail.*                   -/var/log/maillog     # - 前缀表示写入时不 flus
 # 只收集 err 及以上到单独文件
 *.err;auth.none          /var/log/errors.log
 
-# 转发到远程收集器（TCP 514）
-# *.*   @192.168.10.20:514
+# 转发到远程收集器（TCP 514）：*.*   @192.168.10.20:514
 ```
 
 修改后重载配置（不要 restart，避免丢消息）：
@@ -133,18 +131,14 @@ $ sudo grep 'sshd' /var/log/secure | tail -5      # RHEL
 
 ```bash
 journalctl                          # 全部日志（分页，q 退出）
-journalctl -b                       # 本次启动
-journalctl -b -1                    # 上次启动
+journalctl -b                        # 本次启动；-b -1 为上次启动
 journalctl -u nginx                 # 指定服务
 journalctl -f                       # 实时跟踪
-journalctl -p err                   # err 及以上
-journalctl -p warning..alert        # 指定范围
-journalctl --since "2026-09-22 09:00" --until "2026-09-22 10:00"
-journalctl --since "1 hour ago"
+journalctl -p err                   # err 及以上；warning..alert 为闭区间
+journalctl --since "1 hour ago"     # 时间窗口（也支持绝对时间）
 journalctl -k                       # 仅内核（等价 dmesg）
 journalctl --grep "bind\(\) to"     # 内容检索（PCRE）
 journalctl -o json-pretty -u nginx  # 结构化输出便于脚本处理
-journalctl --disk-usage             # 当前占用
 ```
 
 ## 6. journal 持久化：为什么必须关心
