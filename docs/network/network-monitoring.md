@@ -657,7 +657,7 @@ agent、自动发现、模板、告警内置，
   [网络故障排除](./troubleshooting.md)
   的推理链与抓包证据。
 
-## 9. 参考资料
+## 参考资料
 
 - Prometheus 文档：<https://prometheus.io/docs/>
 - node_exporter README：

@@ -281,7 +281,7 @@ sudo dmidecode -t baseboard   # 主板型号；-t processor 看插槽上的 CPU
 
 需要 `lshw` 做更完整的硬件树时：`apt install lshw`、`pacman -S lshw`、`dnf install lshw`，然后 `sudo lshw -short` 一页看全。ARM 开发板上没有传统 BIOS，改看设备树：`ls /sys/firmware/devicetree/base/`。
 
-## 三系差异速览
+## 8. 三系差异速览
 
 本页命令三系用法一致，差异只在包名与是否预装：
 
@@ -295,7 +295,7 @@ sudo dmidecode -t baseboard   # 主板型号；-t processor 看插槽上的 CPU
 
 内核接口（`/proc`、`/sys`）与输出格式三系相同，差异只在包名——`lm-sensors`/`lm_sensors` 连字符与下划线之别是高发陷阱。完整底座见 [README · 三系诊断工具速览](./README.md)。
 
-## 常见坑
+## 9. 常见坑
 
 1. **虚拟机/云主机里 `dmidecode` 读到的是"假"硬件。** 序列号、主板型号都是 hypervisor 模拟或注入的，不能当作采购凭证；内存条数量也未必等于你下单的配置。以 hypervisor 控制台或云厂商文档为准，`dmidecode` 在这些环境里只适合看"虚拟机被配置成了什么规格"。
 2. **容器里的 `/proc/interrupts`、`/sys` 是宿主机的命名空间视图。** 你在容器内看到的中断计数、PCIe 设备属于宿主机，不是本容器的"硬件"。容器层面的资源限制要去 cgroup 看（`/sys/fs/cgroup/`），别对着容器里的 `lspci` 排查宿主机故障。

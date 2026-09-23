@@ -247,7 +247,7 @@ fio --name=rand_read --filename=/data/testfile --size=1G \
 
 三系的块层、`lsblk`、`smartctl` 用法完全一致，差异集中在**默认文件系统**与**扩展仓库**上——RHEL 若 `dnf install smartmontools` 报无匹配，先启用 EPEL（`dnf install epel-release`）再试，这是三系对照里少数需要动仓库的地方。完整工具安装清单见[硬件篇速览表](./README.md)。
 
-## 常见坑
+## 9. 常见坑
 
 1. **`hdparm` 拿去测 NVMe。** ATA 命令对 NVMe 无意义，结果是报错或误导（第 3.3 节）；SATA 用 `hdparm -Tt`，NVMe 用 `nvme`/`fio`。
 2. **不加 `direct` 的性能测试，测的是内存。** `dd`/`fio` 忘了绕过页缓存，得到几 GB/s 的假象（第 7 节）——所有结论必须来自 `oflag=direct`/`--direct=1` 的输出。

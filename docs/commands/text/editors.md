@@ -288,7 +288,7 @@ command -v nano && nano file || command -v vim && vim file || vi file
 | 脚本里 `vi` 行为奇怪 | 替代名指向不同实现 | `readlink -f $(which vi)` 确认 |
 | `cat -A` 一堆 `^I`/`$` | 正是 Tab 与行尾 | 用于排格式问题，不是乱码 |
 
-## 三发行版差异说明
+## 12. 三发行版差异说明
 
 | 项目 | Debian/Ubuntu | RHEL/CentOS/Rocky | Arch |
 |------|---------------|-------------------|------|

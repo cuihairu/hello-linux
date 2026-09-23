@@ -96,7 +96,7 @@
   会锁定关键软件版本（`apt-mark hold` / `dnf versionlock` / `pacman -D --ignore`），
   避免一次全量升级把生产环境炸掉。
 
-## 本章内容
+## 子页导读
 
 - [包管理命令](./package/package.md) — 三大包管理器的完整操作手册：APT 的 `install/remove/search` 与 `dpkg` 底层、DNF/YUM 的 `install/remove/repoquery` 与 `rpm` 底层、**pacman 的 `-S/-R/-Q/-Syu` 全套用法**，以及软件源配置、版本锁定、本地仓库搭建、锁文件与依赖故障排查、三系命令对照表。
 

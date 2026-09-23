@@ -129,7 +129,7 @@ Hello, World!
 5. **`[ ]` 与 `[[ ]]`、BRE 与 ERE 混用**。空变量、正则方言选错会得到"看起来跑了但匹配不对"的结果，详见条件判断与正则两章。
 6. **不做静态检查就上线**。shellcheck 能拦下大部分引号与反模式问题；三系分别用 `apt install shellcheck`、`pacman -S shellcheck`、`dnf install ShellCheck` 安装。
 
-## 8. 参考资料
+## 参考资料
 
 - Bash 手册 — [gnu.org](https://www.gnu.org/software/bash/manual/)
 - Arch Wiki - Bash — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)

@@ -251,7 +251,7 @@ command -v numactl >/dev/null && numactl --hardware   # 多路才用得上；单
 
 `lscpu` 回答"几个核、是不是虚拟机"，绑核规划与归因都从这里起步（第 2、4 节）；`numactl --hardware` 只在 `Socket(s) > 1` 时值得细看，单路确认 1 个 node 即可跳过。需要逐字段深挖再回到对应小节。
 
-## 常见坑
+## 9. 常见坑
 
 1. **把营销名当 flag。** `/proc/cpuinfo` 里只有 `vmx`/`svm`，没有 `vt-x`/`VT-x`；按 VT-x 去 grep 一定空手而归（见第 4.2 节的更正说明）。
 2. **`nproc` 和 `lscpu` 的 CPU(s) 对不上，以为系统坏了。** `nproc` 反映**当前进程可用**的 CPU：被 `taskset`/cpuset/容器 CPU 绑定后会变小，而 `lscpu` 始终是全机拓扑。反过来，cgroup 的 CPU 配额（`cpu.max`，CFS quota）**不会**反映到 `nproc` 里——容器里 `nproc` 显示 16 不代表能用满 16 核，配额要看 cgroup 文件。

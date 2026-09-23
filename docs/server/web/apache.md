@@ -253,7 +253,7 @@ sudo httpd -t && sudo httpd -S
 sudo systemctl reload apache2   # 或 httpd
 ```
 
-## 常见坑速查
+## 11. 常见坑速查
 
 - 装完打不开：先 status，再防火墙/云安全组 80，再 `curl -I localhost` 区分没起和没放行。
 - vhost 没生效：Debian 忘了 `a2ensite` 或 reload；`apache2ctl -S` 看列表。

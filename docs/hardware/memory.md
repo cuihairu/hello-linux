@@ -307,7 +307,7 @@ numa_miss       12        9   # 溢到对端——持续涨才值得关注
 
 `sysctl` 持久化三系写法一致（`/etc/sysctl.d/`），差异只在谁负责"官方推荐档位"——RHEL 系 `tuned` 有 `virtual-guest`/`throughput-performance` 等档位，Debian/Ubuntu/Arch 通常自行管理。首次调参建议只写 `sysctl.d` 单文件，便于 `rm` 回滚，别往 `/etc/sysctl.conf` 里无限追加历史垃圾。
 
-## 常见坑
+## 11. 常见坑
 
 1. **把 `free` 当可用内存。** 危险线看 `available`；`free` 低+`buff/cache` 高+`si/so` 为 0 的机器健康得很（第 6.1 节）。
 2. **用 `fallocate` 建 swap，重启后 swap 消失。** `swapon` 对 CoW 文件系统上的 fallocate swapfile 报错拒绝，fstab 里那行在开机时静默失败（第 7.2 节）；统一用 `dd`，写完必测 `swapon -a`。

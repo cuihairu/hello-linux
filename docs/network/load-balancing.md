@@ -744,7 +744,7 @@ HAProxy 的 ` backlog`/`qcur`
   或 HAProxy 的 `stick-table`
   rate-limit 是廉价的保险。
 
-## 10. 参考资料
+## 参考资料
 
 - Nginx 负载均衡文档：
   <https://nginx.org/en/docs/http/load_balancing.html>

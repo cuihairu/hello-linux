@@ -327,7 +327,7 @@ grep -i error app.log | awk '{print $3}' | sort | uniq -c | sort -rn | head
 | 管道"假成功" | 退出码来自最后一命令 | `set -o pipefail` |
 | 文件名带空格被 `xargs` 拆碎 | 按空白分词 | `-print0` + `xargs -0` |
 
-## 三发行版差异说明
+## 11. 三发行版差异说明
 
 三系都是 GNU 工具链（`grep`/`sed` 语义一致），差别主要在 **awk 实现、现代替代工具与日志路径**上，写跨发行版脚本前先对下表。
 

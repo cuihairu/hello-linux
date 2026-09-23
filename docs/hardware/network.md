@@ -218,7 +218,7 @@ rfkill list all   # 0: WLAN Soft blocked: yes → rfkill unblock；Hard = 物理
 
 注意本表只列**硬件视角的差异**：配置管理器与防火墙的完整对照见[网络篇](../network/README.md)的三系速览；本篇三系一致的原则是——`lspci`/`ethtool`/`ip` 的用法与 `/proc/interrupts` 的格式完全相同，差异只在包名、固件是否默认齐全、以及配置落在哪个管理器手里。
 
-## 常见坑
+## 8. 常见坑
 
 1. **脚本里写死 `eth0`。** 可预测命名下默认是 `enp3s0`/`ens33` 这类名字，且换卡会变——用 `ip link` 读取实际名，或用 MAC 地址/udev 规则做稳定别名（第 2.2 节）。
 2. **`ip link` 显示 UP 却不通，忘了看 `LOWER_UP`。** 管理状态与物理链路是两回事；没有 `LOWER_UP` 就是没链路，去查协商与线缆，别先查路由（第 2.2 节）。
