@@ -223,7 +223,7 @@ sudo ausearch -m avc -ts recent
 
 ### 10.1 403 Forbidden
 
-403 表示请求已到 Apache 但被拒绝——TCP 是通的，HTTP 也到了，是访问控制层挡下的。按"文件系统权限 → 目录指令 → SELinux/AppArmor"三层走，不要只反复改 `<Directory>`；只改一处常常碰巧“好了”，下次换目录又复发，根因仍留在另外两层。
+403 表示请求已到 Apache 但被拒绝——TCP 是通的，HTTP 也到了，是访问控制层挡下的。按"文件系统权限 → 目录指令 → SELinux/AppArmor"三层走，不要只反复改 `<Directory>`；只改一处常常碰巧"好了"，下次换目录又复发，根因仍留在另外两层。
 
 **第一层**看运行用户能否沿路径每一级 `x` 位走到文件，`namei -l` 一次打印整条路径。**第二层**用 `apache2ctl -S` 确认落到预期 VirtualHost，且对应块有 `Require all granted`；2.2 的 Order/Allow 在 2.4 下无效。**第三层**查 SELinux 上下文是否 `httpd_sys_content_t`，错则 restorecon，自定义路径再补 semanage 打标。三层都查完仍 403，再看是否被 `DirectoryMatch` 的隐藏文件规则误伤，或别名指向了不存在的路径。
 
