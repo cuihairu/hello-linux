@@ -1,14 +1,14 @@
 # 安全基础
 
+## 本章导语
+
 传统 Linux 权限（rwx + user/group）有一个结构性弱点：**root 说了算**。Web 服务被攻破时，攻击者拿到的往往是运行服务的那个进程的身份；如果进程以 root 运行、或恰好能通过 sudo 提权，DAC 权限模型就全线失守——文件权限挡不住一个已经是 root 的进程。强制访问控制（MAC）正是为此设计的第二道闸：即便进程拥有 uid 0，只要安全策略没写"允许它碰这个文件"，内核照样拒绝。
 
 本章讲 Linux 上最主流的 MAC 实现 SELinux：它是什么、三种模式怎么选、日常排障的标准命令流程，以及 file contexts 为什么比 `chcon` 更可靠。同时会对照 Debian/Ubuntu 的 AppArmor 与 Arch 的默认无 MAC 现状，帮你建立三系安全栈的全景认知，避免把 RHEL 文档的命令生搬到其他发行版上。
 
-> 内容参考自 Red Hat SELinux 文档、Arch Wiki 与各发行版安全文档，见文末参考资料。
-
-## 本章导语
-
 安全基础不止 SELinux。本章从 DAC 的局限性出发引入 MAC 概念，再分四节展开 SELinux 的**概念**（安全上下文与 type enforcement）、**模式**（Enforcing/Permissive/Disabled 的取舍）、**基本命令**（ausearch/restorecon/semanage 的排障流程）和**策略配置**（fcontext 持久化、audit2allow 的正确用法）。每节都会对照说明三发行版的默认安全栈差异，确保你在 Ubuntu 上不会找不到 `getenforce`、在 Arch 上不会误以为 SELinux 默认开启。
+
+> 内容参考自 Red Hat SELinux 文档、Arch Wiki 与各发行版安全文档，见文末参考资料。
 
 ## 为什么需要 MAC：从 DAC 的天花板说起
 
