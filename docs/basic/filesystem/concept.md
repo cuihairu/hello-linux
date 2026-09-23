@@ -88,7 +88,7 @@ sudo xfs_info /dev/sdb1 | head -3
 
 `mkfs.xfs` 会打印 meta-data/data 段的 `isize`、`agcount`、`bsize` 等参数，之后用 `xfs_info` 随时复查。
 
-注意 XFS 的老限制（历史版本单文件 16TB 时代已过）当前版本上限极高，但**不支持缩容**是硬约束——规划 XFS 分区时"宁大勿小"。
+注意 XFS 的老限制（历史版本单文件 16 TB 时代已过）当前版本上限极高，但**不支持缩容**是硬约束——规划 XFS 分区时"宁大勿小"。
 
 ### 3.3 Btrfs：为可恢复性设计
 
@@ -112,7 +112,7 @@ sudo btrfs subvolume snapshot /mnt /mnt/snapshots/my-snapshot
 | FAT32 | 4 GB | 8 TB | 跨平台兼容 | ESP、U 盘 |
 | NTFS | 16 TB | 256 TB | Windows 默认 | 双系统共享数据 |
 
-顺带解释安装篇里"ESP 必须 FAT32"：UEFI 规范只认 FAT 系列，所以哪怕根分区用 Btrfs，那个 512MB 的引导分区也没得选。
+顺带解释安装篇里"ESP 必须 FAT32"：UEFI 规范只认 FAT 系列，所以哪怕根分区用 Btrfs，那个 512 MB 的引导分区也没得选。
 
 ## 4. 挂载与卸载
 
