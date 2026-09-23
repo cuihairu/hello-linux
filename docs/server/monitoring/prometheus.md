@@ -105,7 +105,7 @@ Prometheus 里最要紧的类型区分是 **counter**（只增不减的累计值
 
 ### 4.2 常用表达式
 
-```promql
+```text
 # CPU 使用率（counter → rate）
 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
 
@@ -174,7 +174,9 @@ groups:
           summary: "磁盘空间不足 ({{ $labels.instance }})"
 ```
 
+::: v-pre
 主配置用 `rule_files` 引入这些 YAML，改完 `promtool check rules` 再 reload——与改 BIND 区域先 `named-checkzone` 是同一纪律：语法错误若拖到运行时才炸，告警通道会静默失明。Arch 用户加载规则前可先 `pacman -Ql prometheus | grep rules` 看包内是否自带示例规则文件，出厂样例往往就是 `rule_files` 默认引用的路径，改错文件名是最常见的"规则写了却不 evaluation"。`{{ $labels.instance }}`、`{{ $value }}` 在告警文案里注入实例名与当前值，收件人无需回平台就能判断严重度；`severity` 标签则是 Alertmanager 路由分诊的依据。
+:::
 
 ### 6.2 Alertmanager
 

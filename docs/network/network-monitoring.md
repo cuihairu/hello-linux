@@ -392,7 +392,7 @@ node_exporter 中
 裸计数器只能看累计，
 不能直接设阈值：
 
-```promql
+```text
 # 过去 5 分钟平均每秒接收速率（换算成 bit/s 乘 8）
 rate(node_network_receive_bytes_total{device="eth0"}[5m]) * 8
 
