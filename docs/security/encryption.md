@@ -10,6 +10,8 @@
 
 Linux 生态里这四件事各有成熟工具且几乎全部预装或官方仓库可得：`openssl` 三系都有，GPG 在 Debian/Arch 是 `gnupg`、RHEL 系是 `gnupg2`，SSH 用 `openssh`，磁盘加密是 `cryptsetup`。Arch 上一句 `sudo pacman -S gnupg cryptsetup` 就能把缺的补齐（`sudo pacman -S openssl openssh` 同理补齐传输侧），其余多数字节在最小安装里已经躺在 `/usr/bin` 下。工具齐全只是起点——同一台机器上这四件事的**配置质量**可能天差地别：默认 SSH、过期证书、未签名的部署脚本、没备份头的加密盘，全都是"装了工具但没建立纪律"的典型状态。本篇每节都按"工具安装 → 威胁模型 → 操作纪律"展开，命令是表，纪律才是里。
 
+> 内容参考自 OpenSSL、GnuPG、OpenSSH、cryptsetup 官方文档与 Arch Wiki，见文末参考资料。
+
 ## 学习目标
 
 - 说清对称与非对称加密的分工，理解为什么真实协议（TLS、SSH）两者都要用

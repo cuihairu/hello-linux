@@ -146,9 +146,7 @@ fe80::5 dev ens18 lladdr 94:28:6f:bf:d1:35 router STALE
 | RHEL/CentOS/Rocky 7 | ifcfg 脚本 | `/etc/sysconfig/network-scripts/ifcfg-*` | `nmcli connection reload` 或重启网络服务 | `nmcli`、`ifup` |
 | RHEL/CentOS/Rocky 8+ / Fedora | NetworkManager（keyfile） | `/etc/NetworkManager/system-connections/`（`.nmconnection`） | `nmcli connection up 名称` | `nmcli`、`nmcli device` |
 
-读法要点已足够支撑 90% 的端口类工单。值得再展开的是 **Recv-Q 与 Send-Q 在不同状态下的语义**：LISTEN 时 `Recv-Q` 是等待 accept 的连接数、`Send-Q` 是 backlog 上限，前者贴近后者说明应用来不及 accept，应加大 backlog 或修应用；ESTABLISHED 时它们才是收发缓冲区待处理字节。很多"服务卡住"的事故，根因就是 accept 队列打满，而这个信号只在 `ss -tlnp` 里一闪而过——排障时对可疑端口多停留两秒看这两列，往往比翻十页日志更快。
-
-另一个是 **UDP**：`ss -ulnp` 格式相同，但 UDP 没有三次握手，"LISTEN 正常"不代表对端能收到，得靠业务日志或抓包。DNS、SNMP、syslog 的疑难杂症常卡在这里——`ss` 只能证明本地 socket 在，不能证明报文出去了、回包回来了。
+表读完再补两条与第 3 节呼应的事实，避免把「配置入口」和「当下状态」混为一谈：上表管的是**重启后如何恢复地址**，`ss`/`ip` 管的是**现在谁在听、谁连着谁**——远程改网络前先用 `ss -tlnp` 记下当前监听，改完再对照一次，才能确认变更只动了该动的接口。
 
 两个必须记住的版本事实：
 

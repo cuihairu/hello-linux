@@ -66,7 +66,7 @@ sudo dnf install ShellCheck
 
 标准模板是 `trap cleanup EXIT` + `mktemp`：临时文件即使中途 `set -e` 退出也能删掉，不会堆积在 `/tmp`；`trap 'on_error ${LINENO} "$BASH_COMMAND" $?' ERR` 记录出错行号与命令；`trap 'echo "收到中断"; exit 130' INT` 处理中断。启动时一次性把「缺工具、缺变量、缺文件」挡在门外：用 `command -v` 探测依赖，用 `${VAR:?}` 或 `[[ -n ${TARGET:-} ]]` 检查变量——比跑到一半 `command not found` 友好得多。
 
-**注意 `trap ERR` 不触发的常见原因**：需要 `set -e` 或 `set -o errtrace`；且被 `if cmd` 消费掉退出码的命令不进 ERR。
+**注意 `trap ERR` 与 `set -e` 的分工**：`-e` 管「命令失败就退出」，`ERR` 管「失败时跑一段钩子」；两者都依赖失败能被 shell 看见。`if cmd` / `while cmd` 这类条件位置会消费掉退出码，既不触发 `-e` 也不进 `ERR`——钩子不会跑是设计如此，不是配置写错了。
 
 ## 5. 日志记录
 

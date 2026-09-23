@@ -36,6 +36,8 @@ DAC（Discretionary Access Control，自主访问控制）的规则很简单：�
 
 本章后续四节聚焦 SELinux（它是 RHEL 系的默认栈，也是概念上最完整的 MAC 教材），但每节都会对照说明另外两系的情况，避免形成"Linux = SELinux"的错误心智模型。
 
+> 内容参考自 Red Hat SELinux 文档与 Arch Wiki，见各章节参考资料。
+
 ## 学习目标
 
 - 理解 DAC 与 MAC 的本质区别，能用自己的话解释"为什么 root 也需要被 SELinux 约束"

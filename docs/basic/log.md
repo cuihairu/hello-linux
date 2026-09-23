@@ -18,6 +18,8 @@
 
 日志体系还有一层历史包袱：syslog 协议（RFC 5424）诞生于 1980 年代，定义了 facility（谁说的）和 severity（多严重）两套分类，今天的 journald 和 rsyslog 仍然沿用这套词汇。不理解这两套分类，就看不懂 `/etc/rsyslog.conf` 里 `authpriv.*  /var/log/secure` 这类规则，也用不好 `journalctl -p err`。
 
+> 内容参考自 systemd/journald、syslog 与 Arch Wiki，见各章节参考资料。
+
 ## 学习目标
 
 - 理解 journald 与 rsyslog/syslog-ng 的分工：谁收集、谁落盘、为什么两者常常并存

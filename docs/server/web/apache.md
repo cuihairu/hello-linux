@@ -76,8 +76,6 @@ Apache 的配置布局按发行版分成两派：Debian 系拆成多文件用软
 
 主配置从上到下依次是全局指令（运行用户、日志、超时）、模块加载（`LoadModule`）、默认虚拟主机与包含指令。顺序很关键：`LoadModule` 之前写的模块指令不会生效，Include 片段按出现位置参与合并。新手常见错误是把 `RewriteEngine On` 写在 mod_rewrite 加载之前，规则"写了没反应"。改完配置不要直接重启，先语法检查（见第 10 节），通过后再 reload；语法错误时 reload 会失败并保留旧配置继续服务，这是保护机制——但也不要跳过检查直接 restart，把可回滚的小错变成宕机。运行用户（Debian `www-data`、RHEL/Arch `httpd`）决定了子进程读站点文件的身份，改错会导致全局 403。
 
-改完配置不要直接重启，先语法检查（见第 10 节），通过后再 reload。语法错误时 reload 会失败并保留旧配置继续服务，这是保护机制——但也不要跳过检查直接 restart，把可回滚的小错变成宕机。运行用户（Debian `www-data`、RHEL/Arch `httpd`）决定了子进程读站点文件的身份，改错会导致全局 403。
-
 典型骨架：`ServerRoot` 指向配置根目录，`User`/`Group` 设定子进程身份，随后按需 `LoadModule`，最后用 `<VirtualHost *:80>` 声明默认或首个站点（`ServerName` + `DocumentRoot`）。理解这个顺序后，往下加站点与模块就是重复同一模式，不必每次整文件照抄。
 
 ## 4. 虚拟主机

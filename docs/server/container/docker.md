@@ -28,20 +28,17 @@ Docker 是容器化技术的事实标准：它把应用代码、运行时与依�
 
 需要强隔离的异构负载、要跑不同内核的场景，虚拟机仍不可替代；同宿主机上密集部署同构服务，容器是更经济的选择。两者也常组合使用：先用虚拟机切物理机，再在 VM 里用容器提高密度。选型时问自己两个问题就够——是否需要独立内核（需要则 VM），是否接受共享内核带来的攻击面（接受则容器，再叠加非 root、只读根系统等加固）。也别把"容器 = 更安全"当成口号：容器缩小了部署单元，但共享内核意味着逃逸面仍然存在，安全结论要回到刚才两个问题上做权衡。
 
+理解命名空间与 cgroup 的分工后，很多"容器怪现象"会自动消解：容器里 `top` 看到的是宿主机总内存（cgroup 限额在别处）、容器改 `/etc/resolv.conf` 只影响自己（mount namespace）、`docker top` 看到的 PID 与宿主机 `ps` 能对上（pid namespace 并非隐藏只是重映射）。排障时先问"这是视图问题还是配额问题"，对应去查 namespace 视图还是 cgroup 限额，比盲目重启容器有效得多——与"先分清 DNS 还是防火墙"在方法论上是同一招。
+
 ### 1.2 镜像分层：与 pacman/apt 装包的对照
 
 理解 Docker 最关键的一步，是把它和你已经熟悉的包管理器对照着看。Arch 用户用 `pacman -S nginx` 安装 Nginx 时，包管理器把文件**直接铺进系统根文件系统**的 `/usr`、`/etc`——这些改动立刻影响当前系统，卸载靠数据库记账回滚；`pacman -Ql nginx` 能列出装了哪些文件，`pacman -Syu` 升级会原地替换旧文件。Docker 镜像则是**分层的只读快照**：Dockerfile 里每条 `RUN`/`COPY` 生成一层，层与层叠加上面再盖一个可写层，共同构成容器看到的根目录。
 
 ```text
-┌─────────────────────────┐
-│  可写层（容器运行时改动）  │  ← docker exec 进去改的文件落在这里
-├─────────────────────────┤
-│  层 N：COPY app /app     │  ← 只读
-├─────────────────────────┤
-│  层 N-1：RUN npm ci      │  ← 只读，有缓存
-├─────────────────────────┤
-│  基础镜像 node:20-alpine │  ← 只读，类似"发行版 base 组"
-└─────────────────────────┘
+可写层（docker exec 改动落这里）      ← 唯一可写
+层 N：COPY app /app                   ← 只读
+层 N-1：RUN npm ci                    ← 只读，有缓存
+基础镜像 node:20-alpine               ← 只读，类似"发行版 base 组"
 ```
 
 三条由此推出的实战结论：**其一**，层是不可变的，`docker exec` 里 `apt install`/`pacman -S` 改出来的东西只活在可写层，容器删了就没——所以临时调试无妨，固化配置必须写进 Dockerfile；**其二**，构建时只要某条指令及其之前的内容没变，该层及以下全部命中缓存直接复用，这与包管理器"已满足依赖就跳过下载"是同一种省功哲学，因此 Dockerfile 惯例是把不常变的 `COPY package.json`、依赖安装放在源码 `COPY` 之前；**其三**，多镜像可共享同一基础层，就像多台 Arch 机器共享同一组 pacman 包缓存——`docker images` 里显示的 Size 远小于各镜像体积之和，原因就是去重共享。清理逻辑也能对上：`pacman -Sc` 清理不再需要的包缓存，`docker system prune` 清理悬空镜像与停止的容器，二者都是"回收构建副产品"，动手前都应确认没有在用对象。再往下追一层：`pacman` 管的是"一台机器上系统软件的状态"，镜像管的是"一份可任意复制的文件系统快照"——前者追求唯一真相源，后者追求处处一致，理解这个差别就不会再把 `pacman -Syu` 和 `docker pull` 混为一谈。分层带来的另一个实际收益是分发效率：内网里只需同步变化的层，正如升级时 `pacman` 也只下载有差异的包，全量重传在两种模型里都是要避免的浪费。把这三点刻进肌肉记忆，Dockerfile 的写法与排错思路会自然变得顺手。
@@ -74,13 +71,9 @@ docker CLI ──(REST API /var/run/docker.sock)──▶ dockerd 守护进程
 
 ```bash
 $ sudo apt update
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
-    | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-$ echo "deb [signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-$(. /etc/os-release && echo $VERSION_CODENAME) stable" \
-    | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-$ sudo apt update && sudo apt install docker-ce docker-ce-cli containerd.io \
-    docker-buildx-plugin docker-compose-plugin
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+$ echo "deb [signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list
+$ sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
 GPG 密钥与专用 `sources.list.d` 条目的目的只有一个：让 apt 校验包签名，确保装到的二进制确实来自 Docker 官方。发行版自带源里的 `docker.io` 包版本通常滞后数月，生产环境一般直接用官方源。
@@ -89,25 +82,16 @@ GPG 密钥与专用 `sources.list.d` 条目的目的只有一个：让 apt 校�
 
 ```bash
 $ sudo pacman -Syu docker docker-compose
-resolving dependencies...
-Packages (5) containerd-2.0.x  docker-27.x.x  docker-compose-2.x.x
-             libseccomp-2.5.x  runc-1.2.x
-
-Total Download Size:   85.42 MiB
-:: Proceed with installation? [Y/n] y
-(5/5) installing docker                             [######################] 100%
-$ sudo systemctl enable --now docker
-$ docker --version
+$ sudo systemctl enable --now docker && docker --version
 Docker version 27.x.x, build abcdef1
 ```
 
-Arch 上 `pacman -S docker` 会连同 `containerd`、`runc` 一起拉入（Docker 的运行时依赖），无需添加任何第三方源；`docker-compose` 作为独立包按需安装。日常升级保持 `pacman -Syu` 整体滚动，Docker 引擎与 CLI、containerd 版本由同一仓库保证匹配——手搓二进制混搭版本是自制发行版的做法，不适用于 Arch。
+Arch 上 `pacman -S docker` 会连同 `containerd`、`runc` 一起拉入（Docker 的运行时依赖），无需添加任何第三方源；`docker-compose` 作为独立包按需安装。日常升级保持 `pacman -Syu` 整体滚动，Docker 引擎与 CLI、containerd 版本由同一仓库保证匹配——手搓二进制混搭版本是自制发行版的做法，不适用于 Arch。安装进度条本身不承载排障信息，验收固定看 `systemctl is-active docker` 与 `docker --version` 两行；版本号对得上、服务 active，安装阶段就可以翻篇。
 
 ### 2.3 RHEL/CentOS/Rocky（官方仓库）
 
 ```bash
-$ sudo yum-config-manager --add-repo \
-    https://download.docker.com/linux/centos/docker-ce.repo
+$ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 $ sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 $ sudo systemctl enable --now docker
 ```
@@ -119,36 +103,32 @@ $ sudo systemctl enable --now docker
 三系安装完的验收动作完全相同——只是前面的包管理器换成了 apt、pacman 或 dnf：
 
 ```bash
-$ sudo systemctl status docker
-● docker.service - Docker Application Container Engine
-   Active: active (running) since Tue 2026-09-22 09:14:02 CST
+$ systemctl is-active docker
+active
 $ sudo usermod -aG docker $USER    # 重新登录后生效
 $ docker run hello-world
 Hello from Docker!
 ```
 
-`Hello from Docker!` 出现即全链路（客户端→守护进程→拉镜像→建容器→跑进程）打通。把用户加入 `docker` 组等价于授予 root 权限（守护进程以 root 运行、可挂载宿主机任意路径），仅对确需免 sudo 的受信账号开启；`newgrp docker` 可免重新登录立即生效。
+`Hello from Docker!` 出现即全链路（客户端→守护进程→拉镜像→建容器→跑进程）打通。把用户加入 `docker` 组等价于授予 root 权限（守护进程以 root 运行、可挂载宿主机任意路径），仅对确需免 sudo 的受信账号开启；`newgrp docker` 可免重新登录立即生效。验收时若 `is-active` 返回 `active` 但 `hello-world` 仍失败，优先查组成员与会话缓存（`id -nG` 是否已含 docker、当前 shell 是否在加组之后打开），而不是怀疑镜像拉取——把"服务层、权限层、网络层"三层检查顺序固定下来，能避免在最不可能的环节反复重装软件包。三系在这一节的动作完全一致，唯一差异是第一行之前的包管理器动词：Debian 用 `apt`、Arch 用 `pacman`、RHEL 用 `dnf`，与全站其他章节的对照表保持同一套记忆锚点。
 
 ## 3. 镜像与容器日常
 
 ```bash
 # 镜像：拉取、列表、离线转移
-$ docker pull nginx:1.27
-$ docker images
-REPOSITORY   TAG       IMAGE ID       SIZE
-nginx        1.27      605c77e624dd   187MB
+$ docker pull nginx:1.27 && docker images
+nginx   1.27   605c77e624dd   187MB
 $ docker save nginx:1.27 -o nginx.tar && docker load -i nginx.tar
-
 # 容器：生命周期与观察
 $ docker run -d --name web -p 8080:80 --restart unless-stopped nginx
 $ docker ps
-CONTAINER ID   IMAGE   STATUS         PORTS                  NAMES
 b3f1c2d4e5a6   nginx   Up 2 minutes   0.0.0.0:8080->80/tcp   web
 $ docker logs --tail 20 web
 $ docker exec -it web sh              # Alpine 基底用 sh，Debian 基底可用 bash
-$ docker stats --no-stream
 $ docker rm -f web
 ```
+
+`docker run` 的输出只给容器 ID 这一行——设计上就要求你立刻用 `docker ps`/`logs` 去验证，而不是盯着 ID 猜发生了什么。日常排障的最小命令集就是上面这组：`ps` 看状态、`logs` 看应用输出、`exec` 进去核对文件与环境变量、`stats` 看资源（需要时再加 `--no-stream` 抓一帧）。把这四个动作形成肌肉记忆后，再配合 `inspect` 看结构化字段（`State.OomKilled`、`Mounts`、`NetworkSettings`），绝大多数"起不来、连不上、写不进"都能在不看宿主机进程表的情况下定位到层：是镜像问题、是端口问题、还是卷权限问题——`inspect` 的 JSON 字段名本身就对应着这三种根因。
 
 `-p 8080:80` 的含义是"宿主机 8080 → 容器 80"，写反是新手第一坑；端口只写了容器侧（`-p 80`）则由 Docker 随机映射到宿主机高位端口——测试可以用，生产必须写死宿主机端口，否则每次重建都变，下游配置全要跟着改。`--restart unless-stopped` 让容器在守护进程重启、宿主机重启后自动拉起（详见第 6 节与 systemd 的分工）。`docker save`/`load` 则是内网隔离环境的标配动作——生产机不通外网时，在有网机器拉好镜像打成 tar 搬运，等价于离线拷一个 pacman 缓存包目录（Arch 的 `/var/cache/pacman/pkg` 同样是为离线与回滚准备的）。镜像固定 tag 而不是 `latest` 也是同理：可预期的升级才是升级，`latest` 每次 pull 都可能给你惊喜，回滚时才发现上一版早已不在。
 
@@ -160,11 +140,10 @@ $ docker rm -f web
 $ docker volume create mysql-data
 $ docker run -d --name db -v mysql-data:/var/lib/mysql \
     -e MYSQL_ROOT_PASSWORD=secret mysql:8.0
-$ docker volume ls
 $ docker run -v /opt/webhtml:/usr/share/nginx/html:ro nginx   # :ro 容器内只读
 ```
 
-`:ro` 是常被忽略的最小加固：只读内容就不给写权限，防容器被攻破后篡改静态资源。持久化与日志同理，都遵循"容器是易耗品、数据与日志要活在容器外"的原则——理解了这一点，卷、bind mount、日志限额就不再是三个孤立配置，而是同一条工程纪律的三个落点。备份策略也顺势清晰：数据卷用常规文件备份工具从宿主机的 volume 目录拷走，bind mount 直接备份宿主机路径，都不需要"进容器"备份。
+`:ro` 是常被忽略的最小加固：只读内容就不给写权限，防容器被攻破后篡改静态资源。持久化与日志同理，都遵循"容器是易耗品、数据与日志要活在容器外"的原则——理解了这一点，卷、bind mount、日志限额就不再是三个孤立配置，而是同一条工程纪律的三个落点。备份策略也顺势清晰：数据卷用常规文件备份工具从宿主机的 volume 目录拷走，bind mount 直接备份宿主机路径，都不需要"进容器"备份。`docker volume inspect mysql-data` 能看到卷在宿主机上的真实路径，迁移机器时先停容器、拷该目录、再在新机创建同名卷挂回去，比"导出导入镜像带数据"更不易出错。卷与 bind mount 的另一处差异是可移植性：Compose 里声明的命名卷随项目升降级自如，而绝对路径的 bind mount 换机器时必须重写路径——把"人写的路径"和"机器管的路径"分开，是跨环境部署时不踩坑的底层习惯。
 
 ## 4. Dockerfile 要点
 
@@ -187,7 +166,6 @@ FROM golang:1.22 AS builder
 WORKDIR /src
 COPY . .
 RUN CGO_ENABLED=0 go build -o /out/app ./cmd/app
-
 FROM alpine:3.20
 COPY --from=builder /out/app /usr/local/bin/app
 USER nobody
@@ -205,47 +183,35 @@ CMD ["/usr/local/bin/app"]
 services:
   web:
     build: .
-    ports:
-      - "8080:80"
-    volumes:
-      - ./html:/usr/share/nginx/html:ro
-    depends_on:
-      db:
-        condition: service_healthy
+    ports: ["8080:80"]
+    volumes: ["./html:/usr/share/nginx/html:ro"]
+    depends_on: { db: { condition: service_healthy } }
     restart: unless-stopped
-
   db:
     image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: app
-    volumes:
-      - db_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      retries: 10
+    environment: { MYSQL_ROOT_PASSWORD: example, MYSQL_DATABASE: app }
+    volumes: ["db_data:/var/lib/mysql"]
+    healthcheck: { test: ["CMD", "mysqladmin", "ping", "-h", "localhost"], interval: 10s, retries: 10 }
     restart: unless-stopped
-
-volumes:
-  db_data:
+volumes: { db_data: }
 ```
 
 常用命令序列（`down` 与 `down -v` 的一字之差，决定数据库数据卷是否陪葬——写进变更单前请再读一遍）：
 
 ```bash
 $ docker compose up -d            # 后台创建网络、卷并启动
-$ docker compose ps
-$ docker compose logs -f web
+$ docker compose ps && docker compose logs -f web
 $ docker compose exec db mysql -u root -p   # 进容器执行一次性命令
 $ docker compose pull && docker compose up -d   # 更新镜像并滚动重启
 $ docker compose down             # 停止并移除容器（保留数据卷）
 $ docker compose down -v          # 连数据卷一起删——生产慎用
 ```
 
-`version:` 顶层键在新版 Compose 规范中已废弃，可省略。`depends_on` 默认只保证**启动顺序**、不保证"就绪"；数据库进程起来不代表能接受连接，所以上面用了 `condition: service_healthy` 配合 `healthcheck`——这是从"能跑"到"可用"的关键一步，也是排"应用先于数据库就绪而崩溃重启"这类问题的标准解法。健康检查命令应探测"能否提供服务"（如 `mysqladmin ping`、HTTP `GET /health`），而不是"进程在不在"——进程僵死但端口不通的情况，恰恰是 healthcheck 最该抓住的。
+`version:` 顶层键在新版 Compose 规范中已废弃，可省略。`depends_on` 默认只保证**启动顺序**、不保证"就绪"；数据库进程起来不代表能接受连接，所以上面用了 `condition: service_healthy` 配合 `healthcheck`——这是从"能跑"到"可用"的关键一步，也是排"应用先于数据库就绪而崩溃重启"这类问题的标准解法。健康检查命令应探测"能否提供服务"（如 `mysqladmin ping`、HTTP `GET /health`），而不是"进程在不在"——进程僵死但端口不通的情况，恰恰是 healthcheck 最该抓住的。写完 YAML 先 `docker compose config` 做一次语法展开，能把缩进错误、变量未定义这类低级问题挡在上线之前；`config` 输出也常被贴进变更单，作为"这次到底要起哪些服务"的可读清单。日常改完配置用 `up -d` 比 `down && up` 更温和——未变更的服务不会被重建，连接与缓存得以保留，只有真正改了端口、卷、环境变量的服务才会滚动替换。
 
-另一个 LNMP（Nginx + PHP-FPM + MySQL）式的组合与上例结构相同：共享数据卷挂 PHP 代码，Nginx `depends_on` PHP-FPM，MySQL 用命名卷保数据。想加缓存服务，多声明一个 `redis` 服务并让应用 `depends_on` 即可——Compose 的可组合性正来自"每个服务一份声明、依赖画在图里"。超出单机范围（多节点调度、滚动升级、服务发现）后再评估 Kubernetes；在那之前，Compose 已经覆盖了绝大多数团队的编排需求，不必为了"看起来云原生"提前复杂化。反过来，如果整套应用其实只是一个二进制加一个配置文件，强行拆成三个服务反而是负担——先问"是否真的需要独立伸缩或独立发布"，再决定要不要引入新的服务边界。写完 YAML 记得跑 `docker compose config` 做一次语法展开，能把缩进错误、变量未定义这类低级问题挡在上线之前。
+另一个 LNMP（Nginx + PHP-FPM + MySQL）式的组合与上例结构相同：共享数据卷挂 PHP 代码，Nginx `depends_on` PHP-FPM，MySQL 用命名卷保数据。想加缓存服务，多声明一个 `redis` 服务并让应用 `depends_on` 即可——Compose 的可组合性正来自"每个服务一份声明、依赖画在图里"。超出单机范围（多节点调度、滚动升级、服务发现）后再评估 Kubernetes；在那之前，Compose 已经覆盖了绝大多数团队的编排需求，不必为了"看起来云原生"提前复杂化。反过来，如果整套应用其实只是一个二进制加一个配置文件，强行拆成三个服务反而是负担——先问"是否真的需要独立伸缩或独立发布"，再决定要不要引入新的服务边界。
+
+编排文件进 git 之后，评审重点自然从"命令敲得对不对"变成"拓扑声明合不合理"：端口是否绑死宿主机、密钥是否走环境变量而非明文、healthcheck 是否探测业务可用性、restart 策略是否与 systemd 分工清楚——这四条正好对应前文四个小节。把 Compose 当作可执行的架构图来维护，新人接手时读 YAML 即可理解依赖，不必再考古某位同事的 shell 历史。
 
 ## 6. 与 systemd 的关系
 
@@ -266,6 +232,8 @@ Docker 不是和 systemd 抢活干的另一套 init：`docker.service` 本身就
 ```
 
 改完文件用 `dockerd --validate` 或重启前先 `systemctl cat docker` 确认没有覆盖的 drop-in 干扰，JSON 语法错误会让引擎直接拒绝启动——这是改 `daemon.json` 最容易踩的坑，改完务必先验证再重启。三个配置项各管一件事：日志限额防磁盘被打满，`live-restore` 保升级窗口业务不断，缺省的 json-file 驱动则保证 `docker logs` 可用——别为了"精简"随手删掉驱动配置，排障时会想念它的。`live-restore` 开启后，升级或重启 dockerd 时容器继续运行，不会因引擎维护窗口把业务打断——生产建议开启；重启引擎前先确认它已生效，否则"只是升级个引擎"也会把全部容器按停，这正是把引擎层与容器层职责分清楚的实际收益。改坏 `daemon.json` 导致引擎起不来的急救方法：`journalctl -u docker -e` 看解析错误，修正 JSON 后再 `systemctl start docker`——先看日志再动手，能省掉一半的"我什么都没改它就坏了"。这几个参数改完都应走同一套"改前备份、改后验证、验证过再重启"的流程，和改任何关键系统配置没有区别。
+
+引擎配置与容器 restart 策略的联动还有一个容易漏的点：`live-restore: false`（默认行为之一）时，引擎升级会把所有容器一并停掉——即使每个容器都写了 `--restart=always`，恢复窗口也取决于 systemd 把 `docker.service` 拉起后再由 dockerd 逐个重建，整套依赖链里任一环慢都会被业务感知为一次计划外抖动。反过来，只开 `live-restore` 却让引擎 `WantedBy=multi-user.target` 失效，宿主机重启后容器同样不会自己回来：引擎自启、live-restore、容器 restart 三者必须同时到位，才算把"宿主机重启 → 引擎就绪 → 容器就绪"这条链闭合。验收方法很直接：改完 `daemon.json` 后重启一次维护窗口内的机器，观察 `docker ps` 是否在无人干预下恢复到变更前状态——能复现的恢复才是真的恢复，写在文档里的策略假设不算数。
 
 ## 7. 常见坑
 

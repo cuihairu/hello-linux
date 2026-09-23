@@ -31,12 +31,13 @@ DNS 查询从客户端视角只有两种形态。**递归查询**（recursive）
 
 ```text
 客户端 ──递归──▶ 本地解析器 ──迭代──▶ 根 / TLD / 权威
-                      │
-                      ├── 命中缓存 → 直接应答（看 TTL）
-                      └── 未命中 → 走完整条 referral 链
+                  ├── 命中缓存 → 直接应答（看 TTL）
+                  └── 未命中 → 走完整条 referral 链
 ```
 
 TTL（存活时间）是缓存协议的呼吸节奏：TTL 太长，改记录后传播慢，回滚也慢；TTL 太短，解析器反复回源，权威服务器压力大。上线前把关键记录 TTL 调低（如 60 秒），切换完成后再调回常态，是换 IP/迁移机房的标准手法——这一步经常被省略，结果就是"我明明改了记录，用户那边还是旧 IP"。理解这张分层图之后再动手配置，会发现自己要做的决定其实只有三件：这台机器是权威还是递归（或两者如何隔离）、谁允许来查、区域账本怎么版本化；其余语法细节查手册即可，取舍框架才是本页真正要留下的东西。
+
+动手前再补两条跨发行版不会变的纪律：其一，**先 check 再 reload**——`named-checkzone` 与 `named-checkconf` 双绿之前不要碰生产进程，语法错误被拦在维护窗口外，比服务半死不活时深夜回滚便宜得多；其二，**serial 只增不改内容**——从服务器只比较大小，不比较哈希，同一 serial 下偷改 zone 是主从分叉的经典来源。这两条与包管理"先看依赖再升级、升级失败保留旧包"是同一种保守变更观：DNS 与软件包都是多机共享的状态，单点上的"改完了"不等于集群里的"都对了"。
 
 ## 2. 安装（三发行版对照）
 
@@ -55,34 +56,29 @@ TTL（存活时间）是缓存协议的呼吸节奏：TTL 太长，改记录后�
 ### 2.1 Debian/Ubuntu
 
 ```bash
-$ sudo apt update
 $ sudo apt install bind9 bind9utils dnsutils
-$ sudo systemctl enable --now bind9
-● bind9.service - BIND Domain Name Server
-   Active: active (running)
+$ sudo systemctl enable --now bind9 && systemctl is-active bind9
+active
 ```
 
-Debian 把配置拆在 `/etc/bind/` 下多个片段文件里：`named.conf.options` 放全局选项，`named.conf.local` 放本地区域——与 apt 把源拆进 `sources.list.d/` 是同一哲学，升级包时本地改动不易被覆盖。
+Debian 把配置拆在 `/etc/bind/` 下多个片段文件里：`named.conf.options` 放全局选项，`named.conf.local` 放本地区域——与 apt 把源拆进 `sources.list.d/` 是同一哲学，升级包时本地改动不易被覆盖。`dnsutils` 只是客户端工具包（dig、nslookup、host），不装它服务照样能跑，但排障时会发现最常见的诊断命令全部缺失——装服务器的同时把客户端装齐，是 Debian 系与 Arch/RHEL 一个不起眼但很实用的差别（后两者 dig 随主包带来）。
 
 ### 2.2 Arch
 
 ```bash
 $ sudo pacman -S bind
-resolving dependencies...
-Packages (1) bind-9.18.x
-(1/1) installing bind                          [######################] 100%
-$ sudo systemctl enable --now named
-$ dig -v
+$ sudo systemctl enable --now named && dig -v | head -1
 DiG 9.18.x
 ```
 
-Arch 的 BIND 走官方 extra 仓库，`pacman -S bind` 一步到位，配置集中在单文件 `/etc/named.conf`（上游默认布局），区域文件惯例放 `/etc/named/` 或 `/var/lib/named/`，以文件内 `directory` 指令为准。安装后 `pacman -Ql bind | head` 可快速看清包铺了哪些 unit 与默认配置——和 Debian 用 `dpkg -L bind9`、RHEL 用 `rpm -ql bind` 查文件清单是同一动作，换的只是包管理器前面那半个词。滚动升级时保持 `pacman -Syu` 整体更新，BIND 与 dig 同包同仓库，不必担心客户端工具与守护进程版本错位。
+Arch 的 BIND 走官方 extra 仓库，`pacman -S bind` 一步到位，配置集中在单文件 `/etc/named.conf`（上游默认布局），区域文件惯例放 `/etc/named/` 或 `/var/lib/named/`，以文件内 `directory` 指令为准。安装后 `pacman -Ql bind | head` 可快速看清包铺了哪些 unit 与默认配置——和 Debian 用 `dpkg -L bind9`、RHEL 用 `rpm -ql bind` 查文件清单是同一动作，换的只是包管理器前面那半个词。滚动升级时保持 `pacman -Syu` 整体更新，BIND 与 dig 同包同仓库，不必担心客户端工具与守护进程版本错位。包管理器的依赖解析与安装进度行对排障没有信息量，验收固定看 `systemctl status` 与 `dig -v` 两行。
 
 ### 2.3 RHEL/CentOS/Rocky
 
 ```bash
 $ sudo dnf install bind bind-utils
-$ sudo systemctl enable --now named
+$ sudo systemctl enable --now named && systemctl is-active named
+active
 $ dig example.com @127.0.0.1 +short
 192.168.1.100
 ```
@@ -125,21 +121,19 @@ zone "example.com" {
 };
 ```
 
+这段声明的四个字段各管一件事：`type` 决定本机是账本主人还是跟随者；`file` 指向真正落盘的 zone 文本（路径必须与 `directory` 约定一致，放错位置会在 named 日志里表现为 file not found）；`allow-transfer` 把 AXFR 收紧到从服务器 IP，避免整份区域被任意查询者拖走；`also-notify` 让序列号变化时主服务器主动敲从服务器的门，把传播从"等 Refresh 周期"压到秒级。写完先 `named-checkzone` 再 `named-checkconf`，两道闸都绿了才 `rndc reload`——顺序反了，单个 zone 的语法错误可能连累整台 named 起不来。
+
 ### 4.2 区域文件
+
+区域文件本身是纯文本账本：TTL、SOA、NS，然后逐条记录。序列号、Refresh、Retry、Expire、Negative TTL 五个 SOA 字段从上到下依次解释"多久重新传输、失败重试间隔、从服务器多久宣告放弃"；CNAME 不可与 A/MX 共存、根域要留 A 给 `mail` 这类别名的宿主，都是写第一份 zone 时最容易踩的语法点：
 
 ```text
 $TTL    86400
 @       IN      SOA     ns1.example.com. admin.example.com. (
-                        2024010101      ; Serial：改动必须递增
-                        3600            ; Refresh
-                        1800            ; Retry
-                        604800          ; Expire
-                        86400           ; Negative TTL
-                        )
-
+                        2024010101 ; Serial：改动必须递增
+                        3600 1800 604800 86400 )
         IN      NS      ns1.example.com.
         IN      NS      ns2.example.com.
-
         IN      A       192.168.1.100
 ns1     IN      A       192.168.1.100
 www     IN      A       192.168.1.100
@@ -152,46 +146,30 @@ SOA 五元组里，**序列号是主从同步的心跳**：从服务器每次比
 
 ## 5. 反向解析
 
-反向域把 IP 八位组倒写后挂上 `in-addr.arpa`：`192.168.1.100` 对应 zone `1.168.192.in-addr.arpa`，PTR 记录负责从地址答回名字。
+反向域把 IP 八位组倒写后挂上 `in-addr.arpa`：`192.168.1.100` 对应 zone `1.168.192.in-addr.arpa`，PTR 记录负责从地址答回名字。声明与记录合成一段即可——zone 声明里的 `type`/`file` 与正向区完全对称，差别只在文件名与 PTR 行：
 
 ```text
 zone "1.168.192.in-addr.arpa" {
     type primary;
     file "/etc/bind/zones/db.192.168.1";
 };
-```
-
-```text
+// db.192.168.1 —— SOA 与正向区同构，serial 同步递增
 $TTL    86400
-@       IN      SOA     ns1.example.com. admin.example.com. (
-                        2024010101      ; Serial：与正向区一样，改动必增
-                        3600
-                        1800
-                        604800
-                        86400
-                        )
+@       IN      SOA     ns1.example.com. admin.example.com. ( 2024010101 3600 1800 604800 86400 )
         IN      NS      ns1.example.com.
-
 100     IN      PTR     www.example.com.
 102     IN      PTR     mail.example.com.
 ```
 
 PTR 目标必须写**全限定域名并以点结尾**，漏掉末尾的点会被拼成 `www.example.com.1.168.192.in-addr.arpa` 这样的笑话——这是反向区最常见的笔误。反向解析在实务中不是可选项：邮件服务器反查不通过会被对端降权甚至拒收，反向区写错的网络里排障时 `dig -x` 永远给不出可信答案。
 
+正反向区成对维护时，把两侧 serial 绑在同一张变更单里改，能避免"正向已生效、反向还停在昨天"的半更新状态；反向区改动频率低，更容易被遗忘，巡检脚本里应把 `dig -x` 的期望结果与 `dig A` 一样纳入冒烟测试。若网段做了 DHCP 动态 PTR，注意与静态 PTR 的边界——同一地址不要同时存在手工与动态两条记录，BIND 只会按配置的优先级取其一，排查"反查结果不对"时先确认你改的是哪一类区。
+
 ## 6. 主从 DNS
 
 ### 6.1 主（primary）侧
 
-主服务器沿用第 4 节的区域声明——`type primary`、`file` 指向权威账本，再补两行给从服务器开口：
-
-```text
-zone "example.com" {
-    type primary;
-    file "/etc/bind/zones/db.example.com";
-    allow-transfer { 192.168.1.101; };
-    also-notify { 192.168.1.101; };
-};
-```
+主服务器沿用第 4 节的区域声明——`type primary`、`file` 指向权威账本，再补两行给从服务器开口（`allow-transfer` 与 `also-notify` 见第 4 节示例，此处不重复）。
 
 ### 6.2 从（secondary）侧
 
@@ -214,27 +192,24 @@ zone "example.com" {
 $ sudo named-checkconf
 $ sudo named-checkzone example.com /etc/bind/zones/db.example.com
 zone example.com/IN: loaded serial 2024010101
-OK
-
-# 指定服务器查询，绕开本机缓存与 /etc/resolv.conf 干扰
+# 指定服务器查询 / 链路追踪 / 反向 / 响应码
 $ dig @192.168.1.100 www.example.com A
-;; ANSWER SECTION:
-www.example.com. 86400 IN A 192.168.1.100
-
-# 完整链路追踪 / 反向 / 响应码
+www.example.com. 86400 IN A 192.168.1.100   # ANSWER SECTION 摘录
 $ dig +trace example.com
 $ dig -x 192.168.1.100
 $ dig @192.168.1.100 no-such.example.com   # 关注 STATUS
-
-# 跟踪日志（unit 按发行版：Debian bind9，Arch/RHEL named）
-$ sudo journalctl -u named -f
+$ sudo journalctl -u named -f              # Debian unit 名为 bind9
 ```
+
+`named-checkzone` 打印 `loaded serial` 即区域文件被语法层接受；serial 数值要与你在 zone 里写的一致，对不上说明改的是另一份文件——多环境、多 zone 并存时这是最常见的"改了不生效"根因。`dig @IP` 里的 `@` 指定权威侧入口，排障时务必带上，否则本机缓存会把结果污染成"明明改了还是旧的"。`STATUS` 三态要背熟：`NOERROR` 空应答是"域名存在但没这条记录"，`NXDOMAIN` 是"整名不存在"，`SERVFAIL` 多指上游或 DNSSEC 校验失败——三种状态对应三条完全不同的处置路径，先读 STATUS 再翻日志能少走一半弯路。
 
 排错时养成读三行的习惯：`STATUS` 判断是没域名（NXDOMAIN）还是没记录（NOERROR 空应答）；`ANSWER SECTION` 看结果与 TTL；`AUTHORITY SECTION`/`ADDITIONAL SECTION` 看是谁给的权威答复。`+trace` 把 referral 链摊开，"卡在根还是卡在权威"一眼可辨；nslookup 也能用，但交互模式对脚本化排查不友好，诊断场景优先 `dig`。区域改了没生效？按顺序检查：serial 是否递增 → `named-checkzone` 是否通过 → 是否 `rndc reload`/重启 → 查询时是否命中了本地缓存（先 `dig +norecurse @权威` 验证源头）——四步走完，绝大多数"改了不生效"都能定位到具体一环。把这四步写进变更单模板，比出事后在群里问"谁改了 DNS"更能省下深夜的时间。
 
 ## 8. 常见坑
 
 **服务起不来 / 端口被占。** `systemctl status named`（或 Debian 的 `bind9`）看报错摘要，再 `journalctl -u named -e` 看全文。最常见三类：配置语法错（用 `named-checkconf` 复现即可）；53 端口被 systemd-resolved 或另一套 DNS 占用（`ss -ulnp | grep :53` 找到占用者）；权限/SELinux 拒绝区域文件读取（`ls -lZ` 对照包默认上下文，必要时 `restorecon`）。端口放行与入站策略仍以[防火墙篇](../../security/firewall.md)为准，本页不重复。
+
+**同一台机上 systemd-resolved 与 named 抢 53。** 症状是 `bind9`/`named` 起到一半 `address already in use`，或起得来但查询被截到 127.0.0.53。`ss -ulnp | grep :53` 若指向 `systemd-resolved`，按本机角色二选一：本机仅做递归出口时可让 resolved 转发给 named；要当权威服务器则禁用 resolved 的监听（改 `resolved.conf` 的 DNS StubListener 或直接 `systemctl disable --now systemd-resolved`）并写好 `/etc/resolv.conf`——与端口占用类问题同一套处置顺序：先认占用者是谁，再决定让路还是关掉，不要两边同时改一半。
 
 **改了记录不生效。** 按第 7 节四步法走：serial 没递增是主因之首；`named-checkzone` 报错则区域被拒载，named 会保持运行但该 zone 轮空；忘了 reload，进程还抱着旧缓存；最后一环是测试端自身缓存——用 `dig +norecurse @权威IP` 直击源头，才能把"权威没改"和"缓存没过期"分开。
 
@@ -243,6 +218,12 @@ $ sudo journalctl -u named -f
 **公网开放递归被滥用。** 症状是带宽异常、`allow-recursion` 日志里出现陌生网段。处置顺序：收紧 ACL → 对纯权威角色考虑 `recursion no` → 必要时用视图把内外网应答拆开。这一条与"包管理仓库不要对不可信网络开放"同理：服务默认姿态应当是收窄信任面，再按需开口，而不是先全开再打补丁——`pacman` 源文件里的签名策略，和 named 的 ACL 表，写的是同一份信任名单。
 
 **内网短名解析不到。** 确认 `/etc/resolv.conf` 指向了你的服务器；确认客户端网段在 `allow-query` 内；确认 zone 里的名字确实存在且 CNAME 没有悬空。与 `pacman -Ss` 搜不到包先怀疑索引没刷新一样，DNS 查不到先怀疑"问的不是你以为的那台服务器"——`dig @服务器IP 名字` 是最快的验尸工具。
+
+**DNSSEC 校验失败（SERVFAIL）。** 症状是域名在公共解析器上正常、在自建递归上 SERVFAIL。依次检查：`dnssec-validation` 是否被改成 `no` 后又残留了损坏的托管密钥；上游 forwarder 是否返回了不完整的 DNSSEC 链；本机时间是否严重偏移（签名有效期以时钟为准，与 NTP 失步会让一切签名"过期"）。排查时先 `dig +cd` 绕过校验确认是数据问题还是校验问题，再决定是修时间、补 DS 记录还是回滚验证开关——与"图空先分清是查询错还是数据缺"一样，先隔离变量再改配置。
+
+**AXFR 被拒 / 从服务器拿不到区。** 主侧 `allow-transfer` 没放行从机 IP、`named-checkzone` 在主侧就红了、或防火墙拦了 53/TCP——三者日志表现各不相同：ACL 拒绝常见 `permission denied`，语法红则传输根本不启动，防火墙表现为超时。在从服务器上 `dig AXFR example.com @主IP` 直接复现握手，比翻双向日志更快；与包管理"先本地 query 再查网络"的顺序相同：先证明服务层能应答，再怀疑链路。
+
+**换 IP 后旧地址还在应答。** TTL 过长 + 中间层缓存（递归解析器、浏览器、libc 缓存）叠加的经典现象。处置：改记录前先降 TTL 到 60 并等到旧 TTL 过完，再切 A 记录，切完恢复常态 TTL；已切完才发现问题则要等各层缓存自然过期，无法强刷时只能加大新值覆盖。这条时间线写进变更单，比事后解释"为什么还指向旧机器"省力得多——DNS 没有全网 flush 按钮，预降 TTL 是唯一便宜的后悔药。
 
 ## 参考资料
 

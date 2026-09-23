@@ -65,18 +65,12 @@ $ sudo systemctl status postfix
 
 ```bash
 $ sudo pacman -S postfix dovecot
-resolving dependencies...
-Packages (2) dovecot-2.3.x  postfix-3.8.x
-
-Total Download Size:   8.73 MiB
-:: Proceed with installation? [Y/n] y
-(2/2) installing dovecot                         [######################] 100%
 $ sudo systemctl enable --now postfix dovecot
 $ postconf mail_version
 mail_version = 3.8.x
 ```
 
-Arch 上 Postfix 与 Dovecot 都在 extra，`pacman -S postfix dovecot` 一次装齐传输与取信两侧；`postconf mail_version` 是快速验证二进制与文档版本是否对得上的小技巧。若后续要做 DKIM 签名，对应软件同样来自仓库：`pacman -S opendkim`，与 Debian 的 `apt install opendkim`、RHEL 的 `dnf install opendkim` 职责完全相同，差别只在配置片段默认是否已 `include` 进主配置——Arch 惯例是改完 conf.d 片段后自己确认 include 链完整，`pacman -Ql opendkim` 可列出包铺设的全部默认文件。验证清单类文件时也别忘了 `pacman -Ql postfix` 对照出厂清单，升级前后各跑一次，能立刻发现 `.pacnew` 里丢了哪些自定义行——和 Debian 用 `dpkg -L postfix` 是同一把尺子。
+Arch 上 Postfix 与 Dovecot 都在 extra，`pacman -S postfix dovecot` 一次装齐传输与取信两侧；`postconf mail_version` 是快速验证二进制与文档版本是否对得上的小技巧。若后续要做 DKIM 签名，对应软件同样来自仓库：`pacman -S opendkim`，与 Debian 的 `apt install opendkim`、RHEL 的 `dnf install opendkim` 职责完全相同，差别只在配置片段默认是否已 `include` 进主配置——Arch 惯例是改完 conf.d 片段后自己确认 include 链完整，`pacman -Ql opendkim` 可列出包铺设的全部默认文件。验证清单类文件时也别忘了 `pacman -Ql postfix` 对照出厂清单，升级前后各跑一次，能立刻发现 `.pacnew` 里丢了哪些自定义行——和 Debian 用 `dpkg -L postfix` 是同一把尺子。依赖解析与进度行删掉不损失任何教学信息，验收只认 `systemctl is-active` 与 `postconf mail_version`。
 
 ### 2.3 RHEL/CentOS/Rocky
 
