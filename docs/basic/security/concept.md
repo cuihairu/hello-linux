@@ -147,7 +147,7 @@ apparmor module is loaded.
 
 profile 放在 `/etc/apparmor.d/`，拒绝日志通常进 `/var/log/kern.log` 或 journal。概念上与 SELinux 的"域-类型"对应"profile-路径"，但命令、日志格式、策略语法完全不同——在 Ubuntu 上找 `ausearch -m avc` 会一无所获。Debian 也提供 SELinux 选项（`wiki.debian.org/SELinux`），但需要显式安装配置，非默认。
 
-**Arch**：官方基线**不默认启用 SELinux，也不默认启用 AppArmor**。这不是疏忽而是 Arch 的设计取舍：Arch 提供接近上游的滚动更新和最小预设，把是否启用 MAC、启用哪一种留给用户决定。Arch 内核自 4.18 起已包含 SELinux 支持，但用户态工具、策略、以及大量需要重新编译以链接 libselinux 的核心包均需自行处理（详见 [Arch Wiki - SELinux](https://wiki.archlinux.org/title/SELinux)），属于明确的高级定制场景；AppArmor 同样可自行安装启用。对绝大多数 Arch 服务器，实际承担边界防护的是防火墙 + DAC + 最小安装。
+**Arch**：官方基线**不默认启用 SELinux，也不默认启用 AppArmor**。这不是疏忽而是 Arch 的设计取舍：Arch 提供接近上游的滚动更新和最小默认配置，把是否启用 MAC、启用哪一种留给用户决定。Arch 内核自 4.18 起已包含 SELinux 支持，但用户态工具、策略、以及大量需要重新编译以链接 libselinux 的核心包均需自行处理（详见 [Arch Wiki - SELinux](https://wiki.archlinux.org/title/SELinux)），属于明确的高级定制场景；AppArmor 同样可自行安装启用。对绝大多数 Arch 服务器，实际承担边界防护的是防火墙 + DAC + 最小安装。
 
 **给运维的实践结论**：跨发行版脚本不要假设 `getenforce` 一定可用；RHEL 系排障用 `ausearch`，Debian/Ubuntu 用 `aa-status`，Arch 先 `cat /sys/kernel/security/lsm` 看当前加载了哪些 LSM 模块再决定用哪套工具。
 

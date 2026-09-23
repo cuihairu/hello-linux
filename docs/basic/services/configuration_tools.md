@@ -151,7 +151,7 @@ $ resolvectl status / query example.com / flush-caches   # 状态、测试解析
 4. **YAML 缩进/引号错误**：Netplan 用空格缩进，地址要加引号写成 `"192.168.10.5/24"` 的形式更稳妥（部分解析器对裸值敏感）；改完先 `netplan generate` 验证。
 5. **手工编辑 NM 连接文件损坏**：`/etc/NetworkManager/system-connections/` 权限必须 600、格式非法会导致 NetworkManager 拒绝加载。优先用 `nmcli`，改完 `nmcli connection reload`。
 6. **时区对了但时间不对**：`set-timezone` 只改时区；时钟不同步要 `set-ntp true` 并确认 `System clock synchronized: yes`，否则证书与日志仍会出问题。
-7. **防火墙与 SELinux 不在本节范围**：三系默认防火墙差异见[系统服务管理](./system_services.md)，规则配置见[网络篇](../../network/firewall.md)，SELinux/AppArmor 见[安全基础](../security.md)。
+7. **防火墙与 SELinux 不在本节范围**：三系默认防火墙差异见[系统服务管理](./system_services.md)，规则配置见[网络篇 · 防火墙](../../network/firewall.md)，SELinux/AppArmor 见[安全基础](../security.md)。
 
 ## 参考资料
 

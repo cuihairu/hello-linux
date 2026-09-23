@@ -183,7 +183,7 @@ $ sudo journalctl --vacuum-time=14days
 3. **改了 rsyslog 配置不生效**：用 `reload` 而非盲目 `restart`；且确认 journald 的数据真的到了 rsyslog（Arch 上常见只装了 rsyslog 却没配 imjournal/ForwardToSyslog）。
 4. **规则写对了但文件不增长**：facility 写错（如 RHEL 上写 `auth.*` 而实际走 `authpriv`），或该 facility 的消息根本没有产生。用 `journalctl --facility=authpriv` 对照验证。
 5. **普通用户执行 journalctl 只看到自己的日志**：系统日志需 root，或将用户加入 `systemd-journal`/`adm` 组。
-6. **把安全事件当普通日志翻**：SELinux/audit 拒绝在 `/var/log/audit/audit.log`，用 `ausearch`；防火墙丢包见 firewalld/nftables 日志。本篇不展开，见[安全基础](../security.md)与[网络篇](../../network/firewall.md)。
+6. **把安全事件当普通日志翻**：SELinux/audit 拒绝在 `/var/log/audit/audit.log`，用 `ausearch`；防火墙丢包见 firewalld/nftables 日志。本篇不展开，见[安全基础](../security.md)与[网络篇 · 防火墙](../../network/firewall.md)。
 7. **时间线错乱**：系统时钟不准会导致日志时间戳穿越（journalctl 会提示 clock jumped）。先 `timedatectl` 确认 NTP 同步，再解读日志时间。
 
 ## 参考资料

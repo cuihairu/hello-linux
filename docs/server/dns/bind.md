@@ -83,7 +83,7 @@ $ dig example.com @127.0.0.1 +short
 192.168.1.100
 ```
 
-RHEL 系主配置在 `/etc/named.conf`，区域默认落 `/var/named/`，权限由包预设的 `named` 用户与 SELinux 上下文共同约束——`restorecon -Rv /var/named` 是改完文件后常被忘掉的一步，权限或标签不对时 named 会以 `permission denied` 拒载区域，日志里只留下一句含糊的 `loading configuration: file not found` 类错误。RHEL 侧升级同样是一句 `dnf upgrade bind`，与 Debian 的 `apt upgrade bind9`、Arch 的 `pacman -Syu` 对齐节奏；三系共同点是"升级后必 reload 或重启、重启前必 checkconf"，包管理器换了，纪律不换。
+RHEL 系主配置在 `/etc/named.conf`，区域默认落 `/var/named/`，权限由包默认的 `named` 用户与 SELinux 上下文共同约束——`restorecon -Rv /var/named` 是改完文件后常被忘掉的一步，权限或标签不对时 named 会以 `permission denied` 拒载区域，日志里只留下一句含糊的 `loading configuration: file not found` 类错误。RHEL 侧升级同样是一句 `dnf upgrade bind`，与 Debian 的 `apt upgrade bind9`、Arch 的 `pacman -Syu` 对齐节奏；三系共同点是"升级后必 reload 或重启、重启前必 checkconf"，包管理器换了，纪律不换。
 
 ## 3. 全局配置要点
 

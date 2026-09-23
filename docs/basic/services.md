@@ -60,7 +60,7 @@
 unit 文件被编辑后必须执行 `systemctl daemon-reload` 重新读取；已经运行的进程还要 `systemctl restart` 才会用上新配置。`daemon-reload` 只刷新 systemd 的认知，不会重启服务。
 
 **Q：三系的防火墙命令为什么完全不一样？**
-因为默认栈不同：Ubuntu/Debian 常用 ufw（前端），Arch 不预装防火墙，RHEL 系用 firewalld。防火墙规则本身属于网络与安全篇的内容，本章只交代默认差异，具体配置见[网络篇](../network/firewall.md)与[安全篇](../security/README.md)。
+因为默认栈不同：Ubuntu/Debian 常用 ufw（前端），Arch 不预装防火墙，RHEL 系用 firewalld。防火墙规则本身属于网络与安全篇的内容，本章只交代默认差异，具体配置见[网络篇 · 防火墙](../network/firewall.md)与[安全篇](../security/README.md)。
 
 **Q：timer 和 cron 该用哪个？**
 系统级定时任务优先用 systemd timer，它能继承服务依赖、日志直接进 journal；用户个人的零散任务继续用 crontab 也很正常。两者并存，不必强行迁移。

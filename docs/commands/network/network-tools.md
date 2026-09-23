@@ -174,7 +174,7 @@ sudo tcpdump -ni ens18 port 443 -w /tmp/https.pcap              # 落盘，离�
 
 **只在 NetworkManager 管理网络的机器上使用**——RHEL/CentOS/Rocky 8+、Fedora、Arch 桌面、部分 Ubuntu（装了 `network-manager` 的桌面版）默认如此；用 `nmcli general status` 无响应或 `nmcli` 报错时，说明系统走的是 systemd-networkd/ifupdown，改用[网络管理命令](./network.md)第 4 节的入口，不要硬写 NM 配置文件。
 
-`connection` 是**配置档案**，`device` 是**硬件设备**——"连接已保存但没生效"往往是 `connection up` 没执行，或设备处于 `unmanaged`（`nmcli device set eth0 managed yes` 可恢复）。改完 DNS 后 `resolvectl flush-caches`，否则解析层还留着旧缓存。这些操作会写入 `/etc/NetworkManager/system-connections/`（keyfile，权限 600），重启后仍生效——这正是它与临时 `ip addr add` 的区别。
+`connection` 是**配置文件**，`device` 是**硬件设备**——"连接已保存但没生效"往往是 `connection up` 没执行，或设备处于 `unmanaged`（`nmcli device set eth0 managed yes` 可恢复）。改完 DNS 后 `resolvectl flush-caches`，否则解析层还留着旧缓存。这些操作会写入 `/etc/NetworkManager/system-connections/`（keyfile，权限 600），重启后仍生效——这正是它与临时 `ip addr add` 的区别。
 
 nmcli 的常用句型可以收成五类：查状态 `general status`/`device status`/`connection show`，无线 `device wifi list`，激活停用 `connection up|down 名称`，改配置 `connection modify 名称 字段 值`，重下发生效 `device reapply 网卡`。现场使用时，`nmcli device status` 一行就能给出设备名、类型、`connected`/`disconnected`/`unmanaged` 三态；桌面"连不上 Wi-Fi"十有八九在这里显示 `disconnected` 而用户以为已连。脚本化改配置前先 `nmcli -t -f NAME connection show` 拿连接名（`-t` 简洁模式适合解析），再 `connection modify`——**别用中文/空格的显示名硬编码**，新建连接时用 `nmcli con add ... con-name wired1` 起个稳定的 ASCII 名。改完用 `nmcli -t -f GENERAL.STATE device show eth0` 确认 `100`（connected），比看 NetworkManager 图标可靠。
 

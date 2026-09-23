@@ -51,7 +51,7 @@ $ curl -s localhost:9090/-/ready
 Prometheus Server is Ready.
 ```
 
-Debian 的默认配置在 `/etc/prometheus/prometheus.yml`，数据目录 `/var/lib/prometheus/`，权限已随包交给 `prometheus` 用户——**不要**再手工 `chown` 无关目录，包管理器预设的属主就是升级不打架的前提；要改采集目标直接编辑 YAML 后 `systemctl reload prometheus`（或 `kill -HUP`）即可热加载 scrape 配置。`enable --now` 一气呵成比先 `enable` 再 `start` 少记一步，也是三系通用的装服务姿势。装完先跑一次本机 `curl /-/ready` 再开浏览器，能把"服务没起"和"防火墙/端口问题"在终端里就分开——排障入口越早收敛到命令行，后面越省时间。
+Debian 的默认配置在 `/etc/prometheus/prometheus.yml`，数据目录 `/var/lib/prometheus/`，权限已随包交给 `prometheus` 用户——**不要**再手工 `chown` 无关目录，包管理器默认的属主就是升级不打架的前提；要改采集目标直接编辑 YAML 后 `systemctl reload prometheus`（或 `kill -HUP`）即可热加载 scrape 配置。`enable --now` 一气呵成比先 `enable` 再 `start` 少记一步，也是三系通用的装服务姿势。装完先跑一次本机 `curl /-/ready` 再开浏览器，能把"服务没起"和"防火墙/端口问题"在终端里就分开——排障入口越早收敛到命令行，后面越省时间。
 
 ### 2.2 Arch
 
