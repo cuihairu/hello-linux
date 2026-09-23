@@ -82,7 +82,7 @@ grep -E 'apple|banana' g.txt           # → Apple pie / banana / APPLE sauce
 grep -F 'Apple pie' g.txt              # → Apple pie
 ```
 
-注意：`grep -F` 会把 `.`、`*`、`[` 等全部当普通字符；需要正则时用 `-E`（或默认 BRE）。详细规范可对照 [POSIX grep](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/grep.html) 与 [Arch Wiki - Grep](https://wiki.archlinux.org/title/Grep)。
+注意：`grep -F` 会把 `.`、`*`、`[` 等全部当普通字符；需要正则时用 `-E`（或默认 BRE）。详细规范可对照 [POSIX grep](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/grep.html)与 [Arch Wiki - Grep](https://wiki.archlinux.org/title/Grep)。
 
 ## 3. 文本替换
 

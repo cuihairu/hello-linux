@@ -2,7 +2,7 @@
 
 排障最怕的不是命令多，而是**不知道此刻该用哪一个**：`ping` 通了 `curl` 却超时，你可能会反复重试 ping；DNS 换了好几个 `nameserver` 还是解析失败，问题可能出在 `/etc/hosts` 的优先级。本页把这些工具按**场景**摆开——先回答"什么时候用哪个"，再给每个工具的关键用法、真实输出与判断线索。命令级语法细节以 `man` 为准，本页只收录实战里真正会敲的那些。
 
-> 与前一页的分工：[网络管理命令](./network.md) 管"本机状态"（接口、路由、端口、配置入口、DNS 路径），本页管"主动探测与传输"（ping/trace/DNS 查询/HTTP/远程复制/抓包）。防火墙规则见[网络篇 · 防火墙](../../network/firewall.md)。除特别标注外，`ping`、`dig`、`curl`、`ssh`、`rsync`、`tcpdump` 在 **Debian/Ubuntu、Arch、RHEL/CentOS/Rocky** 上通用；`traceroute` 与 `nmap` 三系默认都不一定装，首次用前先装包。
+> 与前一页的分工：[网络管理命令](./network.md)管"本机状态"（接口、路由、端口、配置入口、DNS 路径），本页管"主动探测与传输"（ping/trace/DNS 查询/HTTP/远程复制/抓包）。防火墙规则见[网络篇 · 防火墙](../../network/firewall.md)。除特别标注外，`ping`、`dig`、`curl`、`ssh`、`rsync`、`tcpdump` 在 **Debian/Ubuntu、Arch、RHEL/CentOS/Rocky** 上通用；`traceroute` 与 `nmap` 三系默认都不一定装，首次用前先装包。
 
 ## 学习目标
 

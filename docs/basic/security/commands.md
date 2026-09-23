@@ -110,7 +110,7 @@ $ sudo ausearch -m avc -ts today | audit2why -a
    - 有现成布尔值？`getsebool -a | grep <关键词>` → 命中就 `sudo setsebool -P <name> on`；
    - 是文件标签不对？`ls -Z` 对比正常文件与异常文件 → 临时用 `chcon -t <type> <file>`，持久用 `semanage fcontext -a ...` 后 `restorecon -R ...`；
    - 是端口标签不对？`semanage port -l | grep <type>` → `semanage port -a -t <type> -p tcp <port>`；
-   - 都不是，策略真缺规则 → 最后才考虑 [策略配置](./policy_configuration.md) 中的 `audit2allow`。
+   - 都不是，策略真缺规则 → 最后才考虑 [策略配置](./policy_configuration.md)中的 `audit2allow`。
 4. **验证**：若曾临时关闭，先 `setenforce 1`，再复现业务操作，最后再次 `ausearch` 应无新增拒绝。
 
 **常见错误顺序**：一上来就 `setenforce 0` 或 `audit2allow`。前者掩盖问题且重启失效，后者可能引入过宽规则。正确姿势永远是：**先读日志，再按"布尔值 → 标签 → 端口 → 策略"的优先级做最小改动**。

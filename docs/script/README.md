@@ -67,7 +67,7 @@ Shell 脚本是 Linux 系统管理与自动化的基础技能。它不是一门"
 
 几个关键点：
 
-- **默认 shell 不同**。Debian/Ubuntu 的 `/bin/sh` 指向 `dash`，它不是 bash，不支持数组、`[[ ]]`、`local` 等 bash 扩展。脚本第一行写 `#!/bin/bash` 而非 `#!/bin/sh`，就是为了避免在 Debian 上用 dash 解释 bash 语法而报错。详见 [Bash 基础](./bash-basics.md) 的 shebang 一节。
+- **默认 shell 不同**。Debian/Ubuntu 的 `/bin/sh` 指向 `dash`，它不是 bash，不支持数组、`[[ ]]`、`local` 等 bash 扩展。脚本第一行写 `#!/bin/bash` 而非 `#!/bin/sh`，就是为了避免在 Debian 上用 dash 解释 bash 语法而报错。详见 [Bash 基础](./bash-basics.md)的 shebang 一节。
 - **bash 版本**。RHEL 系随大版本固定 bash（如 Rocky 9 是 5.1），Arch 滚动更新到最新（`pacman -S bash`）。写脚本时若用到较新的 bash 特性（如关联数组需 4.0+、`readarray` 需 4.0+），注意 RHEL 老版本可能不支持。
 - **coreutils 三系通用**。本篇涉及的 `ls`、`grep`、`sed`、`awk`、`sort`、`uniq`、`cut`、`wc` 等在三系都是 GNU 实现，命令行为一致；本篇不讨论 BSD 差异（那是 macOS/FreeBSD 的问题）。
 - **工具需手动装**。shellcheck、bashdb 不是默认必装，三系安装方式见上表与 [脚本调试](./debugging.md)。
@@ -116,7 +116,7 @@ Hello, World!
 当前用户: alice
 ```
 
-`set -euo pipefail` 是工程脚本的标配"严格模式"：`-e` 出错即退、`-u` 用未定义变量即报错、`-o pipefail` 让管道中任意一段失败都算整体失败。为什么需要它、有哪些副作用，会在 [Bash 基础](./bash-basics.md) 和 [脚本调试](./debugging.md) 展开。
+`set -euo pipefail` 是工程脚本的标配"严格模式"：`-e` 出错即退、`-u` 用未定义变量即报错、`-o pipefail` 让管道中任意一段失败都算整体失败。为什么需要它、有哪些副作用，会在 [Bash 基础](./bash-basics.md)和 [脚本调试](./debugging.md)展开。
 
 ## 7. 常见坑
 

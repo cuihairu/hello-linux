@@ -285,7 +285,7 @@ Shell 没有一等函数对象——不能把函数塞进变量再当值传（Ba
 
 自测清单（可贴进 PR 模板）：所有新变量是否 `local`；`$(func)` 捕获结果里是否混入调试输出；`local out=$(cmd)` 是否改成分步赋值；库路径是否用 `${BASH_SOURCE[0]}`；`shellcheck -x` 是否零 error。五项全绿再合入，比上线后追"偶数层结果全错"省事得多。
 
-下一步可以把本章函数与 [文本处理](./text-processing.md)、[脚本调试](./debugging.md) 串起来：用函数收口 `grep`/`awk` 包装，用 `set -x` 与 shellcheck 守住回归，最终落到 [实战案例](./examples.md) 里的完整脚本骨架。
+下一步可以把本章函数与 [文本处理](./text-processing.md)、[脚本调试](./debugging.md)串起来：用函数收口 `grep`/`awk` 包装，用 `set -x` 与 shellcheck 守住回归，最终落到 [实战案例](./examples.md)里的完整脚本骨架。
 
 ## 参考资料
 
