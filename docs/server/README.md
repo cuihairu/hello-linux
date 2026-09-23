@@ -95,6 +95,15 @@ journalctl -u nginx -f
 
 对于刚起步的项目，不必一上来就上 Kubernetes。一台 2 核 4G 的机器用 Nginx + MySQL + PHP-FPM 或 Nginx + Node.js 就能支撑相当流量，瓶颈往往先出现在数据库慢查询，而不是 Web 层并发。先按本篇把单机架构做扎实，再考虑水平扩展。
 
+## 学习目标
+
+- 掌握三系包管理器与 systemd 服务管理的对照关系，能独立完成服务的安装、启停、开机自启与状态查看
+- 理解服务器低权限用户模型与 FHS 目录约定，能快速定位配置（`/etc`）、数据（`/var/lib`）、日志（`/var/log`）
+- 能用 `nginx -t`、`apachectl configtest` 做配置语法检查，并用 `systemctl status`、`journalctl` 排查启动失败
+- 掌握 Nginx 反向代理、负载均衡与 HTTPS 的基本配置，理解 Nginx 与 Apache 的选型边界
+- 会完成 MySQL/MariaDB 的用户权限配置与备份恢复，了解 Redis 持久化、Docker 部署与监控方案的定位
+- 避开防火墙与 SELinux 导致的 403/连接不通问题，知道先查端口放行、再查安全上下文的排查顺序
+
 ## 常见问题
 
 **Q：应该选哪个发行版做服务器？**

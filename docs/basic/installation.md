@@ -22,6 +22,34 @@
 
 阅读顺序建议按上表依次进行。若你已经选定发行版，也可以直接跳到第三篇对照操作，但**第二篇的启动模式判断和备份清单不要跳过**——绝大多数"装机事故"都源于这里。
 
+## 安装前检查清单
+
+无论用哪个发行版的安装器，进安装界面前先在 Live 环境（或现有系统）里跑完这份清单。三件事没确认就点"下一步"，是最常见的翻车原因：**启动模式不匹配、磁盘认不出、数据没备份**。
+
+```bash
+# 1. 确认启动模式：有输出 = UEFI，无输出 = Legacy/CSM
+ls /sys/firmware/efi && echo "UEFI 模式" || echo "Legacy 模式"
+
+# 2. 确认磁盘与分区表：安装器里看不到硬盘多半在这里露馅
+lsblk -f
+sudo fdisk -l          # 或 parted -l
+# 注意磁盘是 GPT 还是 MBR，与启动模式是否匹配
+
+# 3. 确认网络（联网安装器需要）
+ip addr                # 或 ip link
+ping -c 3 8.8.8.8      # 基础连通性
+ping -c 3 archlinux.org  # 能否解析域名（DNS）
+
+# 4. 确认内存与架构（archinstall/部分安装器对内存有要求）
+free -h
+uname -m               # x86_64 还是 aarch64，决定下哪个镜像
+
+# 5. 确认要装的磁盘上没有需要保留的数据
+sudo wipefs -l /dev/sda  # 只读查看签名，不会改动
+```
+
+决策要点先记三条：**UEFI 机器用 GPT + EFI 系统分区（ESP，建议 ≥ 512MB，fat32）**；**Legacy 机器用 MBR + BIOS boot 分区（BIOS+GPT 时才需要）**；**双系统务必先确认现有分区表类型和 Windows 占用的磁盘**，别在安装器里手滑选"清除整个磁盘"。备份原则更简单：`/home` 和桌面上的文件在重装前必须已复制到外部介质——安装器的"保留数据"选项不等于零风险。
+
 ## 三系安装方式速览
 
 三大发行版家族的安装体验差异，本质是"谁替你做决定"的差异：
@@ -36,6 +64,16 @@
 | 学习曲线 | 平缓，出错时网络资料最多 | 陡峭，但走一遍就理解 Linux 从分区到引导的全部环节 | 中等，重在 SELinux、LVM 等企业特性 |
 
 三者最终得到的都是"内核 + GNU 工具 + 包管理器"的同一类系统，日常命令几乎通用；差别集中在**软件打包格式**（deb / pacman 包 / rpm）、**升级节奏**（LTS 固定发布 / 滚动更新 / 企业级慢节奏）和**社区支持取向**。理解这三点，比记住安装器的菜单顺序更有价值。
+
+装完后的第一次进入，三系也有各自的"必做三件事"，顺序基本一致，命令略有差别：
+
+| 步骤 | Debian/Ubuntu | Arch | RHEL/CentOS/Rocky |
+|------|---------------|------|-------------------|
+| 1. 首次全量更新 | `sudo apt update && sudo apt upgrade -y` | `sudo pacman -Syu`（必须完整升级） | `sudo dnf update -y` |
+| 2. 确认网络服务 | `systemctl status NetworkManager` 或 `netplan status` | `systemctl status systemd-networkd` / `dhcpcd` | `systemctl status NetworkManager` |
+| 3. 确认 SSH 可用（服务器） | `sudo apt install openssh-server && sudo systemctl enable --now ssh` | `sudo pacman -S openssh && sudo systemctl enable --now sshd` | `sudo dnf install openssh-server && sudo systemctl enable --now sshd` |
+
+注意 Arch 的 `pacman -Syu`：滚动发行版**禁止部分升级**（只 `-Sy` 不 `-u`），否则容易出现库版本不一致导致的半升级状态——这是 Arch 新手最经典的第一个坑。RHEL 系还要留意 `dnf update` 与 `dnf upgrade` 在旧版 CentOS 上的语义差异，Rocky/新 RHEL 中两者已趋于一致。
 
 ## 常见问题预览
 
