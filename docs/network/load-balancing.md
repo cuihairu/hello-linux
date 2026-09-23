@@ -746,16 +746,11 @@ HAProxy 的 ` backlog`/`qcur`
 
 ## 参考资料
 
-- Nginx 负载均衡文档：
-  <https://nginx.org/en/docs/http/load_balancing.html>
-- Nginx reverse proxy 参数：
-  <https://nginx.org/en/docs/http/ngx_http_proxy_module.html>
-- HAProxy 官方文档与 Configuration Manual：
-  <https://www.haproxy.org/#ref>
-- Arch Wiki - HAProxy：
-  <https://wiki.archlinux.org/title/HAProxy>
-- LVS 项目与文档：<https://www.linuxvirtualserver.org/>
-- Keepalived 官方文档：
-  <https://keepalived.org/documentation.html>
+- Nginx 负载均衡文档 — [nginx.org](https://nginx.org/en/docs/http/load_balancing.html)
+- Nginx reverse proxy 参数 — [nginx.org](https://nginx.org/en/docs/http/ngx_http_proxy_module.html)
+- HAProxy 官方文档与 Configuration Manual — [haproxy.org](https://www.haproxy.org/#ref)
+- Arch Wiki - HAProxy — [wiki.archlinux.org](https://wiki.archlinux.org/title/HAProxy)
+- LVS 项目与文档 — [linuxvirtualserver.org](https://www.linuxvirtualserver.org/)
+- Keepalived 官方文档 — [keepalived.org](https://keepalived.org/documentation.html)
 - `man haproxy`、`man ipvsadm`、
   `man nginx`、`man 8 keepalived`

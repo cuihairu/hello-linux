@@ -250,11 +250,11 @@ Linux 会把暂时用不到的内存拿去做页缓存（buff/cache）加速磁�
 ## 参考资料
 
 - `man ps`, `man top`, `man free`, `man systemctl`, `man journalctl`, `man vmstat`, `man iostat`
-- [鸟哥的私房菜 - 程序观察与作业管理](https://linux.vbird.org/linux_basic/centos7/0510process_monitor.php)
-- [Arch Wiki - Process management](https://wiki.archlinux.org/title/Process_management)
-- [Arch Wiki - systemd](https://wiki.archlinux.org/title/Systemd)
-- [Arch Wiki - Btop/Htop（监控工具）](https://wiki.archlinux.org/title/Btop)
-- [procps-ng 项目页](https://gitlab.com/procps-ng/procps)
-- [sysstat 手册（iostat/vmstat/sar）](https://sebastien.godard.pagesperso-orange.fr/)
-- [Red Hat 文档 - Monitoring and managing system status and performance](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index)
-- [Ansible 官方文档](https://docs.ansible.com/)
+- 鸟哥的私房菜 - 程序观察与作业管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0510process_monitor.php)
+- Arch Wiki - Process management — [wiki.archlinux.org](https://wiki.archlinux.org/title/Process_management)
+- Arch Wiki - systemd — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd)
+- Arch Wiki - Btop/Htop（监控工具） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Btop)
+- procps-ng 项目页 — [gitlab.com](https://gitlab.com/procps-ng/procps)
+- sysstat 手册（iostat/vmstat/sar） — [sebastien.godard.pagesperso-orange.fr](https://sebastien.godard.pagesperso-orange.fr/)
+- Red Hat 文档 - Monitoring and managing system status and performance — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index)
+- Ansible 官方文档 — [docs.ansible.com](https://docs.ansible.com/)

@@ -106,13 +106,13 @@ done
 
 ## 参考资料
 
-- 鸟哥的私房菜 - 认识计算机硬件：<https://linux.vbird.org/linux_basic/centos7/0100computer.php>
-- 鸟哥的私房菜 - 系统管理工具：<https://linux.vbird.org/linux_server/>
-- Arch Wiki - Hardware 分类：<https://wiki.archlinux.org/title/Category:Hardware>
-- Arch Wiki - 安装程序前的系统要求（含 CPU flags 基线）：<https://wiki.archlinux.org/title/System_requirements>
-- Linux Hardware Database：<https://linux-hardware.org/>
-- Linux 内核文档：<https://www.kernel.org/doc/html/latest/>
+- 鸟哥的私房菜 - 认识计算机硬件 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0100computer.php)
+- 鸟哥的私房菜 - 系统管理工具 — [linux.vbird.org](https://linux.vbird.org/linux_server/)
+- Arch Wiki - Hardware 分类 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Category:Hardware)
+- Arch Wiki - 安装程序前的系统要求（含 CPU flags 基线） — [wiki.archlinux.org](https://wiki.archlinux.org/title/System_requirements)
+- Linux Hardware Database — [linux-hardware.org](https://linux-hardware.org/)
+- Linux 内核文档 — [kernel.org](https://www.kernel.org/doc/html/latest/)
 - Patterson & Hennessy《计算机组成与设计：硬件/软件接口》
 - Bryant & O'Hallaron《深入理解计算机系统》（CSAPP）
-- Intel® 64 and IA-32 Architectures Software Developer Manuals：<https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html>
-- AMD64 Architecture Programmer's Manual：<https://developer.amd.com/resources/developer-guides-manuals/>
+- Intel® 64 and IA-32 Architectures Software Developer Manuals — [intel.com](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
+- AMD64 Architecture Programmer's Manual — [developer.amd.com](https://developer.amd.com/resources/developer-guides-manuals/)

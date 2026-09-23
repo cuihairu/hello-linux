@@ -246,13 +246,13 @@ Arch 改 `/etc/pacman.d/mirrorlist`（可用 `reflector` 自动筛选）。
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 软件管理（RPM/DPKG/YUM）](https://linux.vbird.org/linux_basic/centos7/0520softwaremanager.php)
-- [Arch Wiki - Pacman](https://wiki.archlinux.org/title/Pacman)（含 `-Syu`、部分升级警告、缓存管理）
-- [Arch Wiki - AUR](https://wiki.archlinux.org/title/Arch_User_Repository)
-- [Arch Wiki - Mirrors](https://wiki.archlinux.org/title/Mirrors)
-- [Debian 手册 - APT](https://www.debian.org/doc/manuals/debian-handbook/apt.zh-cn.html)
-- [Ubuntu - apt(8) 与包管理文档](https://ubuntu.com/server/docs/package-management)
-- [Red Hat 文档 - Managing software with the DNF tool](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_software_with_the_dnf_tool/index)
-- [Rocky Linux 文档 - 软件管理](https://docs.rockylinux.org/guides/software_management/)
-- [Fedora 文档 - DNF](https://docs.fedoraproject.org/en_US/quick-docs/dnf/)
+- 鸟哥的私房菜 - 软件管理（RPM/DPKG/YUM） — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0520softwaremanager.php)
+- Arch Wiki - Pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)（含 `-Syu`、部分升级警告、缓存管理）
+- Arch Wiki - AUR — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_User_Repository)
+- Arch Wiki - Mirrors — [wiki.archlinux.org](https://wiki.archlinux.org/title/Mirrors)
+- Debian 手册 - APT — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/apt.zh-cn.html)
+- Ubuntu - apt(8) 与包管理文档 — [ubuntu.com](https://ubuntu.com/server/docs/package-management)
+- Red Hat 文档 - Managing software with the DNF tool — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_software_with_the_dnf_tool/index)
+- Rocky Linux 文档 - 软件管理 — [docs.rockylinux.org](https://docs.rockylinux.org/guides/software_management/)
+- Fedora 文档 - DNF — [docs.fedoraproject.org](https://docs.fedoraproject.org/en_US/quick-docs/dnf/)
 - `man apt`, `man dpkg`, `man dnf`, `man rpm`, `man pacman`

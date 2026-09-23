@@ -126,13 +126,13 @@
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 基础篇](https://linux.vbird.org/linux_basic/)
-- [Arch Wiki](https://wiki.archlinux.org/)
-- [Arch Wiki - pacman](https://wiki.archlinux.org/title/Pacman)
-- [Debian 手册](https://www.debian.org/doc/manuals/debian-handbook/)
-- [Ubuntu 官方文档](https://help.ubuntu.com/)
-- [Red Hat 文档中心](https://docs.redhat.com/)
-- [Rocky Linux 文档](https://docs.rockylinux.org/)
-- [Fedora 文档](https://docs.fedoraproject.org/)
-- [Linux 内核文档](https://www.kernel.org/doc/html/latest/)
-- [DistroWatch](https://distrowatch.com/)
+- 鸟哥的私房菜 - 基础篇 — [linux.vbird.org](https://linux.vbird.org/linux_basic/)
+- Arch Wiki — [wiki.archlinux.org](https://wiki.archlinux.org/)
+- Arch Wiki - pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
+- Debian 手册 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
+- Ubuntu 官方文档 — [help.ubuntu.com](https://help.ubuntu.com/)
+- Red Hat 文档中心 — [docs.redhat.com](https://docs.redhat.com/)
+- Rocky Linux 文档 — [docs.rockylinux.org](https://docs.rockylinux.org/)
+- Fedora 文档 — [docs.fedoraproject.org](https://docs.fedoraproject.org/)
+- Linux 内核文档 — [kernel.org](https://www.kernel.org/doc/html/latest/)
+- DistroWatch — [distrowatch.com](https://distrowatch.com/)

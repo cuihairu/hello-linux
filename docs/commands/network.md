@@ -244,12 +244,12 @@ Arch 常见 `nftables`/`iptables`（`nft list ruleset`）→
 ## 参考资料
 
 - `man ip`, `man ss`, `man ping`, `man curl`, `man ssh`, `man rsync`, `man dig`
-- [鸟哥的私房菜 - 网络基础与指令](https://linux.vbird.org/linux_server/0110networkbasic.php)
-- [Arch Wiki - Networking](https://wiki.archlinux.org/title/Networking)
-- [Arch Wiki - iproute2](https://wiki.archlinux.org/title/Iproute2)
-- [Arch Wiki - SSH](https://wiki.archlinux.org/title/SSH)
-- [Arch Wiki - nftables](https://wiki.archlinux.org/title/Nftables)
-- [iproute2 手册（ss/ip）](https://man7.org/linux/man-pages/man8/ip.8.html)
-- [curl 手册](https://curl.se/docs/manpage.html)
-- [Red Hat 文档 - Configuring and managing networking](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/index)
-- [Ubuntu - Netplan 文档](https://netplan.io/)
+- 鸟哥的私房菜 - 网络基础与指令 — [linux.vbird.org](https://linux.vbird.org/linux_server/0110networkbasic.php)
+- Arch Wiki - Networking — [wiki.archlinux.org](https://wiki.archlinux.org/title/Networking)
+- Arch Wiki - iproute2 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Iproute2)
+- Arch Wiki - SSH — [wiki.archlinux.org](https://wiki.archlinux.org/title/SSH)
+- Arch Wiki - nftables — [wiki.archlinux.org](https://wiki.archlinux.org/title/Nftables)
+- iproute2 手册（ss/ip） — [man7.org](https://man7.org/linux/man-pages/man8/ip.8.html)
+- curl 手册 — [curl.se](https://curl.se/docs/manpage.html)
+- Red Hat 文档 - Configuring and managing networking — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/index)
+- Ubuntu - Netplan 文档 — [netplan.io](https://netplan.io/)

@@ -218,10 +218,10 @@ Arch 和 RHEL 系则是标准的 `fd`。
 ## 参考资料
 
 - `man grep`, `man sed`, `man awk`, `man sort`, `man less`, `man vim`
-- [鸟哥的私房菜 - 文本编辑器与处理器](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
-- [Arch Wiki - Vim](https://wiki.archlinux.org/title/Vim)
-- [Arch Wiki - Core utilities](https://wiki.archlinux.org/title/Core_utilities)
-- [GNU grep 手册](https://www.gnu.org/software/grep/manual/)
-- [GNU sed 手册](https://www.gnu.org/software/sed/manual/)
-- [gawk 手册（GNU awk）](https://www.gnu.org/software/gawk/manual/)
-- [POSIX - Regular Expressions](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V4_chap09.html)
+- 鸟哥的私房菜 - 文本编辑器与处理器 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
+- Arch Wiki - Vim — [wiki.archlinux.org](https://wiki.archlinux.org/title/Vim)
+- Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
+- GNU grep 手册 — [gnu.org](https://www.gnu.org/software/grep/manual/)
+- GNU sed 手册 — [gnu.org](https://www.gnu.org/software/sed/manual/)
+- gawk 手册（GNU awk） — [gnu.org](https://www.gnu.org/software/gawk/manual/)
+- POSIX - Regular Expressions — [pubs.opengroup.org](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V4_chap09.html)

@@ -186,14 +186,10 @@ done
 
 ## 参考资料
 
-- 鸟哥的私房菜 - 网络基础：
-  <https://linux.vbird.org/linux_server/0110networkbasic.php>
-- Arch Wiki - Networking：
-  <https://wiki.archlinux.org/title/Networking>
-- Arch Wiki - systemd-networkd：
-  <https://wiki.archlinux.org/title/Systemd-networkd>
-- RHEL 9 配置与管理网络：
-  <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/index>
-- Netplan 官方文档：<https://netplan.readthedocs.io/>
+- 鸟哥的私房菜 - 网络基础 — [linux.vbird.org](https://linux.vbird.org/linux_server/0110networkbasic.php)
+- Arch Wiki - Networking — [wiki.archlinux.org](https://wiki.archlinux.org/title/Networking)
+- Arch Wiki - systemd-networkd — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd-networkd)
+- RHEL 9 配置与管理网络 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/index)
+- Netplan 官方文档 — [netplan.readthedocs.io](https://netplan.readthedocs.io/)
 - iproute2 手册页（`man ip`、`man ss`、`man tc`）
 - systemd.network(5)、systemd-resolved.service(8)

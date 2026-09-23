@@ -270,12 +270,12 @@ GNU 工具（Linux 上的主流）支持 `--long-option` 和 `-abc` 合并短选
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 命令行与 Shell](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
-- [鸟哥的私房菜 - 常用命令介绍](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
-- [Arch Wiki - Core utilities](https://wiki.archlinux.org/title/Core_utilities)
-- [Arch Wiki - Bash](https://wiki.archlinux.org/title/Bash)
-- [Arch Wiki - Pacman](https://wiki.archlinux.org/title/Pacman)
-- [Debian 手册](https://www.debian.org/doc/manuals/debian-handbook/)
-- [Red Hat 文档中心 - Getting started with the command line](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/getting_started_with_the_red_hat_enterprise_linux_console/index)
-- [Linux man pages（man7.org）](https://man7.org/linux/man-pages/)
-- [POSIX.1-2017 Shell Command Language](https://pubs.opengroup.org/onlinepubs/9699919799/)
+- 鸟哥的私房菜 - 命令行与 Shell — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
+- 鸟哥的私房菜 - 常用命令介绍 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
+- Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
+- Arch Wiki - Bash — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
+- Arch Wiki - Pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
+- Debian 手册 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
+- Red Hat 文档中心 - Getting started with the command line — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/getting_started_with_the_red_hat_enterprise_linux_console/index)
+- Linux man pages（man7.org） — [man7.org](https://man7.org/linux/man-pages/)
+- POSIX.1-2017 Shell Command Language — [pubs.opengroup.org](https://pubs.opengroup.org/onlinepubs/9699919799/)

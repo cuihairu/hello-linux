@@ -243,7 +243,7 @@ $ chsh -s /bin/zsh     # 切换默认 Shell（下次登录生效）
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 基础篇](https://linux.vbird.org/linux_basic/centos7/)
-- [Arch Wiki - General recommendations](https://wiki.archlinux.org/title/General_recommendations)
-- [The Linux Kernel documentation](https://www.kernel.org/doc/html/latest/)
-- [Linux man pages](https://man7.org/linux/man-pages/)
+- 鸟哥的私房菜 - 基础篇 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/)
+- Arch Wiki - General recommendations — [wiki.archlinux.org](https://wiki.archlinux.org/title/General_recommendations)
+- The Linux Kernel documentation — [kernel.org](https://www.kernel.org/doc/html/latest/)
+- Linux man pages — [man7.org](https://man7.org/linux/man-pages/)

@@ -659,16 +659,13 @@ agent、自动发现、模板、告警内置，
 
 ## 参考资料
 
-- Prometheus 文档：<https://prometheus.io/docs/>
-- node_exporter README：
-  <https://github.com/prometheus/node_exporter>
-- PromQL 函数手册：
-  <https://prometheus.io/docs/prometheus/latest/querying/functions/>
-- Grafana 文档：<https://grafana.com/docs/>
-- Net-SNMP 手册：<https://www.net-snmp.org/docs/man/>
+- Prometheus 文档 — [prometheus.io](https://prometheus.io/docs/)
+- node_exporter README — [github.com](https://github.com/prometheus/node_exporter)
+- PromQL 函数手册 — [prometheus.io](https://prometheus.io/docs/prometheus/latest/querying/functions/)
+- Grafana 文档 — [grafana.com](https://grafana.com/docs/)
+- Net-SNMP 手册 — [net-snmp.org](https://www.net-snmp.org/docs/man/)
 - SNMPv3 安全模型（RFC 3411-3415）
-- Zabbix 文档：<https://www.zabbix.com/documentation>
-- Arch Wiki - Prometheus：
-  <https://wiki.archlinux.org/title/Prometheus>
+- Zabbix 文档 — [zabbix.com](https://www.zabbix.com/documentation)
+- Arch Wiki - Prometheus — [wiki.archlinux.org](https://wiki.archlinux.org/title/Prometheus)
 - `man snmpget`、`man snmpwalk`、
   `man tcpdump`、`man vnstat`、`man iperf3`

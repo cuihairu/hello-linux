@@ -518,18 +518,16 @@ echo "fresh"
 
 ## 参考资料
 
-- rsync 官方文档：<https://download.samba.org/pub/rsync/rsync.html>
-- GNU tar 手册：<https://www.gnu.org/software/tar/manual/>
-- Backblaze - The 3-2-1 Backup Strategy：
-  <https://www.backblaze.com/blog/the-3-2-1-backup-strategy/>
-- Arch Wiki - Timeshift：<https://wiki.archlinux.org/title/Timeshift>
-- Arch Wiki - Borg backup：<https://wiki.archlinux.org/title/Borg_backup>
-- Arch Wiki - Cron（cronie 安装与启用）：<https://wiki.archlinux.org/title/Cron>
-- systemd.timer(5)：<https://man7.org/linux/man-pages/man5/systemd.timer.5.html>
-- rclone 文档：<https://rclone.org/docs/>
+- rsync 官方文档 — [download.samba.org](https://download.samba.org/pub/rsync/rsync.html)
+- GNU tar 手册 — [gnu.org](https://www.gnu.org/software/tar/manual/)
+- Backblaze - The 3-2-1 Backup Strategy — [backblaze.com](https://www.backblaze.com/blog/the-3-2-1-backup-strategy/)
+- Arch Wiki - Timeshift — [wiki.archlinux.org](https://wiki.archlinux.org/title/Timeshift)
+- Arch Wiki - Borg backup — [wiki.archlinux.org](https://wiki.archlinux.org/title/Borg_backup)
+- Arch Wiki - Cron（cronie 安装与启用） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Cron)
+- systemd.timer(5) — [man7.org](https://man7.org/linux/man-pages/man5/systemd.timer.5.html)
+- rclone 文档 — [rclone.org](https://rclone.org/docs/)
 - Red Hat - System Backup and Recovery（System Administrator's Guide，
   RHEL 7 版，ReaR/备份概念仍适用）：
   <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/system_administrators_guide/part-system_backup_and_recovery>
-- 鸟哥的私房菜 - 服务器篇（含备份相关单元）：
-  <https://linux.vbird.org/linux_server/>
+- 鸟哥的私房菜 - 服务器篇（含备份相关单元） — [linux.vbird.org](https://linux.vbird.org/linux_server/)
 - `man rsync`、`man tar`、`man crontab`、`man dump`、`man restore`

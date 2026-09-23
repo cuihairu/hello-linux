@@ -278,11 +278,11 @@ Link 3 (ztksetoehl):
 ## 参考资料
 
 - `man ip`, `man ss`, `man ip-rule`, `man resolvectl`, `man nsswitch.conf`, `man systemd-resolved`
-- [鸟哥的私房菜 - 网络基础](https://linux.vbird.org/linux_server/0110networkbasic.php)
-- [Arch Wiki - iproute2](https://wiki.archlinux.org/title/Iproute2)
-- [Arch Wiki - Network configuration](https://wiki.archlinux.org/title/Network_configuration)
-- [Arch Wiki - systemd-resolved](https://wiki.archlinux.org/title/Systemd-resolved)
-- [iproute2 手册（ss/ip）](https://man7.org/linux/man-pages/man8/ip.8.html)
-- [Ubuntu - Netplan 文档](https://netplan.io/)
-- [systemd-resolved / resolvectl 手册](https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html)
-- [Red Hat 文档 - Configuring and managing networking](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/index)
+- 鸟哥的私房菜 - 网络基础 — [linux.vbird.org](https://linux.vbird.org/linux_server/0110networkbasic.php)
+- Arch Wiki - iproute2 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Iproute2)
+- Arch Wiki - Network configuration — [wiki.archlinux.org](https://wiki.archlinux.org/title/Network_configuration)
+- Arch Wiki - systemd-resolved — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd-resolved)
+- iproute2 手册（ss/ip） — [man7.org](https://man7.org/linux/man-pages/man8/ip.8.html)
+- Ubuntu - Netplan 文档 — [netplan.io](https://netplan.io/)
+- systemd-resolved / resolvectl 手册 — [freedesktop.org](https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html)
+- Red Hat 文档 - Configuring and managing networking — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/index)

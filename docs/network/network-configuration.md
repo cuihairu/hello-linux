@@ -1034,17 +1034,13 @@ MAC 地址漂移、
 半年后你会得到一份
 比任何通用教程都准确的"这台机器怎么组网"的记录。
 
-- Netplan 官方文档：<https://netplan.readthedocs.io/>
+- Netplan 官方文档 — [netplan.readthedocs.io](https://netplan.readthedocs.io/)
 - systemd.network(5)、networkctl(1)、
   systemd-resolved.service(8)
-- Arch Wiki - systemd-networkd：
-  <https://wiki.archlinux.org/title/Systemd-networkd>
-- Arch Wiki - Network configuration：
-  <https://wiki.archlinux.org/title/Network_configuration>
-- NetworkManager 手册：<https://networkmanager.dev/docs/>
-- RHEL 9 配置与管理网络：
-  <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/>
-- 鸟哥的私房菜 - 网络配置：
-  <https://linux.vbird.org/linux_server/0110networkbasic.php>
+- Arch Wiki - systemd-networkd — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd-networkd)
+- Arch Wiki - Network configuration — [wiki.archlinux.org](https://wiki.archlinux.org/title/Network_configuration)
+- NetworkManager 手册 — [networkmanager.dev](https://networkmanager.dev/docs/)
+- RHEL 9 配置与管理网络 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/)
+- 鸟哥的私房菜 - 网络配置 — [linux.vbird.org](https://linux.vbird.org/linux_server/0110networkbasic.php)
 - `man ip`、`man nmcli`、`man netplan`、
   `man sysctl`、`man ethtool`

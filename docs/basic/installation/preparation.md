@@ -143,9 +143,9 @@ macOS 自带的 `dd` 语法相同，但更推荐用 balenaEtcher——图形操�
 
 ## 参考资料
 
-- [Arch Wiki - Installation guide (Pre-installation)](https://wiki.archlinux.org/title/Installation_guide)
-- [Arch Wiki - USB flash installation media](https://wiki.archlinux.org/title/USB_flash_installation_media)
-- [Arch Wiki - UEFI, Secure Boot](https://wiki.archlinux.org/title/UEFI)
-- [Debian Installation Manual](https://www.debian.org/releases/stable/installmanual)
-- [Ubuntu installation tutorial](https://ubuntu.com/tutorials/install-ubuntu-desktop)
-- [鸟哥的私房菜 - 安装 Linux 前的准备](https://linux.vbird.org/linux_basic/centos7/0130installlinux/)
+- Arch Wiki - Installation guide (Pre-installation) — [wiki.archlinux.org](https://wiki.archlinux.org/title/Installation_guide)
+- Arch Wiki - USB flash installation media — [wiki.archlinux.org](https://wiki.archlinux.org/title/USB_flash_installation_media)
+- Arch Wiki - UEFI, Secure Boot — [wiki.archlinux.org](https://wiki.archlinux.org/title/UEFI)
+- Debian Installation Manual — [debian.org](https://www.debian.org/releases/stable/installmanual)
+- Ubuntu installation tutorial — [ubuntu.com](https://ubuntu.com/tutorials/install-ubuntu-desktop)
+- 鸟哥的私房菜 - 安装 Linux 前的准备 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0130installlinux/)

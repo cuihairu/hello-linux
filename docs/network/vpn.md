@@ -658,17 +658,12 @@ WireGuard 未握手的流量
 
 ## 参考资料
 
-- WireGuard 官方站点与白皮书：
-  <https://www.wireguard.com/>
-- Arch Wiki - WireGuard：
-  <https://wiki.archlinux.org/title/WireGuard>
-- OpenVPN 社区文档：
-  <https://openvpn.net/community-resources/>
-- Arch Wiki - OpenVPN：
-  <https://wiki.archlinux.org/title/OpenVPN>
-- strongSwan 文档：<https://docs.strongswan.org/>
-- Libreswan 文档：
-  <https://libreswan.org/wiki/Documentation>
+- WireGuard 官方站点与白皮书 — [wireguard.com](https://www.wireguard.com/)
+- Arch Wiki - WireGuard — [wiki.archlinux.org](https://wiki.archlinux.org/title/WireGuard)
+- OpenVPN 社区文档 — [openvpn.net](https://openvpn.net/community-resources/)
+- Arch Wiki - OpenVPN — [wiki.archlinux.org](https://wiki.archlinux.org/title/OpenVPN)
+- strongSwan 文档 — [docs.strongswan.org](https://docs.strongswan.org/)
+- Libreswan 文档 — [libreswan.org](https://libreswan.org/wiki/Documentation)
 - RFC 7296（IKEv2）、
   RFC 4301/4303（IPsec 架构与 ESP）
 - `man wg`、`man wg-quick`、`man openvpn`

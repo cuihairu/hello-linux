@@ -476,13 +476,11 @@ failed
 
 ## 参考资料
 
-- Arch Wiki - ufw：<https://wiki.archlinux.org/title/Ufw>
-- Arch Wiki - nftables：<https://wiki.archlinux.org/title/Nftables>
-- Arch Wiki - firewalld：<https://wiki.archlinux.org/title/Firewalld>
-- UFW Manual：
-  <https://manpages.ubuntu.com/manpages/en/man8/ufw.8.html>
-- firewalld 官方文档：<https://firewalld.org/documentation/>
-- nftables wiki：<https://wiki.nftables.org/>
-- RHEL 9 使用 firewalld 配置防火墙：
-  <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_firewalls/>
+- Arch Wiki - ufw — [wiki.archlinux.org](https://wiki.archlinux.org/title/Ufw)
+- Arch Wiki - nftables — [wiki.archlinux.org](https://wiki.archlinux.org/title/Nftables)
+- Arch Wiki - firewalld — [wiki.archlinux.org](https://wiki.archlinux.org/title/Firewalld)
+- UFW Manual — [manpages.ubuntu.com](https://manpages.ubuntu.com/manpages/en/man8/ufw.8.html)
+- firewalld 官方文档 — [firewalld.org](https://firewalld.org/documentation/)
+- nftables wiki — [wiki.nftables.org](https://wiki.nftables.org/)
+- RHEL 9 使用 firewalld 配置防火墙 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_firewalls/)
 - `man ufw`、`man firewall-cmd`、`man nft`

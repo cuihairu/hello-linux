@@ -308,11 +308,11 @@ sudo dmidecode -t baseboard   # 主板型号；-t processor 看插槽上的 CPU
 
 - Patterson, D. A., & Hennessy, J. L.《计算机组成与设计：硬件/软件接口》（RISC-V 版），机械工业出版社
 - Bryant, R. E., & O'Hallaron, D. R.《深入理解计算机系统》（CSAPP），机械工业出版社
-- 鸟哥的私房菜 - 认识计算机硬件：<https://linux.vbird.org/linux_basic/centos7/0100computer.php>
-- Arch Wiki - Hardware 分类：<https://wiki.archlinux.org/title/Category:Hardware>
-- Arch Wiki - dmidecode：<https://wiki.archlinux.org/title/Dmidecode>
-- Intel® 64 and IA-32 Architectures Software Developer Manuals：<https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html>
-- AMD64 Architecture Programmer's Manual：<https://developer.amd.com/resources/developer-guides-manuals/>
-- Linux Kernel Documentation：<https://www.kernel.org/doc/html/latest/>
-- dmidecode 项目主页：<https://git.kernel.org/pub/scm/utils/dmidecode/dmidecode.git>
-- Wikipedia: Von Neumann architecture：<https://en.wikipedia.org/wiki/Von_Neumann_architecture>
+- 鸟哥的私房菜 - 认识计算机硬件 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0100computer.php)
+- Arch Wiki - Hardware 分类 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Category:Hardware)
+- Arch Wiki - dmidecode — [wiki.archlinux.org](https://wiki.archlinux.org/title/Dmidecode)
+- Intel® 64 and IA-32 Architectures Software Developer Manuals — [intel.com](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
+- AMD64 Architecture Programmer's Manual — [developer.amd.com](https://developer.amd.com/resources/developer-guides-manuals/)
+- Linux Kernel Documentation — [kernel.org](https://www.kernel.org/doc/html/latest/)
+- dmidecode 项目主页 — [git.kernel.org](https://git.kernel.org/pub/scm/utils/dmidecode/dmidecode.git)
+- Wikipedia: Von Neumann architecture — [en.wikipedia.org](https://en.wikipedia.org/wiki/Von_Neumann_architecture)

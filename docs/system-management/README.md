@@ -169,21 +169,14 @@ AppStream 直接提供的是最小化的 `ansible-core`，
 
 ## 参考资料
 
-- 鸟哥的私房菜 - 系统管理单元：
-  <https://linux.vbird.org/linux_basic/centos7/>
-- Arch Wiki - System maintenance：
-  <https://wiki.archlinux.org/title/System_maintenance>
-- Arch Wiki - Pacman（Arch 装包习惯）：
-  <https://wiki.archlinux.org/title/Pacman>
-- Arch Wiki - Improving performance：
-  <https://wiki.archlinux.org/title/Improving_performance>
-- Brendan Gregg - Linux Performance Methods：
-  <https://www.brendangregg.com/linuxperf.html>
-- RHEL 9 监控与管理系统状态和性能：
-  <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index>
-- rsync 官方文档：<https://download.samba.org/pub/rsync/rsync.html>
-- Backblaze - The 3-2-1 Backup Strategy：
-  <https://www.backblaze.com/blog/the-3-2-1-backup-strategy/>
-- systemd.timer(5)：<https://man7.org/linux/man-pages/man5/systemd.timer.5.html>
-- Ansible 官方文档：<https://docs.ansible.com/>
+- 鸟哥的私房菜 - 系统管理单元 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/)
+- Arch Wiki - System maintenance — [wiki.archlinux.org](https://wiki.archlinux.org/title/System_maintenance)
+- Arch Wiki - Pacman（Arch 装包习惯） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
+- Arch Wiki - Improving performance — [wiki.archlinux.org](https://wiki.archlinux.org/title/Improving_performance)
+- Brendan Gregg - Linux Performance Methods — [brendangregg.com](https://www.brendangregg.com/linuxperf.html)
+- RHEL 9 监控与管理系统状态和性能 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index)
+- rsync 官方文档 — [download.samba.org](https://download.samba.org/pub/rsync/rsync.html)
+- Backblaze - The 3-2-1 Backup Strategy — [backblaze.com](https://www.backblaze.com/blog/the-3-2-1-backup-strategy/)
+- systemd.timer(5) — [man7.org](https://man7.org/linux/man-pages/man5/systemd.timer.5.html)
+- Ansible 官方文档 — [docs.ansible.com](https://docs.ansible.com/)
 - `man crontab`、`man rsync`、`man tar`、`man systemd.timer`

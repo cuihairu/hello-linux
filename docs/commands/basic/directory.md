@@ -514,9 +514,17 @@ df -h .
 
 ## 参考资料
 
-- [鸟哥的私房菜 - 文件与目录管理](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
-- [Arch Wiki - Core utilities](https://wiki.archlinux.org/title/Core_utilities)
-- [Arch Wiki - File permissions](https://wiki.archlinux.org/title/File_permissions)
-- [Arch Wiki - Pacman](https://wiki.archlinux.org/title/Pacman)
-- [man ls](https://man.archlinux.org/man/ls.1.en) / [man mkdir](https://man.archlinux.org/man/mkdir.1.en) / [man rmdir](https://man.archlinux.org/man/rmdir.1.en) / [man du](https://man.archlinux.org/man/du.1.en) / [man df](https://man.archlinux.org/man/df.1.en) / [man tar](https://man.archlinux.org/man/tar.1.en) / [man chmod](https://man.archlinux.org/man/chmod.1.en)
-- [Debian 手册](https://www.debian.org/doc/manuals/debian-handbook/) · [Rocky Linux 文档](https://docs.rockylinux.org/) · [Red Hat 文档](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/)
+- 鸟哥的私房菜 - 文件与目录管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
+- Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
+- Arch Wiki - File permissions — [wiki.archlinux.org](https://wiki.archlinux.org/title/File_permissions)
+- Arch Wiki - Pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
+- man ls — [man.archlinux.org](https://man.archlinux.org/man/ls.1.en)
+- man mkdir — [man.archlinux.org](https://man.archlinux.org/man/mkdir.1.en)
+- man rmdir — [man.archlinux.org](https://man.archlinux.org/man/rmdir.1.en)
+- man du — [man.archlinux.org](https://man.archlinux.org/man/du.1.en)
+- man df — [man.archlinux.org](https://man.archlinux.org/man/df.1.en)
+- man tar — [man.archlinux.org](https://man.archlinux.org/man/tar.1.en)
+- man chmod — [man.archlinux.org](https://man.archlinux.org/man/chmod.1.en)
+- Debian 手册 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
+- Rocky Linux 文档 — [docs.rockylinux.org](https://docs.rockylinux.org/)
+- Red Hat 文档 — [access.redhat.com](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/)

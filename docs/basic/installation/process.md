@@ -240,10 +240,10 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 ## 参考资料
 
-- [Arch Wiki - Installation guide](https://wiki.archlinux.org/title/Installation_guide)
-- [Arch Wiki - archinstall](https://wiki.archlinux.org/title/Archinstall)
-- [Arch Wiki - General recommendations (System maintenance)](https://wiki.archlinux.org/title/General_recommendations)
-- [Ubuntu installation tutorial](https://ubuntu.com/tutorials/install-ubuntu-desktop)
-- [Debian Installation Manual - Partitioning](https://www.debian.org/releases/stable/installmanual)
-- [Rocky Linux Installation Guide](https://docs.rockylinux.org/guides/installation/)
-- [鸟哥的私房菜 - 安装多重引导](https://linux.vbird.org/linux_basic/centos7/0130installlinux/)
+- Arch Wiki - Installation guide — [wiki.archlinux.org](https://wiki.archlinux.org/title/Installation_guide)
+- Arch Wiki - archinstall — [wiki.archlinux.org](https://wiki.archlinux.org/title/Archinstall)
+- Arch Wiki - General recommendations (System maintenance) — [wiki.archlinux.org](https://wiki.archlinux.org/title/General_recommendations)
+- Ubuntu installation tutorial — [ubuntu.com](https://ubuntu.com/tutorials/install-ubuntu-desktop)
+- Debian Installation Manual - Partitioning — [debian.org](https://www.debian.org/releases/stable/installmanual)
+- Rocky Linux Installation Guide — [docs.rockylinux.org](https://docs.rockylinux.org/guides/installation/)
+- 鸟哥的私房菜 - 安装多重引导 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0130installlinux/)

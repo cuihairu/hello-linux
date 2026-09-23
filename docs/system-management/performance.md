@@ -313,18 +313,13 @@ SSD/NVMe 上默认的 `mq-deadline` 或 `none`（多队列直通）通常无需�
 
 ## 参考资料
 
-- Brendan Gregg - Linux Performance (USE method, methodology)：
-  <https://www.brendangregg.com/linuxperf.html>
-- Arch Wiki - Improving performance：
-  <https://wiki.archlinux.org/title/Improving_performance>
-- Red Hat - Monitoring and managing system status and performance：
-  <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index>
-- sysstat 官方文档（iostat/mpstat/pidstat/sar）：
-  <https://github.com/sysstat/sysstat>
-- BCC 工具集（动态追踪）：<https://github.com/iovisor/bcc>
-- bpftrace：<https://github.com/bpftrace/bpftrace>
-- 鸟哥的私房菜 - 程序观察与管理：
-  <https://linux.vbird.org/linux_basic/centos7/0440processcontrol.php>
+- Brendan Gregg - Linux Performance (USE method, methodology) — [brendangregg.com](https://www.brendangregg.com/linuxperf.html)
+- Arch Wiki - Improving performance — [wiki.archlinux.org](https://wiki.archlinux.org/title/Improving_performance)
+- Red Hat - Monitoring and managing system status and performance — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index)
+- sysstat 官方文档（iostat/mpstat/pidstat/sar） — [github.com](https://github.com/sysstat/sysstat)
+- BCC 工具集（动态追踪） — [github.com](https://github.com/iovisor/bcc)
+- bpftrace — [github.com](https://github.com/bpftrace/bpftrace)
+- 鸟哥的私房菜 - 程序观察与管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0440processcontrol.php)
 - [命令篇 · 系统管理](../commands/system.md)（命令语法与输出列速查）
 - [命令篇 · 内存管理](../commands/system/memory.md)（available/swappiness/OOM 专节）
 - `man mpstat`、`man iostat`、`man vmstat`、`man sar`、`man pidstat`

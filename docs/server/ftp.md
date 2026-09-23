@@ -249,4 +249,4 @@ $ sudo journalctl -u vsftpd -f
 - Arch Wiki: vsftpd — [wiki.archlinux.org/title/Very_Secure_FTP_Daemon](https://wiki.archlinux.org/title/Very_Secure_FTP_Daemon)
 - ProFTPD 官方文档 — [proftpd.org/docs](https://proftpd.org/docs/)
 - FTP 协议规范 — [RFC 959](https://tools.ietf.org/html/rfc959)
-- RFC 2428（EPRT/EPSV，IPv6 下的 FTP 扩展）— [tools.ietf.org/html/rfc2428](https://tools.ietf.org/html/rfc2428)
+- RFC 2428（EPRT/EPSV，IPv6 下的 FTP 扩展）— [tools.ietf.org](https://tools.ietf.org/html/rfc2428)

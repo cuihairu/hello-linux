@@ -132,10 +132,10 @@ Arch 的 ISO 还提供 GPG 签名验证（`archlinux-*.iso.sig`），用发布�
 
 ## 参考资料
 
-- [DistroWatch](https://distrowatch.com/) — 发行版热度与基本信息查询
-- [Ubuntu 下载](https://ubuntu.com/download)
-- [Debian 下载](https://www.debian.org/distrib/)
-- [Rocky Linux 下载](https://rockylinux.org/download)
-- [Arch Linux 下载](https://archlinux.org/download/)
-- [Arch Wiki - Arch Linux](https://wiki.archlinux.org/title/Arch_Linux) — 理解 Arch 设计哲学
-- [鸟哥的私房菜 - 选择合适的 Linux 发行版](https://linux.vbird.org/linux_basic/centos7/0110whatislinux.php)
+- DistroWatch — [distrowatch.com](https://distrowatch.com/)（发行版热度与基本信息查询）
+- Ubuntu 下载 — [ubuntu.com](https://ubuntu.com/download)
+- Debian 下载 — [debian.org](https://www.debian.org/distrib/)
+- Rocky Linux 下载 — [rockylinux.org](https://rockylinux.org/download)
+- Arch Linux 下载 — [archlinux.org](https://archlinux.org/download/)
+- Arch Wiki - Arch Linux — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_Linux)（理解 Arch 设计哲学）
+- 鸟哥的私房菜 - 选择合适的 Linux 发行版 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0110whatislinux.php)

@@ -518,20 +518,16 @@ echo "deploy ok: $DATE"
 ## 参考资料
 
 - `man cron`、`man crontab`、`man systemd.timer`、`man systemd.time`、`man at`
-- cron(8)/crontab(5) 在线手册：
-  <https://man7.org/linux/man-pages/man5/crontab.5.html>
-- systemd.timer(5)：<https://man7.org/linux/man-pages/man5/systemd.timer.5.html>
-- Ansible 安装文档（含各发行版包名）：
-  <https://docs.ansible.com/projects/ansible-core/devel/installation_guide/installation_distros.html>
-- Ansible 官方文档：<https://docs.ansible.com/>
-- Arch Wiki - Ansible：<https://wiki.archlinux.org/title/Ansible>
-- Arch Wiki - Cron（cronie）：<https://wiki.archlinux.org/title/Cron>
-- Arch Wiki - systemd/Timers：<https://wiki.archlinux.org/title/Systemd/Timers>
-- Jenkins 安装文档（Linux packages，密钥以此为准）：
-  <https://www.jenkins.io/doc/book/installing/>
-- etckeeper 官方站点：<https://etckeeper.branchable.com/>
-- Arch Wiki - Etckeeper：<https://wiki.archlinux.org/title/Etckeeper>
-- 鸟哥的私房菜 - 例行性任务排程：
-  <https://linux.vbird.org/linux_basic/centos7/0430cron.php>
-- Red Hat - 自动化主题：<https://www.redhat.com/en/topics/automation>
+- cron(8)/crontab(5) 在线手册 — [man7.org](https://man7.org/linux/man-pages/man5/crontab.5.html)
+- systemd.timer(5) — [man7.org](https://man7.org/linux/man-pages/man5/systemd.timer.5.html)
+- Ansible 安装文档（含各发行版包名） — [docs.ansible.com](https://docs.ansible.com/projects/ansible-core/devel/installation_guide/installation_distros.html)
+- Ansible 官方文档 — [docs.ansible.com](https://docs.ansible.com/)
+- Arch Wiki - Ansible — [wiki.archlinux.org](https://wiki.archlinux.org/title/Ansible)
+- Arch Wiki - Cron（cronie） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Cron)
+- Arch Wiki - systemd/Timers — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd/Timers)
+- Jenkins 安装文档（Linux packages，密钥以此为准） — [jenkins.io](https://www.jenkins.io/doc/book/installing/)
+- etckeeper 官方站点 — [etckeeper.branchable.com](https://etckeeper.branchable.com/)
+- Arch Wiki - Etckeeper — [wiki.archlinux.org](https://wiki.archlinux.org/title/Etckeeper)
+- 鸟哥的私房菜 - 例行性任务排程 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0430cron.php)
+- Red Hat - 自动化主题 — [redhat.com](https://www.redhat.com/en/topics/automation)
 - [脚本篇](../script/README.md)（Bash 语法、调试与 shellcheck）

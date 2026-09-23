@@ -263,11 +263,11 @@ command -v numactl >/dev/null && numactl --hardware   # 多路才用得上；单
 ## 参考资料
 
 - Patterson, D. A., & Hennessy, J. L.《计算机组成与设计：硬件/软件接口》
-- Intel® 64 and IA-32 Architectures Software Developer Manuals：<https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html>
-- AMD64 Architecture Programmer's Manual：<https://developer.amd.com/resources/developer-guides-manuals/>
-- Arch Wiki - CPU frequency scaling：<https://wiki.archlinux.org/title/CPU_frequency_scaling>
-- Arch Wiki - KVM（vmx/svm 与嵌套虚拟化）：<https://wiki.archlinux.org/title/KVM>
-- Arch Wiki - NUMA：<https://wiki.archlinux.org/title/NUMA>
-- Red Hat - RHEL 9 硬件兼容性与 x86-64-v2 要求：<https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/considerations_adopting_rhel-9/assembly_hardware-requirements_considerations-adopting-rhel-9>
-- Linux Kernel Documentation - CPU scheduler utilization clamps / cpufreq：<https://www.kernel.org/doc/html/latest/admin-guide/pm/cpufreq.html>
-- cpupower(1) 手册：<https://man7.org/linux/man-pages/man1/cpupower.1.html>
+- Intel® 64 and IA-32 Architectures Software Developer Manuals — [intel.com](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
+- AMD64 Architecture Programmer's Manual — [developer.amd.com](https://developer.amd.com/resources/developer-guides-manuals/)
+- Arch Wiki - CPU frequency scaling — [wiki.archlinux.org](https://wiki.archlinux.org/title/CPU_frequency_scaling)
+- Arch Wiki - KVM（vmx/svm 与嵌套虚拟化） — [wiki.archlinux.org](https://wiki.archlinux.org/title/KVM)
+- Arch Wiki - NUMA — [wiki.archlinux.org](https://wiki.archlinux.org/title/NUMA)
+- Red Hat - RHEL 9 硬件兼容性与 x86-64-v2 要求 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/considerations_adopting_rhel-9/assembly_hardware-requirements_considerations-adopting-rhel-9)
+- Linux Kernel Documentation - CPU scheduler utilization clamps / cpufreq — [kernel.org](https://www.kernel.org/doc/html/latest/admin-guide/pm/cpufreq.html)
+- cpupower(1) 手册 — [man7.org](https://man7.org/linux/man-pages/man1/cpupower.1.html)
