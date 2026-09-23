@@ -49,6 +49,8 @@ jobs:
         run: npm ci
       - name: Build with VitePress
         run: npm run docs:build
+      - name: Check links and anchors
+        run: python3 scripts/check_links.py --require-html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
