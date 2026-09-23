@@ -6,7 +6,7 @@
 
 > 内容参考自 Red Hat SELinux 文档、Arch Wiki 与各发行版安全文档，见文末参考资料。
 
-## 导语
+## 本章导语
 
 安全基础不止 SELinux。本章从 DAC 的局限性出发引入 MAC 概念，再分四节展开 SELinux 的**概念**（安全上下文与 type enforcement）、**模式**（Enforcing/Permissive/Disabled 的取舍）、**基本命令**（ausearch/restorecon/semanage 的排障流程）和**策略配置**（fcontext 持久化、audit2allow 的正确用法）。每节都会对照说明三发行版的默认安全栈差异，确保你在 Ubuntu 上不会找不到 `getenforce`、在 Arch 上不会误以为 SELinux 默认开启。
 
