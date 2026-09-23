@@ -75,4 +75,4 @@ unit 文件被编辑后必须执行 `systemctl daemon-reload` 重新读取；已
 - 鸟哥的私房菜 - 认识系统服务 (daemons) — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0560daemons.php)
 - 鸟哥训练教材 - 服务管理与开机流程管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic_train/centos8/unit13.php)
 - `man systemctl`、`man systemd.unit`
-- Red Hat 文档 - 配置基本系统设置 (含 systemd 服务管理) — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/index)
+- Red Hat 文档 - 配置基本系统设置（含 systemd 服务管理） — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/index)

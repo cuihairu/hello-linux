@@ -311,7 +311,7 @@ command -v nano && nano file || command -v vim && vim file || vi file
 - man head — [man.archlinux.org](https://man.archlinux.org/man/head.1.en)
 - man tail — [man.archlinux.org](https://man.archlinux.org/man/tail.1.en)
 - Vim 手册 — [vim.org](https://www.vim.org/docs.php)
-- Vim 快捷键cheatsheet — [vim.rtorr.com](https://vim.rtorr.com/)
+- Vim 快捷键 cheatsheet — [vim.rtorr.com](https://vim.rtorr.com/)
 - Arch Wiki - Vim — [wiki.archlinux.org](https://wiki.archlinux.org/title/Vim)
 - Arch Wiki - Neovim — [wiki.archlinux.org](https://wiki.archlinux.org/title/Neovim)
 - Arch Wiki - Pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
