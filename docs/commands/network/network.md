@@ -146,7 +146,7 @@ fe80::5 dev ens18 lladdr 94:28:6f:bf:d1:35 router STALE
 | RHEL/CentOS/Rocky 7 | ifcfg 脚本 | `/etc/sysconfig/network-scripts/ifcfg-*` | `nmcli connection reload` 或重启网络服务 | `nmcli`、`ifup` |
 | RHEL/CentOS/Rocky 8+ / Fedora | NetworkManager（keyfile） | `/etc/NetworkManager/system-connections/`（`.nmconnection`） | `nmcli connection up 名称` | `nmcli`、`nmcli device` |
 
-表读完再补两条与第 3 节呼应的事实，避免把「配置入口」和「当下状态」混为一谈：上表管的是**重启后如何恢复地址**，`ss`/`ip` 管的是**现在谁在听、谁连着谁**——远程改网络前先用 `ss -tlnp` 记下当前监听，改完再对照一次，才能确认变更只动了该动的接口。
+表读完再补两条与第 3 节呼应的事实，避免把"配置入口"和"当下状态"混为一谈：上表管的是**重启后如何恢复地址**，`ss`/`ip` 管的是**现在谁在听、谁连着谁**——远程改网络前先用 `ss -tlnp` 记下当前监听，改完再对照一次，才能确认变更只动了该动的接口。
 
 两个必须记住的版本事实：
 
