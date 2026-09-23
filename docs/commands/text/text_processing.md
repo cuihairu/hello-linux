@@ -255,7 +255,7 @@ patch < fix.patch          # 或 patch target_file < fix.patch
 | `+` | 1 次或多次 |
 | `?` | 0 次或 1 次 |
 | `()` | 分组 |
-| `\|` 或 `\|` | 或（ERE 中 `|` 即可） |
+| `\|` | 或（ERE 中 `\|` 即可） |
 | `{n}` / `{n,}` / `{n,m}` | 次数限定 |
 
 ```bash
@@ -317,7 +317,7 @@ grep -i error app.log | awk '{print $3}' | sort | uniq -c | sort -rn | head
 
 | 现象 | 原因 | 处理 |
 |------|------|------|
-| `grep` 返回码 1 使脚本中断 | 1 = 无匹配，`set -e` 视为失败 | 判断退出码，或显式 `|| true` |
+| `grep` 返回码 1 使脚本中断 | 1 = 无匹配，`set -e` 视为失败 | 判断退出码，或显式 `\|\| true` |
 | `egrep` 在新系统报 not found/警告 | POSIX 废弃别名 | 改写 `grep -E` / `grep -F` |
 | `sed -i` 搞坏配置 | 无备份就地写 | `-i.bak` 或先 `cp` |
 | `uniq` 去重不干净 | 未先 `sort` | `sort \| uniq` |

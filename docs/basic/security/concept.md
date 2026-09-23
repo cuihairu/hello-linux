@@ -115,7 +115,7 @@ type=AVC msg=audit(2026-09-21 14:03:11.234:412) : avc:  denied  { name_connect }
    │     class:   file
    │     operation: read
    │         ↓
-   │     查策略：allow httpd_t shadow_t : file read ? 
+   │     查策略：allow httpd_t shadow_t : file read ?
    │         ├─ 有规则 → 放行，进入③
    │         └─ 无规则 → 记录 AVC 日志 → EACCES
    │
