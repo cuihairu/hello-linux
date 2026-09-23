@@ -1,295 +1,178 @@
 # 入侵检测
 
-入侵检测系统（IDS）用于监控和检测恶意活动。
+入侵检测系统（IDS）用于监控和检测恶意活动。防火墙解决"不让坏人进来"，但**进不来**和"没被进来过"是两回事：后门可能通过一次成功的口令爆破、一个上传漏洞甚至供应链更新进入系统，然后安静地修改几个文件。本篇讲 Linux 主机侧的检测手段——文件完整性检查、响应式封禁、内核审计与 rootkit 扫描，并把它们与日志系统串成一条可落地的链路。
 
-> 内容参考自 Fail2Ban、AIDE、OSSEC 官方文档和实际运维经验，见文末参考资料。
+> 内容参考自 Fail2Ban、AIDE、auditd、rkhunter 官方文档与 Arch Wiki，见文末参考资料。
+
+## 导语
+
+把"检测"和"防护"混为一谈，是安全实践里最贵的误解之一。许多人装完防火墙就认为万事大吉，直到某天发现 `/etc/passwd` 多了一个 uid 0 账号，或者网站目录里多了一个半年没被注意的 `.php` 文件。防护是**事前减少入口**，检测是**事后回答三个问题**：文件被动过吗（完整性）、有人在试门吗（认证与网络行为）、进程干了什么（系统调用审计）。三个问题也正好对应攻击链上三个不同的时间点——**完整性看的是"已经落地"，封禁看的是"正在尝试"，审计看的是"已经进门"**——把时间轴画出来，后面五节的工具位置就不会记混。
+
+还有一层更微妙的分工差异：防火墙的失败模式是"拦错了把业务挡住"（立刻被发现），检测的失败模式却是"什么都没检出来"（永远不会报警）。**静默失败**是检测系统特有的风险——工具没装、服务没起、日志路径错了、告警邮件发到了没人看的收件箱，从仪表盘上看都和"系统很安全"无法区分。这也是本篇在每节都强调"验证信号"的原因：装完要 status、init 后要 check、规则加了要 ausearch，**每一步都要主动证明它在工作**，而不是假设它在工作。对抗静默失败还有一条工程手法值得先记：**让"无事件"本身成为一个可观测指标**——若某类信号连续 N 天为零，不是"天下太平"而是"探头可能掉了"，该指标应触发健康检查而非庆祝。
+
+检测体系还有一个容易被低估的属性：它是**唯一会随时间自动积累价值**的安全层——日志攒得越久、基线维护得越连续，时间线拼接与异常比对就越准；防火墙和加密则更像"配好那一刻的快照"。反过来说，检测也是**最怕中断**的一层：中间断了三个月日志，等于那三个月的盲区永远无法回补。这两条合起来解释了本篇为什么反复把"持久化、轮转、接告警"当承重墙讲，而不是把它们塞进附录。
+
+工具选型上还有一个"覆盖 vs 深度"的权衡值得先说：四类工具可以只装两类做到"有基本感知"，也可以四类全上并中心化聚合——前者一小时能完成，后者是一个季度的工程。本篇默认读者先到达前者：**先让信号存在，再优化信号质量**。没有信号的"深度平台"与没有平台的"两个工具"之间，永远先选后者，因为它至少能回答"昨晚有没有人动过 /etc"。
+
+检测与合规、告警的关系也可以先画一条线，避免后面读岔：本篇聚焦**主机上如何产生可信信号**；信号如何进 SIEM、如何值班、如何按严重级别开单，属于监控与响应体系的范畴，本篇只负责把出口（邮件、webhook、journal）接通。**检测系统交付物不是仪表盘，是"有人会处理的事件流"**——出口没接好之前，四类工具的输出都只是安静的文本文件。
+
+Linux 上这三问各有专门工具，且与发行版默认栈紧密相关：文件完整性用 AIDE，认证爆破用 Fail2Ban，行为审计用 auditd——而 auditd 产生的事件又与 journald 有交集，查日志时容易迷路。本篇按"问题 → 工具 → 落地"展开，并在每个环节给出三系安装差异（Arch 侧一律用 `pacman -S` 从官方仓库取，无需 AUR）。
+
+另一个容易走偏的起点是"该买商业 IDS 还是先用开源"。对绝大多数单机到几十台的规模，开源三件套的覆盖率已经远超"装了但从不看的商业产品"；商业平台的价值在统一 UI、威胁情报和合规报表，而不是更灵的检测算法。先把本篇的链路跑通——有基线、有封禁、有归因、有告警——再评估平台化，顺序反了最常见的结局是一堆没配 filter 的 agent 和永远 loading 的仪表盘。
+
+## 为什么需要入侵检测
+
+三个真实场景说明"只防不检"的代价：
+
+1. **Web Shell 不触发任何防护**。攻击者通过上传漏洞在 `/var/www/html/` 放一个一句话木马，防火墙规则一条没变、SSH 没有异常登录——所有基于"网络入口"的告警都是安静的。只有文件完整性检查会在下一次扫描时发现这个多出来的文件。
+2. **爆破在低速进行时不像攻击**。每分钟一次的 SSH 尝试，单看日志毫无波澜；但一周下来就是上万次。Fail2Ban 之类工具的价值在于把"日志里的模式"变成"自动拉黑"，不依赖人肉盯屏。
+3. **rootkit 替换了系统二进制**。`ls`、`ps` 被换成隐藏自身进程的版本，你看到的一切都"正常"。rkhunter 用已知特征与文件校验和对比，是这类场景的粗筛工具——虽然它只能发现已知模式，但已知模式覆盖了绝大多数入门级后门。
+
+一个值得内化的观点：**检测工具不阻止攻击发生，它们缩短的是"发现时间"（MTTD）**。安全预算有限时，"防火墙 + AIDE + Fail2Ban + 日志持久化"这个组合的性价比远高于购买一个从不看告警的商业 IDS。三个场景还可以按"防护是否沉默"再归类：场景 1、3 是防护**完全无感**（没有触发任何 deny），场景 2 是防护**有感但不动作**（日志在涨、没有拉黑）——前者逼你上 FIM/粗筛，后者逼你上响应式工具，**"防护沉默的程度"决定该补哪一类检测**，比"行业推荐装什么"更可操作。按沉默程度排优先级还有个实用推论：**先补最沉默的那一类**——你已有的告警越多，剩下的盲区越值得先补，而不是先给已覆盖的场景再加一个工具。
+
+MTTD 的价值可以量化感受一下：同样是一个 Web Shell，10 分钟内被 Fail2Ban/监控发现，损失通常限于一次响应；30 天后被季度审计偶然发现，期间被拖库、横向、清日志的余地就完全不同。检测预算真正购买的是**时间**——缩短从入侵发生到有人行动的间隔。这也是为什么本篇反复强调"告警要接通道"：检测器写在硬盘里但没人读，MTTD 等于无穷大，工具再强也是摆设。MTTD 与 MTTA（平均响应时间）还常被混用：检测解决前者，值班与 runbook 解决后者——本篇第 8 节的演练同时给两者提供测量点，**不演练的团队两个数字都是估的**。测量本身可以从轻量做起：告警消息带上时间戳、值班群记下首次人工确认时间，一周后就能算出真实基线——**没有测量的 MTTD 目标只是愿望**。
+
+三个场景还可以映射回三系默认栈的差异：场景 1 在三系上都需要主动装 AIDE（没有哪家出厂带完整 FIM）；场景 2 在 RHEL 系更容易先被日志观察到（auditd/firewalld 默认在跑），Arch 则连认证日志的持久化都要先确认；场景 3 三系都只有特征粗筛可依赖。**默认栈决定的是"起点海拔"，不是"终点高度"**——无论哪家发行版，不主动建检测链路，三个场景的结局是一样的。把三系差异记成"起点海拔"还有个实用推论：**Arch 上要多写两行持久化，RHEL 上要多读一层类型标签**——同一条链路，缺的步骤不同，缺的意识相同。
 
 ## 学习目标
 
-- 掌握 Fail2Ban 配置和使用
-- 学会使用 AIDE 进行文件完整性检查
-- 了解 OSSEC 入侵检测系统
+- 分清文件完整性检查（FIM）、主机 IDS、响应式封禁、审计框架各自的职责边界
+- 掌握 AIDE 的初始化、检查、更新流程，理解为什么"升级系统后必须更新基线库"
+- 配好 Fail2Ban 的 SSH 监狱，处理三系日志路径差异（尤其 Arch 的 journald 后端）
+- 理解 auditd 规则写法，会用 `ausearch` 查事件，并知道 audit 日志与 journald 的衔接
+- 能把检测结果接到日志轮转与告警链路，避免"检了但没人知道"
 
-## 1. Fail2Ban
+五条目标刻意按"分清 → 单工具 → 跨工具 → 收口"排列：前两条解决"知不知道在检什么"，中间两条解决"会不会配"，最后一条解决"配了有没有人知道"。多数失败的检测项目都死在最后一条——工具齐了、服务绿了，告警却发进了一个三年没人登录的邮箱。读的过程中可以把每节末尾的"验证信号"标出来，它们对应目标里的可检验动作。第 1 节的四类工具表是后面所有小节的地图，建议先抄在便签上，读到第 3–5 节时随时对号入座。
 
-### 1.1 基本概念
+学完的操作性检验：给你一台新服务器，你应该能在一小时内装齐三件套、完成 AIDE 基线初始化、让 Fail2Ban 的 sshd jail 出现在 status 列表里，并能用 `ausearch -k identity` 查到自己刚才改 `/etc/passwd` 的那次操作。四步都能独立跑通，说明检测链路的每一环（采集、匹配、归因、响应）都已接通，而不是只装了包。检验里刻意包含"主动制造一次信号"：没有受控触发的检测系统，你无法区分"没攻击"和"没在看"——这两种状态在仪表盘上长得一模一样。
+
+检验之后还可以加一道口头题，考的是边界：**为什么 Fail2Ban 不能替代防火墙、AIDE 不能替代备份、auditd 不能替代 HIDS 的实时告警**？三句话各对应一个工具的能力上限，答不上来说明还在"工具堆叠"阶段，没有进入"链路设计"阶段。第 1 节的表就是这三句话的地图，值得在动手配置前重读一遍。
+
+## 1. 检测手段全景：先分清四类工具
+
+新手常把"入侵检测"理解成一个软件，装上就完事；实际上主机检测是**四类工具的组合拳**，每类回答不同的问题、覆盖攻击链的不同阶段。先分清它们，后面每节的"定位"才不会混淆——也才能理解为什么单靠任何一款工具都不够。也别把"主机 IDS"和网络 IDS/NIDS 混为一谈：NIDS 看流量镜像、回答"有没有人在打"，本篇四类都跑在主机上、回答"打进来了之后系统状态怎么变了"——企业环境里两者互补，个人服务器先把本篇做实。四类还可以按**信号来源**再分一刀：FIM 与 rkhunter 读的是"文件系统当前状态"，Fail2Ban 读的是"文本日志里的模式"，auditd 读的是"内核事件流"——三种来源的可靠性、噪音特征、排障入口各不相同，混着记会乱，按来源记则每类工具的位置立刻固定。按来源记还有个副产品：**排障路径也跟着固定**——状态类问题去看库和 diff，模式类问题去看正则和日志格式，事件类问题去看 key 和 `ausearch`，三类入口互不占用。
+
+| 类型 | 代表工具 | 回答的问题 | 局限 |
+|------|---------|-----------|------|
+| 文件完整性（FIM） | AIDE、Tripwire | 关键文件被改了吗 | 只看静态文件，不看运行时行为 |
+| 响应式封禁 | Fail2Ban | 谁在反复失败尝试 | 依赖日志格式，防不了已获凭证者 |
+| 系统审计 | auditd | 谁对什么执行了什么系统调用 | 规则要设计，噪音大，需定期清理 |
+| Rootkit 扫描 | rkhunter、chkrootkit | 是否有已知后门特征 | 特征库滞后，只能当粗筛 |
+
+四类工具互补而非替代：AIDE 看不出"谁"改的文件，auditd 能给出调用者但不会告诉你"这个文件本来该是什么"；Fail2Ban 封 IP 很有效，但内网横向移动根本不需要爆破。完整的主机检测 = **FIM（变化）+ 审计（行为）+ 封禁（重复失败）+ 日志（时间线）**。也可以把四类读成四种"问题句式"——"改了吗"归 FIM，"谁改的"归 auditd，"谁在试"归 Fail2Ban，"以前长什么样"归时间线上的日志；**工具选型时用句式反查，比背功能列表更不容易选错**。
+
+四类的落地成本也不对称，选型时值得心里有数：Fail2Ban 几乎零配置就能见效，AIDE 要维护基线，auditd 要设计规则且治理噪音，rkhunter 则是定期任务加特征库更新。**投入应当与"这台机器上数据的敏感度"同向**——公网 Web 机先上 FIM 与封禁，存客户数据的库机再上完整审计，跳级部署（还没搞清日志路径就上全套 audit 规则）多半以第一周关掉告警收场。
+
+也可以从攻击者视角理解这四类的覆盖面：进门（爆破/漏洞利用）由 Fail2Ban 与防火墙压缩窗口；进门后落地（放 Web Shell、改配置）由 AIDE 在下次扫描时现形；落地后持久（加计划任务、改认证文件）由 auditd 留下带身份的证据链；伪装自身（rootkit）由 rkhunter 粗筛。**攻击链的每个阶段至少有一类工具盯着**，这就是"纵深"在主机检测上的具体含义——不追求任何单点全能，追求没有单点失效就全盘失明。
+
+把这张覆盖表读成"检测预算分配表"也成立：若只能投一样，多数公网 Web 机应先选 AIDE（Web Shell 场景直接命中）；若能投两样，加 Fail2Ban（把噪音挡在门外，让 AIDE 报告更干净）；auditd 与 rkhunter 分别是"要归因"与"要例行粗筛"时的第三、四步。**投入顺序与攻击频率同向，与工具酷炫程度无关。**
+
+三系安装对照（工具几乎都在官方仓库，`pacman` 一把梭即可）：
 
 ```bash
-# Fail2Ban 通过监控日志文件来阻止恶意 IP
-# 支持多种服务：SSH、Apache、Nginx 等
+# Debian/Ubuntu —— 全部一次装齐
+sudo apt install aide fail2ban auditd rkhunter
+# Arch —— auditd 由 audit 包提供
+sudo pacman -S aide fail2ban audit rkhunter
+# RHEL/CentOS/Rocky —— auditd 默认已有；其余常需 EPEL
+sudo dnf install epel-release && sudo dnf install aide fail2ban rkhunter
 ```
 
-### 1.2 安装和配置
+Arch 的包名细节值得记：`pacman -S audit` 安装的是 audit 守护进程（提供 `auditd`、`ausearch`），不是"审计报告工具"；RHEL 系 GPG 相关包名是 `gnupg2`，与这里无关但同属安全工具链，别在三系间混用包名。装完任何工具先 `command -v` 确认可执行文件到位，再谈配置。
+
+四类工具的落地顺序也有讲究：**先 Fail2Ban（几分钟见效，依赖日志存在），再 AIDE（要 init 基线，当天可完成），然后 auditd（规则要设计，宁缺毋滥），最后 rkhunter（例行任务化即可）**。反过来先折腾 auditd 全量规则，多半会因为噪音太大在第一周放弃，连带 Fail2Ban 这种"低垂果实"也没装上。顺序反映的是运维现实——检测体系是逐层叠上去的，不是一次性建成的。
+
+选型时还要区分"开源单机工具"与"商业 EDR/托管检测"的边界：本篇四类都是**单机、可自持、不依赖外部服务**的方案，适合个人服务器、内网机器与预算有限的团队；商业 EDR 额外提供行为遥测、云端关联与威胁情报，代价是费用与数据外流。对多数读者，先把本篇四类做扎实是性价比最高的路径——它们不花一分钱，却覆盖了"文件、行为、失败、后门"四个最基本的观测面；EDR 是在此之上的增强，不是替代。
+
+## 2. AIDE：文件完整性检查
+
+四类工具里，FIM 是投入产出比最高的一类：配置量小、误报可解释、对 Web Shell 与篡改类攻击几乎必中。本节把 AIDE 的原理、三步初始化与配置边界一次讲透——原理懂了，Tripwire 或同类工具可以触类旁通。把 AIDE 放在四类里的第一位讲，也因为它最接近"安全基线"的直觉：先定义正常，再发现异常，这个范式后面 auditd 的 `-k` 归因、Fail2Ban 的 filter 阈值都在复用。也可以把本节的三小节读成一条流水线：**2.1 弄清它比什么，2.2 把比对跑起来，2.3 让比对结果值得读**——顺序调换（先狂配范围、后理解原理）是噪音失控的最常见来源。
+
+AIDE 还有一个容易被低估的属性：它是四类里**唯一能在离线/无网络环境工作**的——不依赖外部情报、不依赖日志管道，只要本地库与文件系统在就能 diff。这让它成为"air-gapped 机器怎么检测篡改"的标准答案；代价则是它只能看见"和上次比变了"，看不见变更是谁在什么时候做的——**归因要等第 4 节的 auditd，AIDE 只负责把变更摆上桌。**
+
+### 2.1 原理与定位
+
+AIDE（Advanced Intrusion Detection Environment）的工作方式朴素而可靠：**先把系统关键文件的属性（权限、属主、哈希、时间戳）算一遍存成基线库，之后定期再算一遍做 diff**。任何不在你预期中的变化都会被列出来。它不关心攻击路径，只关心"和上次比哪里不一样"——这正是 Web Shell、篡改的 `sshd`、被加料的 `cron` 都逃不掉的原因。把它的输出想象成一份"系统关键部位的体检报告"：正常运维会主动签发这份报告（更新基线），入侵则会在报告里留下不请自来的异常项。原理听上去简单，运维难点全部落在两个字上：**"关键"选哪些、"更新"何时做**——选多了是噪音，更新晚了是噪音，更新早了则可能把异常一并洗白，2.2、2.3 节就是围绕这两个字展开。
+
+FIM 这个缩写（File Integrity Monitoring）比"HIDS"更准确地描述了 AIDE：它不是在监控"入侵"，而是在监控**文件状态**。区分这两个词对排障很关键——AIDE 报告 `/etc/passwd` 变了，它并不知道这是你执行了 `useradd` 还是攻击者加了后门账号；**判断"正常变更还是入侵"永远是人的活**，工具只负责把变更摆到你面前。这也是为什么 AIDE 必须和变更管理流程绑定：有变更窗口、有审批记录，diff 才有对照组；没有流程的 AIDE，每一条告警都是薛定谔的异常。反过来，若变更流程完备到"每一条 diff 都能指回工单"，AIDE 的误报率会自然降到接近零——**工具的噪音水平是流程成熟度的放大器**，这也是本篇把检测放在加固、变更制度之后讲的结构原因。
+
+它的天然盲区也要清楚：**只覆盖配置里声明的路径**（通常 `/etc`、`/usr/bin`、`/boot` 等），不含内存里的进程与网络连接；`/var/www` 之类的业务目录要显式加入才会被检查。所以"AIDE 没报"不等于"系统干净"，只能等于"监控范围内的文件没变"。还有一个更隐蔽的盲区：**时间窗**。两次扫描之间的篡改，如果攻击者改完又改回去（只在窗口内利用），静态 diff 根本看不见——那是 auditd 的活。FIM 与审计的互补关系，第 4 节展开。
+
+### 2.2 初始化、检查与更新
+
+三步流程本身只有三行命令，但**每一步的产物路径都是跨发行版差异点**，也是第一次启用最容易走岔的地方——先把"库在哪、谁指向谁"画清楚，再敲命令，比反过来试错快得多。
 
 ```bash
-# 安装
-sudo apt install fail2ban
-
-# 启动服务
-sudo systemctl start fail2ban
-sudo systemctl enable fail2ban
-
-# 查看状态
-sudo systemctl status fail2ban
+$ sudo aideinit
+$ sudo aide --init
+$ ls -lh /var/lib/aide/
+-rw-r--r-- 1 root root 1.2M Sep 22 10:00 aide.db.new.gz
+$ sudo aide --check
 ```
 
-### 1.3 配置文件
+初始化产物在不同发行版的文件名/压缩方式略有差异（Debian 系常见 `aide.db.new.gz`，Arch 常见未压缩或自行指定路径），以 `/etc/aide/aide.conf` 里的 `database_out` 为准——**不确定时读配置，不要凭记忆写路径**。Debian 的 `aideinit` 是发行版包装，Arch 用通用 `aide --init`；`init` 生成的往往是 `.new` 库，要先拷贝为 `database_in` 指向的正式库再 `--check`（或 `aide -C`）。首次启用的标准三步是：init → 把输出库安装为正式库 → `--check` 应显示无变化。许多教程把"init 完直接 check"当成捷径，结果第一次检查就报出一堆差异——因为检查用的还是空库或旧库，不是因为你被入侵了。三步之间的衔接是 AIDE 最容易做错的部分，建议第一次启用时把每一步的库路径都 `ls` 确认一遍。
+
+库文件的"正式路径 vs 生成路径"分离，本质是给安全基线一个原子切换点：新库先生成、人工或脚本确认无误后再改名生效，中途失败不会弄丢上一份可用基线。这个模式在证书轮换、密钥更新里同样出现（先写 `.new` 再 rename），把它当成运维通识比单独记 AIDE 命令更有用；反过来，若图省事直接覆盖正式库，一次失败的 `--init` 就能让全站失去对照基准，而且没有任何报错会提醒你。
+
+`--check` 有变化时会逐文件列出属性差异（示意，真实环境取决于你的配置）：
 
 ```bash
-# 主配置文件
-/etc/fail2ban/fail2ban.conf
-
-# 监狱配置文件
-/etc/fail2ban/jail.conf
-
-# 自定义配置（推荐）
-/etc/fail2ban/jail.local
+$ sudo aide --check | head -20
+The following files were changed:
+ /etc/passwd
+   Size : 1520 -> 1548
+   Sha256 : a1b2... -> c3d4...
+AIDE found differences between database and filesystem!!
 ```
 
-### 1.4 SSH 保护
+读报告要抓重点：**先看路径是否在预期变更范围内，再看变化类型**。系统升级窗口后 `/usr/bin` 下大片哈希变化是正常的（重建基线即可）；`/etc/passwd` 在非变更窗口多出一行 uid 0，则是最高级告警。**每次系统升级、安装软件包之后必须更新基线库**，否则下一跑全是正常变更的噪音，真正的入侵反而淹没其中——这是 AIDE 最高发的运维事故：告警疲劳让人直接关掉整套检查。把"重建基线"写进变更流程的收尾步骤，和"重启服务"同级，是让 AIDE 长期活下去的关键。
+
+基线更新还要区分"整库重建"与"逐项确认"两种粒度：全量升级后的 `/usr/bin` 适合整库重建（变更本身就是预期的），而生产窗口里只改了两个配置文件的机器，更稳妥的做法是先人工读 `--check` 输出、确认每一项都在变更单里，再选择性更新——**盲目重建会把入侵痕迹和你的正常变更一起"洗白"**，这是比噪音更隐蔽的风险：攻击者若能在你重建前完成持久化，基线更新反而替他销案。变更单与 AIDE 输出的对账，价值就在这里。
+
+### 2.3 配置要点
+
+原理与三步流程都对了，AIDE 仍然可能因为**监控范围与噪音控制**在两周内被团队弃用——配置要点几乎全是围绕"如何让报告值得读"展开的，而不是围绕"如何监控更多文件"。可以把这一节读成"报告的用户体验设计"：读者是值班工程师，他的耐心只有一页 diff。
+
+配置设计还要预留"误报申诉通道"：每条被判定为正常的变更，应回到变更单或基线更新记录里留下痕迹，而不是只在 IM 里口头说一句"那是我"。有了可检索的记录，下次同类变更就能自动放行；没有记录，同一类误报会在每月巡检时原样重演——**噪音控制不是调参一次的事，是把申诉沉淀成规则的循环**。
+
+`/etc/aide/aide.conf` 的核心是"规则宏 + 监控路径"。规则宏把一组属性（权限、属主、哈希、时间戳等）打包命名，路径再引用宏——这样调整监控强度只需改宏定义，不必逐路径修改：
 
 ```bash
-# /etc/fail2ban/jail.local
-[sshd]
-enabled = true
-port = ssh
-filter = sshd
-logpath = /var/log/auth.log
-maxretry = 3
-bantime = 3600
-findtime = 600
-```
-
-### 1.5 常用命令
-
-```bash
-# 查看所有监狱
-sudo fail2ban-client status
-
-# 查看特定监狱状态
-sudo fail2ban-client status sshd
-
-# 手动封禁 IP
-sudo fail2ban-client set sshd banip 192.168.1.100
-
-# 手动解封 IP
-sudo fail2ban-client set sshd unbanip 192.168.1.100
-
-# 查看封禁日志
-sudo tail -f /var/log/fail2ban.log
-```
-
-### 1.6 自定义过滤器
-
-```bash
-# /etc/fail2ban/filter.d/myfilter.conf
-[Definition]
-failregex = ^.*Failed password for .* from <HOST>.*$
-            ^.*Invalid user .* from <HOST>.*$
-ignoreregex =
-```
-
-## 2. AIDE
-
-### 2.1 基本概念
-
-```bash
-# AIDE (Advanced Intrusion Detection Environment)
-# 通过检查文件完整性来检测入侵
-```
-
-### 2.2 安装和配置
-
-```bash
-# 安装
-sudo apt install aide
-
-# 初始化数据库
-sudo aideinit
-
-# 检查完整性
-sudo aide --check
-
-# 更新数据库
-sudo aide --update
-```
-
-### 2.3 配置文件
-
-```bash
-# 主配置文件
-/etc/aide/aide.conf
-
-# 示例配置
-/etc/aide/aide.conf.d/
-```
-
-### 2.4 配置示例
-
-```bash
-# /etc/aide/aide.conf
-# 数据库位置
+# /etc/aide/aide.conf（节选）
 database_in=file:/var/lib/aide/aide.db
 database_out=file:/var/lib/aide/aide.db.new
-
-# 规则
-NORMAL = p+i+n+u+g+s+m+c+sha256
-DIR = p+i+n+u+g
-LOG = p+i+n+u+g
-
-# 监控目录
-/boot NORMAL
-/bin NORMAL
-/sbin NORMAL
-/lib NORMAL
-/lib64 NORMAL
-/etc NORMAL
-
-# 忽略目录
-!/var/log
-!/var/spool
+NORMAL = p+i+n+u+g+s+m+c+sha256   # 规则宏：权限/属主/哈希等
+/boot    NORMAL
+/bin     NORMAL
+/etc     NORMAL
+/usr/bin NORMAL
+/var/www NORMAL                     # 业务目录按需加入（Web Shell 高发区）
+!/var/log                           # 排除高变动目录，否则全是噪音
 !/var/cache
 ```
 
-### 2.5 定时检查
+监控范围的设计原则：**宁可少而准，不要多而噪**。把整个 `/usr` 和 `/var` 都塞进去，第一次升级就会产生上百条"变化"，团队很快失去信任；先覆盖 `/etc` + 二进制目录 + 业务目录，稳定运行一段时间再逐步扩围。`!` 开头的排除项和正向监控同样重要——`/var/log`、`/var/cache`、包管理器缓存目录这些高频写入路径一旦纳入，AIDE 会变成一个只会喊"又变了"的狼来了。定时执行用 cron 或 systemd timer 均可，关键是**结果要能送出去**（邮件、webhook、监控系统），否则等于没跑。AIDE 自己不告警，它只是产出一份 diff；把 diff 接到有人看的通道上，检测才算闭环。
 
 ```bash
-# 添加定时任务
-sudo crontab -e
-
-# 每天凌晨 3 点检查
-0 3 * * * /usr/bin/aide --check | mail -s "AIDE Report" admin@example.com
+# 每天 3:30 检查并仅在有变化时输出（配合 mail 或外部采集）
+30 3 * * * /usr/bin/aide --check 2>&1 | grep -q "No differences" || /usr/sbin/sendmail -t < /tmp/aide.report
 ```
 
-## 3. OSSEC
+## 3. Fail2Ban：把日志模式变成自动封禁
 
-### 3.1 基本概念
+AIDE 是"事后对账"，Fail2Ban 则是"事中止损"——四类工具里唯一在攻击进行时就动作的，也因此是唯一可能**误伤正常用户**的。本节的篇幅分配会明显偏向参数与边界，因为 Fail2Ban 的配置本身通常十分钟就能跑通，难的是把阈值调到"挡得住爆破、放得过同事"。也可以把 Fail2Ban 读成"**给日志配一个自动扳机**"——扳机灵敏度（maxretry/findtime）与扳机杀伤范围（bantime、封网段还是封单 IP）必须一起调，只动一个参数必然把天平推偏：灵敏度太高误伤自己人，杀伤范围太大一次误判就断网段，**参数是成组生效的，调参讨论应以"组合"为单位。**
 
-```bash
-# OSSEC 是开源的主机入侵检测系统
-# 支持日志分析、文件完整性检查、rootkit 检测
-```
+### 3.1 工作方式
 
-### 3.2 安装
+Fail2Ban 是四类工具里唯一**边检测边处置**的：它不满足于记录"有人在试"，而是在阈值触发的瞬间把来源挡出去。这种主动响应既是它的卖点，也是误伤风险的来源——所以本节花在"边界与参数"上的篇幅会比命令本身多。理解这一点后，调参就不再是"抄一份最优配置"，而是回答三个问题：封多久（bantime）、错几次算恶意（maxretry）、窗口多长（findtime）——三者必须一起校准，单改任何一个都会把天平推偏。三个参数的默认值来自"交互式 SSH 登录手滑"的假设；若你的入口是**无人值守 API**，失败几乎必然是恶意的，maxretry 可以更低；若是**共享 NAT 后的办公网**，bantime 就要更保守——**参数跟随入口的使用者画像走，不跟随教程走。**
 
-```bash
-# 下载安装包
-wget https://github.com/ossec/ossec-hids/archive/3.6.0.tar.gz
-tar -xzf 3.6.0.tar.gz
-cd ossec-hids-3.6.0
+Fail2Ban 是**日志驱动的响应器**：tail 认证日志 → 用正则（filter）匹配失败模式 → 在时间窗内超过阈值就调用 iptables/nftables/firewalld 封禁来源 IP。它不产生新的检测能力，而是把"你本来该从日志里看出的爆破"自动化。这也决定了它的两个边界：**日志格式变了 filter 要跟着改**；**已通过合法凭证登录的攻击者它完全无感**（那是 auditd 与 HIDS 的活）。
 
-# 安装
-sudo ./install.sh
+把 Fail2Ban 放进攻击链视角更清楚它的位置：它作用在**最前端的"进门"阶段**，把大规模、无差别的扫描挡在口令尝试这一步；一旦攻击者拿到合法凭证进门，Fail2Ban 的整个模型（"同一来源短时间内反复失败"）就失效了——没有失败，只有成功的会话。所以它永远不能单独作为防线，必须与 AIDE（进了门改文件会现形）、auditd（进了门动敏感对象留证据）叠着用。**Fail2Ban 省的是日志噪音，不是入侵检测本身。**
 
-# 启动服务
-sudo /var/ossec/bin/ossec-control start
-```
+另一个容易误解的点是封禁粒度：Fail2Ban 按 **IP** 封，而 NAT 后面可能是一个办公网段——误伤共享出口的同事是常见事故，也是配置 `bantime` 从短值起步的原因。反过来，真正的攻击者会换 IP（僵尸网络、代理池），单 IP 封禁拦不住有组织的爆破；这时需要的是把 maxretry 调更紧、把 SSH 改成密钥登录、或引入按前缀/ASN 的聚合封禁——**Fail2Ban 是止血带，不是免疫系统。**
 
-### 3.3 配置
-
-```bash
-# 主配置文件
-/var/ossec/etc/ossec.conf
-
-# 示例配置
-<ossec_config>
-  <global>
-    <email_notification>yes</email_notification>
-    <email_to>admin@example.com</email_to>
-    <smtp_server>localhost</smtp_server>
-  </global>
-  
-  <rules>
-    <include>rules_config.xml</include>
-    <include>pam_rules.xml</include>
-    <include>sshd_rules.xml</include>
-  </rules>
-  
-  <syscheck>
-    <frequency>7200</frequency>
-    <directories check_all="yes">/etc,/usr/bin,/usr/sbin</directories>
-  </syscheck>
-  
-  <rootcheck>
-    <frequency>86400</frequency>
-  </rootcheck>
-</ossec_config>
-```
-
-### 3.4 管理命令
-
-```bash
-# 查看状态
-sudo /var/ossec/bin/ossec-control status
-
-# 查看日志
-sudo tail -f /var/ossec/logs/ossec.log
-
-# 查看告警
-sudo tail -f /var/ossec/logs/alerts/alerts.log
-```
-
-## 4. rkhunter
-
-### 4.1 基本概念
-
-```bash
-# rkhunter (Rootkit Hunter)
-# 检测 rootkit、后门、漏洞
-```
-
-### 4.2 安装和使用
-
-```bash
-# 安装
-sudo apt install rkhunter
-
-# 更新数据库
-sudo rkhunter --update
-
-# 检查系统
-sudo rkhunter --check
-
-# 查看日志
-sudo cat /var/log/rkhunter.log
-```
-
-### 4.3 配置
-
-```bash
-# 主配置文件
-/etc/rkhunter.conf
-
-# 常用配置
-ALLOWHIDDENDIR="/etc/.java"
-ALLOWHIDDENFILE="/etc/.pwd.lock"
-```
-
-## 5. 日志监控
-
-### 5.1 使用 logwatch
-
-```bash
-# 安装
-sudo apt install logwatch
-
-# 查看日志报告
-sudo logwatch --detail high --range today
-```
-
-### 5.2 使用 multitail
-
-```bash
-# 安装
-sudo apt install multitail
-
-# 监控多个日志
-sudo multitail /var/log/syslog /var/log/auth.log
-```
-
-## 6. 实战案例
-
-### 6.1 SSH 防护配置
+配置文件的正确姿势是**只写 `jail.local`，不要改发行版自带的 `jail.conf`**——包升级会覆盖 `.conf`，而 `.local` 优先级更高且属于你的自定义。这层"发行版配置 vs 用户配置"的分离在 Linux 服务里很常见（sshd 也允许 `sshd_config.d/`），记住这个模式，以后改任何软件的默认配置前都先问一句"升级会不会冲掉它"：
 
 ```bash
 # /etc/fail2ban/jail.local
@@ -297,65 +180,169 @@ sudo multitail /var/log/syslog /var/log/auth.log
 enabled = true
 port = ssh
 filter = sshd
-logpath = /var/log/auth.log
+logpath = /var/log/auth.log     # Debian/Ubuntu；RHEL 系改 /var/log/secure
 maxretry = 3
-bantime = 86400
 findtime = 600
-
-[sshd-ddos]
-enabled = true
-port = ssh
-filter = sshd-ddos
-logpath = /var/log/auth.log
-maxretry = 5
 bantime = 3600
 ```
 
-### 6.2 Web 服务器防护
+三个时间参数决定监狱的"脾气"，值得按业务调：`findtime` 是统计窗口（这里 10 分钟内失败超 `maxretry` 才触发），`bantime` 是封禁时长（首次 1 小时；生产上常配成递增式，`bantime = 10m` 起步配合 `bantime.increment` 越封越久），`maxretry` 太松挡不住爆破、太紧则容易误伤共享出口 IP 的正常用户。先用保守值观察日志一周，再收紧阈值，比一开始拍脑袋设"5 次封 1 天"稳妥得多。
+
+三系日志路径差异必须处理对：Debian/Ubuntu 是 `/var/log/auth.log`，RHEL/CentOS/Rocky 是 `/var/log/secure`，**Arch 默认两者都不存在**（见[日志系统](../basic/log.md)）——Arch 上认证事件在 journald 里，jail 需改用 systemd 后端：
 
 ```bash
-# /etc/fail2ban/jail.local
-[nginx-http-auth]
+# Arch 的 jail.local 片段
+[sshd]
 enabled = true
-port = http,https
-filter = nginx-http-auth
-logpath = /var/log/nginx/error.log
+backend = systemd
 maxretry = 3
-bantime = 3600
-
-[nginx-botsearch]
-enabled = true
-port = http,https
-filter = nginx-botsearch
-logpath = /var/log/nginx/access.log
-maxretry = 2
-bantime = 86400
 ```
 
-### 6.3 文件完整性检查
+`backend = systemd` 让 Fail2Ban 直接读 journal 而不是文件，是 Arch 环境的标准做法；装了 rsyslog 之后也可以改回文件路径，但 systemd 后端少一层依赖。这个后端差异也是三系 Fail2Ban 文档互相矛盾的根源：网上教程默认 Debian 的 auth.log 写法，你照抄到 Arch 上，服务能启动、jail 却是空的——**"服务 running"不等于"监狱在工作"**，必须用 status 命令验证 jail 列表与计数。改完配置重启生效并确认监狱在跑：
 
 ```bash
-#!/bin/bash
-# 文件完整性检查脚本
-
-# 初始化 AIDE 数据库
-if [ ! -f /var/lib/aide/aide.db ]; then
-    sudo aideinit
-fi
-
-# 检查完整性
-report=$(sudo aide --check)
-
-if [ -n "$report" ]; then
-    echo "文件完整性检查发现问题:"
-    echo "$report"
-    echo "$report" | mail -s "AIDE Alert" admin@example.com
-fi
+$ sudo systemctl enable --now fail2ban
+$ sudo fail2ban-client status
+Jail list:	sshd
+$ sudo fail2ban-client status sshd
+Currently banned:	1
+Banned IP list:	203.0.113.7
 ```
+
+`Currently banned` 非零说明封禁链路（filter 匹配 → 调防火墙命令）全通；`Total failed` 高但 banned 为 0，则多半是 filter 正则没对上当前日志格式（sshd 版本或日志模板变更后常见）；jail 根本不在列表里，则是 `enabled = true` 没写对或后端起不来。排障就按这个三步走：**先看 jail 在不在，再看 failed 涨不涨，最后看 banned 有没有**。手动干预用 `fail2ban-client set sshd banip/unbanip`，应急解封自己的 IP 就靠它——建议把这条命令写进运维手册的第一页，因为误封自己的下午，你唯一想敲的就是它。
+
+### 3.2 自定义 filter 与多服务扩展
+
+SSH 只是起点——公网机器上的 Web 服务同样是爆破高发区，而 Fail2Ban 的 filter.d 生态里已经沉淀了大量现成正则。Nginx/Apache 的 404 探测、WordPress 登录尝试都有现成 filter（`filter.d/` 下），在 jail 里启用即可——**每多启用一个 jail，就多一类日志被持续扫描**，但也要控制数量：同时盯着十个低流量服务的 filter，维护成本会超过收益，优先覆盖真正面向公网的服务。自定义 filter 的正则要用 `<HOST>` 占位符标记来源 IP，写完用 `fail2ban-regex` 试跑：
+
+```bash
+$ sudo fail2ban-regex /var/log/nginx/error.log /etc/fail2ban/filter.d/nginx-http-auth.conf
+Failregex: 12 total
+```
+
+`fail2ban-regex` 能在不封任何人的前提下验证正则命中率——**先 regex 后上线**是避免"封错人/漏封"的唯一稳妥做法。它输出的 `Failregex`/`Ignoreregex` 计数是 filter 的单元测试：命中为 0 说明正则写错或日志格式假设不成立，命中异常偏高则要检查是否把正常请求也圈了进来。把 `fail2ban-regex` 的验证步骤写进 filter 变更的检查单，等于给每个监狱配了回归测试。
+
+## 4. auditd：内核级审计与 journald 的衔接
+
+AIDE 给的是"结果快照"，Fail2Ban 给的是"重复失败的自动处置"；要回答"**谁、以什么身份、在什么时间对什么对象做了什么**"，必须下到内核审计层。本节把 auditd 的定位、规则与日志归属一次讲清，并顺手解决它与 journald 抢日志时的常见困惑——这是三系排障里最容易互相甩锅的一块。若把前两节比成"门有没有被动、有没有人在踹门"，auditd 则是**贴身录像**：它不负责拦，只负责让事后复盘时的每一句"不是我"都能被证实或证伪。也可以说，前三节回答的是"发生了什么异常"，本节开始回答"**归因链**能不能闭合"——没有归因，告警只能触发"重装系统"这种高成本响应，而不能触发"追责到具体操作"这种精准响应。
+
+auditd 的代价也值得提前说：它是四类里**最容易写出噪音**的，一条过宽的 `-a always,exit` 规则可以让日志量翻十倍，把磁盘与检索体验一起拖垮。所以本节的规则设计坚持"少而带 key"——每条规则都要能回答"我为什么监视它、出事时用哪个 `-k` 捞"，答不出的规则宁可不加。噪音治理的思路与 AIDE 排除高变动目录一脉相承，只是 auditd 的"高变动"变成了高频系统调用。噪音过大还会带来一个次生风险：**真正重要的 identity 事件被淹没后，团队会习惯性跳过 ausearch 结果**——归因工具一旦被当成"日志海"，它的价值会归零，哪怕规则本身写得没错。
+
+### 4.1 它和 AIDE 的分工
+
+AIDE 回答"文件变了"，auditd 回答"**谁、在什么时候、以什么身份、对什么对象做了什么系统调用**"。auditd 由内核 audit 子系统供数，记录的是事件流而非文件快照，因此能抓到"改完再改回去"的过程，也能覆盖 AIDE 范围之外的行为（如打开敏感设备、切换用户）。两者一起用，才有"变化 + 归因"的完整画面。
+
+可以把两者想成两种取证笔录：AIDE 是**现场照片**（事后对比差在哪），auditd 是**监控录像**（过程连续可回放）。照片能看出金库门被换过锁，录像才能看到谁拿钥匙开的门、开了多久、碰了哪些抽屉。只留照片的团队在事故报告里最常写的一句话是"文件被篡改，来源不明"；只留录像的团队则会淹没在海量 syscall 里找不到重点——**两样都要，且都要能按时间对齐**。
+
+### 4.2 写规则与查事件
+
+规则写在 `/etc/audit/rules.d/*.conf`，`-w` 监控路径、`-p` 指定触发操作（`w` 写、`a` 属性、`r` 读、`x` 执行）、`-k` 打关键字便于检索。三条身份文件 + 一条 sshd 配置是公认的起步配置，覆盖面与噪音比最优：
+
+```bash
+# /etc/audit/rules.d/security.rules
+-w /etc/passwd      -p wa -k identity
+-w /etc/shadow      -p wa -k identity
+-w /etc/sudoers     -p wa -k identity
+-w /etc/ssh/sshd_config -p wa -k sshd_config
+```
+
+启动（Debian/Ubuntu/Arch；RHEL 系通常已启用）并按关键字检索（比 grep 原始日志快得多）：
+
+```bash
+$ sudo systemctl enable --now auditd
+$ sudo ausearch -k identity -i
+type=SYSCALL msg=audit(...) comm=useradd euid=0 name="/etc/passwd"
+```
+
+`-i` 把数字 uid 翻译成可读用户名，排查时几乎必加。`ausearch -k` 的价值在于规则设计阶段就埋好了标签——**没有 `-k` 的规则等于往大海里撒网**，`ausearch` 只能全量扫描。规则设计的另一条纪律是**只监控会改身份、改权限、改认证配置的对象**：`/etc/passwd`、`/etc/shadow`、`/etc/sudoers`、`sshd_config` 这几个点位各写一条就够起步；把 `/etc/hosts`、整个 `/home` 都加 `-w`，事件量会迅速失控，而多出来的事件对归因帮助甚微。audit 是稀缺的**归因**数据源，用滥了反而没人查。audit 日志默认在 `/var/log/audit/audit.log`，体积增长很快，必须配轮转（auditd 自带 `auditd.conf` 的 size 参数，或交给 logrotate，见[日志系统](../basic/log.md)）。
+
+规则落地还有两步容易漏：写完 `.conf` 后要让 auditd 重新加载（`augenrules --load` 或 `service auditd restart`，三系命令略有差异），并用 `auditctl -l` 确认规则真的在内核里——**文件写了不等于规则生效**，这和 sysctl、firewalld permanent 是同一类"双视图"陷阱。负载敏感的机器还要留意 audit 的失败策略（`disk_full` 时丢事件还是 panic）：生产默认丢事件保业务，但要监控 `auditd` 的错误计数，否则归因链路会在你不知情时悄悄变窄。
+
+### 4.3 和 journald 什么关系
+
+容易混淆的一点：**auditd 不是 journald 的替代品，两者数据同源但入口不同**。内核 audit 事件会被 auditd 写入自己的日志文件；同时 systemd-journald 内置 audit 桥接，会把部分 audit 消息收进 journal（带有 `_AUDIT_` 前缀字段）。因此你可能在两个地方看到相似事件——`journalctl --grep "_AUDIT_"` 查 journal 侧，`ausearch -k` 查 audit 专用日志，两者时间戳一致但字段完整度不同。
+
+实操建议：**归因查 `ausearch -k`，时间线拼接用 `journalctl`**。两者时间戳一致，可以把 audit 关键字事件插进服务日志时间线里看上下文——典型的排障剧本是：journal 里看到 Nginx 500 报错，用同一时间窗的 `ausearch -k identity` 查身份文件是否被改，再决定是应用问题还是有人动了配置。RHEL 系 auditd 默认启用，Debian/Ubuntu 与 Arch 默认不装——这也是三系"安全栈"差异的一部分（详见[安全加固](./hardening.md)的三系对照）。
+
+auditd 与 journald 的分工可以记成"**专用日志管归因，journal 管时间线**"：需要回答"谁改了 shadow"时永远用 `ausearch`，需要回答"改 shadow 前后服务发生了什么"时把两者按时间对齐。不要试图把 audit 事件全部搬进 journal 当唯一存储——audit 的体量和字段结构不是为 journal 设计的，强行汇流只会让两边都不好查。
+
+## 5. rkhunter 与 OSSEC：粗筛与完整 HIDS
+
+前四节的工具都是"专精单项"，本节两款则走另一条路：rkhunter 用特征库做**广度粗筛**，OSSEC 用完整 agent 做**平台化 HIDS**。选型时先问规模与深度需求，而不是先看功能列表长度。多数单机读者读完本节只需记住"rkhunter 进例行任务、OSSEC 先放收藏夹"，真正的决策点在团队规模长到几十台、需要统一告警面板的那天。把两款压进同一节也提醒一件事：**"完整 HIDS"不是必选项，粗筛 + 前四节的组合已经覆盖单机场景的大半风险**——工具清单越长，维护面越大，半吊子平台反而不如两件用熟的专精工具。两款的失败模式也值得对照记：rkhunter 的失败是**特征库不更新导致假阴性**，OSSEC 的失败是**规则/agent 没铺完导致覆盖空洞**——一个死在"没喂料"，一个死在"没铺开"，都是静默的。粗筛与完整 HIDS 还共享一个定位：它们都建立在前四节**信号可信**的前提上——日志不持久时 OSSEC 也无从归因，基线被污染时 rkhunter 的文件校验同样失真。所以本节在文末而非开头，不是重要性排序，而是**依赖顺序**：先把专精工具跑稳，再决定要不要上平台；反过来先上平台再补地基，是检测项目最常见的预算黑洞。
+
+rkhunter（Rootkit Hunter）用特征库 + 已知文件校验和扫描 rootkit、后门与可疑属性（SUID、隐藏目录）。它适合当**例行粗筛**，不适合当唯一防线。它也与 AIDE 形成一对互补：AIDE 对比的是**你自己维护的基线**，rkhunter 对比的是**厂商/社区维护的已知恶意特征**——前者抓"你的机器不该有的变化"，后者抓"别人机器上出现过的坏东西"，两条线都扫，才既覆盖配置漂移也覆盖已知后门模式（命令见下）：
+
+rkhunter 的常用命令很短：`rkhunter --update` 更新特征库、`rkhunter --check` 交互式扫描、`--check --sk` 脚本友好地跳过回车确认。
+
+首次扫描前先 `rkhunter --propupd` 记录当前文件属性基线，否则会把"正常文件属性"误报为异常——和 AIDE 要 init 是同一个道理：**粗筛工具也需要一份"正常长什么样"的参照**。特征库长期不更新则形同虚设——把 `--update` 放进与系统补丁相同的例行任务里。rkhunter 报告里的 warning 不等于中招：属性变化、已知 rootkit 残留项、可疑内核模块都要人工复核，多数 warning 在正常升级后会出现一批，逐条对照比"看见红字就重装系统"理性得多。
+
+OSSEC/Wazuh 属于完整的 HIDS：日志分析 + 文件完整性 + 注册表式配置监控 + rootkit 检测，带中心化告警。它的能力覆盖本篇前三节，但引入了守护进程、规则库与（Wazuh 场景下）独立的管理组件，运维成本明显更高。选型经验：**单机或小规模用 AIDE + Fail2Ban + auditd 三件套足够；多机需要统一告警面板时再上 Wazuh**——先有"检测意识"，再谈"平台化"，否则平台只会变成没人看的仪表盘。从三件套升级到平台的合理时机是：告警通道已经稳定有人响应、每台机器的基线流程已经固化，平台只是把同样的流程集中执行；顺序反过来，平台只会把混乱放大到几十台机器。
+
+## 6. 与日志系统的衔接
+
+单机检测配置得再对，若日志本身不可靠（不持久化、不轮转、不外送），整条链路的地基就是松的。本节把前五节的输出统一接到日志系统上，也是全篇从"工具"过渡到"体系"的一步——日志细节的完整展开在[基础篇 · 日志系统](../basic/log.md)，这里只关心检测侧的接入点。
+
+检测工具的输出最终都要回到日志链路，否则等于静默运行。这一节常被当成"锦上添花"跳过，但它其实是整篇的承重墙：前五节所有工具，采集的采集、封禁的封禁、归因的归因，**最后都汇成"某人在某时做了某事"这一条时间线**——时间线断了，孤立的告警只是噪音，事后复盘也拼不回完整故事。
+
+1. **Fail2Ban 读日志**：依赖认证日志存在且格式稳定（第 3 节）。
+2. **AIDE/auditd 产生告警**：写入日志或推送到监控，必须有人/系统消费。
+3. **日志本身要持久化与轮转**：journal 不持久化则重启丢线索，audit.log 不轮转会吃满磁盘。
+
+三系在这一环的差异集中在"认证日志在哪"：Debian/Ubuntu 的 `/var/log/auth.log`、RHEL 的 `/var/log/secure`、Arch 的 journal。跨发行版写监控脚本时，**用 `journalctl -u fail2ban` 或工具自身的 status 命令做探活，不要写死日志路径**。这条原则可以推广到整个检测栈：探活用服务状态（`systemctl is-active`）而不是"日志文件今天有没有新行"，因为静默的机器可能只是没有攻击，不是检测没在跑。
+
+日志链路的健康检查值得做成固定的三条命令：`journalctl --disk-usage` 看 journal 是否在写、`fail2ban-client status` 看监狱是否在列、`aide --version`/最近一次 check 时间看 FIM 是否还在跑。三系输出细节不同，但语义一致——**这三条哪一条断了，本篇对应的那一层就等于没装**。日志协议、facility/severity 与轮转细节见[基础篇 · 日志系统](../basic/log.md)，本篇不重复。
+
+## 7. 常见坑
+
+工具都装对了，检测仍可能整层失效——失效方式不是崩溃，而是**看起来一切正常**。下面十条按"会让检测整层失效"到"会拖垮机器"排序。前五条的共同点是**工具看似在跑、实际没有检测力**，这比完全没装更危险，因为仪表盘上一片绿色：值守的人不会去质疑绿灯，审计的人只看有没有红灯——**静默失效是检测体系独有的失败模式，也是本篇反复要求"主动制造信号"的原因。**
+
+1. **AIDE 初始化后从不更新基线库**。每次系统升级都产生海量"变化"，团队很快对告警脱敏，真正的入侵反而没人看。规则：**每次变更窗口结束后重建基线**，并把 AIDE 报告接入告警通道。
+2. **AIDE 监控范围过宽**。把 `/var/log`、`/proc` 之类高变动路径排除；先窄后宽，用两周噪音量决定是否扩围。
+3. **Fail2Ban 在 Arch 上直接复制 Debian 的 `logpath`**。Arch 默认没有 `/var/log/auth.log`，jail 会静默失败或空转，必须 `backend = systemd`。
+4. **改发行版自带的 `jail.conf` 而不是写 `jail.local`**。包升级一覆盖，所有自定义封禁策略消失且不易察觉。
+5. **封禁后误封自己/办公网段**。上线前用 `fail2ban-regex` 验证 filter，`bantime` 从较短值起步；保持一条 `fail2ban-client set sshd unbanip` 的应急路径。
+6. **audit 规则不打 `-k` 关键字**。事件照常记录，但 `ausearch` 无法按主题检索，事后只能全量 grep，等于没有检测设计。
+7. **audit.log 不轮转导致磁盘满**。audit 事件量远超普通服务日志，必须显式限额；磁盘满会让 auditd 丢事件甚至拖垮依赖写盘的服务——日志把磁盘写满引发的次生事故，在生产上屡见不鲜，轮转不是可选项。
+8. **把 rkhunter 当实时防护**。它是离线扫描器，两次扫描之间的窗口完全依赖其它层；特征库不更新则连"事后"都靠不住。
+9. **工具装了但服务没启用**。`pacman -S aide`、`apt install fail2ban` 只是落盘二进制，`systemctl enable --now` 才是开始工作——三系一致的老陷阱，见[基础篇 · 系统服务](../basic/services.md)。
+10. **告警发到没人看的邮箱**。检测链路的最后一环是"人或工单系统"，邮件投递失败、收件箱被忽略，等价于没装。
+
+十条坑可以归成三类：基线维护类（1、2、8）、配置正确性类（3、4、6、9）、响应链路类（5、7、10）。自查时按类扫一遍，比逐条背清单更快发现系统性漏洞——比如发现"基线类中了两条"，说明整个变更流程没接 AIDE，而不是 AIDE 本身有问题。
+
+三类对应的责任人也不同：基线类归**变更流程**（发布负责人在收尾时勾选），配置正确性类归**工具 owner**（谁引入 Fail2Ban 谁维护 jail.local 的三系差异），响应链路类归**值班与告警平台**（和防火墙日志、监控用同一条通知通道）。把十条映射到三个责任面，月度安全例会上就不用逐条念清单，只需要问三个面各自的上次检查时间——**分类的目的是找到制度缺口，不是增加背诵负担。**
+
+## 8. 实战：单机检测基线清单
+
+前七节按工具分头讲，本节把它们压成**一台机器从零到"三层信号齐全"**的执行序列。顺序刻意与第 1 节的落地建议一致，每步的验收信号也对应前文各节的"验证"段落——清单不是新内容，是把散落的验收动作排成一条时间线。若只保留本篇一页纸，那就是下面七步；前面七节负责解释每一步"为什么必须在这一步做"，本节负责把依赖关系压成可打印的顺序。七步与加固篇九步的分工也值得再钉一次：**加固定"系统该长什么样"，本清单定"谁在看着它不被改回去"**——两份清单可以并进同一张上线工单，但勾选逻辑不同：加固项验的是"生效值"，检测项验的是"信号能否被触发"。
+
+给一台新服务器配置最小可用的检测能力，顺序不能颠倒——每一步都以前一步的产物为前提（没有日志就配不了 Fail2Ban，没有基线就谈不上完整性检查）。清单刻意设计成"**每步产出可验证的信号**"：装完看得到二进制、init 后看得到库文件、jail 起来后 status 有计数、auditd 写了规则能 ausearch 到——任何一步的信号缺失，都说明下一层还没真正就位，不必等到"出事了才发现没装上"。执行时请把每步的回读输出贴进变更单，和[安全加固](./hardening.md)第 9 节的证据线是同一条纪律：**检测基线本身也要可审计，否则复盘时说不清"当时到底检了什么"。** 七步的可打印形态还有一条设计意图：**每步的验收动词都是"能看到/能查到/能触发"**，没有一步的完成标准是"配置文件已保存"——把完成定义从"写过"抬到"能证明"，是整份清单最核心的约束。
+
+1. 确认日志持久化（`journalctl --disk-usage` 非空、认证日志存在或 journald 后端可用）。
+2. 安装三件套：AIDE + Fail2Ban + auditd（三系命令见第 1 节，Arch 用 `pacman -S aide fail2ban audit`）。
+3. AIDE 初始化并**立即** `--check` 确认无差异，再纳入定时任务。
+4. 写 `jail.local` 启用 sshd 监狱，按发行版选对 logpath/backend，`fail2ban-client status` 确认 jail 在列。
+5. 加 2–4 条 auditd 关键文件规则（`-k identity`/`-k sshd_config`），`ausearch -k identity` 验证能查到事件。
+6. 把 AIDE 报告与 Fail2Ban 封禁事件接到你真正会看的通道（邮件、IM webhook 或监控系统）。
+7. 演练一次：临时改 `/etc/passwd` 再跑 `aide --check`，确认变化能被抓到，然后重建基线。
+
+跑完这七步，你至少能回答三个问题：**关键文件是否被改、是否有人在爆破、敏感文件被谁动过**。这正是主机检测的最低可用线——其余平台化、中心化都是在这个基础上做规模化的加法。
+
+清单与[防火墙](./firewall.md)第 8 节的策略清单、[安全加固](./hardening.md)第 9 节的上线清单是**同一条上线流水线上的三段**，顺序建议是：加固盘点与补丁 → 防火墙收口 → 检测上线。检测放在防火墙之后，是因为 Fail2Ban 的封禁动作依赖防火墙后端可用；加固放在最前，是因为检测基线（AIDE）最好在系统内容相对稳定时 init——顺序反了，要么 jail 调不通，要么基线刚建完就被补丁变更冲成噪音。三份清单一起用，覆盖"状态、流量、事件"三个观测面，缺一份都会在事后复盘时留下盲区。
+
+清单的第 7 步"演练"最容易被省略，却最能暴露配置问题：亲手制造一次受控变更，验证告警真的会动，比读十遍文档都可靠。演练同时也在测试告警链路的最后几米——AIDE 报告发得出去吗、Fail2Ban 的封禁看得到吗、值班的人收到通知了吗。**没有演练过的检测体系，默认假设它在你最需要的那天失效**，这是和加密恢复演练（见[加密技术](./encryption.md)）同一条纪律。建议把演练频率定成与补丁周期同级：每月一次小变更验证，每季度一次全链路桌面推演。
 
 ## 参考资料
 
-- [Fail2Ban 文档](https://www.fail2ban.org/)
-- [AIDE 文档](https://aide.github.io/)
-- [OSSEC 文档](https://www.ossec.net/docs/)
-- [rkhunter 文档](http://rkhunter.sourceforge.net/)
+本篇工具链横跨用户态与内核两侧，参考资料也按层给出：AIDE/Fail2Ban/rkhunter 属用户态工具，文档在各自官网；auditd 规则语法以 Linux 内核文档为准（发行版手册常滞后）；Arch Wiki 的 Fail2Ban/AIDE 条目则对 journald 后端与包名差异写得最清楚，是跨发行版排障时的首选对照。建议先读 Arch Wiki 对应工具条目建立全貌，再以官方文档核对参数细节。
+
+排障时的查阅顺序也建议固定：**先查本篇对应节的"验证信号"，再查 Arch Wiki 的发行版差异，最后才翻上游 man page**。多数"检测不工作"的问题停在第一步（服务没起、jail 没在、基线没 init），少数停在第二步（日志路径、包名、后端）；真正需要读 man 的通常是规则语法类的少数情况。把这三步写进 runbook，新人也能在十分钟内自查大部分链路问题——检测篇的文档消费方式，本身就应该像检测一样分层，而不是每次都从头读。
+
+- `man aide`、`man fail2ban-client`、`man auditctl`、`man ausearch`、`man rkhunter`
+- AIDE 官方文档 — [aide.github.io](https://aide.github.io/)
+- Fail2Ban 文档 — [fail2ban.org](https://www.fail2ban.org/)
+- Arch Wiki - Fail2Ban — [wiki.archlinux.org](https://wiki.archlinux.org/title/Fail2ban)
+- Arch Wiki - AIDE — [wiki.archlinux.org](https://wiki.archlinux.org/title/Aide)
+- auditd / Audit 文档（内核） — [docs.kernel.org](https://www.kernel.org/doc/html/latest/admin-guide/audit.html)
+- OSSEC 文档 — [ossec.net](https://www.ossec.net/docs/)
+- rkhunter 手册 — [sourceforge.net](https://rkhunter.sourceforge.net/)
+- 鸟哥的私房菜 - 账号与权限管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0420file_permission.php)
