@@ -229,7 +229,7 @@ find . -maxdepth 1 -name "nums.txt" -exec wc -l {} \;
 25 ./nums.txt
 ```
 
-`-delete` 可就地删除（隐含深度优先）；大量文件用 `-print0 | xargs -0` 处理，见[文本处理命令](text_processing.md)中的 `xargs`。
+`-delete` 可就地删除（隐含深度优先）；大量文件用 `-print0 | xargs -0` 处理，见[文本处理命令](../text/text_processing.md)中的 `xargs`。
 
 **坑**：
 
