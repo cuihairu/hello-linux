@@ -180,7 +180,7 @@
 
 ## 常见问题
 
-**Q1：
+**Q：
 `Unable to lock the administration directory (/var/lib/dpkg/lock-frontend)` 怎么办？**
 
 APT 被另一个进程占着。
@@ -192,7 +192,7 @@ APT 被另一个进程占着。
 DNF 对应锁是 `/var/run/dnf.pid`/`/var/cache/dnf/` 下的锁；
 `pacman` 报 `unable to lock database` 时同样先查有没有另一个 `pacman` 在跑。
 
-**Q2：`apt update` 报 `GPG error` / `NO_PUBKEY`？**
+**Q：`apt update` 报 `GPG error` / `NO_PUBKEY`？**
 
 本地缺仓库的签名公钥，
 说明源配置换过但没导入密钥。
@@ -201,7 +201,7 @@ Arch 若报 `signature from ... is unknown trust`，
 检查系统时间是否正确（时间错乱会导致所有签名验证失败），
 或按提示 `pacman-key --populate archlinux`。
 
-**Q3：`apt --fix-broken install` 或 `dnf distro-sync` 也救不回来怎么办？**
+**Q：`apt --fix-broken install` 或 `dnf distro-sync` 也救不回来怎么办？**
 
 先确认故障范围：
 是单个包的依赖环，
@@ -214,7 +214,7 @@ Arch 若报 `signature from ... is unknown trust`，
 动手前记录报错原文，
 必要时做快照。
 
-**Q4：装同一个软件，三系包名不一样怎么办？**
+**Q：装同一个软件，三系包名不一样怎么办？**
 
 很常见（如 `iptables` 在 Debian 叫 `iptables`，
 文档示例包名可能对应 `nmap`/`ripgrep` 等在不同仓库略有差异）。
@@ -225,7 +225,7 @@ Arch 若报 `signature from ... is unknown trust`，
 不确定时以发行版官方 wiki/手册的包名为准，
 不要照抄别的发行版教程。
 
-**Q5：为什么 `pacman -Ss` 搜得到 AUR 里的软件，但 `-S` 装不了？**
+**Q：为什么 `pacman -Ss` 搜得到 AUR 里的软件，但 `-S` 装不了？**
 
 `pacman` 只认识官方仓库。
 AUR 是社区构建脚本仓库，
@@ -236,7 +236,7 @@ AUR 是社区构建脚本仓库，
 构建前务必过目 PKGBUILD 内容，
 生产服务器谨慎使用。
 
-**Q6：国内环境下更新源很慢？**
+**Q：国内环境下更新源很慢？**
 
 三系都换国内镜像即可：
 Debian/Ubuntu 改 `/etc/apt/sources.list`（或 Ubuntu 的 `sources.list.d/ubuntu.sources`），

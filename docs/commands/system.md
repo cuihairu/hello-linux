@@ -200,7 +200,7 @@ Arch 和 RHEL 系一般默认启用。
 
 ## 常见问题
 
-**Q1：`load average` 超过 CPU 核数就一定有问题吗？**
+**Q：`load average` 超过 CPU 核数就一定有问题吗？**
 
 不一定。
 Linux 的负载包含**运行态 + 不可中断睡眠（D 状态，通常是等 I/O）**两部分。
@@ -212,7 +212,7 @@ Linux 的负载包含**运行态 + 不可中断睡眠（D 状态，通常是等 
 `top`/`mpstat` 看 CPU 分布 → `iostat` 看 I/O → `pidstat`/`ps` 定位进程，
 不要只盯着 load 一个数字下结论。
 
-**Q2：`free -h` 里 `available` 和 `free` 差那么多，内存到底够不够？**
+**Q：`free -h` 里 `available` 和 `free` 差那么多，内存到底够不够？**
 
 看 **`available`**。
 Linux 会把暂时用不到的内存拿去做页缓存（buff/cache）加速磁盘读写，
@@ -223,7 +223,7 @@ Linux 会把暂时用不到的内存拿去做页缓存（buff/cache）加速磁�
 且 `free -h` 的 `swap used` 在不断增长，
 才说明真的需要加内存或查内存泄漏。
 
-**Q3：`systemctl enable` 和 `start` 有什么区别？**
+**Q：`systemctl enable` 和 `start` 有什么区别？**
 
 `start`/`stop` 管**当前这一次**是否立即运行；
 `enable`/`disable` 管**下次开机**是否自动拉起。
@@ -235,7 +235,7 @@ Linux 会把暂时用不到的内存拿去做页缓存（buff/cache）加速磁�
 另一半是只 `start` 没 `enable`（或反之）。
 `is-active`/`is-enabled` 可以分别验证两种状态。
 
-**Q4：`kill` 默认发的信号是哪个？`kill -9` 为什么不能随便用？**
+**Q：`kill` 默认发的信号是哪个？`kill -9` 为什么不能随便用？**
 
 默认是 **SIGTERM（15）**，
 进程可以捕获它，用来清理临时文件、关闭连接、释放锁。

@@ -50,13 +50,17 @@ Linux 是多用户系统，从你按下开机键到看到登录提示符的那�
 
 新手进入本章前最常问的四个问题，先集中回答：
 
-1. **问题："我应该一直用 root 登录吗？"** 不应该。root（UID 0）没有任何权限限制，一条 `rm -rf /` 或一次敲错的 `dd of=/dev/sda` 就是不可逆事故。日常用普通用户 + `sudo`，既保留了提权能力，又在 `/var/log/auth.log`（Debian/Ubuntu）或 `/var/log/secure`（RHEL 系）里留下了完整的操作审计记录。详见[账号管理](./users/account_management.md)。
+**Q：我应该一直用 root 登录吗？**
+不应该。root（UID 0）没有任何权限限制，一条 `rm -rf /` 或一次敲错的 `dd of=/dev/sda` 就是不可逆事故。日常用普通用户 + `sudo`，既保留了提权能力，又在 `/var/log/auth.log`（Debian/Ubuntu）或 `/var/log/secure`（RHEL 系）里留下了完整的操作审计记录。详见[账号管理](./users/account_management.md)。
 
-2. **问题："`usermod -aG` 和 `usermod -G` 有什么区别？"** `-aG` 是**追加**到补充组，`-G` 是**覆盖**整个补充组列表。漏掉 `-a` 会把用户从其他所有补充组里移除——比如刚把运维同事加进 `sudo` 组，顺手又执行了一次不带 `-a` 的 `usermod -G docker`，他就会莫名其妙失去 sudo 资格。这是本章最高频的事故。
+**Q：`usermod -aG` 和 `usermod -G` 有什么区别？**
+`-aG` 是**追加**到补充组，`-G` 是**覆盖**整个补充组列表。漏掉 `-a` 会把用户从其他所有补充组里移除——比如刚把运维同事加进 `sudo` 组，顺手又执行了一次不带 `-a` 的 `usermod -G docker`，他就会莫名其妙失去 sudo 资格。这是本章最高频的事故。
 
-3. **问题："改了用户所属组，为什么新权限不生效？"** 补充组在登录时一次性读入进程凭证，已经开着的 SSH 会话不会自动刷新。重新登录（或用 `newgrp groupname` 临时切换）即可。
+**Q：改了用户所属组，为什么新权限不生效？**
+补充组在登录时一次性读入进程凭证，已经开着的 SSH 会话不会自动刷新。重新登录（或用 `newgrp groupname` 临时切换）即可。
 
-4. **问题："什么时候该用 ACL 而不是 chmod/chown？"** 当你不想（或没权限）改变文件的属主属组，却要给某个特定用户或组单独授权时。典型场景：共享目录 `/srv/projects` 属主是 `root:devops`，但只想让 `guest` 账号能写其中一个子目录。`chmod` 做不到"只对一个人开"，ACL 可以。详见 [ACL 权限控制](./users/acl_permissions.md)。
+**Q：什么时候该用 ACL 而不是 chmod/chown？**
+当你不想（或没权限）改变文件的属主属组，却要给某个特定用户或组单独授权时。典型场景：共享目录 `/srv/projects` 属主是 `root:devops`，但只想让 `guest` 账号能写其中一个子目录。`chmod` 做不到"只对一个人开"，ACL 可以。详见 [ACL 权限控制](./users/acl_permissions.md)。
 
 ## 参考资料
 

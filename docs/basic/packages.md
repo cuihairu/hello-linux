@@ -56,13 +56,17 @@
 
 进入子页前最常被问到的四个问题：
 
-1. **问题："`apt update` 和 `apt upgrade` 为什么总是要连着敲？"** `update` 只刷新本地索引（相当于看最新菜单），`upgrade` 才真正下载并安装更新（点菜）。只 `update` 不 `upgrade` 没有副作用，但下次 `apt install` 会基于新索引解析依赖——如果你刚换了镜像源，这步必须做，否则会提示"找不到包"或版本对不上。三系对应关系是：`apt update` ↔ `pacman -Sy` ↔ `dnf makecache`。
+**Q：`apt update` 和 `apt upgrade` 为什么总是要连着敲？**
+`update` 只刷新本地索引（相当于看最新菜单），`upgrade` 才真正下载并安装更新（点菜）。只 `update` 不 `upgrade` 没有副作用，但下次 `apt install` 会基于新索引解析依赖——如果你刚换了镜像源，这步必须做，否则会提示"找不到包"或版本对不上。三系对应关系是：`apt update` ↔ `pacman -Sy` ↔ `dnf makecache`。
 
-2. **问题："为什么 Arch 上 `pacman -Sy 包名` 单装一个包很危险？"** 这正是 partial upgrade：索引已刷新到最新，但你只安装了目标包，它依赖的库可能已升级到不兼容版本，而系统里其他旧软件还链着旧库。Arch Wiki 的官方立场是"永远不要 partial upgrade"，正确做法是先 `sudo pacman -Syu` 全量升级，再考虑装新包。
+**Q：为什么 Arch 上 `pacman -Sy 包名` 单装一个包很危险？**
+这正是 partial upgrade：索引已刷新到最新，但你只安装了目标包，它依赖的库可能已升级到不兼容版本，而系统里其他旧软件还链着旧库。Arch Wiki 的官方立场是"永远不要 partial upgrade"，正确做法是先 `sudo pacman -Syu` 全量升级，再考虑装新包。
 
-3. **问题："三方仓库/PPA/AUR 到底安不安全？"** 优先级永远是官方仓库 > 发行版背书的扩展源（EPEL、backports）> 社区 PPA/AUR。AUR 是 PKGBUILD 构建脚本而非预编译二进制，安装前必须审阅 `PKGBUILD` 内容；PPA 同理，`add-apt-repository` 之前先看是谁发布的。生产服务器建议只用官方 + EPEL。
+**Q：三方仓库/PPA/AUR 到底安不安全？**
+优先级永远是官方仓库 > 发行版背书的扩展源（EPEL、backports）> 社区 PPA/AUR。AUR 是 PKGBUILD 构建脚本而非预编译二进制，安装前必须审阅 `PKGBUILD` 内容；PPA 同理，`add-apt-repository` 之前先看是谁发布的。生产服务器建议只用官方 + EPEL。
 
-4. **问题："卡在 `Could not get lock /var/lib/dpkg/lock-frontend` 怎么办？"** 这是另一个进程（通常是未完成的 `apt upgrade` 或无人值守的 `unattended-upgrades`）占着 dpkg 锁。先 `ps aux | grep -E 'apt|dpkg'` 确认是谁，等它结束或谨慎 kill；若上次安装被中断留下半配置状态，用 `sudo dpkg --configure -a` 修复，再 `sudo apt --fix-broken install`。切勿直接删 lock 文件——那会损坏 dpkg 数据库。
+**Q：卡在 `Could not get lock /var/lib/dpkg/lock-frontend` 怎么办？**
+这是另一个进程（通常是未完成的 `apt upgrade` 或无人值守的 `unattended-upgrades`）占着 dpkg 锁。先 `ps aux | grep -E 'apt|dpkg'` 确认是谁，等它结束或谨慎 kill；若上次安装被中断留下半配置状态，用 `sudo dpkg --configure -a` 修复，再 `sudo apt --fix-broken install`。切勿直接删 lock 文件——那会损坏 dpkg 数据库。
 
 ## 参考资料
 
