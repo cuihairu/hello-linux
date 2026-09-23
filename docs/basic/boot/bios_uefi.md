@@ -120,7 +120,7 @@ NVRAM 是掉电保存的，所以"拔了硬盘换机器"或"主板电池没电"�
 
 UEFI 规范还定义了 Secure Boot：固件只执行签名验证通过的 `.efi` 文件。发行版的应对策略是引入二级信任链——Microsoft 签名的 `shimx64.efi` 作为第一级，再由它验证发行版自己的 `grubx64.efi`（后者持有发行版密钥）。所以你在 ESP 里常看到：
 
-```
+```text
 EFI/ubuntu/shimx64.efi      ← Microsoft OEM 密钥签名，固件直接信任
 EFI/ubuntu/grubx64.efi      ← 发行版自签，由 shim 验证
 EFI/BOOT/BOOTX64.EFI        ← 可移动介质回退路径（常是 shim 的副本）

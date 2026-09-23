@@ -4,6 +4,14 @@
 
 > 内容参考自 Arch Wiki、rsyslog 文档与鸟哥的私房菜，见文末参考资料。
 
+## 学习目标
+
+- 说清 journald 收集与 rsyslog 落盘的两层分工，知道该去哪层找日志
+- 对照三发行版日志文件位置（`auth.log` / `secure` / journal）
+- 熟练使用 `journalctl -u` 按服务查日志，掌握时间范围与优先级过滤
+- 理解 journal 持久化的意义，会开启并限制大小
+- 会查看传统文本日志，知道 postrotate 类"轮转后不写"问题的成因
+
 ## 1. 为什么日志链路有两层
 
 SysV 时代只有 rsyslog 一个守护进程：所有程序往 `/dev/log` 写消息，rsyslog 按规则拆分到 `/var/log` 下的各个文件。systemd 普及后，`systemd-journald` 成为第一接收者，原因很实际：
@@ -14,7 +22,7 @@ SysV 时代只有 rsyslog 一个守护进程：所有程序往 `/dev/log` 写消
 
 但 journald 并不取代 rsyslog，而是分工：
 
-```
+```text
 应用/内核 ──stdout、/dev/log──▶ systemd-journald ──(imjournal 或 ForwardToSyslog)──▶ rsyslog ──▶ /var/log/*.log
                                     │
                                     └──▶ /var/log/journal/（二进制，journalctl 读取）

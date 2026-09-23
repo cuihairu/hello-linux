@@ -34,7 +34,7 @@ Unix 第六版进入大学后被广泛研读和改造，BSD 就是加州大学�
 
 1979 年，AT&T 在 Unix 第七版之后明确转向商业化授权，大学不能再自由使用源码——这道禁令直接催生了两件事：BSD 项目加速从自有代码重构出可用系统，以及整个行业对"下一个自由 Unix"的渴望。Unix 逐渐分裂为两大流派：
 
-```
+```text
                     Unix
                      │
         ┌────────────┴────────────┐
@@ -128,7 +128,7 @@ RHEL 与 Arch 系统上该路径可能不存在（许可证通常放在 `/usr/sh
 
 1991 年 8 月 25 日，Linus 在 comp.os.minix 新闻组发表了著名的帖子：
 
-```
+```text
 From: torvalds@klaava.Helsinki.FI (Linus Benedict Torvalds)
 Newsgroups: comp.os.minix
 Subject: What would you like to see most in minix?
@@ -198,7 +198,7 @@ Arch 与 `pacman` 的出现值得单独说：2002 年之前的主流叙事是"�
 
 ### 4.3 发行版家谱
 
-```
+```text
 Slackware (1993)
     └── SUSE (1994)
 

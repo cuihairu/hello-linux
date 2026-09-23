@@ -4,11 +4,19 @@ rsyslog 是大多数 Linux 发行版使用的系统日志服务；在 systemd �
 
 > 内容参考自 rsyslog 文档、Arch Wiki 与鸟哥的私房菜，见文末参考资料。
 
+## 学习目标
+
+- 画出 journald → rsyslog → 文本文件的日志链路，说清两者是上下游而非竞争
+- 掌握 syslog 的 severity（0–7）与 facility 分类，能读懂 rsyslog 规则
+- 会配置 rsyslog 分流、远程转发，并知道 Arch 默认只装 journald 的差异
+- 熟练使用 `journalctl` 按 unit、时间、优先级、内容检索
+- 理解 journal 持久化的意义，会开启、限大小、清理
+
 ## 1. 日志链路：journald 与 rsyslog 的分工
 
 先回答最容易困惑的问题：**journald 和 rsyslog 是竞争关系吗？不是，是上下游关系。**
 
-```
+```text
 应用写 /dev/log ─┐
 服务 stdout/stderr ┼─▶ systemd-journald ──┬─▶ /var/log/journal/（二进制，journalctl 读）
 内核 /dev/kmsg   ─┘         │             └─▶ rsyslog ──▶ /var/log/syslog、messages 等文本

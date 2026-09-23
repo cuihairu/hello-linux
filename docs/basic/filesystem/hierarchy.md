@@ -12,7 +12,7 @@ Linux 遵循 FHS（Filesystem Hierarchy Standard）标准定义目录结构。FH
 
 ## 1. 目录结构总览
 
-```
+```text
 /
 ├── bin -> usr/bin        # 基本命令（usr-merge 后是指向 /usr/bin 的符号链接）
 ├── sbin -> usr/sbin      # 系统管理命令（同上）

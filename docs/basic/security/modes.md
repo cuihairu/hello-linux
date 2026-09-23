@@ -4,6 +4,14 @@ SELinux 有三种运行模式，选择哪一种直接决定系统的安全强度
 
 > 内容参考自 Red Hat 文档，见文末参考资料。
 
+## 学习目标
+
+- 分清 Enforcing、Permissive、Disabled 三种模式的行为差异与副作用
+- 知道三发行版的默认模式，解释为什么不能简单"Disabled 了事"
+- 会用 `getenforce`/`setenforce` 查看与临时切换，并理解临时的边界
+- 掌握 `/etc/selinux/config` 永久配置与启动参数的优先级
+- 能根据排障阶段选择合适模式：先 Permissive 取证，再 Enforcing 验证
+
 ## 1. 三种模式：行为与后果
 
 | 模式 | 行为 | AVC 拒绝日志 | 适用场景 | 主要风险 |

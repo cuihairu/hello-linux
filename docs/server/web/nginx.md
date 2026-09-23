@@ -25,7 +25,7 @@ Nginx 采用 Master-Worker 多进程架构：Master 读取配置、管理 Worker
 
 Worker 数通常设 `auto`（等于 CPU 核数）。理论并发上限约等于 `worker_processes × worker_connections`，还要扣掉与上游的出站连接——反代场景下每个客户端连接往往对应一条到后端的连接，上限要按双向一起算。与 Apache 对比：Nginx 集中式配置、内存友好、擅长反代；Apache 进程/线程模型、支持 `.htaccess`、动态模块生态成熟。选型不必非此即彼——静态为主的现代前端栈优先 Nginx，遗留 LAMP 可继续 Apache，两者也可前后串联，Nginx 做 TLS 卸载与静态缓存，Apache/应用处理动态请求。生产上更常见的形态是：Nginx 在最外层收流量，后面挂应用容器或 Apache，职责边界清晰后排障也快。
 
-```
+```text
                     ┌─────────────┐
                     │   Master    │  ← 读取配置、管理 Worker
                     │   Process   │

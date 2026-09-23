@@ -127,7 +127,7 @@ sudo swapon /swapfile
 
 `chmod 600` 不可省略——权限过宽的 swapfile，`swapon` 会直接拒绝（安全限制）。持久化写入 `/etc/fstab`：
 
-```
+```text
 /swapfile none swap sw 0 0
 ```
 

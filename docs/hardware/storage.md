@@ -148,7 +148,7 @@ sudo nvme smart-log /dev/nvme0     # NVMe 原生路径（与 smartctl 二选一�
 
 一块数据从裸盘到能被 `open()`，要依次经过五层，每层工具与责任人都不同——把这张栈印在脑子里，"挂载失败"立刻能定位到是哪一层：
 
-```
+```text
 物理盘 /dev/sda（或 nvme0n1）          ← 硬件层：本篇，SMART/lsblk
   └─ 分区 /dev/sda1（GPT/MBR 表）       ← 分区层：fdisk/parted，表坏=全盘丢
        └─（可选）PV → VG → LV /dev/vg0/root  ← 块虚拟层：LVM/mdadm

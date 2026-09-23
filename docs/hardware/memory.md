@@ -20,7 +20,7 @@ DRAM（Dynamic Random-Access Memory）是现代计算机主存的主流技术，
 
 ### 1.2 内存条的组织
 
-```
+```text
 ┌─────────────────────────────────┐
 │           内存条 (DIMM)          │
 │  ┌─────┐ ┌─────┐ ┌─────┐       │
@@ -66,7 +66,7 @@ sudo dmidecode -t memory | grep -E "Size:|Type:|Speed:|Error Correction" | head 
 
 ### 2.2 带宽计算
 
-```
+```text
 理论带宽 = 有效速率 × 数据总线宽度 × 通道数 ÷ 8
 
 DDR4-3200 双通道：

@@ -4,13 +4,21 @@ SELinux（Security-Enhanced Linux）是 Linux 的强制访问控制（MAC）安�
 
 > 内容参考自 Red Hat SELinux 文档与 Arch Wiki，见文末参考资料。
 
+## 学习目标
+
+- 说清 DAC 的结构性缺陷，能解释为什么 root 也需要被 MAC 约束
+- 读懂安全上下文 `user:role:type:level` 各字段含义，会用 `ls -Z` 验证
+- 理解类型强制（Type Enforcement）如何用一条 allow 规则做访问决定
+- 画出 SELinux 完整决策流程：标签匹配 → 规则查找 → 允许/拒绝
+- 对照三发行版 MAC 全景，知道 RHEL 用 SELinux、Ubuntu 用 AppArmor、Arch 默认无
+
 ## 1. 为什么需要 MAC：DAC 的结构性缺陷
 
 在 SELinux 之前，Linux 只有 DAC（Discretionary Access Control，自主访问控制）：检查的依据是**进程的 uid/gid 与文件的 rwx 位**。这套模型有一个所有者无法自己修复的缺陷——**root 例外**。
 
 用一个真实场景说明。假设你按最佳实践把 nginx 配置成 root 启动、bind 80 端口后降权为 `www-data` 用户。某天攻击者利用 nginx 的路径穿越漏洞，拿到了以 `www-data` 身份执行任意命令的能力：
 
-```
+```text
 DAC 的判断路径：
   进程 uid=33 (www-data)
   目标文件 /etc/shadow  owner=root group=shadow  权限 0640
@@ -37,7 +45,7 @@ MAC（Mandatory Access Control，强制访问控制）把决定权收回给**系
 
 SELinux 给每个进程和每个文件都贴上一个**安全上下文（security context）**，格式为：
 
-```
+```text
 user : role : type : level
   ↓      ↓      ↓      ↓
 SELinux  SELinux  决策   MLS 层级
@@ -73,7 +81,7 @@ $ ls -lZ /var/www/html/
 
 Type Enforcement（TE）是 SELinux 在 targeted 策略下的核心机制，规则形如：
 
-```
+```text
 allow httpd_t httpd_sys_content_t : file { read open getattr };
 #  ↑谓词  ↑主体类型     ↑客体类型        ↑允许的客体类与操作
 ```
@@ -82,7 +90,7 @@ allow httpd_t httpd_sys_content_t : file { read open getattr };
 
 因此排障时的日志（AVC 拒绝记录）也是按这个三元组组织的，读懂一行 AVC 就定位了问题两端：
 
-```
+```text
 type=AVC msg=audit(2026-09-21 14:03:11.234:412) : avc:  denied  { name_connect }
   for  pid=1024 comm="httpd" dest=3306
   scontext=system_u:system_r:httpd_t:s0        ← 谁想访问（进程 type）
@@ -96,7 +104,7 @@ type=AVC msg=audit(2026-09-21 14:03:11.234:412) : avc:  denied  { name_connect }
 
 一次文件访问的检查顺序：
 
-```
+```text
 进程发起 open()
    │
    ├─① DAC 检查（uid/rwx/ACL）── 不通过 → EACCES（普通 Permission denied）

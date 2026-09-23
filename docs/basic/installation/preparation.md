@@ -25,7 +25,7 @@ lsblk -o NAME,SIZE,TYPE,MOUNTPOINT
 
 真实输出片段（`lsblk` 为例，能看出 ESP、swap、根分区的典型布局）：
 
-```
+```text
 $ lsblk -o NAME,SIZE,TYPE,MOUNTPOINT
 sda    476.9G disk
 ├─sda1   512M part /boot/efi

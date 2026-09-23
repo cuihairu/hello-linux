@@ -130,7 +130,7 @@ VERSION_ID="24.04"
 
 **版本命名规则**：
 
-```
+```text
 Ubuntu 24.04 LTS
       │    │  │
       │    │  └── Long Term Support（长期支持）
@@ -156,7 +156,7 @@ Ubuntu 24.04 LTS
 
 ### 2.3 家谱
 
-```
+```text
 Debian (1993)
     ├── Ubuntu (2004)
     │   ├── Linux Mint
@@ -224,7 +224,7 @@ CentOS Stream 不是 CentOS 的改名延续，而是**方向反了**：旧 CentO
 
 ### 3.4 家谱
 
-```
+```text
 Fedora (2003, 上游试验)
     └── RHEL (2000, 商业产品)
         ├── CentOS Stream (上游滚动, 原 CentOS 已转型)

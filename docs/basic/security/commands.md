@@ -4,6 +4,14 @@
 
 > 内容参考自 Red Hat 文档与各命令手册，见文末参考资料。
 
+## 学习目标
+
+- 熟练查看 SELinux 状态与安全上下文（`getenforce`、`ls -Z`、`ps -Z`）
+- 会用布尔值与端口标签做最小改动放行，避免一出问题就关 SELinux
+- 掌握 `ausearch` 排障标准流程：确认模式 → 读拒绝 → 定位类型 → 最小修复
+- 分清 `chcon`、`restorecon`、`semanage fcontext` 的适用场景与持久化边界
+- 能独立完成"服务被拒 → 定位 AVC → 修复 → 验证"的完整闭环
+
 ## 1. 状态查看
 
 ```bash
@@ -130,7 +138,7 @@ $ sudo sealert -a /var/log/audit/audit.log
 
 ### 排障标准流程（务必按顺序）
 
-```
+```text
 ① 确认模式          getenforce / sestatus
                       ├─ Disabled/非 SELinux 系统 → 换思路，别在这里耗
                       └─ Permissive → 日志只记录不拦，业务异常另有原因

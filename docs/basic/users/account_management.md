@@ -206,7 +206,7 @@ $ sudo visudo
 
 编辑 sudoers **必须用 `visudo`**，它会在保存前做语法检查，发现错误直接拒绝写入。直接 `vim /etc/sudoers` 一旦留下语法错误，下次任何 `sudo` 调用都会失败——如果你恰好又是唯一管理员，就把自己锁在系统外了，只能靠 Live USB 救援。更稳妥的做法是在 `/etc/sudoers.d/` 下放独立文件（Debian/Ubuntu 的 `010_admin`，或任意不带 `.` 的文件名），内容一行即可：
 
-```
+```text
 alice ALL=(ALL:ALL) ALL
 ```
 

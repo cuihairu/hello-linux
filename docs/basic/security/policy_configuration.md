@@ -4,6 +4,14 @@
 
 > 内容参考自 Red Hat 文档与 Arch Wiki，见文末参考资料。
 
+## 学习目标
+
+- 分清 targeted、minimum、mls 三种策略的定位与适用场景
+- 理解 file contexts 为什么是策略记忆标签的正确载体
+- 掌握 `semanage fcontext` 持久化自定义标签 + `restorecon` 生效的流程
+- 认识 `audit2allow` 的双刃剑属性，知道何时可用、何时危险
+- 对照三发行版，确认相关命令与策略包的可用性差异
+
 ## 1. 策略类型：targeted、minimum、mls
 
 RHEL 系在 `/etc/selinux/config` 里用 `SELINUXTYPE=` 选择已安装的策略包，最常见的三种各有明确分工：

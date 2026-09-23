@@ -4,6 +4,14 @@ systemd 是现代 Linux 发行版的初始化系统和服务管理器，负责�
 
 > 内容参考自 Arch Wiki systemd 文档与鸟哥的私房菜，见文末参考资料。
 
+## 学习目标
+
+- 理解 systemd 取代 SysV init 的动机，读懂 unit 文件结构与依赖声明
+- 熟练使用 `systemctl`，准确区分 `enable` 与 `start`（最高频的坑）
+- 掌握 `journalctl` 查服务日志的常用姿势
+- 理解 target 取代运行级别、timer 取代 cron 的对应关系
+- 对照三发行版默认服务与防火墙差异，避免拿一系命令去另一系执行
+
 ## 1. 为什么 systemd 取代了 SysV init
 
 早期 Linux 用 SysV init 管理开机：`/etc/rc.d/rc3.d/` 下一堆按 `S01`、`S12` 编号的脚本串行执行，依赖关系全靠编号顺序约定。三个致命问题让它难以适应现代系统：
