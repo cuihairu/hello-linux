@@ -280,7 +280,7 @@ $ redis-cli SLOWLOG GET 2
    4) 1) "LRANGE"  2) "biglist"  3) "0"  4) "-1"
 ```
 
-阈值用 `slowlog-log-slower-than 10000`（10ms）与 `slowlog-max-len 128` 控制。`LRANGE key 0 -1` 拉取百万级列表这类命令即使 O(N) 也会拖垮事件循环，应改为分页 `LRANGE` 或拆分数据结构。慢日志只记录超过阈值的命令，不等于全量审计；要长期观测延迟趋势，应把 `INFO` 指标接入 Prometheus——与之对接可用 `redis_exporter` 暴露指标，接入方法见[监控篇](monitoring/prometheus.md)。
+阈值用 `slowlog-log-slower-than 10000`（10ms）与 `slowlog-max-len 128` 控制。`LRANGE key 0 -1` 拉取百万级列表这类命令即使 O(N) 也会拖垮事件循环，应改为分页 `LRANGE` 或拆分数据结构。慢日志只记录超过阈值的命令，不等于全量审计；要长期观测延迟趋势，应把 `INFO` 指标接入 Prometheus——与之对接可用 `redis_exporter` 暴露指标，接入方法见[监控篇](./monitoring/prometheus.md)。
 
 ## 9. 常见坑
 

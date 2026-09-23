@@ -100,7 +100,7 @@ rm -rf directory
 3. 不确定时先 `rm -r`（会提示）或 `rm -i`，确认清单后再 `-f`。
 4. 桌面环境误删请先考虑回收站；服务器 `rm` 通常不可恢复。
 
-递归删除同样适用于文件页，见[文件操作命令](file.md)。
+递归删除同样适用于文件页，见[文件操作命令](./file.md)。
 
 ## 3. 目录切换
 
@@ -304,7 +304,7 @@ mv source_dir /path/to/dest/         # 移入目标目录
 
 ### 7.1 find -type d
 
-把 `find` 限定为目录类型即可；名称、时间、大小条件与文件查找一致，完整语法见[文件操作命令](file.md)。
+把 `find` 限定为目录类型即可；名称、时间、大小条件与文件查找一致，完整语法见[文件操作命令](./file.md)。
 
 ```bash
 find /path -type d -name "dirname"
@@ -415,7 +415,7 @@ ln -s /path/to/directory link_name
 
 - **目录不能创建硬链接**（防止目录树成环，通用文件系统约定）；强行 `ln dir hard` 会报 `hard link not allowed for directory`。
 - 符号链接指向目录是常态（`/etc/alternatives`、模块路径切换都靠它）。
-- 与文件链接的 inode/`ls -li` 细节见[文件操作命令](file.md)第 8 节。
+- 与文件链接的 inode/`ls -li` 细节见[文件操作命令](./file.md)第 8 节。
 
 ## 11. 目录比较
 
