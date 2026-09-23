@@ -174,7 +174,6 @@ sudo reboot
 - Red Hat - Using SELinux（模式切换章节） — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/using_selinux/index)
 - `man getenforce` — [man7.org](https://man7.org/linux/man-pages/man8/getenforce.8.html)
 - `man setenforce` — [man7.org](https://man7.org/linux/man-pages/man8/setenforce.8.html)
-- `man setenforce`
 - `man sestatus`
 - Arch Wiki - SELinux — [wiki.archlinux.org](https://wiki.archlinux.org/title/SELinux)
 - Debian Wiki - SELinux — [wiki.debian.org](https://wiki.debian.org/SELinux)

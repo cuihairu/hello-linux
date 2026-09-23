@@ -19,7 +19,7 @@
 5. **掌握版本锁定**：在需要钉死某个包版本（如内核、glibc）时，用 `apt-mark hold`、`dnf versionlock`、`pacman -Q` 相关机制阻止意外升级。
 6. **避开升级事故**：不在 Arch 上执行 partial upgrade，不在生产环境直接 `apt full-upgrade` 而不看变更列表。
 
-## 三子页导读
+## 子页导读
 
 本章由两页构成，建议按顺序阅读，每页约 12–18 分钟：
 

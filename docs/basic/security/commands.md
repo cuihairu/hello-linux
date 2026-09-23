@@ -1,6 +1,6 @@
 # SELinux 基本命令
 
-管理 SELinux 的常用命令，以及一套从"服务被拒"到"最小化修复"的标准排障流程。
+服务突然起不来、浏览器返回 503、邮件被拒收——排到最后往往是 AVC denial 在作怪，而大多数人第一反应是 `setenforce 0` 把 SELinux 关掉了事。本页给出一条更稳妥的路径：先用 `getenforce`/`sestatus` 确认当前模式，用 `ls -Z`/`ps -Z` 读出对象与进程的安全上下文，再用 `ausearch`/`ausearch -m avc` 把内核拒绝记录翻译成人话，最后通过布尔值、端口标签、`restorecon`/`semanage fcontext` 做**最小化修复**——既放行业务，又不把 MAC 整个关掉。每一节都会对照说明 Debian/Ubuntu（AppArmor）与 Arch（默认无 SELinux）的差异，避免把 RHEL 文档的命令生搬到其他发行版上。
 
 > 内容参考自 Red Hat 文档与各命令手册，见文末参考资料。
 

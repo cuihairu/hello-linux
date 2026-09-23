@@ -19,7 +19,7 @@
 5. **完成引导救援**：在 GRUB 菜单丢失或系统无法启动时，用 Live USB 进入 chroot，执行 `grub-install`（BIOS 与 UEFI 的目标参数不同）与配置重建，恢复启动。
 6. **理解三系 bootloader 差异**：Debian/Ubuntu、RHEL/CentOS/Rocky 默认 GRUB2，Arch 默认由用户选择（GRUB、systemd-boot 或 rEFInd），并知道这些选择如何影响 ESP 布局。
 
-## 三子页导读
+## 子页导读
 
 本章由两页构成，建议按顺序阅读，每页约 12–15 分钟：
 

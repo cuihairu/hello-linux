@@ -1,6 +1,6 @@
 # 系统日志
 
-rsyslog 是大多数 Linux 发行版使用的系统日志服务；在 systemd 发行版上，它的上游采集者是 journald。本文讲清楚日志从产生、分类到落盘的完整链路。
+"服务起不来先看日志"是共识，但真正打开 `/var/log` 的人往往会被两个问题绊住：日志到底是谁写进去的？`auth`、`daemon`、`kern` 这些facility 又是从哪冒出来的？答案是一条固定链路——应用把消息丢给 `/dev/log` 或直接写 stdout，**journald** 作为 systemd 自带的采集器先落一份结构化二进制 journal，再由 **rsyslog** 按 `/etc/rsyslog.conf` 的规则分流成 `/var/log/syslog`、`messages`、`secure` 等文本文件。本页讲清这条链路的上下游关系、syslog 协议的 severity/facility 分类、rsyslog 规则与远程转发，以及 Arch 默认只装 journald 时的差异；同时覆盖 `journalctl` 的常用查询与 journal 持久化——不理解持久化，断电后你连昨晚的日志都找不到。
 
 > 内容参考自 rsyslog 文档、Arch Wiki 与鸟哥的私房菜，见文末参考资料。
 
