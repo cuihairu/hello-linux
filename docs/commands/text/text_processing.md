@@ -18,24 +18,9 @@ Linux 运维与开发的大量工作，本质是"把一堆文本变成另一堆�
 ### 1.1 cat / less / head / tail
 
 ```bash
-cat -n file.txt          # 行号
-cat -A file.txt          # 显示 Tab 为 ^I、行尾 $
-head -n 5 file.txt       # 前 5 行
-tail -n 3 file.txt       # 后 3 行
-tail -n +18 file.txt     # 从第 18 行到结尾
-tail -f /var/log/syslog  # 实时跟踪追加
-less file.txt            # 大文件分页，可回翻可搜索
-```
-
-```text
-     1	Hello Linux
-     2	Second line	with tab
-```
-
-```text
-Hello Linux$
-Second line^Iwith tab$
-Third line with trailing space   $
+cat -n file.txt / cat -A / head -n 5 / tail -n 3 / tail -n +18 / tail -f / less
+# cat -n: 1  Hello Linux
+# cat -A: Hello Linux$ / Second line^Iwith tab$（^I=Tab，行尾 $）
 ```
 
 **管道习惯**：`head`/`tail` 既能接文件参数，也能读标准输入；`less` 也可 `dmesg | less`。实时多文件或轮转场景优先 `tail -F`。
@@ -48,48 +33,15 @@ Third line with trailing space   $
 
 ```bash
 printf 'Apple pie\nbanana\nAPPLE sauce\ngrape\n' > g.txt
-
-grep -i apple g.txt        # 忽略大小写
-grep -n -i apple g.txt     # 带行号
-grep -c -i apple g.txt     # 只输出匹配行数
-grep -v -i apple g.txt     # 反向：输出不匹配的行
-```
-
-```text
-Apple pie
-APPLE sauce
-1:Apple pie
-3:APPLE sauce
-2
-banana
-grape
-```
-
-上下文与递归：
-
-```bash
-grep -A1 -i apple g.txt          # 匹配行后 1 行
-grep -B1 -A1 -i apple g.txt      # 前 1 行 + 匹配 + 后 1 行
-grep -rn "Hello" . --include="*.txt"
-```
-
-```text
-Apple pie
-banana
-APPLE sauce
-```
-
-```text
-./file.txt:1:Hello Linux
-./file2.txt:1:Hello Linux v2
-...
-```
-
-固定字符串与扩展正则（见 2.2）：
-
-```bash
-grep -F 'Apple pie' g.txt
-grep -E -i 'apple|banana' g.txt
+grep -i apple g.txt        # 忽略大小写 → Apple pie / APPLE sauce
+grep -n -i apple g.txt     # 带行号 → 1:Apple pie / 3:APPLE sauce
+grep -c -i apple g.txt     # 只输出匹配行数 → 2
+grep -v -i apple g.txt     # 反向 → banana / grape
+grep -A1 -i apple g.txt    # 匹配行后 1 行
+grep -B1 -A1 -i apple g.txt # 前 1 + 匹配 + 后 1
+grep -rn "Hello" . --include="*.txt"   # 递归限定扩展名
+grep -F 'Apple pie' g.txt  # 固定字符串
+grep -E -i 'apple|banana' g.txt        # 扩展正则
 ```
 
 **退出码（必须背下来）**：
@@ -124,23 +76,10 @@ set +o pipefail
 `egrep` 与 `fgrep` 历史上分别是 `grep -E`（扩展正则）与 `grep -F`（固定字符串）的别名。**POSIX 已将它们标记为 deprecated（废弃）**，理由包括与 `grep -E/-F` 语义重复、历史实现行为不一致，以及 `egrep` 名称在新标准中带来的兼容包袱；部分系统文档与新发行版已不再推荐、甚至不再提供独立别名。因此：**新脚本与新教程一律写 `grep -E` / `grep -F`**，遇到旧代码里的 `egrep`/`fgrep` 应理解为同义并逐步替换。
 
 ```bash
-# 等价于废弃的 egrep
-grep -E "pattern1|pattern2" file.txt
-
-# 等价于废弃的 fgrep（按字面字符串匹配，不解析元字符，通常更快）
-grep -F "fixed string" file.txt
-```
-
-```bash
-grep -E 'apple|banana' g.txt
-grep -F 'Apple pie' g.txt
-```
-
-```text
-Apple pie
-banana
-APPLE sauce
-Apple pie
+grep -E "pattern1|pattern2" file.txt   # 等价于废弃的 egrep
+grep -F "fixed string" file.txt        # 等价于废弃的 fgrep（字面匹配，通常更快）
+grep -E 'apple|banana' g.txt           # → Apple pie / banana / APPLE sauce
+grep -F 'Apple pie' g.txt              # → Apple pie
 ```
 
 注意：`grep -F` 会把 `.`、`*`、`[` 等全部当普通字符；需要正则时用 `-E`（或默认 BRE）。详细规范可对照 [POSIX grep](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/grep.html) 与 [Arch Wiki - Grep](https://wiki.archlinux.org/title/Grep)。
@@ -152,65 +91,17 @@ Apple pie
 `sed` 逐行处理，默认**不**修改原文件。最常用的是替换 `s/old/new/` 与删行 `Nd`。默认只替换每行**第一次**出现，加 `g` 才是全局。
 
 ```bash
-printf 'foo bar foo baz\n' | sed 's/foo/FOO/'
-printf 'foo bar foo baz\n' | sed 's/foo/FOO/g'
-```
-
-```text
-FOO bar foo baz
-FOO bar FOO baz
-```
-
-就地修改与备份：
-
-```bash
+printf 'foo bar foo baz\n' | sed 's/foo/FOO/'     # → FOO bar foo baz
+printf 'foo bar foo baz\n' | sed 's/foo/FOO/g'    # → FOO bar FOO baz
 printf 'foo bar foo\n' > sedfile.txt
-sed -i.bak 's/foo/FOO/g' sedfile.txt
-cat sedfile.txt
-cat sedfile.txt.bak
+sed -i.bak 's/foo/FOO/g' sedfile.txt              # 就地改并写 .bak 备份
+seq 1 6 | sed '3,5d'    # → 1 2 6
+seq 1 5 | sed -n '2p'   # → 2（-n 关默认打印，p 才输出选中行）
+seq 1 3 | sed '2i\INSERTED'   # → 1 / INSERTED / 2 / 3
+seq 1 3 | sed '2a\APPENDED'   # → 1 / 2 / APPENDED / 3
 ```
 
-```text
-FOO bar FOO
-foo bar foo
-```
-
-GNU sed 的 `-i` 直接改文件；`-i.bak`（注意没有空格）会先写备份。BSD/macOS 上 `-i` 必须带后缀参数，跨平台脚本要么显式 `-i.bak`，要么用重定向 + `mv`。
-
-删行、打印、插入/追加：
-
-```bash
-seq 1 6 | sed '3,5d'
-seq 1 5 | sed -n '2p'
-seq 1 3 | sed '2i\INSERTED'
-seq 1 3 | sed '2a\APPENDED'
-```
-
-```text
-1
-2
-6
-```
-
-```text
-2
-```
-
-```text
-1
-INSERTED
-2
-3
-```
-
-```text
-1
-2
-APPENDED
-3
-```
-
-`-n` 关闭默认打印，配合 `p` 才是"只输出选中行"。地址支持行号、`$` 末行、`/re/` 正则与逗号区间。
+GNU sed 的 `-i` 直接改文件；`-i.bak`（注意没有空格）会先写备份。BSD/macOS 上 `-i` 必须带后缀参数，跨平台脚本要么显式 `-i.bak`，要么用重定向 + `mv`。`-n` 关闭默认打印，配合 `p` 才是"只输出选中行"。地址支持行号、`$` 末行、`/re/` 正则与逗号区间。
 
 **坑**：
 
@@ -223,56 +114,14 @@ APPENDED
 `awk` 默认按空白分列，`$1` 第一列，`$0` 整行，`NF` 列数，`NR` 行号；`-F` 指定分隔符。适合"取第几列、按条件过滤、分组求和"。
 
 ```bash
-awk -F: '{print $1}' /etc/passwd
-awk -F: '{print $1, $NF}' /etc/passwd | head -2
-awk 'NR<=3 {print NR, NF, $0}' fruits.txt
-```
-
-```text
-root
-daemon
-bin
-```
-
-```text
-root /bin/bash
-daemon /usr/sbin/nologin
-```
-
-```text
-1 2 banana 3
-2 2 apple 5
-3 2 cherry 2
-```
-
-汇总与格式化：
-
-```bash
-awk '{s+=$2} END{print s}' fruits.txt
-# fruits.txt: banana 3 / apple 5 / cherry 2 / apple 9 / date 1
-```
-
-```text
-20
-```
-
-```bash
-printf 'a 10\nb 5\na 7\nc 3\na 1\n' > sales.txt
+awk -F: '{print $1}' /etc/passwd              # → root / daemon / bin …
+awk -F: '{print $1, $NF}' /etc/passwd | head -2  # → root /bin/bash · daemon /usr/sbin/nologin
+awk 'NR<=3 {print NR, NF, $0}' fruits.txt     # 行号、列数、整行
+awk '{s+=$2} END{print s}' fruits.txt         # 求和 → 20
+printf 'a 10\nb 5\na 7\nc 3\na 1\nc 3\n' > sales.txt
 awk '{s[$1]+=$2} END{for (k in s) printf "%-6s %d\n", k, s[k]}' sales.txt | sort
-```
-
-```text
-a      18
-b      5
-c      3
-```
-
-```bash
-awk 'BEGIN{printf "%-10s %s\n", "NAME", "QTY"}'
-```
-
-```text
-NAME       QTY
+# → a 18 / b 5 / c 3
+awk 'BEGIN{printf "%-10s %s\n", "NAME", "QTY"}'  # 表头格式化
 ```
 
 **坑**：
@@ -286,35 +135,10 @@ NAME       QTY
 ### 4.1 sort
 
 ```bash
-sort fruits.txt
-sort -k2 -n fruits.txt
-sort -u list.txt                 # 排序并去重
-sort -t: -k3 -n /etc/passwd      # 按第 3 列（UID）数值排序
-```
-
-```text
-# sort fruits.txt
-apple 5
-apple 9
-banana 3
-cherry 2
-date 1
-```
-
-```text
-# sort -k2 -n
-date 1
-cherry 2
-banana 3
-apple 5
-apple 9
-```
-
-```text
-# sort -t: -k3 -n /etc/passwd | head | cut -d: -f1,3
-root:0
-daemon:1
-bin:2
+sort fruits.txt           # 字典序：apple 5 / apple 9 / banana 3 / cherry 2 / date 1
+sort -k2 -n fruits.txt    # 按第 2 列数值：date 1 / cherry 2 / banana 3 / apple 5 / apple 9
+sort -u list.txt          # 排序并去重
+sort -t: -k3 -n /etc/passwd | head | cut -d: -f1,3   # root:0 / daemon:1 / bin:2
 ```
 
 默认按**字典序**（甚至受 locale 影响），`-n` 数值、`-r` 反向、`-h` 人类可读大小（GNU）。管道里做数字排序时务必 `-n`，否则 `"10"` 会排在 `"9"` 前面。
@@ -325,24 +149,9 @@ bin:2
 
 ```bash
 printf 'apple\nbanana\napple\ncherry\napple\n' > list.txt
-sort list.txt | uniq -c
-sort list.txt | uniq -d
-sort list.txt | uniq -u
-```
-
-```text
-      3 apple
-      1 banana
-      1 cherry
-```
-
-```text
-apple
-```
-
-```text
-banana
-cherry
+sort list.txt | uniq -c   # → 3 apple / 1 banana / 1 cherry
+sort list.txt | uniq -d   # → apple（只输出重复过的行）
+sort list.txt | uniq -u   # → banana / cherry（只输出从未重复的行）
 ```
 
 **坑**：跳过 `sort` 直接 `uniq`，相隔的重复行会被当成"没重复"。
@@ -354,15 +163,9 @@ cherry
 `tr` 只处理标准输入，不能直接接文件名；做大小写转换、删字符、压缩重复空白很方便。
 
 ```bash
-printf 'hello world\n' | tr 'a-z' 'A-Z'
-printf 'a  b   c\n' | tr -s ' '
-printf 'abc123\n' | tr -d '0-9'
-```
-
-```text
-HELLO WORLD
-a b c
-abc
+printf 'hello world\n' | tr 'a-z' 'A-Z'   # → HELLO WORLD
+printf 'a  b   c\n' | tr -s ' '           # 压缩连续空白 → a b c
+printf 'abc123\n' | tr -d '0-9'           # 删除集合内字符 → abc
 ```
 
 **坑**：`tr` 不能替换"一串"为另一串（那是 `sed` 的活）；`-d` 是删除集合内字符，不是删除行。
@@ -372,30 +175,10 @@ abc
 比 `awk` 更轻的取列工具，适合简单 `-f` 场景；不支持复杂条件逻辑。
 
 ```bash
-cut -d: -f1 /etc/passwd | head -3
-cut -d: -f1,3 /etc/passwd | head -3
-printf 'col1,col2,col3\n' | cut -d, -f2
-printf 'abcdefghij\n' | cut -c3-5
-```
-
-```text
-root
-daemon
-bin
-```
-
-```text
-root:0
-daemon:1
-bin:2
-```
-
-```text
-col2
-```
-
-```text
-cde
+cut -d: -f1 /etc/passwd | head -3         # → root / daemon / bin
+cut -d: -f1,3 /etc/passwd | head -3       # → root:0 / daemon:1 / bin:2
+printf 'col1,col2,col3\n' | cut -d, -f2   # → col2
+printf 'abcdefghij\n' | cut -c3-5         # → cde
 ```
 
 **坑**：`cut` 的分隔符只能是**单个字符**，不能是多字符/正则；CSV 内含逗号时请用 `awk -F'","'` 或专用 CSV 工具。
@@ -403,14 +186,7 @@ cde
 ### 5.3 paste - 按行合并多列
 
 ```bash
-paste -d, c1.txt c2.txt
-# c1: a b c    c2: 1 2 3
-```
-
-```text
-a,1
-b,2
-c,3
+paste -d, c1.txt c2.txt   # c1: a b c / c2: 1 2 3 → a,1 / b,2 / c,3
 ```
 
 默认分隔符是 Tab；`paste -s` 可把多行合成一行。
@@ -418,19 +194,9 @@ c,3
 ## 6. 文本统计
 
 ```bash
-wc -l fruits.txt
-wc -lw fruits.txt
-wc fruits.txt
-wc fruits.txt g.txt
-```
-
-```text
-5 fruits.txt
- 5 10 fruits.txt
- 5 10 41 fruits.txt
- 5 10 41 fruits.txt
- 4  6 35 g.txt
- 9 16 76 total
+wc -l fruits.txt     # 5 fruits.txt（行数）
+wc -lw fruits.txt    # 5 10 fruits.txt（行·词）
+wc fruits.txt g.txt  # 各文件行/词/字节 + total 行
 ```
 
 列顺序固定为：行数、词数、字节数。`-l` 行、`-w` 词、`-c` 字节（部分实现 `-m` 为字符数）。
@@ -494,14 +260,8 @@ patch < fix.patch          # 或 patch target_file < fix.patch
 
 ```bash
 echo 'a+ b' | grep 'a+'        # BRE：+ 是字面量，仍匹配成功
-echo 'a+ b' | grep -E 'a+'     # ERE：+ 是量词
-echo 'foo(bar)' | grep -E 'foo(bar)'
-```
-
-```text
-a+ b
-a+ b
-0
+echo 'a+ b' | grep -E 'a+'     # ERE：+ 是量词 → a+ b
+echo 'foo(bar)' | grep -E 'foo(bar)'   # 分组
 ```
 
 ### 8.3 实用示例
@@ -529,20 +289,9 @@ mail user@example.com
 `find`/`grep` 的输出转成 `rm`、`chmod` 等命令的参数时，空格与换行文件名是重灾区，优先 `-print0` + `-0`。
 
 ```bash
-find . -name "*.txt" -print0 | xargs -0 rm
-printf 'one two three\n' | xargs -n1 echo got
-printf 'a.txt\0b.txt\0' | xargs -0 -I{} echo "file: {}"
-```
-
-```text
-got one
-got two
-got three
-```
-
-```text
-file: a.txt
-file: b.txt
+printf 'one two three\n' | xargs -n1 echo got   # → got one / got two / got three
+printf 'a.txt\0b.txt\0' | xargs -0 -I{} echo "file: {}"  # file: a.txt / file: b.txt
+find . -name "*.txt" -print0 | xargs -0 rm     # 空格文件名安全删除
 ```
 
 **坑**：GNU `xargs` 默认即使无输入也可能执行一次命令（视选项）；要"有输入才跑"可加 `-r`（GNU）。删除前先去掉 `-exec rm` 试跑 `find ... -print | xargs -n1 echo` 看清单。
@@ -550,16 +299,8 @@ file: b.txt
 ### 9.2 tee - 同时写屏幕与文件
 
 ```bash
-echo hello | tee teeout.txt
-echo world | tee -a teeout.txt
-cat teeout.txt
-```
-
-```text
-hello
-world
-hello
-world
+echo hello | tee teeout.txt     # → 屏幕与文件各一份 hello
+echo world | tee -a teeout.txt  # 追加 → teeout.txt: hello / world
 ```
 
 `tee` 默认覆盖，`-a` 追加；可接多个文件名。既想看进度又想落盘时替代 `> file`。

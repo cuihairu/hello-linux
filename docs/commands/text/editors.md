@@ -18,26 +18,11 @@
 Vim（Vi IMproved）是 vi 的增强版，模式化编辑、搜索替换、宏与插件生态成熟，是服务器上事实标准的终端编辑器。它不是图形程序，却能完成从改一行配置到批量重构脚本的大部分工作。
 
 ```bash
-# Debian/Ubuntu
-sudo apt install vim
-
-# RHEL / CentOS / Rocky
-sudo dnf install vim
-
-# Arch Linux（官方 extra 仓库）
-sudo pacman -S vim
-```
-
-本机（Ubuntu）版本探测：
-
-```bash
-vim --version | head -3
-```
-
-```text
+# Debian/Ubuntu: sudo apt install vim
+# RHEL/CentOS/Rocky: sudo dnf install vim
+# Arch Linux（官方 extra 仓库）: sudo pacman -S vim
+vim --version | head -1
 VIM - Vi IMproved 9.1 (2024 Jan 02, compiled Aug 24 2026 22:11:12)
-Included patches: 1-948, 950-2141
-Modified by team+vim@tracker.debian.org
 ```
 
 **Arch 包名说明（重要）**：
@@ -68,21 +53,10 @@ Vim 的一切别扭感都来自模式。进入时默认是**普通模式**，键
 ### 1.3 启动、保存、退出
 
 ```bash
-vim file.txt              # 打开文件
-vim +10 file.txt          # 打开并跳到第 10 行
-vim +/pattern file.txt    # 打开并搜索 pattern
+vim file.txt              # 打开；vim +10 跳到第 10 行；vim +/pat 先搜索
 vim file1.txt file2.txt   # 同时打开多个文件
-```
-
-```text
-:w          保存
-:q          退出（有未保存修改会拒绝）
-:wq         保存并退出
-:q!         不保存强制退出
-:w!         尝试强制写入（只读文件需权限）
-:x          有改动才保存后退出（同 :wq 的常见写法）
-ZZ          普通模式下保存并退出
-ZQ          普通模式下不保存退出
+:w 保存  :q 退出（有未保存修改拒绝）  :wq 保存并退出  :q! 不保存强制退出
+:x 有改动才保存后退出   ZZ 普通模式保存退出   ZQ 普通模式不保存退出
 ```
 
 只读配置若提示 `E45: 'readonly' option is set`，要么改权限（`chmod`/`sudo`），要么明确 `:w!`——不要养成无脑覆盖只读文件的习惯。
@@ -90,14 +64,9 @@ ZQ          普通模式下不保存退出
 ### 1.4 光标移动
 
 ```text
-h j k l          左 下 上 右
-w b e            下一词首 / 上一词首 / 词尾
-0 ^ $            行首 / 第一个非空字符 / 行尾
-{ }              上一段 / 下一段
-H M L            屏幕顶 / 中 / 底
-gg G             文件开头 / 末尾
-10G 或 :10       第 10 行
-Ctrl+d / Ctrl+u  半页下 / 半页上
+h j k l 左下上右  w b e 下/上词首·词尾  0 ^ $ 行首·首非空·行尾
+{ } 上/下一段  H M L 屏顶·中·底  gg G 文件头/尾  10G 或 :10 跳行
+Ctrl+d / Ctrl+u 半页下/上
 ```
 
 比鼠标更快的秘密是组合：`d` + 移动 = 删除该范围，`y` + 移动 = 复制该范围，`c` + 移动 = 删除并进入插入。
@@ -105,46 +74,19 @@ Ctrl+d / Ctrl+u  半页下 / 半页上
 ### 1.5 编辑操作
 
 ```text
-# 进入插入
-i I a A o O     光标前 / 行首 / 光标后 / 行尾 / 下方新行 / 上方新行
-
-# 删除（可配移动键）
-x X             删字符 / 删光标前字符
-dd              删整行
-D d$            删到行尾
-d0              删到行首
-dw db           删到词首（后/前）
-dG dgg          删到文件末/首
-
-# 复制粘贴
-yy Y            复制整行
-yw y$           复制词 / 到行尾
-p P             光标后粘贴 / 前粘贴
-
-# 撤销
-u               撤销
-Ctrl+r          重做
-U               撤销本行最近改动
-
-# 修改
-r R             替换一字符 / 进入替换模式
-s S             删字符进插入 / 整行替换进插入
-cw c$ C         改到词尾 / 到行尾 / 到行尾
+i I a A o O  进入插入：光标前/行首/光标后/行尾/下方新行/上方新行
+x X dd D d0 dw db dG  删字符/前行/整行/到尾/到首/到词/到文末（可配移动）
+yy yw y$ p P  复制行·词·到尾；光标后/前粘贴
+u Ctrl+r U  撤销/重做/撤销本行最近改动
+r R s S cw C  替字符·替换模式·删字符进插入·改到词尾/行尾
 ```
 
 ### 1.6 搜索与替换
 
 ```text
-/pattern        向下搜索
-?pattern        向上搜索
-n N             下一个 / 上一个结果
-*               搜光标下单词（向下）
-
-:s/old/new/           当前行第一次替换
-:s/old/new/g          当前行全部
-:%s/old/new/g         全文
-:%s/old/new/gc        全文并逐个确认（y/n/a/q）
-:10,20s/old/new/g     第 10–20 行
+/pattern ?pattern  向下/向上搜索  n N 下/上一个  * 搜光标下单词
+:s/old/new/ 当前行首次  :s/old/new/g 当前行全部  :%s/…/g 全文
+:%s/…/gc 全文逐个确认  :10,20s/…/g 第 10–20 行
 ```
 
 替换前先 `/old` 确认能命中，再 `%s`；生产配置务必 `cp` 备份或 `vim -p` 开两个窗口对照。
@@ -152,25 +94,16 @@ n N             下一个 / 上一个结果
 ### 1.7 多文件与分屏
 
 ```text
-:next :prev              下一个 / 上一个文件
-:ls                      列缓冲区
-:b2 :bn :bp :bd          切换 / 下一个 / 上一个 / 关闭缓冲区
-
-:split (Ctrl+w s)        水平分屏
-:vsplit (Ctrl+w v)       垂直分屏
-Ctrl+w h/j/k/l           在窗格间移动
-Ctrl+w =                 均分大小
+:next :prev / :ls / :b2 :bn :bp :bd  文件与缓冲区切换
+:split (Ctrl+w s) 水平分屏  :vsplit (Ctrl+w v) 垂直分屏
+Ctrl+w h/j/k/l 窗格间移动   Ctrl+w = 均分大小
 ```
 
 ### 1.8 宏与可视块
 
 ```text
-qa ... q                 录制宏到寄存器 a，q 停止
-@a @@                    执行 / 重复宏
-
-v V Ctrl+v               字符 / 行 / 块选择
-块选择后 I ... Esc       在每行块首插入
-块选择后 A ... Esc       在每行块尾追加
+qa ... q  录制宏到寄存器 a，q 停止  @a @@ 执行/重复
+v V Ctrl+v  字符/行/块选择；块选后 I…Esc 行首插、A…Esc 行尾追
 ```
 
 批量给多行加注释：`Ctrl+v` 选行首列 → `I#` → `Esc`，是改配置时的高频技巧。
@@ -204,90 +137,29 @@ Neovim 与 Vim 命令高度兼容，差异主要在：默认配置路径 `~/.con
 nano 键位提示常驻屏幕底部，适合只想改几行、不想学模式的场景；很多发行版把它设为 `editor` 替代名的默认实现。
 
 ```bash
-# 安装（若未预装）
-sudo apt install nano        # Debian/Ubuntu
-sudo dnf install nano        # RHEL/CentOS/Rocky
-sudo pacman -S nano          # Arch
-
+# 安装（若未预装）: apt/dnf/pacman install nano
 nano file.txt
 nano +10 file.txt            # 打开并跳到第 10 行
+# GNU nano 8.7.1 —— 底部常驻键位提示
+Ctrl+O 保存  Ctrl+X 退出  Ctrl+K 剪切  Ctrl+U 粘贴  Ctrl+W 搜索
+Ctrl+\ 替换  Ctrl+G 帮助  Alt+U 撤销  Alt+E 重做
 ```
-
-```bash
-nano --version | head -2
-```
-
-```text
- GNU nano, version 8.7.1
- (C) 2026 the Free Software Foundation and various contributors
-```
-
-```text
-Ctrl+O   保存（Write Out）
-Ctrl+X   退出
-Ctrl+K   剪切行
-Ctrl+U   粘贴（恢复被剪切内容）
-Ctrl+W   搜索
-Ctrl+\   替换
-Ctrl+G   帮助
-Alt+U    撤销
-Alt+E    重做
-```
-
-启动参数 `-A`（smart home）、`-E`（tab 转空格）、`-l`（关闭换行回绕）等可用 `nano --help` 查看。
 
 ### 3.2 配置（`~/.nanorc`）
 
-```text
-set tabsize 4
-set autoindent
-set linenumbers
-set smarthome
-set mouse
-```
-
-## 4. vi 与替代名机制
+常用项：`set tabsize 4`、`set autoindent`、`set linenumbers`、`set smarthome`、`set mouse`——与 Vim 的 `~/.vimrc` 同属"一次配置、处处受益"的个人基线，放进 dotfiles 仓库即可在新机器秒恢复。
 
 命令行敲的 `vi`、`editor` 往往不是某个固定二进制，而是经 **alternatives / 替代名** 指向当前实现。在 Debian/Ubuntu 上查看：
 
 ```bash
-update-alternatives --display vi
-update-alternatives --display editor
-```
-
-```text
-vi - auto mode
-  link best version is /usr/bin/vim.basic
-  link currently points to /usr/bin/vim.basic
-```
-
-```text
-editor - auto mode
-  link best version is /bin/nano
-  link currently points to /bin/nano
-```
-
-```bash
+update-alternatives --display vi && update-alternatives --display editor
+# vi - auto mode → /usr/bin/vim.basic   editor - auto mode → /bin/nano
 readlink -f "$(which vi)" "$(which editor)"
-```
-
-```text
 /usr/bin/vim.basic
 /bin/nano
-```
-
-含义：`vi` → Vim 的 vi 兼容入口，`editor` → nano。切换可用 `update-alternatives --config vi`（需 root）。已安装相关包示例：
-
-```bash
 dpkg -l | grep -E 'vim|nano' | awk '{print $1,$2,$3}'
-```
-
-```text
 ii nano 8.7.1-1ubuntu0.1
 ii vim 2:9.1.2141-1ubuntu4.9
-ii vim-common 2:9.1.2141-1ubuntu4.9
-ii vim-runtime 2:9.1.2141-1ubuntu4.9
-ii vim-tiny 2:9.1.2141-1ubuntu4.9
 ```
 
 RHEL/CentOS/Rocky 常见包：`vim-minimal`（提供基础 `vi`）、`vim-enhanced`（完整 `vim`）、`neovim`（多在 EPEL）、`nano`。Arch 见第 1.1 节表；`pacman -Qs 'vim|nano'` 可查询已装包。脚本中若依赖"存在 vi"，请写 `command -v vi` 判断，不要写死 `/usr/bin/vim`。
@@ -295,31 +167,16 @@ RHEL/CentOS/Rocky 常见包：`vim-minimal`（提供基础 `vi`）、`vim-enhanc
 ## 5. cat - 整文件查看与合并
 
 ```bash
-cat file.txt               # 原样输出
-cat -n file.txt            # 行号
-cat -b file.txt            # 仅非空行编号
-cat -s file.txt            # 压缩连续空行
-cat -A file.txt            # 显示 Tab/行尾等非打印字符
-cat file1.txt file2.txt > combined.txt
-```
-
-`cat -A` 实测（注意 `^I` = Tab，行尾 `$`）：
-
-```text
+cat file.txt / cat -n / -b / -s / -A   # 原样 / 行号 / 仅非空编号 / 压空行 / 显示 ^I 与 $
+cat file1.txt file2.txt > combined.txt # 拼接合并
+# cat -A 实测: ^I=Tab，行尾 $
 server {$
 ^Ilisten 80;$
-^Iserver_name example.com;$
 }$
-```
-
-创建并追加：
-
-```bash
-cat > notes.txt << 'EOF'
+cat > notes.txt << 'EOF'               # 创建并写入
 line one
-line two
 EOF
-cat >> notes.txt << 'EOF'
+cat >> notes.txt << 'EOF'              # 追加
 line three
 EOF
 ```
@@ -331,32 +188,10 @@ EOF
 less 支持前后翻页、搜索、跳转，退出只占一个 `q`，是大文件与管道的默认选择。
 
 ```bash
-less file.txt
-less +10 file.txt
-less +/pattern file.txt
-dmesg | less
-less -N file.txt           # 显示行号
-less -i file.txt           # 搜索忽略大小写
-```
-
-```text
-Space / f     下一页
-b             上一页
-j / k         下 / 上一行
-g / G         文件头 / 尾
-10G           跳到第 10 行
-/ ?           向下 / 向上搜索
-n / N         下一 / 上一匹配
-q             退出
-h             帮助
-```
-
-```bash
-less --version | head -1
-```
-
-```text
-less 668 (GNU regular expressions)
+less file.txt / less +10 / less +/pat   # 打开并跳行/搜索
+dmesg | less / less -N / less -i         # 管道、行号、忽略大小写
+# less 668 (GNU regular expressions)
+# 键位: Space·f 下页  b 上页  j·k 行  g·G 头尾  10G 跳行  /·? 搜索  q 退出  h 帮助
 ```
 
 **坑**：`less` 在管道中会全量缓冲输入再进入界面（取决于实现与 `--no-init` 等选项），对"边生成边看"的超长实时流，优先 `tail -f` 或 `journalctl -f`。
@@ -366,23 +201,9 @@ less 668 (GNU regular expressions)
 more 只能向后翻，功能弱于 less，但依赖简单、在某些最小环境仍存在。适合"看前几屏就退出"的场景。
 
 ```bash
-more file.txt
-more +10 file.txt
-```
-
-```text
-Space / Enter   下一页 / 下一行
-b               向上（部分实现支持）
-q               退出
-/pattern        搜索
-```
-
-```bash
-more --version | head -1
-```
-
-```text
-more from util-linux 2.41.3
+more file.txt / more +10 file.txt
+# Space·Enter 下页/行  b 向上（部分实现）  q 退出  /pattern 搜索
+# more from util-linux 2.41.3
 ```
 
 新脚本与文档优先推荐 `less`；交互教学可按"more 会用即可，less 必须会"掌握。
@@ -390,37 +211,15 @@ more from util-linux 2.41.3
 ## 8. head / tail - 首尾与实时日志
 
 ```bash
-head file.txt              # 默认 10 行
-head -n 20 file.txt
-head -c 100 file.txt       # 前 100 字节
-tail file.txt              # 默认最后 10 行
-tail -n 20 file.txt
-tail -c 100 file.txt
+head file.txt / head -n 20 / head -c 100    # 默认 10 行 / 指定行数 / 前 100 字节
+tail file.txt / tail -n 20 / tail -c 100    # 默认最后 10 行
 tail -f /var/log/syslog    # 实时追加
 tail -F /var/log/app.log   # 轮转后自动重新打开
-```
-
-```bash
-head -c 20 file.txt; echo
-tail -c 20 file.txt; echo
-```
-
-```text
-Hello Linux
-Second l
-h trailing space   
-```
-
-```bash
 tail -n +18 file.txt       # 从第 18 行到结束
-```
-
-日志排查组合拳：
-
-```bash
-tail -100 app.log                    # 最近 100 行
-grep -i error app.log | tail -50     # 错误中最后 50 条
-less +G app.log                      # 直接跳到末尾再搜索
+# 日志排查组合拳
+tail -100 app.log
+grep -i error app.log | tail -50
+less +G app.log            # 直接跳到末尾再搜索
 ```
 
 **坑**：

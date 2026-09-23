@@ -20,16 +20,11 @@ Shell 变量是存储数据的容器，无需声明类型——同一个变量�
 
 ```bash
 $ name="John"
-$ echo "Hello, ${name}!"
-Hello, John!
-$ greeting="Hi$name again"      # 紧跟字母时必须花括号界定
-$ echo "$greeting"
-HiJohn again
+$ echo "Hello, ${name}!"          # → Hello, John!
+$ greeting="Hi$name again"        # 紧跟字母时必须花括号界定 → HiJohn again
 $ readonly PI=3.14159
-$ PI=3                         # 再赋值即报错
-bash: PI: readonly variable
-$ unset name && echo "${name:-Anonymous}"
-Anonymous
+$ PI=3                            # → bash: PI: readonly variable
+$ unset name && echo "${name:-Anonymous}"   # → Anonymous
 ```
 
 只读与删除：`readonly PI=3.14159` 或 `declare -r VERSION=1.0` 之后再赋值会得到 `readonly variable` 错误；`unset name` 只删除变量本身（只影响当前 shell），若变量被 `export` 过，子 shell 仍可能从别处继承。
@@ -46,18 +41,12 @@ Anonymous
 
 ```bash
 $ str="Hello World"
-$ echo "${#str}"          # 长度
-11
-$ echo "${str:0:5}"       # 子串
-Hello
-$ echo "${str/World/Linux}"   # 替换第一处
-Hello Linux
-$ echo "${str//o/0}"          # 全局替换
-Hell0 W0rld
-$ echo "${str#Hello }"        # 删前缀
-World
-$ echo "${str% World}"        # 删后缀
-Hello
+$ echo "${#str}"                  # 长度 → 11
+$ echo "${str:0:5}"               # 子串 → Hello
+$ echo "${str/World/Linux}"       # 替换第一处 → Hello Linux
+$ echo "${str//o/0}"              # 全局替换 → Hell0 W0rld
+$ echo "${str#Hello }"            # 删前缀 → World
+$ echo "${str% World}"            # 删后缀 → Hello
 ```
 
 ### 2.2 索引数组：为什么必须写 `"${arr[@]}"`
@@ -66,21 +55,13 @@ Hello
 
 ```bash
 $ fruits=("apple" "banana" "cherry")
-$ echo "${fruits[0]}"
-apple
-$ echo "${#fruits[@]}"       # 元素个数
-3
+$ echo "${fruits[0]}"            # → apple
+$ echo "${#fruits[@]}"           # 元素个数 → 3
 $ fruits+=("date")
-$ echo "${fruits[@]}"
-apple banana cherry date
+$ echo "${fruits[@]}"            # → apple banana cherry date
 $ files=("my notes.txt" "c.txt")
-$ printf '[%s]\n' $files          # 不加引号: 含空格元素被再次拆分
-[my]
-[notes.txt]
-[c.txt]
-$ printf '[%s]\n' "${files[@]}"    # 正确写法: 每个元素一个词
-[my notes.txt]
-[c.txt]
+$ printf '[%s]\n' $files         # 不加引号: 含空格元素被再次拆分 → [my] [notes.txt] [c.txt]
+$ printf '[%s]\n' "${files[@]}"  # 正确: 每个元素一个词 → [my notes.txt] [c.txt]
 ```
 
 ### 2.3 关联数组（Bash 4+）
@@ -103,16 +84,11 @@ $ printf '[%s]\n' "${files[@]}"    # 正确写法: 每个元素一个词
 
 ```bash
 $ a=15 b=7
-$ echo $(( a + b ))         # 22
-22
-$ echo $(( a * b ))         # 105
-105
-$ echo $(( a % b ))         # 取模
-1
-$ echo $(( a > b ? a : b )) # 数值三元
-15
-$ (( a += 3 )) && echo "$a" # 算术后赋值
-18
+$ echo $(( a + b ))              # 22
+$ echo $(( a * b ))              # 105
+$ echo $(( a % b ))              # 取模 → 1
+$ echo $(( a > b ? a : b ))      # 数值三元 → 15
+$ (( a += 3 )) && echo "$a"      # 算术后赋值 → 18
 ```
 
 ## 6. 类型声明

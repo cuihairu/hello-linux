@@ -81,8 +81,7 @@ DHCP=yes
 
 ```bash
 $ sudo systemctl enable --now systemd-networkd
-$ networkctl status enp3s0     # 查看链路与地址状态
-$ networkctl                   # 列出全部接口
+$ networkctl status enp3s0     # 查看链路与地址状态；networkctl 列出全部接口
 ```
 
 Arch 官方安装介质装出来的最小系统往往尚未配置网络管理器；用 `pacman -S networkmanager` 或直接启用 `systemd-networkd` 二选一即可，装完同样要 `systemctl enable --now`。
@@ -96,15 +95,9 @@ $ nmcli device status
 DEVICE  TYPE      STATE      CONNECTION
 enp3s0  ethernet  connected  System eth0
 lo      loopback  unmanaged  --
-
-# 修改连接：设为 DHCP
-$ sudo nmcli connection modify "System eth0" ipv4.method auto
-
-# 手动改 IP 后需要 down/up 才生效
-$ sudo nmcli connection down "System eth0" && sudo nmcli connection up "System eth0"
-
-# 交互式编辑器（nmtui 之外的另一种选择）
-$ nmcli connection edit "System eth0"
+$ sudo nmcli connection modify "System eth0" ipv4.method auto    # 改为 DHCP
+$ sudo nmcli connection down "System eth0" && sudo nmcli connection up "System eth0"   # 改 IP 后 down/up 生效
+$ nmcli connection edit "System eth0"    # 交互式编辑器（nmtui 之外的另一种选择）
 ```
 
 文本事实来源在 `/etc/NetworkManager/system-connections/`（keyfile 格式，权限 600），但**不建议直接编辑后重启服务**，用 `nmcli` 修改再 `nmcli connection reload` 更不容易写出非法文件。临时命令行界面用 `nmtui`。
@@ -122,7 +115,6 @@ $ timedatectl
                 Time zone: Asia/Shanghai (CST, +0800)
 System clock synchronized: yes
               NTP service: active
-
 $ sudo timedatectl set-timezone Asia/Shanghai
 $ sudo timedatectl set-ntp true      # 开启 NTP 同步
 $ timedatectl list-timezones | grep Shanghai   # 查可用时区
@@ -136,9 +128,6 @@ RHEL 系实际跑的 NTP 守护进程多为 `chronyd`，Debian/Ubuntu 为 `syste
 $ hostnamectl
  Static hostname: web01.example.com
 Operating System: Debian GNU/Linux 12 (bookworm)
-          Kernel: Linux 6.1.0-13-amd64
-    Architecture: x86-64
-
 $ sudo hostnamectl set-hostname web01.example.com
 ```
 
@@ -149,9 +138,7 @@ $ sudo hostnamectl set-hostname web01.example.com
 systemd-resolved 接管 DNS 后，`/etc/resolv.conf` 往往是指向 `/run/systemd/resolve/` 的符号链接，直接编辑会在下次网络变更时被覆盖——这是"改了 DNS 却不生效"的标准原因：
 
 ```bash
-$ resolvectl status        # 查看各链路 DNS 与全局状态
-$ resolvectl query example.com   # 测试解析（走 systemd-resolved 缓存）
-$ resolvectl flush-caches  # 清空缓存
+$ resolvectl status / query example.com / flush-caches   # 状态、测试解析、清缓存
 ```
 
 要固化 DNS，请在 Netplan 的 `nameservers`、`.network` 的 `DNS=` 或 nmcli 的 `ipv4.dns` 里配置，而不是手改 `resolv.conf`。未启用 systemd-resolved 的系统（部分 Debian/Ubuntu 版本仍直接管理 resolv.conf）则编辑 `/etc/resolv.conf` 即可——先用 `ls -l /etc/resolv.conf` 判断是文件还是链接。

@@ -21,18 +21,10 @@
 **为什么优先 `{1..N}` 而非 `$(seq 1 N)`**：`seq` 是外部命令，每次循环都要 fork 一个进程；`{1..N}` 是 shell 的花括号展开，纯内建。循环上万次时差异明显。需要复杂步进或浮点时才用 `seq`。
 
 ```bash
-$ for fruit in apple banana cherry; do
->     echo "fruit: $fruit"
-> done
-fruit: apple
-fruit: banana
-fruit: cherry
-$ for i in {1..5}; do printf '%s ' "$i"; done; echo
-1 2 3 4 5
-$ for ((i=0; i<3; i++)); do echo "i=$i"; done
-i=0
-i=1
-i=2
+$ for fruit in apple banana cherry; do echo "fruit: $fruit"; done
+fruit: apple / fruit: banana / fruit: cherry
+$ for i in {1..5}; do printf '%s ' "$i"; done; echo    # → 1 2 3 4 5
+$ for ((i=0; i<3; i++)); do echo "i=$i"; done          # → i=0 / i=1 / i=2
 ```
 
 ### 1.2 文件 glob 遍历
@@ -53,21 +45,11 @@ i=2
 
 ```bash
 $ count=0
-$ while (( count < 3 )); do
->     echo "count=$count"
->     count=$((count + 1))      # 不用 ((count++)), 见上文 set -e 陷阱
-> done
-count=0
-count=1
-count=2
+$ while (( count < 3 )); do echo "count=$count"; count=$((count + 1)); done
+# count=0 / count=1 / count=2 —— 不用 ((count++)), 见 set -e 陷阱
 $ n=3
-$ until (( n == 0 )); do
->     echo "还剩 $n"
->     n=$((n - 1))
-> done
-还剩 3
-还剩 2
-还剩 1
+$ until (( n == 0 )); do echo "还剩 $n"; n=$((n - 1)); done
+# 还剩 3 / 还剩 2 / 还剩 1
 ```
 
 ## 3. 循环控制与嵌套
@@ -81,17 +63,11 @@ $ until (( n == 0 )); do
 ```bash
 $ printf 'a\nb\nc\n' > /tmp/lines.txt
 $ count=0
-$ cat /tmp/lines.txt | while IFS= read -r line; do
->     count=$((count + 1))
-> done
-$ echo "管道写法: $count"
-管道写法: 0
+$ cat /tmp/lines.txt | while IFS= read -r line; do count=$((count + 1)); done
+$ echo "管道写法: $count"          # → 管道写法: 0（子 shell 变量丢失）
 $ count=0
-$ while IFS= read -r line; do
->     count=$((count + 1))
-> done < /tmp/lines.txt
-$ echo "重定向写法: $count"
-重定向写法: 3
+$ while IFS= read -r line; do count=$((count + 1)); done < /tmp/lines.txt
+$ echo "重定向写法: $count"        # → 重定向写法: 3
 ```
 
 三种修复思路，按推荐度排序：
@@ -110,16 +86,12 @@ $ echo "重定向写法: $count"
 
 ```bash
 $ printf '  my notes.txt  \npath/with\\space.txt\n' > /tmp/names.txt
-$ while IFS= read -r file; do
->     echo "读到: [$file]"
-> done < /tmp/names.txt
-读到: [  my notes.txt  ]
-读到: [path/with\space.txt]
-$ while read file; do               # 错误示范: 无 IFS=、无 -r
->     echo "读到: [$file]"
-> done < /tmp/names.txt
-读到: [my notes.txt]                # 首尾空格被吞
-读到: [path/withspace.txt]          # 反斜杠被当成转义吃掉
+$ while IFS= read -r file; do echo "读到: [$file]"; done < /tmp/names.txt
+读到: [  my notes.txt  ]          # 首尾空格保留
+读到: [path/with\space.txt]       # 反斜杠保留
+$ while read file; do echo "读到: [$file]"; done < /tmp/names.txt   # 错误示范
+读到: [my notes.txt]              # 空格被吞
+读到: [path/withspace.txt]        # 反斜杠被当转义吃掉
 ```
 
 ### 5.2 处理含空格的文件名

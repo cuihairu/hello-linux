@@ -22,17 +22,8 @@
 
 ```bash
 $ age=20
-$ if (( age >= 18 )); then
->     echo "成年人"
-> else
->     echo "未成年人"
-> fi
-成年人
-$ if systemctl is-active --quiet nginx; then
->     echo "nginx 正在运行"
-> else
->     echo "nginx 未运行"
-> fi
+$ if (( age >= 18 )); then echo "成年人"; else echo "未成年人"; fi   # → 成年人
+$ if systemctl is-active --quiet nginx; then echo "nginx 正在运行"; else echo "nginx 未运行"; fi
 nginx 未运行
 ```
 
@@ -55,14 +46,10 @@ nginx 未运行
 ```bash
 $ name=""
 $ [ $name = foo ]; echo "exit=$?"
-# bash: [: =: unary operator expected
-exit=2
-$ [ "$name" = foo ]; echo "exit=$?"   # [ ] 加引号才安全
-exit=1
-$ [[ $name = foo ]]; echo "exit=$?"    # [[ ]] 关键字内部不做词分割
-exit=1
-$ [[ "file.txt" == *.txt ]] && echo 匹配   # [[ ]] 支持 glob
-匹配
+# bash: [: =: unary operator expected   exit=2（空变量词分割后消失）
+$ [ "$name" = foo ]; echo "exit=$?"   # [ ] 加引号才安全 → exit=1
+$ [[ $name = foo ]]; echo "exit=$?"    # [[ ]] 关键字内部不做词分割 → exit=1
+$ [[ "file.txt" == *.txt ]] && echo 匹配   # [[ ]] 支持 glob → 匹配
 ```
 
 ## 4. 逻辑运算符
@@ -74,7 +61,6 @@ $ [[ "file.txt" == *.txt ]] && echo 匹配   # [[ ]] 支持 glob
 ```bash
 $ cat > backup-type.sh <<'EOF'
 #!/bin/bash
-# 按参数选择备份类型
 case "$1" in
     full|fullonly)   echo "执行完整备份" ;;
     incr|daily)      echo "执行增量备份" ;;
@@ -83,12 +69,8 @@ case "$1" in
 esac
 EOF
 $ chmod +x backup-type.sh
-$ ./backup-type.sh full
-执行完整备份
-$ ./backup-type.sh bogus
-用法: ./backup-type.sh {full|incr}
-$ echo $?
-2
+$ ./backup-type.sh full      # → 执行完整备份
+$ ./backup-type.sh bogus     # → 用法: ./backup-type.sh {full|incr}，$? = 2
 ```
 
 ## 5. 三元运算与退出码
