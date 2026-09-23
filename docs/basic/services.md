@@ -32,7 +32,7 @@ Linux 系统服务管理、日志管理和配置工具。
 | [日志管理](./services/log_management.md) | 服务日志在哪里、`journalctl` 怎么查、journald 与 rsyslog 如何分工、为什么要持久化 | 服务异常但不知道日志去哪找时 |
 | [系统配置工具](./services/configuration_tools.md) | 文本配置哲学 vs GUI；三系网络配置（Netplan / systemd-networkd / nmcli）对照；时间与主机名 | 系统装好后的第一次基础配置 |
 
-三页的分工可以这样记：**先用系统服务管理把服务跑起来，出问题去日志管理查日志，装机初始化看系统配置工具**。日志的协议细节与轮转策略另见[日志系统](../log.md)章节，防火墙与安全上下文分别见[网络篇](../network/README.md)与[安全基础](../security.md)。
+三页的分工可以这样记：**先用系统服务管理把服务跑起来，出问题去日志管理查日志，装机初始化看系统配置工具**。日志的协议细节与轮转策略另见[日志系统](./log.md)章节，防火墙与安全上下文分别见[网络篇](../network/README.md)与[安全基础](./security.md)。
 
 ## 三系差异速览
 

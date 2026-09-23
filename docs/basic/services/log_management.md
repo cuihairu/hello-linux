@@ -145,7 +145,7 @@ $ sudo grep -n "error" /var/log/syslog
 4. **以为 Arch 必须装 rsyslog**：不必。Arch 默认 journal 即可满足绝大多数排查；只有需要 `/var/log/messages` 这类文本文件、或要接入传统 syslog 管道时才 `pacman -S rsyslog`。
 5. **日志文件被手工删除**：删 `/var/log/journal/*/system.journal` 会让历史查询直接断档；收缩请用 `--vacuum-*`，不要 `rm`。
 6. **`journalctl -f` 卡住不动**：`-f` 默认只显示最近 10 行后进入跟踪；结合 `-u` 使用时请确认 unit 名拼写正确，否则会一直"没有输出"。
-7. **在错误的文件里 grep 防火墙/安全事件**：本文只讲服务日志链路；防火墙规则与拒绝日志见[网络篇](../../network/firewall.md)与[安全篇](../../security/README.md)，审计与 SELinux 拒绝见[安全基础](../../security.md)。
+7. **在错误的文件里 grep 防火墙/安全事件**：本文只讲服务日志链路；防火墙规则与拒绝日志见[网络篇](../../network/firewall.md)与[安全篇](../../security/README.md)，审计与 SELinux 拒绝见[安全基础](../security.md)。
 
 ## 参考资料
 

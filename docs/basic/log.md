@@ -33,7 +33,7 @@ Linux 日志系统，包括系统日志和日志轮转。
 | [系统日志](./log/syslog.md) | 日志从产生到落盘的链路；facility/severity 分类；rsyslog 配置规则；journald 与 syslog 的关系；journalctl 查询与持久化 | 想系统理解"日志去哪了"、需要配置 rsyslog 规则时 |
 | [日志轮转](./log/rotation.md) | 为什么要轮转；logrotate 配置项各自解决什么问题；postrotate/copytruncate 的选择；journal 的空间回收 | 日志文件过大、轮转不生效、或要为自研服务写轮转规则时 |
 
-两页与[系统服务/日志管理](./services/log_management.md)的分工：后者面向"**排查某个服务为什么挂了**"的日常流程，本章面向"**日志体系本身如何工作与维护**"。防火墙日志与安全审计不在此章，见[网络篇](../network/firewall.md)与[安全基础](../security.md)。
+两页与[系统服务/日志管理](./services/log_management.md)的分工：后者面向"**排查某个服务为什么挂了**"的日常流程，本章面向"**日志体系本身如何工作与维护**"。防火墙日志与安全审计不在此章，见[网络篇](../network/firewall.md)与[安全基础](./security.md)。
 
 ## 三系差异速览
 
@@ -63,7 +63,7 @@ Linux 日志系统，包括系统日志和日志轮转。
 手动 `-d` 只是调试；真正执行的是 cron 或 `logrotate.timer`。检查 `systemctl status logrotate.timer`（或对应 cron 条目）是否启用，以及 `/var/lib/logrotate.status` 里该文件上次轮转时间。
 
 **Q：防火墙拒绝、SELinux 拒绝的日志也在这里看吗？**
-不冲突但入口不同：防火墙日志多在 `/var/log/messages`/`journalctl -k` 或 firewalld 自身日志；SELinux 拒绝在 `/var/log/audit/audit.log`，用 `ausearch` 查，见[安全基础](../security.md)。本章聚焦通用日志链路与轮转，不重复安全篇内容。
+不冲突但入口不同：防火墙日志多在 `/var/log/messages`/`journalctl -k` 或 firewalld 自身日志；SELinux 拒绝在 `/var/log/audit/audit.log`，用 `ausearch` 查，见[安全基础](./security.md)。本章聚焦通用日志链路与轮转，不重复安全篇内容。
 
 ## 参考资料
 

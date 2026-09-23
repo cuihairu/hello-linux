@@ -1,6 +1,6 @@
 # 包管理命令
 
-装软件、升级、查依赖、清缓存——这些事每台机器每天都在发生，但三系命令长得完全不一样：Debian 叫 `apt`，RHEL 8+ 叫 `dnf`（旧文还写着 `yum`），Arch 叫 `pacman`。把 A 系的 `apt install` 敲到 Arch 上只会得到 `command not found`，反过来 `pacman -Syu` 也不会被 Ubuntu 认出。本页定位是**命令速查手册**：用三张总表 + 真实输出把"六件日常事"（安装、升级、搜索、仓库、缓存、锁定）钉死，再补底层 `dpkg`/`rpm` 与仓库生态（PPA、EPEL、AUR）。概念讲解与发行版选择见[基础篇 · 软件包管理](../../basic/packages/README.md)，APT 细节在 [apt 详解](../../basic/packages/apt.md)，RHEL 家族细节在 [yum/dnf 详解](../../basic/packages/yum.md)，本页不再重复长篇原理——**遇到"怎么做"，先查这里；遇到"为什么"，翻基础篇**。
+装软件、升级、查依赖、清缓存——这些事每台机器每天都在发生，但三系命令长得完全不一样：Debian 叫 `apt`，RHEL 8+ 叫 `dnf`（旧文还写着 `yum`），Arch 叫 `pacman`。把 A 系的 `apt install` 敲到 Arch 上只会得到 `command not found`，反过来 `pacman -Syu` 也不会被 Ubuntu 认出。本页定位是**命令速查手册**：用三张总表 + 真实输出把"六件日常事"（安装、升级、搜索、仓库、缓存、锁定）钉死，再补底层 `dpkg`/`rpm` 与仓库生态（PPA、EPEL、AUR）。概念讲解与发行版选择见[基础篇 · 软件包管理](../../basic/packages.md)，APT 细节在 [apt 详解](../../basic/packages/apt.md)，RHEL 家族细节在 [yum/dnf 详解](../../basic/packages/yum.md)，本页不再重复长篇原理——**遇到"怎么做"，先查这里；遇到"为什么"，翻基础篇**。
 
 > 三系对照涉及的命令在 **Debian/Ubuntu（apt/dpkg）、RHEL/CentOS/Rocky（dnf/rpm）、Arch（pacman）** 上分别给出；一条命令同时出现在两系的，表格里会并列。所有 APT/dpkg 输出来自真实 Ubuntu 26.04 环境；dnf 与 pacman 输出按各系稳定版本的标准格式给出，若你机器版本较新，列名可能略有出入，语义一致。
 

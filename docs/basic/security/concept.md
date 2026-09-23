@@ -90,7 +90,7 @@ type=AVC msg=audit(2026-09-21 14:03:11.234:412) : avc:  denied  { name_connect }
   tclass=tcp_socket                            ← 想做什么操作（连接 TCP 端口）
 ```
 
-这条记录说的是：`httpd_t` 想连到标记为 `mysqld_port_t` 的 3306 端口，策略里没有对应 allow 规则，于是被拒。修复方向取决于你的意图——本来就该让 Web 连数据库？打开相应布尔值或端口标签；本来不该连？拒绝是正确行为，无需修策略。[基本命令](./security/commands.md)一节会给出完整的三步排障流程。
+这条记录说的是：`httpd_t` 想连到标记为 `mysqld_port_t` 的 3306 端口，策略里没有对应 allow 规则，于是被拒。修复方向取决于你的意图——本来就该让 Web 连数据库？打开相应布尔值或端口标签；本来不该连？拒绝是正确行为，无需修策略。[基本命令](./commands.md)一节会给出完整的三步排障流程。
 
 ## 4. 完整决策流程
 
@@ -117,7 +117,7 @@ type=AVC msg=audit(2026-09-21 14:03:11.234:412) : avc:  denied  { name_connect }
 两个要点：
 
 1. **DAC 先于 MAC**。DAC 都不通过的访问，根本轮不到 SELinux 判断——所以排查"权限被拒"时仍要先 `ls -l` 确认 rwx，再 `ls -Z` 确认标签，两层都要查。
-2. **Enforcing 与 Permissive 的差异只在②的"拒绝"分支**：Enforcing 真的拒绝并写日志；Permissive 只写日志、行为上放行。这正是用 Permissive 模式收集完整拒绝清单再统一修策略的原理（见[模式](./security/modes.md)）。
+2. **Enforcing 与 Permissive 的差异只在②的"拒绝"分支**：Enforcing 真的拒绝并写日志；Permissive 只写日志、行为上放行。这正是用 Permissive 模式收集完整拒绝清单再统一修策略的原理（见[模式](./modes.md)）。
 
 ## 5. 三发行版的 MAC 全景：SELinux 只是选项之一
 
