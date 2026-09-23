@@ -526,8 +526,6 @@ echo "fresh"
 - Arch Wiki - Cron（cronie 安装与启用） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Cron)
 - systemd.timer(5) — [man7.org](https://man7.org/linux/man-pages/man5/systemd.timer.5.html)
 - rclone 文档 — [rclone.org](https://rclone.org/docs/)
-- Red Hat - System Backup and Recovery（System Administrator's Guide，
-  RHEL 7 版，ReaR/备份概念仍适用）：
-  <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/system_administrators_guide/part-system_backup_and_recovery>
+- Red Hat - System Backup and Recovery（System Administrator's Guide，RHEL 7 版，ReaR/备份概念仍适用） — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/system_administrators_guide/part-system_backup_and_recovery)
 - 鸟哥的私房菜 - 服务器篇（含备份相关单元） — [linux.vbird.org](https://linux.vbird.org/linux_server/)
 - `man rsync`、`man tar`、`man crontab`、`man dump`、`man restore`

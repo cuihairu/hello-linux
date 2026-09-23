@@ -231,7 +231,7 @@ Docker 不是和 systemd 抢活干的另一套 init：`docker.service` 本身就
 }
 ```
 
-改完文件用 `dockerd --validate` 或重启前先 `systemctl cat docker` 确认没有覆盖的 drop-in 干扰，JSON 语法错误会让引擎直接拒绝启动——这是改 `daemon.json` 最容易踩的坑，改完务必先验证再重启。三个配置项各管一件事：日志限额防磁盘被打满，`live-restore` 保升级窗口业务不断，缺省的 json-file 驱动则保证 `docker logs` 可用——别为了"精简"随手删掉驱动配置，排障时会想念它的。`live-restore` 开启后，升级或重启 dockerd 时容器继续运行，不会因引擎维护窗口把业务打断——生产建议开启；重启引擎前先确认它已生效，否则"只是升级个引擎"也会把全部容器按停，这正是把引擎层与容器层职责分清楚的实际收益。改坏 `daemon.json` 导致引擎起不来的急救方法：`journalctl -u docker -e` 看解析错误，修正 JSON 后再 `systemctl start docker`——先看日志再动手，能省掉一半的"我什么都没改它就坏了"。这几个参数改完都应走同一套"改前备份、改后验证、验证过再重启"的流程，和改任何关键系统配置没有区别。
+改完文件用 `dockerd --validate` 或重启前先 `systemctl cat docker` 确认没有覆盖的 drop-in 干扰，JSON 语法错误会让引擎直接拒绝启动——这是改 `daemon.json` 最容易踩的坑，改完务必先验证再重启。三个配置项各管一件事：日志限额防磁盘被打满，`live-restore` 保升级窗口业务不断，默认的 json-file 驱动则保证 `docker logs` 可用——别为了"精简"随手删掉驱动配置，排障时会想念它的。`live-restore` 开启后，升级或重启 dockerd 时容器继续运行，不会因引擎维护窗口把业务打断——生产建议开启；重启引擎前先确认它已生效，否则"只是升级个引擎"也会把全部容器按停，这正是把引擎层与容器层职责分清楚的实际收益。改坏 `daemon.json` 导致引擎起不来的急救方法：`journalctl -u docker -e` 看解析错误，修正 JSON 后再 `systemctl start docker`——先看日志再动手，能省掉一半的"我什么都没改它就坏了"。这几个参数改完都应走同一套"改前备份、改后验证、验证过再重启"的流程，和改任何关键系统配置没有区别。
 
 引擎配置与容器 restart 策略的联动还有一个容易漏的点：`live-restore: false`（默认行为之一）时，引擎升级会把所有容器一并停掉——即使每个容器都写了 `--restart=always`，恢复窗口也取决于 systemd 把 `docker.service` 拉起后再由 dockerd 逐个重建，整套依赖链里任一环慢都会被业务感知为一次计划外抖动。反过来，只开 `live-restore` 却让引擎 `WantedBy=multi-user.target` 失效，宿主机重启后容器同样不会自己回来：引擎自启、live-restore、容器 restart 三者必须同时到位，才算把"宿主机重启 → 引擎就绪 → 容器就绪"这条链闭合。验收方法很直接：改完 `daemon.json` 后重启一次维护窗口内的机器，观察 `docker ps` 是否在无人干预下恢复到变更前状态——能复现的恢复才是真的恢复，写在文档里的策略假设不算数。
 
