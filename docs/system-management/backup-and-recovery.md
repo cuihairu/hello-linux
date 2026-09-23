@@ -327,8 +327,9 @@ mkdir -p "$BACKUP_DIR"
 # 文件镜像：先干跑过确认 --delete 行为，再上生产
 rsync -a --delete --exclude='*.log' /var/www/ "$BACKUP_DIR/files_$DATE/"
 
-# 数据库逻辑导出：退出码非 0 由 set -e 中断，整体作业记为失败
-mysqldump -u backup -p"$DB_PASS" --single-transaction --databases shop \
+# 数据库逻辑导出：凭据从权限 600 的 defaults 文件读取，不把密码写进命令行；
+# 退出码非 0 由 set -e 中断，整体作业记为失败
+mysqldump --defaults-extra-file=/root/.my.cnf --single-transaction --databases shop \
   | gzip > "$BACKUP_DIR/db_$DATE.sql.gz"
 
 # 保留策略：只清理超过 KEEP_DAYS 的历史
@@ -344,7 +345,9 @@ echo "backup ok: $BACKUP_DIR ($DATE)"
 备份脚本里最危险的一行永远是 `rm`，
 它比 `rsync` 更需要先干跑、再上线。
 另外，写在命令行里的密码会暴露在 `ps` 输出中，
-生产环境改用 `--defaults-extra-file` 指向一个权限 600 的配置文件。
+所以本脚本的 `mysqldump` 直接用 `--defaults-extra-file`
+指向一个权限 600 的配置文件（内含 `[client]` 段的 user/password），
+密码不出现在命令行，`set -u` 下也不再有未定义的 `$DB_PASS`。
 
 **配置与系统基线备份**（tar + 包清单，见 4.3 节命令），
 每日一次、体积小、恢复最常用：
@@ -477,11 +480,12 @@ $ gpg -d backup.tar.gz.gpg | tar -xzf - -C /restore/
 $ date +%s > /backup/websites/.last_ok
 
 # 2) 独立巡检作业（挂在 cron 或 timer 上）：文件缺失或超过 1 天未更新都算失败
-$ if [ ! -f /backup/websites/.last_ok ] || \
-     [ -n "$(find /backup/websites/.last_ok -mtime +1)" ]; then
->     echo "STALE backup"; exit 1
-> fi
-> echo "fresh"
+if [ ! -f /backup/websites/.last_ok ] || \
+   [ -n "$(find /backup/websites/.last_ok -mtime +1)" ]; then
+    echo "STALE backup"
+    exit 1
+fi
+echo "fresh"
 ```
 
 把巡检接上你的告警通道（邮件、webhook、现成监控系统），

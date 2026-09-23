@@ -4,6 +4,14 @@
 
 > 内容参考自 Arch Wiki、ethtool 手册与内核网络文档，见文末参考资料。
 
+## 学习目标
+
+- 理解网卡的 PHY/MAC/DMA/PCIe 结构，知道一次收包在硬件上经历了什么
+- 用 `lspci -k` + `ethtool -i` 确认设备与驱动绑定，排查"网卡识别不了"
+- 熟练使用 `ethtool` 查看链路、统计、卸载与队列，能读懂错误计数的方向
+- 理解中断亲和性与 RSS 多队列，会用 `irqbalance` 或 `smp_affinity` 优化收包路径
+- 区分接口命名、无线法规域等硬件相关事实与网络篇的配置问题
+
 ## 与网络篇的分工
 
 | 层次 | 本篇（硬件视角） | [网络篇](../network/README.md)（软件视角） |
@@ -15,14 +23,6 @@
 | L3 及以上 | — | [网络配置](../network/network-configuration.md)、[故障排除](../network/troubleshooting.md)、[防火墙](../network/firewall.md) |
 
 一个判断顺序的建议：先用本篇确认**硬件与驱动在不在、链路通不通**（`ip link` 看有没有 `UP`、`ethtool` 看有没有 `Link detected`），再带着"物理层已通"的前提进网络篇查地址、路由、DNS。反过来做，你会在网线松了的机器上抓半天包。本篇所有示例接口名以 `enp3s0` 为准，用 `ip link` 替换成你机器上的实际名字。
-
-## 学习目标
-
-- 理解网卡的 PHY/MAC/DMA/PCIe 结构，知道一次收包在硬件上经历了什么
-- 用 `lspci -k` + `ethtool -i` 确认设备与驱动绑定，排查"网卡识别不了"
-- 熟练使用 `ethtool` 查看链路、统计、卸载与队列，能读懂错误计数的方向
-- 理解中断亲和性与 RSS 多队列，会用 `irqbalance` 或 `smp_affinity` 优化收包路径
-- 区分接口命名、无线法规域等硬件相关事实与网络篇的配置问题
 
 ## 1. 网卡（NIC）的结构
 

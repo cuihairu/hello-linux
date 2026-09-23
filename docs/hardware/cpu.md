@@ -242,6 +242,15 @@ numactl --cpunodebind=0 --membind=0 ./your_app   # 绑定 node 0（策略见内�
 | 持久化调优 | 桌面电源管理组件 / cpufrequtils（按环境核实） | 自建 systemd unit 调 cpupower | `tuned`（`tuned-adm profile`） |
 | 虚拟化组 | `qemu-kvm` + libvirt | `pacman -S qemu-desktop libvirt` + 启用 libvirtd | `qemu-kvm` + `libvirt` |
 
+接手陌生机器先跑这一条，一分钟拿到 CPU 侧关键事实：
+
+```bash
+lscpu | grep -E "^CPU\(s\)|Model name|Core\(s\)|Thread\(s\)|Socket|Hypervisor"
+command -v numactl >/dev/null && numactl --hardware   # 多路才用得上；单路只报 1 个 node
+```
+
+`lscpu` 回答"几个核、是不是虚拟机"，绑核规划与归因都从这里起步（第 2、4 节）；`numactl --hardware` 只在 `Socket(s) > 1` 时值得细看，单路确认 1 个 node 即可跳过。需要逐字段深挖再回到对应小节。
+
 ## 常见坑
 
 1. **把营销名当 flag。** `/proc/cpuinfo` 里只有 `vmx`/`svm`，没有 `vt-x`/`VT-x`；按 VT-x 去 grep 一定空手而归（见第 4.2 节的更正说明）。

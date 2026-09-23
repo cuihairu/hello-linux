@@ -281,6 +281,20 @@ sudo dmidecode -t baseboard   # 主板型号；-t processor 看插槽上的 CPU
 
 需要 `lshw` 做更完整的硬件树时：`apt install lshw`、`pacman -S lshw`、`dnf install lshw`，然后 `sudo lshw -short` 一页看全。ARM 开发板上没有传统 BIOS，改看设备树：`ls /sys/firmware/devicetree/base/`。
 
+## 三系差异速览
+
+本页命令三系用法一致，差异只在包名与是否预装：
+
+| 场景 | Debian/Ubuntu | Arch | RHEL/CentOS/Rocky |
+|------|---------------|------|-------------------|
+| `lscpu` | 预装（`util-linux`） | 预装 | 预装 |
+| `dmidecode` | `apt install dmidecode` | `pacman -S dmidecode` | `dnf install dmidecode` |
+| `lshw` | `apt install lshw` | `pacman -S lshw` | `dnf install lshw` |
+| `lspci`/`lsusb` | 预装（最小化安装或缺） | `pacman -S pciutils usbutils` | `dnf install pciutils usbutils` |
+| `sensors` | `apt install lm-sensors`（连字符） | `pacman -S lm_sensors`（下划线） | `dnf install lm_sensors` |
+
+内核接口（`/proc`、`/sys`）与输出格式三系相同，差异只在包名——`lm-sensors`/`lm_sensors` 连字符与下划线之别是高发陷阱。完整底座见 [README · 三系诊断工具速览](./README.md)。
+
 ## 常见坑
 
 1. **虚拟机/云主机里 `dmidecode` 读到的是"假"硬件。** 序列号、主板型号都是 hypervisor 模拟或注入的，不能当作采购凭证；内存条数量也未必等于你下单的配置。以 hypervisor 控制台或云厂商文档为准，`dmidecode` 在这些环境里只适合看"虚拟机被配置成了什么规格"。

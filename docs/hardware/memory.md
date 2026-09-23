@@ -255,6 +255,17 @@ echo 'vm.nr_hugepages = 1024' | sudo tee /etc/sysctl.d/99-hugepages.conf     # �
 
 两个连带认知：预留内存**从可用池里划走**，改完 `free` 变小是正常记账，不是泄漏；透明大页（THP）默认开启时偶发"卡一下"的延迟抖动，延迟敏感服务常直接关掉 THP 用显式大页——是否关闭以你应用的官方文档为准，不确定就不动全局默认。
 
+THP 入口在 sysfs：
+
+```bash
+# 查看/临时切换 THP：[always] madvise never（方括号为当前值，重启回默认）
+cat /sys/kernel/mm/transparent_hugepage/enabled
+echo madvise | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
+# 持久化：内核参数 transparent_hugepage=madvise；显式大页 hugepages=1024 hugepagesz=2M
+```
+
+分工：**THP** 自动拼 2 MB 页、无感知但可能抖动；**显式大页**启动划池、应用主动用（JVM `UseLargePages`）。改完 `grep -i huge /proc/meminfo` 对账。
+
 ## 9. NUMA 下的内存分配
 
 拓扑事实（几个 node、每个 node 挂多少 CPU/内存）见 [CPU 章 · NUMA](./cpu.md)；本节回答内存视角的另一半问题：**进程的页落在哪个 node 上**。
@@ -267,6 +278,19 @@ numastat -p <pid>           # 单进程视角
 numactl --cpunodebind=0 --membind=0 ./db_server   # 绑定 node 0（见 CPU 章第 7 节）
 numactl --interleave=all ./db_server              # 启动期交错（以应用文档为准）
 ```
+
+```bash
+$ numactl --hardware
+available: 2 nodes (0-1)   # 单路只报 1 个 node，策略无差别
+node distances: 0: 10 21   # 10 = 本地；21 = 跨节点代价
+
+$ numastat
+            Node 0  Node 1
+numa_hit   1284531  1198774   # 命中本节点
+numa_miss       12        9   # 溢到对端——持续涨才值得关注
+```
+
+`numa_hit` 远大于 `numa_miss` 即健康；`numa_miss` 持续涨才考虑 `interleave`/`membind`，改前后各跑一次对比。
 
 单路机器 `numactl --hardware` 只报 1 个 node，这些选项没有实际差别——**先确认拓扑再谈策略**，避免照抄双路服务器的调优清单到单路 VM 上自我感动。
 

@@ -180,9 +180,8 @@ cron 和 timer 都在回答"几点跑"，流水线回答的是
 这是部署与测试类任务的正确形态：
 
 ```bash
-# 最小流水线：服务器端 post-receive 钩子，push 即部署
 #!/bin/bash
-# /var/repo/myapp.git/hooks/post-receive
+# /var/repo/myapp.git/hooks/post-receive —— 最小流水线：服务器端钩子，push 即部署
 GIT_WORK_TREE=/var/www/myapp git checkout -f
 sudo systemctl restart myapp
 ```
@@ -195,6 +194,8 @@ Jenkins 官方仓库安装（密钥会定期轮换，
 下面的命令以 2026 年初的密钥为例）：
 
 ```bash
+# 密钥文件名里的年份会变（jenkins.io-2026.key 仅为当前示例），
+# 指纹/密钥随时间轮换——安装前一律以官方文档的最新值为准
 # Debian/Ubuntu（LTS 仓库；weekly 仓库把 debian-stable 换成 debian）
 curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key \
   | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
@@ -290,7 +291,7 @@ ad-hoc 没有版本历史，出事无法 diff，这是它与 playbook 的真正�
 # playbook.yml
 ---
 - hosts: webservers
-  become: yes
+  become: true
   tasks:
     - name: Install Nginx
       apt:
@@ -377,12 +378,18 @@ shellcheck 报警——全部回[脚本篇](../script/README.md)与
 # check-thresholds.sh —— 由 cron/timer 每 5 分钟拉起一次
 LOG=/var/log/system-monitor.log
 
+# 用 if/fi 而非 `[ ... ] && ...`：条件不成立时后者会以退出码 1 结束，
+# 让 cron/systemd 误报整次巡检失败
 disk=$(df -P / | awk 'NR==2{print $5}' | tr -d '%')
-[ "$disk" -gt 90 ] && echo "$(date) DISK usage high on /: ${disk}%" >> "$LOG"
+if [ "$disk" -gt 90 ]; then
+    echo "$(date) DISK usage high on /: ${disk}%" >> "$LOG"
+fi
 
 # 内存判定用 available 而非 free（列含义见命令篇 · 内存管理）
 mem_avail=$(awk '/^MemAvailable:/{printf "%d", $2/1024}' /proc/meminfo)
-[ "$mem_avail" -lt 256 ] && echo "$(date) LOW mem available: ${mem_avail}MB" >> "$LOG"
+if [ "$mem_avail" -lt 256 ]; then
+    echo "$(date) LOW mem available: ${mem_avail}MB" >> "$LOG"
+fi
 ```
 
 调度行（cron 与 timer 二选一）：
