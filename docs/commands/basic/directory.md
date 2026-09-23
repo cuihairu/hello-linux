@@ -386,7 +386,7 @@ ls -ld app
 drwxr-xr-x 3 cui cui 80 Sep 22 05:53 app
 ```
 
-更多八进制/符号模式说明见父页[基础命令](../basic.md)与 [Arch Wiki - File permissions](https://wiki.archlinux.org/title/File_permissions)。
+更多八进制/符号模式说明见父页[基本命令](../basic.md)与 [Arch Wiki - File permissions](https://wiki.archlinux.org/title/File_permissions)。
 
 **坑**：对整个代码树 `chmod -R 775`/`755` 会把普通文件也加上执行位；更精细用 `find project -type d -exec chmod 755 {} +` 与 `find project -type f -exec chmod 644 {} +` 分开处理。
 

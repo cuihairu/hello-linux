@@ -110,7 +110,7 @@ alias_database = hash:/etc/aliases
 
 ### 3.2 别名与本地投递
 
-```text
+```bash
 # /etc/aliases
 root: admin@example.com
 postmaster: admin@example.com

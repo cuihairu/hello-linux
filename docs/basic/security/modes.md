@@ -32,8 +32,8 @@ SELinux 有三种运行模式，选择哪一种直接决定系统的安全强度
 
 | 发行版 | 默认 MAC | 默认模式 | 说明 |
 |--------|---------|---------|------|
-| RHEL / CentOS / Rocky / Fedora | SELinux | **Enforcing** | 出厂即强制，targeted 策略 |
-| Debian / Ubuntu | AppArmor | enforce（AppArmor 语义） | SELinux 默认未安装/未启用，`getenforce` 常报 `Disabled` 或命令不存在 |
+| RHEL/CentOS/Rocky/Fedora | SELinux | **Enforcing** | 出厂即强制，targeted 策略 |
+| Debian/Ubuntu | AppArmor | enforce（AppArmor 语义） | SELinux 默认未安装/未启用，`getenforce` 常报 `Disabled` 或命令不存在 |
 | Arch | 无默认 MAC | SELinux 默认不启用 | 需自行安装工具链与策略后才谈得上模式选择 |
 
 ```bash

@@ -82,7 +82,7 @@ echo "INFO=$info WARN=$warn ERROR=$err"
 
 演示目录下有三个日志文件，每个含 1 条 INFO、1 条 ERROR、1 条 WARN。下面的会话在临时目录真实执行（时间戳与主机相关字段可能随环境变化）；第二段展示了「目录不存在」时的 stderr 与退出码 1，方便你在 cron/CI 里直接根据 `$?` 分支：
 
-```text
+```bash
 $ ls logs/
 app1.log  app2.log  app3.log
 
@@ -156,7 +156,7 @@ done
 
 先准备两份小文件再跑一次；`wc -c` 打出的字节数与随后 `ls -lh`、`tar -tzf` 清单相互印证——备份类脚本的验收标准是「能列出、能解回」，不是「命令退出码是 0」：
 
-```text
+```bash
 $ echo 'hello backup' > src/a.txt
 $ echo 'world' > src/b.txt
 
@@ -240,7 +240,7 @@ echo "完成: 重命名 $count 个, 跳过 $skipped 个"
 
 演示目录先造几个文件（含带空格的）。`DRY_RUN=1` 只打印计划；去掉后再跑一次，第二次会因为目标已存在而把剩余文件计入 `skipped`——这正是幂等重跑应有的样子：
 
-```text
+```bash
 $ ls *.txt
 my notes.txt  report.txt  sample.txt  words.txt
 
@@ -303,7 +303,7 @@ printf '负载: %s\n' "$(cut -d' ' -f1-3 /proc/loadavg)"
 
 真实输出（本机演示，数值随负载变化）：
 
-```text
+```bash
 $ ./sysinfo.sh
 CPU 空闲: 63%
 内存可用: 30272288 / 39948940 KiB

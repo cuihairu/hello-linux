@@ -358,7 +358,7 @@ Net Upgrade Size:       0.45 MiB
 |------|------|------|
 | 学习入门 | Ubuntu Desktop (LTS) | 资料最多，社区活跃，踩坑容易搜到答案 |
 | 桌面开发 | Ubuntu LTS / Fedora Workstation | 工具链较新，容器生态友好 |
-| 企业服务器 | RHEL / Rocky Linux / AlmaLinux | 长期支持、认证生态、可预期的升级路径 |
+| 企业服务器 | RHEL/Rocky Linux/AlmaLinux | 长期支持、认证生态、可预期的升级路径 |
 | Web / 通用服务器 | Ubuntu Server / Debian stable | 稳定、软件仓库丰富、文档完善 |
 | 深入理解系统 | Arch Linux | 安装即教学，Arch Wiki 质量极高 |
 | 安全测试 | Kali Linux | 预装安全工具（基于 Debian） |
@@ -372,7 +372,7 @@ Net Upgrade Size:       0.45 MiB
 | 有 Windows 经验 | Linux Mint | 界面布局类似 Windows，底层仍是 Ubuntu 仓库 |
 | 想深入学习 | Arch（动手型）/ Debian·Fedora（上游型） | 前者拆开给你看，后者接近上游开发节奏 |
 | 追求极简 | Arch Linux | 从零构建，无强加的桌面与厂商工具 |
-| 企业运维 | RHEL / Rocky Linux | 行业标准，技能可直接迁移 |
+| 企业运维 | RHEL/Rocky Linux | 行业标准，技能可直接迁移 |
 
 ### 6.3 下载地址
 

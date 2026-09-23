@@ -25,7 +25,7 @@ DAC（Discretionary Access Control，自主访问控制）的规则很简单：�
 | 发行版 | 默认 MAC 方案 | 默认状态 | 说明 |
 |--------|--------------|---------|------|
 | RHEL/CentOS/Rocky/Fedora | **SELinux** | Enforcing（强制） | 企业级默认，targeted 策略保护关键服务 |
-| Debian / Ubuntu | **AppArmor** | 启用（enforce 模式） | 基于路径的 MAC，profile 在 `/etc/apparmor.d/`，与 SELinux 机制不同 |
+| Debian/Ubuntu | **AppArmor** | 启用（enforce 模式） | 基于路径的 MAC，profile 在 `/etc/apparmor.d/`，与 SELinux 机制不同 |
 | Arch | **两者默认都不启用** | 无 MAC | 官方不默认启用 SELinux 或 AppArmor；SELinux 需自行编译/安装用户态工具与策略，属高级自定义场景 |
 
 因此：

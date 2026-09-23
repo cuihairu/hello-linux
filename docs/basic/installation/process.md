@@ -101,7 +101,7 @@ sudo genfstab -U /mnt >> /mnt/etc/fstab
 
 安装器会在后台 `apt` 拉取语言包和更新，进度条走完点重启即可。Ubuntu 的 GRUB 会自动探测 Windows 并生成双系统菜单。
 
-### 4.2 Debian / Rocky（服务器场景）
+### 4.2 Debian/Rocky（服务器场景）
 
 - **Debian 网络安装器**：文本界面向导，可在分区步骤选 LVM、加密或软 RAID；语言选中文后建议**暂不启用 mirror**（国内网络下多数默认镜像慢），装完再换 TUNA。
 - **Rocky/Anaconda**：图形界面左侧 Installation Summary 是一张"待办清单"，需手动点进每项配置（日期语言、磁盘分区、网络、软件选择、root 密码）。服务器最小化安装默认**不装图形界面**，这是刻意的——服务器的攻击面和资源占用都应最小化。网络界面里记得打开网卡开关（默认是关的），否则装完没网。

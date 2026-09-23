@@ -50,7 +50,7 @@ $ pacman --version
 
 ### 2.1 安装 / 升级 / 卸载
 
-| 操作 | Debian / Ubuntu | RHEL / CentOS / Rocky | Arch |
+| 操作 | Debian/Ubuntu | RHEL/CentOS/Rocky | Arch |
 |------|-----------------|------------------------|------|
 | 安装 | `sudo apt install 包名` | `sudo dnf install 包名` | `sudo pacman -S 包名` |
 | 批量安装 | `sudo apt install a b c` | `sudo dnf install a b c` | `sudo pacman -S a b c` |
@@ -74,7 +74,7 @@ Debian/Ubuntu 的 `full-upgrade` 与 `upgrade` 差别：前者允许为升级**�
 
 ### 2.2 搜索 / 信息 / 文件归属
 
-| 操作 | Debian / Ubuntu | RHEL / CentOS / Rocky | Arch |
+| 操作 | Debian/Ubuntu | RHEL/CentOS/Rocky | Arch |
 |------|-----------------|------------------------|------|
 | 按名搜索 | `apt search 关键词` | `dnf search 关键词` | `pacman -Ss 关键词` |
 | 查已装 | `apt list --installed` / `dpkg -l 包名` | `dnf list installed` / `rpm -qa` | `pacman -Qs 关键词` |
@@ -120,7 +120,7 @@ extra/vim 9.1.1231-1
 
 ### 2.3 仓库 / 源 / 缓存 / 锁定
 
-| 操作 | Debian / Ubuntu | RHEL / CentOS / Rocky | Arch |
+| 操作 | Debian/Ubuntu | RHEL/CentOS/Rocky | Arch |
 |------|-----------------|------------------------|------|
 | 刷新索引 | `sudo apt update` | `sudo dnf makecache` | `sudo pacman -Sy`（通常合进 `-Syu`） |
 | 列已启仓库 | `apt-cache policy` / 看 `/etc/apt/sources.list.d/` | `dnf repolist` / `dnf repolist -a` | `/etc/pacman.conf` 的 `[extra]`/`[community]` 段；`pacman -Sl` |
