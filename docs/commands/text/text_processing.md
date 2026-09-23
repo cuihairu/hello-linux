@@ -588,9 +588,18 @@ grep -i error app.log | awk '{print $3}' | sort | uniq -c | sort -rn | head
 
 ## 三发行版差异说明
 
-- **Debian/Ubuntu**：`grep` 为 GNU grep；`apt install gawk` 可获得功能更全的 awk 实现（`mawk` 有时是默认轻量实现，复杂脚本建议显式 `gawk`）。
-- **RHEL/CentOS/Rocky**：通常默认 `gawk`；`dnf install gawk` 覆盖或确认。
-- **Arch**：`grep`/`sed`/`gawk` 齐备；可用 `pacman -S gawk` 确认 awk 实现，详见 [Arch Wiki - AWK](https://wiki.archlinux.org/title/AWK)、[Arch Wiki - Sed](https://wiki.archlinux.org/title/Sed)、[Arch Wiki - Grep](https://wiki.archlinux.org/title/Grep)。
+三系都是 GNU 工具链（`grep`/`sed` 语义一致），差别主要在 **awk 实现、现代替代工具与日志路径**上，写跨发行版脚本前先对下表。
+
+| 场景 | Debian/Ubuntu | Arch | RHEL/CentOS/Rocky |
+|------|---------------|------|-------------------|
+| awk 实现 | 默认可能 `mawk`，装 `apt install gawk` | `gawk`（`pacman -S gawk` 确认） | 默认 `gawk`（`dnf install gawk` 确认） |
+| `grep -P`（PCRE） | GNU grep 默认支持 | 默认支持 | 默认支持 |
+| 现代搜索替代（ripgrep/fd） | `apt install ripgrep fd-find`（二进制 `fdfind`） | `pacman -S ripgrep fd` | `dnf install ripgrep fd-find` |
+| `sed -i` 行为 | GNU sed：`-i` 无需后缀，`-i.bak` 才备份 | 同左 | 同左 |
+| 默认分页/编辑器 | `less` + `nano` | `less` + 需自装编辑器 | `less` + `vim-minimal`/`nano` |
+| 日志路径（`tail -f` 示例） | `/var/log/syslog` | `journalctl` 优先 | `/var/log/messages` |
+
+**要点**：Debian 系 awk 常是轻量 `mawk`，依赖 `asort` 等 gawk 特性的脚本要显式 `gawk`；`fd` 在 Debian/Ubuntu 二进制名为 `fdfind`。Arch 详见 [Arch Wiki - AWK](https://wiki.archlinux.org/title/AWK)、[Arch Wiki - Sed](https://wiki.archlinux.org/title/Sed)、[Arch Wiki - Grep](https://wiki.archlinux.org/title/Grep)。
 
 ## 参考资料
 

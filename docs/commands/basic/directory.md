@@ -501,9 +501,16 @@ df -h .
 
 ## 三发行版差异说明
 
-- **Debian/Ubuntu**：`sudo apt install tree plocate`；`ls` 来自 coreutils。
-- **RHEL/CentOS/Rocky**：`sudo dnf install tree plocate`；部分最小化安装不含 `tree`。
-- **Arch**：`sudo pacman -S tree plocate`；基础文件命令已随 base 工具链提供，详见 [Arch Wiki - Pacman](https://wiki.archlinux.org/title/Pacman)。
+核心目录命令（`mkdir`/`cd`/`ls`/`du`/`df`）都来自 GNU coreutils，三系行为一致；差别集中在**可选工具预装与否、`/tmp` 挂载方式、默认 shell**上，换机器排错前先对下表。
+
+| 场景 | Debian/Ubuntu | Arch | RHEL/CentOS/Rocky |
+|------|---------------|------|-------------------|
+| 安装 `tree`/`ncdu`/`plocate` | `sudo apt install tree ncdu plocate` | `sudo pacman -S tree ncdu plocate` | `sudo dnf install tree ncdu plocate` |
+| `/tmp` 默认挂载 | systemd 默认 tmpfs（重启清空） | 可选 tmpfs 单元，默认常为磁盘目录 | 默认磁盘目录（`/var/tmp` 保留） |
+| 默认登录 shell | `/bin/bash`（`/bin/sh` → dash） | `/bin/bash` | `/bin/bash` |
+| `ls` 颜色/确认别名 | root 默认 `--color=auto` | root 默认 `--color=auto` | root 默认 `--color=auto`；部分别名含 `-i` |
+
+**要点**：`/tmp` 是否 tmpfs 决定"重启文件还在不在"；`sh` 在 Debian/Ubuntu 指向 dash，shebang 没写 bash 时花括号展开会失效。Arch 基础文件命令已随 base 提供，详见 [Arch Wiki - Pacman](https://wiki.archlinux.org/title/Pacman)。
 
 ## 参考资料
 

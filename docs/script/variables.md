@@ -18,6 +18,20 @@ Shell 变量是存储数据的容器，无需声明类型——同一个变量�
 
 `name="John"` 是词法赋值，不是「把等号两边的表达式算出来再存」。若写成 `name = "John"`，Bash 会把 `name` 当命令、`=` 与 `John` 当参数，于是报 `name: command not found`——这是新手第一课级别的坑。引用时建议始终写 `"${name}"` 或 `"$name"`：当变量名紧跟其他字符时花括号明确界定边界，`${name}suffix` 若写成 `$namesuffix` 会去找另一个变量。养成习惯：**变量后紧跟字母数字时必加花括号，变量作参数一律双引号**。
 
+```bash
+$ name="John"
+$ echo "Hello, ${name}!"
+Hello, John!
+$ greeting="Hi$name again"      # 紧跟字母时必须花括号界定
+$ echo "$greeting"
+HiJohn again
+$ readonly PI=3.14159
+$ PI=3                         # 再赋值即报错
+bash: PI: readonly variable
+$ unset name && echo "${name:-Anonymous}"
+Anonymous
+```
+
 只读与删除：`readonly PI=3.14159` 或 `declare -r VERSION=1.0` 之后再赋值会得到 `readonly variable` 错误；`unset name` 只删除变量本身（只影响当前 shell），若变量被 `export` 过，子 shell 仍可能从别处继承。
 
 ### 1.2 为什么推荐双引号
@@ -30,9 +44,44 @@ Shell 变量是存储数据的容器，无需声明类型——同一个变量�
 
 字符串是 Bash 里最常用的「类型」，操作全靠 `${}` 扩展：`${#str}` 取长度；`${str:0:5}` 从位置 0 取 5 个字符；`${str/World/Linux}` 替换第一处，`${str//o/0}` 全局替换；`${str#Hello }` 删前缀，`${str% World}` 删后缀。记忆技巧：`#` 在变量名前像「从头数」（删前缀），`%` 像「百分号收尾」（删后缀）；`//` 表示全局替换，单个 `/` 只换第一处。单引号内的内容不展开变量（`'Hello $USER'` 原样输出），双引号内才展开——详见 [Bash 基础](./bash-basics.md)。
 
+```bash
+$ str="Hello World"
+$ echo "${#str}"          # 长度
+11
+$ echo "${str:0:5}"       # 子串
+Hello
+$ echo "${str/World/Linux}"   # 替换第一处
+Hello Linux
+$ echo "${str//o/0}"          # 全局替换
+Hell0 W0rld
+$ echo "${str#Hello }"        # 删前缀
+World
+$ echo "${str% World}"        # 删后缀
+Hello
+```
+
 ### 2.2 索引数组：为什么必须写 `"${arr[@]}"`
 
 数组字面量用圆括号：`fruits=("apple" "banana" "cherry")`。取元素 `${fruits[0]}`，取全部 `${fruits[@]}`，取个数 `${#fruits[@]}`，追加 `fruits+=("date")`，删除 `unset fruits[1]`（会留下空洞）。**不加花括号和 `@`，数组会被压缩成第一个元素；不加引号，元素里的空格会被再次拆分**：`files=("a b.txt" "c.txt")` 时 `echo $files` 经词分割后看不出问题但传参已错，`echo "${files[@]}"` 才把每个元素作为独立词输出。循环数组、传给函数一律用 `"${arr[@]}"`。
+
+```bash
+$ fruits=("apple" "banana" "cherry")
+$ echo "${fruits[0]}"
+apple
+$ echo "${#fruits[@]}"       # 元素个数
+3
+$ fruits+=("date")
+$ echo "${fruits[@]}"
+apple banana cherry date
+$ files=("my notes.txt" "c.txt")
+$ printf '[%s]\n' $files          # 不加引号: 含空格元素被再次拆分
+[my]
+[notes.txt]
+[c.txt]
+$ printf '[%s]\n' "${files[@]}"    # 正确写法: 每个元素一个词
+[my notes.txt]
+[c.txt]
+```
 
 ### 2.3 关联数组（Bash 4+）
 
@@ -51,6 +100,20 @@ Shell 变量是存储数据的容器，无需声明类型——同一个变量�
 ## 5. 变量扩展与默认值
 
 `${name:-Anonymous}` 在 name 为空或未定义时用默认值但不写回；`${name:=Anonymous}` 同时把默认值赋给变量；`${unset_var:?Variable not set}` 在未定义时直接报错退出。脚本开头给可选参数兜底常用 `:-`，关键变量缺失要立刻失败用 `:?`——它与 `set -u` 配合是很好的防御。算术优先用纯内建 `$((a + b))`，无需 fork 外部进程、无需转义空格；`let` 可用但赋值不如 `$(( ))` 直观；`expr` 是外部命令且要求空格，仅在需要兼容极老 POSIX shell 时才用。`$(( age >= 18 ? 1 : 0 ))` 只支持数值三元，字符串结果请用 `if`/`else`（见 [条件判断](./conditionals.md)）。
+
+```bash
+$ a=15 b=7
+$ echo $(( a + b ))         # 22
+22
+$ echo $(( a * b ))         # 105
+105
+$ echo $(( a % b ))         # 取模
+1
+$ echo $(( a > b ? a : b )) # 数值三元
+15
+$ (( a += 3 )) && echo "$a" # 算术后赋值
+18
+```
 
 ## 6. 类型声明
 

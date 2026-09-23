@@ -20,6 +20,21 @@
 
 **为什么优先 `{1..N}` 而非 `$(seq 1 N)`**：`seq` 是外部命令，每次循环都要 fork 一个进程；`{1..N}` 是 shell 的花括号展开，纯内建。循环上万次时差异明显。需要复杂步进或浮点时才用 `seq`。
 
+```bash
+$ for fruit in apple banana cherry; do
+>     echo "fruit: $fruit"
+> done
+fruit: apple
+fruit: banana
+fruit: cherry
+$ for i in {1..5}; do printf '%s ' "$i"; done; echo
+1 2 3 4 5
+$ for ((i=0; i<3; i++)); do echo "i=$i"; done
+i=0
+i=1
+i=2
+```
+
 ### 1.2 文件 glob 遍历
 
 `for file in *.txt` 里的 `*.txt` 在 `in` 列表位置由 shell 展开；若**没有匹配文件**，默认（未开 `nullglob`）会原样保留 `*.txt` 字面量——于是循环体第一次收到的字符串就是 `*.txt` 本身，`cat *.txt` 可能报「没有那个文件」。稳健写法是 `shopt -s nullglob` 让无匹配时展开为空列表（循环零次），用完再 `shopt -u nullglob`；或先把 glob 赋给数组，检查 `${files[0]}` 是否存在再进循环。
@@ -36,6 +51,25 @@
 
 `until` 与 `while` 相反：条件为假时循环，适合「等待文件出现、等端口就绪」这类「直到条件成立」的场景，比 `while ! condition` 更易读，两者可互换。无限循环两种写法：`while true` 或 `while :`（`:` 是空操作内建，永远返回 0）。
 
+```bash
+$ count=0
+$ while (( count < 3 )); do
+>     echo "count=$count"
+>     count=$((count + 1))      # 不用 ((count++)), 见上文 set -e 陷阱
+> done
+count=0
+count=1
+count=2
+$ n=3
+$ until (( n == 0 )); do
+>     echo "还剩 $n"
+>     n=$((n - 1))
+> done
+还剩 3
+还剩 2
+还剩 1
+```
+
 ## 3. 循环控制与嵌套
 
 `break` 跳出整个循环，`continue` 跳过本次迭代；`break 2` / `continue 2` 跳出/跳过第 N 层（1=最内层）。嵌套循环典型例子是九九乘法表：外层控制行、内层控制列，用 `printf` 不换行拼一行，外层末尾再 `echo`。循环里调用函数处理每个文件时，函数参数用 `local`，循环外的计数器也要在当前 shell 累加——若把循环放进管道右侧就会丢，见下节。`[[ -e $file ]] || continue` 是跳过不存在文件的常见守卫。
@@ -43,6 +77,22 @@
 ## 4. 关键陷阱：管道子 shell 与变量丢失
 
 **这是循环章节最经典、最高频的坑**：`cat file.txt | while read -r line; do count=$((count+1)); done` 之后 `echo $count` 得到 0。**原因**：管道 `|` 的右侧会开启一个**子 shell**，循环在子 shell 里跑，对 `count` 的修改只存在于子 shell；父 shell 的 `count` 从未改变。进程结束，子 shell 里的变量随之消失。
+
+```bash
+$ printf 'a\nb\nc\n' > /tmp/lines.txt
+$ count=0
+$ cat /tmp/lines.txt | while IFS= read -r line; do
+>     count=$((count + 1))
+> done
+$ echo "管道写法: $count"
+管道写法: 0
+$ count=0
+$ while IFS= read -r line; do
+>     count=$((count + 1))
+> done < /tmp/lines.txt
+$ echo "重定向写法: $count"
+重定向写法: 3
+```
 
 三种修复思路，按推荐度排序：
 
@@ -57,6 +107,20 @@
 ### 5.1 read 的正确姿势
 
 错误示范是 `while read line`（无 `IFS=`、无 `-r`）：会丢反斜杠、吞首尾空格、遇 `\` 续行。正确模板固定写 `while IFS= read -r line; do ...; done < file.txt`。若担心末行无换行符被 `read` 吞掉（返回非零但 `line` 可能仍有数据），用 `while IFS= read -r line || [[ -n $line ]]; do ...; done` 兜底。
+
+```bash
+$ printf '  my notes.txt  \npath/with\\space.txt\n' > /tmp/names.txt
+$ while IFS= read -r file; do
+>     echo "读到: [$file]"
+> done < /tmp/names.txt
+读到: [  my notes.txt  ]
+读到: [path/with\space.txt]
+$ while read file; do               # 错误示范: 无 IFS=、无 -r
+>     echo "读到: [$file]"
+> done < /tmp/names.txt
+读到: [my notes.txt]                # 首尾空格被吞
+读到: [path/withspace.txt]          # 反斜杠被当成转义吃掉
+```
 
 ### 5.2 处理含空格的文件名
 

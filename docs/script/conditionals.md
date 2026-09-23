@@ -20,6 +20,22 @@
 
 基本结构是 `if 条件; then 真分支; elif 条件2; then 另一分支; else 兜底; fi`——`then` 前的分号（或换行）不可省略，它是关键字分隔符。第一个例子用 `(( age >= 18 ))` 判断是否成年并打印「成年人/未成年人」，因为比较的是整数；若用 `[[ $age -ge 18 ]]` 也可以，但 `-ge` 属于测试语法，`(( ))` 更贴近算术比较的直觉。把 `if` 想象成「命令的退出码路由」：条件位置上的命令返回 0 走 `then`，非 0 走 `else`——这也是为什么 `if command; then` 可以直接挂任何命令（`grep`、`systemctl`、自定义函数）。
 
+```bash
+$ age=20
+$ if (( age >= 18 )); then
+>     echo "成年人"
+> else
+>     echo "未成年人"
+> fi
+成年人
+$ if systemctl is-active --quiet nginx; then
+>     echo "nginx 正在运行"
+> else
+>     echo "nginx 未运行"
+> fi
+nginx 未运行
+```
+
 ## 3. 条件表达式
 
 ### 3.1 整数比较
@@ -34,11 +50,46 @@
 
 `-f` 普通文件、`-d` 目录、`-e` 存在、`-r`/`-w`/`-x` 可读/写/执行、`-s` 非空、`-L` 符号链接。判断符号链接时 **`-L` 必须放在 `-f`/`-d` 之前**——`test -f link` 检查的是链接目标，先测 `-f` 会跟着链接走，永远区分不出链接本身。日常检查 `/etc/passwd` 之类固定路径时注意全部加引号：`[[ -f "$file" && -r "$file" ]]`。
 
+`[ ]` 与 `[[ ]]` 对空变量的行为差异：
+
+```bash
+$ name=""
+$ [ $name = foo ]; echo "exit=$?"
+# bash: [: =: unary operator expected
+exit=2
+$ [ "$name" = foo ]; echo "exit=$?"   # [ ] 加引号才安全
+exit=1
+$ [[ $name = foo ]]; echo "exit=$?"    # [[ ]] 关键字内部不做词分割
+exit=1
+$ [[ "file.txt" == *.txt ]] && echo 匹配   # [[ ]] 支持 glob
+匹配
+```
+
 ## 4. 逻辑运算符
 
 `[[ ]]` 内直接支持 `&&`、`||`、`!`，不必拆成两个 `[ ]`。若用传统 `[ ]`，`&&` 写在两个 `]` 与 `[` **之间**，是 shell 的命令连接符，与写在 `[[ ... && ... ]]` **里面**的测试逻辑与不在同一层次——两者都合法但语义不同，初读容易晕。`(( ))` 用真正的算术比较符，`>`、`<` 不会被解释成重定向或字典序。
 
 **`case` 语句**：当分支很多且基于字符串模式匹配时，比一串 `if/elif` 清晰得多。模式支持 glob 风格通配（`*`、`?`、`[...]`），`|` 表示或，每个分支用 `;;` 结束——**漏写 `;;` 会吞掉后续分支**，这是 `case` 最常见的语法错。默认分支 `*)` 建议永远保留，否则非法输入会静默什么都不做。交互式输入处理常用 `read -rp` 读入后 `case` 匹配 `y|Y|yes|YES` 等模式。
+
+```bash
+$ cat > backup-type.sh <<'EOF'
+#!/bin/bash
+# 按参数选择备份类型
+case "$1" in
+    full|fullonly)   echo "执行完整备份" ;;
+    incr|daily)      echo "执行增量备份" ;;
+    y|Y|yes|YES)     echo "确认执行" ;;
+    *)               echo "用法: $0 {full|incr}" >&2; exit 2 ;;
+esac
+EOF
+$ chmod +x backup-type.sh
+$ ./backup-type.sh full
+执行完整备份
+$ ./backup-type.sh bogus
+用法: ./backup-type.sh {full|incr}
+$ echo $?
+2
+```
 
 ## 5. 三元运算与退出码
 

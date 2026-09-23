@@ -414,9 +414,17 @@ fakebin: ELF
 
 ## 三发行版差异说明
 
-- **Debian/Ubuntu**：`apt install coreutils findutils plocate file`（多数已预装；`locate` 需另装）。
-- **RHEL/CentOS/Rocky**：`dnf install coreutils findutils plocate file`；日志路径与 Ubuntu 不同，`tail -f` 示例需按系统调整。
-- **Arch**：核心工具随 `base`/`base-devel` 体系已具备；`plocate`、`tree` 等可选工具用 `pacman -S plocate tree` 安装。
+`cp`/`mv`/`rm`/`find` 等核心命令三系一致，差异集中在**默认 umask、覆盖确认别名、SELinux 上下文**这几处会在脚本里"悄悄不同"的地方。
+
+| 场景 | Debian/Ubuntu | Arch | RHEL/CentOS/Rocky |
+|------|---------------|------|-------------------|
+| 安装 `plocate`/`tree`/`file` | `sudo apt install plocate tree file` | `sudo pacman -S plocate tree file` | `sudo dnf install plocate tree file` |
+| 新用户默认 umask | `0022` | `0022` | 普通用户 `0002`（legacy）；root `0022` |
+| `cp`/`mv` 覆盖确认别名 | 默认无 `-i` 别名 | 默认无 `-i` 别名 | 部分环境为 root 配 `cp -i`、`mv -i` 别名 |
+| 查看 SELinux 上下文（`ls -Z`） | AppArmor，少见用 | 无默认强制访问控制 | 常用；规则用 `semanage fcontext` |
+| 系统日志路径（`tail -f` 示例） | `/var/log/syslog` | `journalctl` 优先 | `/var/log/messages` |
+
+**要点**：RHEL 系交互式 root shell 常见 `cp`/`mv` 的 `-i` 别名，同一脚本交互与非交互下行为可能不同，自动化里显式写 `-n` 或 `\cp`；`ls -Z` 上下文不对是 SELinux 标签问题，用 `restorecon -R` 恢复而非 `chmod`。
 
 ## 参考资料
 

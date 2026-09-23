@@ -26,6 +26,14 @@
 
 递归搜索排除版本控制目录：`grep -rn --exclude-dir={.git,node_modules} "TODO" src/`。只提取匹配部分再统计：`grep -oE 'IP 正则' access.log | sort | uniq -c | sort -rn | head`。单纯计数优先 `grep -c`，比手写 `while read` 快一个数量级——但一旦需要按行做复杂分支（多条件、累计、跳过注释），就改用循环，见 [循环结构](./loops.md)。
 
+```bash
+$ printf 'GET /a 200\nPOST /b 500\nGET /c 404\n' > access.log
+$ grep ' 5[0-9][0-9]$' access.log | sed -E 's| /[^ ]+ | |' | awk '{print $1, "=>", $NF}'
+POST => 500
+```
+
+组合语义：`grep` 先筛出 5xx 行，`sed` 抽掉路径只留方法与状态，`awk` 再按字段排版——每一步只做一件事，正是三件套的分工。
+
 ## 2. sed：流编辑器
 
 sed 逐行读入模式空间，对匹配的行执行脚本命令，然后输出——它是**非交互式**的行编辑器，适合「批量、可重复、可写进脚本」的替换。核心是 `s/old/new/g`：不带 `g` 每行只替换第一处，`-i` 原地修改，`-n` 抑制默认输出配合 `p` 只打印被替换的行，`-i.bak` 原地修改并留备份（**强烈推荐**——`sed -i` 直接重写原文件，正则写错如 `s/.*//` 内容瞬间清空且无 undo）。
@@ -42,6 +50,16 @@ awk 是「模式-动作」语言：对每一行匹配模式则执行动作，内
 
 统计三板斧：**求和** `'{sum += $3} END {printf "sum=%.2f", sum}'`；**去重** `!seen[$0]++`（首次 `seen[$0]` 为 0 假值，`!0` 为真故打印，随后自增；再次遇到 `!1` 为假不打印——一行完成「保留首次出现」）；**频率** 抽字段后 `sort | uniq -c | sort -rn`。格式化输出用 `printf "%-20s %10d\n"`；多文件时 `FNR==1 {print "=== " FILENAME " ==="}` 打分隔头。
 
+```bash
+$ printf 'alice 100\nbob 250\ncarol 150\nalice 50\n' > score.txt
+$ awk '{sum += $2} END {printf "sum=%.0f avg=%.1f\n", sum, sum/NR}' score.txt
+sum=550 avg=137.5
+$ awk '!seen[$1]++ {print $1}' score.txt   # 按第 1 字段保留首次出现
+alice
+bob
+carol
+```
+
 **awk 默认字段分隔是「任意空白」**，连续空格不会产生空字段；要按单个空格或 CSV 解析需显式 `FS`。含空格的 CSV 别用 `-F,` 硬拆，考虑更严谨的解析。中英文混排时优先 `[[:space:]]` 比 `[ \t]` 可移植。
 
 ## 4. 其他工具与选型
@@ -55,6 +73,36 @@ awk 是「模式-动作」语言：对每一行匹配模式则执行动作，内
 ## 5. 实战：Nginx 日志分析
 
 设计思路：参数校验（`用法` + `[[ -r ]]`）→ 总请求数 `wc -l` → 独立 IP 数抽第 1 字段 `sort -u | wc -l` → TOP IP 与状态码分布各来一串 `sort | uniq -c | sort -rn`。全部是只读管道，无破坏性操作，可直接挂 cron 出日报。真实量级输出形如总请求 12043、独立 IP 876、状态码以 200 为主夹杂 404/502——看到 502 突增就该去查上游了。复杂分支（按状态码分桶告警、按 UA 统计爬虫）再上 `awk` 脚本或本章三件套组合。
+
+```bash
+$ cat > nginx-stats.sh <<'EOF'
+#!/bin/bash
+# 用法: ./nginx-stats.sh access.log
+set -euo pipefail
+log=${1:?用法: $0 <access.log>}
+[[ -r "$log" ]] || { echo "错误: 无法读取 $log" >&2; exit 1; }
+
+echo "总请求数: $(wc -l < "$log")"
+echo "独立 IP 数: $(awk '{print $1}' "$log" | sort -u | wc -l)"
+echo "TOP 5 IP:"
+awk '{print $1}' "$log" | sort | uniq -c | sort -rn | head -5
+echo "状态码分布:"
+awk '{print $9}' "$log" | sort | uniq -c | sort -rn
+EOF
+$ chmod +x nginx-stats.sh
+$ ./nginx-stats.sh access.log
+总请求数: 12043
+独立 IP 数: 876
+TOP 5 IP:
+   1520 203.0.113.7
+    984 198.51.100.23
+    ...
+状态码分布:
+   9871 200
+   1432 404
+    511 502
+    ...
+```
 
 ## 6. 本章常见坑
 

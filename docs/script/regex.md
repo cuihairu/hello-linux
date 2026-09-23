@@ -24,6 +24,24 @@
 
 同一个「一个或多个 o」，BRE 写 `'go\+d'`，ERE/PCRE 写 `'go+d'`——方言开关一错，匹配结果天差地别。
 
+```bash
+$ printf 'god\ngood\ngoood\n' > words.txt
+$ grep -n 'go\+d' words.txt        # BRE: \+ 才是量词
+1:god
+2:good
+3:goood
+$ grep -nE 'go+d' words.txt        # ERE: + 直接用
+1:god
+2:good
+3:goood
+$ grep -n 'go+d' words.txt         # BRE 里 + 是字面量, 几乎匹配不到
+# (无输出)
+$ grep -nE 'a{3}' <<< 'aaaa'       # ERE 花括号不用转义
+aaaa
+$ grep -n 'a\{3\}' <<< 'aaaa'      # BRE 花括号要转义
+aaaa
+```
+
 ## 2. 元字符：三种方言对照
 
 ### 2.1 通用元字符（三方言一致）
@@ -50,11 +68,40 @@ ERE/PCRE：`x+` 一次或多次，`x?` 零或一次，`x{n}` 恰好 n 次，`x{n
 
 捕获组存入 `BASH_REMATCH` 数组（下标 0 是整串匹配）：对「部署于 2026-09-22 完成」用 `([0-9]{4})-([0-9]{2})-([0-9]{2})` 匹配后，`${BASH_REMATCH[1]}` 是年、`[2]` 是月、`[3]` 是日。可封装成 `is_uint`、`is_ipv4`、`is_cn_mobile` 等谓词函数，在 `if` 里直接调用。
 
+```bash
+$ email="alice@example.com"
+$ if [[ $email =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; then
+>     echo "有效邮箱"
+> else
+>     echo "无效邮箱"
+> fi
+有效邮箱
+$ s="部署于 2026-09-22 完成"
+$ if [[ $s =~ ([0-9]{4})-([0-9]{2})-([0-9]{2}) ]]; then
+>     echo "年=${BASH_REMATCH[1]} 月=${BASH_REMATCH[2]} 日=${BASH_REMATCH[3]}"
+> fi
+年=2026 月=09 日=22
+$ re='^[0-9]+$'                     # 正则先存变量再引用
+$ [[ 12345 =~ $re ]] && echo 全是数字
+全是数字
+```
+
 **验证 ≠ 完全合法**：`[0-9]{1,3}` 会放过 `999.999.999.999`；严格校验 IP 需逐段数值判断。写校验时明确「业务可接受的宽松度」，别把演示正则当 RFC 实现。`\b` 单词边界（GNU/ERE/PCRE 支持）用于避免 `cat` 匹配到 `concatenate`。
 
 ## 5. sed/awk 中的正则
 
 `sed` 默认 BRE，`-E` 切到 ERE：`sed -n '/error/p'` 与 `sed -n -E '/error|warn/p'`。`awk` 动态正则用斜杠字面量或字符串：`/error/`、`$0 ~ /timeout|refused/`、`BEGIN {pat="^GET"} $0 ~ pat`。注意 `sed` 替换串的 `&` 与 `\1` 语义——`grep` 只匹配不替换，sed 才有「替换时引用匹配」的概念。
+
+```bash
+$ echo 'hello world' | sed -E 's/([a-z]+) ([a-z]+)/\2 \1/'   # 交换两个单词
+world hello
+$ echo 'price: 42 USD' | sed -E 's/[0-9]+/[金额]/'           # 替换数字
+price: [金额] USD
+$ echo 'user=admin' | sed -n 's/^user=//p'                   # 提取 value
+admin
+$ sed -E 's|http://|https://|g' <<< 'http://a.example http://b.example'
+https://a.example https://b.example
+```
 
 中文匹配需要 PCRE：`grep -P '[\x{4e00}-\x{9fa5}]'`；POSIX 字符类 `[:alpha:]` 不认 CJK，`[` 简单范围也覆盖不了全部汉字区间。处理 UTF-8 中文时确保 locale 正确，否则 `.` 与字符类按字节而非字符处理。
 

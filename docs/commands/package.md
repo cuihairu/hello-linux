@@ -139,7 +139,42 @@
    `s` 清配置文件）；
    `dnf remove` 会移除"仅被该包依赖"的依赖包，
    但保留配置。
-   迁移习惯时别想当然。
+    迁移习惯时别想当然。
+
+## 常见坑
+
+1. **在 Arch 上执行 `pacman -Sy 包名` 做部分升级**。
+   索引已刷新到最新而只装目标包，
+   新包依赖的库可能已升级、系统里其他旧软件还链着旧库，
+   造出一堆 `error while loading shared libraries`。
+   正确写法是 `sudo pacman -Syu 包名` 一步完成；
+   Arch Wiki 的官方立场是永远不要 partial upgrade。
+2. **把 `apt update` 当成升级**。
+   `update`/`makecache`/`-Sy` 只刷新本地索引（看最新菜单），
+   真正动版本的是 `apt upgrade`、`dnf upgrade`、`pacman -Su`。
+   新换镜像源后必须先 update 再 install，
+   否则会提示找不到包或版本对不上。
+3. **直接删 `/var/lib/dpkg/lock-frontend` 解锁**。
+   锁文件存在说明另一个 apt/dpkg 正在跑（或上次被中断留下半配置状态）。
+   先 `ps` 确认并等它结束，
+   残留状态用 `sudo dpkg --configure -a` 修；
+   硬删锁会损坏 dpkg 数据库，
+   修复成本远高于等待。
+4. **生产环境不看变更列表就 `apt full-upgrade`/`dnf upgrade -y`**。
+   大版本跳跃可能移除被依赖的包、改配置文件、重启服务。
+   先用 `apt list --upgradable` / `dnf check-update` / `pacman -Qu` 看清单，
+   重要包先 `apt-mark hold` / `dnf versionlock add` 钉死，
+   再在维护窗口执行。
+5. **无审阅安装 AUR/PPA 包**。
+   AUR 是 PKGBUILD 构建脚本而非预编译二进制，
+   PPA 同理由第三方维护。
+   安装前打开 PKGBUILD/包说明过目构建步骤；
+   生产服务器建议只用官方仓库 + EPEL 这类发行版背书的扩展源。
+6. **忘了三系包管理器互不通用**。
+   `apt` 只在 Debian/Ubuntu 上有、`dnf`/`yum` 只在 RHEL 系、`pacman` 只在 Arch。
+   拿着一系的命令到另一系只会得到 `command not found`。
+   到陌生机器先 `cat /etc/os-release` 看 `ID` 字段再选工具，
+   或用本篇的六维对照表现场查。
 
 ## 常见问题
 
