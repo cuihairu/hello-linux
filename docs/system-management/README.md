@@ -178,7 +178,7 @@ AppStream 直接提供的是最小化的 `ansible-core`，
 - Arch Wiki - Improving performance：
   <https://wiki.archlinux.org/title/Improving_performance>
 - Brendan Gregg - Linux Performance Methods：
-  <http://www.brendangregg.com/linuxperf.html>
+  <https://www.brendangregg.com/linuxperf.html>
 - RHEL 9 监控与管理系统状态和性能：
   <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index>
 - rsync 官方文档：<https://download.samba.org/pub/rsync/rsync.html>

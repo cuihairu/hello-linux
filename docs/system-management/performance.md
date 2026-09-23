@@ -314,7 +314,7 @@ SSD/NVMe 上默认的 `mq-deadline` 或 `none`（多队列直通）通常无需�
 ## 参考资料
 
 - Brendan Gregg - Linux Performance (USE method, methodology)：
-  <http://www.brendangregg.com/linuxperf.html>
+  <https://www.brendangregg.com/linuxperf.html>
 - Arch Wiki - Improving performance：
   <https://wiki.archlinux.org/title/Improving_performance>
 - Red Hat - Monitoring and managing system status and performance：

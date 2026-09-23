@@ -164,7 +164,7 @@ ii vim 2:9.1.2141-1ubuntu4.9
 
 RHEL/CentOS/Rocky 常见包：`vim-minimal`（提供基础 `vi`）、`vim-enhanced`（完整 `vim`）、`neovim`（多在 EPEL）、`nano`。Arch 见第 1.1 节表；`pacman -Qs 'vim|nano'` 可查询已装包。脚本中若依赖"存在 vi"，请写 `command -v vi` 判断，不要写死 `/usr/bin/vim`。
 
-## 5. cat - 整文件查看与合并
+## 4. cat - 整文件查看与合并
 
 ```bash
 cat file.txt / cat -n / -b / -s / -A   # 原样 / 行号 / 仅非空编号 / 压空行 / 显示 ^I 与 $
@@ -183,7 +183,7 @@ EOF
 
 **坑**：`cat 大文件 | less` 没问题，但 `cat 大文件 | grep foo` 时 `cat` 是多余的一跳，直接 `grep foo 大文件` 更省；对超大文件 `cat` 全量进管道还可能造成内存尖峰。`cat` 的本职是"拼接"，查看请按下面选型。
 
-## 6. less - 分页查看（首选）
+## 5. less - 分页查看（首选）
 
 less 支持前后翻页、搜索、跳转，退出只占一个 `q`，是大文件与管道的默认选择。
 
@@ -196,7 +196,7 @@ dmesg | less / less -N / less -i         # 管道、行号、忽略大小写
 
 **坑**：`less` 在管道中会全量缓冲输入再进入界面（取决于实现与 `--no-init` 等选项），对"边生成边看"的超长实时流，优先 `tail -f` 或 `journalctl -f`。
 
-## 7. more - 只能向前的简单分页
+## 6. more - 只能向前的简单分页
 
 more 只能向后翻，功能弱于 less，但依赖简单、在某些最小环境仍存在。适合"看前几屏就退出"的场景。
 
@@ -208,7 +208,7 @@ more file.txt / more +10 file.txt
 
 新脚本与文档优先推荐 `less`；交互教学可按"more 会用即可，less 必须会"掌握。
 
-## 8. head / tail - 首尾与实时日志
+## 7. head / tail - 首尾与实时日志
 
 ```bash
 head file.txt / head -n 20 / head -c 100    # 默认 10 行 / 指定行数 / 前 100 字节
@@ -228,9 +228,9 @@ less +G app.log            # 直接跳到末尾再搜索
 - `tail -f` 遇到日志轮转（logrotate）可能停在旧 inode 上，用 `-F` 或配合 `copytruncate`/`create` 策略。
 - `-n` 与 `-c` 语义不同：行 vs 字节；二进制/无换行文件只能靠 `-c`。
 
-## 9. 实战案例
+## 8. 实战案例
 
-### 9.1 编辑配置并校验
+### 8.1 编辑配置并校验
 
 ```bash
 sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
@@ -242,7 +242,7 @@ diff -u /etc/nginx/nginx.conf.bak /etc/nginx/nginx.conf
 
 SSH 配置、sysctl 同理：**备份 → 编辑 → 语法检查 → 灰度生效 → diff 留档**。忘 `nginx -t`/`sshd -t` 是回滚的主要原因。
 
-### 9.2 日志定位错误
+### 8.2 日志定位错误
 
 ```bash
 grep -n -i "error" /var/log/syslog | tail -20
@@ -252,7 +252,7 @@ tail -f /var/log/nginx/access.log
 
 `grep -n` 保留行号后，可 `vim +412 app.log` 直接跳到那一行上下文。
 
-### 9.3 无图形界面时的最小闭环
+### 8.3 无图形界面时的最小闭环
 
 只剩 SSH、不知系统装了什么编辑器时：
 
@@ -262,7 +262,7 @@ command -v nano && nano file || command -v vim && vim file || vi file
 
 或先 `pacman -Qs 'vim|nano'` / `dpkg -l | grep -E 'vim|nano'` 看现状，再安装。Arch 最小系统请记得 `pacman -S vim` 或 `pacman -S nano`，不要假设编辑器一定在 `base` 里。
 
-## 10. 工具对比与选型
+## 9. 工具对比与选型
 
 | 工具 | 定位 | 何时用 | 不要用于 |
 |------|------|--------|----------|
@@ -275,7 +275,7 @@ command -v nano && nano file || command -v vim && vim file || vi file
 
 **经验法则**：不确定多大就 `less`；只看头尾就 `head`/`tail`；要改就 `vim`（或你会用的编辑器）；要改多处先备份再 `vim`/`sed -i.bak`。
 
-## 11. 常见坑速查
+## 10. 常见坑速查
 
 | 现象 | 原因 | 处理 |
 |------|------|------|
@@ -288,7 +288,7 @@ command -v nano && nano file || command -v vim && vim file || vi file
 | 脚本里 `vi` 行为奇怪 | 替代名指向不同实现 | `readlink -f $(which vi)` 确认 |
 | `cat -A` 一堆 `^I`/`$` | 正是 Tab 与行尾 | 用于排格式问题，不是乱码 |
 
-## 12. 三发行版差异说明
+## 11. 三发行版差异说明
 
 | 项目 | Debian/Ubuntu | RHEL/CentOS/Rocky | Arch |
 |------|---------------|-------------------|------|
