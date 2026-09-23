@@ -1,0 +1,18 @@
+# https://docs.github.com/code-security/dependabot/dependabot-configuration-options
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      vitepress:
+        patterns:
+          - "vitepress"
+    # Nested vite/esbuild under vitepress have no fix until upstream releases;
+    # security alerts remain tracked on the Security tab.
+    ignore:
+      - dependency-name: "vite"
+      - dependency-name: "esbuild"

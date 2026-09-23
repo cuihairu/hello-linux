@@ -8,7 +8,7 @@ export default defineConfig({
   cleanUrls: false,
   lastUpdated: true,
   head: [
-    ['link', { rel: 'icon', href: '/hello-linux/logo.svg' }]
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/hello-linux/favicon.svg' }]
   ],
   themeConfig: {
     logo: '/logo.svg',
