@@ -156,6 +156,35 @@ ssl_key = </etc/ssl/private/mail.example.com.key
 
 三者解决同一问题的不同侧面：**谁有权代表这个域发信**。SPF 在 DNS TXT 里列出允许发信的 IP/MX（`v=spf1 mx a:mail.example.com ip4:203.0.113.10 -all`），收件方比对信封来源；DKIM 用私钥对邮件头签名、公钥发布在 `mail._domainkey.example.com` 的 TXT 里，防篡改并建立域级信誉；DMARC 则告诉收件方"SPF/DKIM 都对不齐时怎么办"（`_dmarc.example.com` TXT，`p=quarantine` 或 `p=reject`），并提供 `rua` 聚合报告地址。配置顺序有讲究：先确保出站 IP 出现在 SPF 中、DKIM 签名稳定生效，最后再把 DMARC 从 `p=none` 观察模式逐步收紧到 `reject`——跳过观察期直接 `reject`，是对齐配置有误时最经典的"己方邮件被静默丢弃"事故。OpenDKIM 的密钥生成与权限收紧属于明确成熟的操作（`opendkim-genkey` 后限制目录属主），但筛选器选择、报告邮箱归档等策略因组织而异，本页只给方向，细节以官方文档与实测报告为准。
 
+### 5.1 SPF：谁能代表这个域发信
+
+SPF 是发布在**域名 apex**（`example.com`）上的一条 TXT 记录，声明哪些源 IP/MX 有权以本域名义外投（`v=spf1 ... -all`）。收件方收到信后取信封 MAIL FROM 对应域的 SPF，比对来源 IP 是否在授权列表内。它只约束"信封来源域"，与信头 `From` 是两回事：
+
+```bash
+$ dig TXT example.com +short
+"v=spf1 mx a:mail.example.com ip4:203.0.113.10 -all"
+```
+
+### 5.2 DKIM：用密钥为邮件头签名
+
+DKIM 在发送时用私钥对邮件头做签名，公钥则以 `<selector>._domainkey.example.com` 的 TXT 记录发布（`default`、`mail` 等 selector 由 OpenDKIM 配置决定）。收件方用公钥验签，既能发现传输途中的篡改，也能让"同一域的持续良好投递"积累域级信誉：
+
+```bash
+$ dig TXT default._domainkey.example.com +short
+"v=DKIM1; k=rsa; p=MIIBIjANBg..."
+```
+
+### 5.3 DMARC：对齐失败时怎么处置
+
+DMARC 记录发布在 `_dmarc.example.com`，声明当 SPF 或 DKIM 至少一项与信头 `From` 域"对齐"失败时收件方该采取的动作：`p=none` 只收集报告不处置，`quarantine` 进垃圾箱，`reject` 直接拒收；`rua=` 指定聚合报告的接收地址：
+
+```bash
+$ dig TXT _dmarc.example.com +short
+"v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com"
+```
+
+验证与上线顺序建议固定为：先发布 SPF 并确认外投 IP 命中，再启用 DKIM 签名并用 dig 确认公钥可达，最后把 DMARC 从 `p=none` 观察模式读完聚合报告、确认对齐率正常后再逐步收紧到 `quarantine`/`reject`。
+
 ## 6. 测试与验证
 
 ```bash

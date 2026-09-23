@@ -340,13 +340,7 @@ ACM/Let's Encrypt 自动续期后
 Arch 用 `pacman -S haproxy`，
 Debian/Ubuntu 用 `apt install haproxy`，
 RHEL/CentOS/Rocky 用
-`dnf install haproxy`：
-
-```bash
-sudo pacman -S haproxy          # Arch
-sudo apt install haproxy        # Debian/Ubuntu
-sudo dnf install haproxy        # RHEL/CentOS/Rocky
-```
+`dnf install haproxy`。
 
 ### 4.2 配置结构
 
@@ -641,20 +635,14 @@ server {
 ```
 
 部署顺序有讲究：
-**先在测试环境 `nginx -t` 校验语法，
-再 reload；
+**先在测试环境 `sudo nginx -t` 校验语法——
+输出 `syntax is ok`、`test is successful`
+后再 `sudo systemctl reload nginx`；
 先确认健康检查路径可达，
 再把后端纳入池**。
 反过来（先加后端再配检查）
 会导致一段窗口期
 把流量打到半就绪的实例上。
-
-```bash
-$ sudo nginx -t
-nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
-nginx: configuration file /etc/nginx/nginx.conf test is successful
-$ sudo systemctl reload nginx
-```
 
 上线后立刻做三件事：
 看 access log 里

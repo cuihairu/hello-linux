@@ -14,6 +14,13 @@ NetworkManager（`nmcli`）、传统 ifcfg 脚本。
 再对照三发行版给出可落地的配置方法，
 最后把 DNS 解析这条最容易被忽视的链路
 完整走一遍。
+本页按"先回答：谁在管理你的网卡 →
+查看当前网络状态 → 永久配置：三系对照 →
+路由配置 → DNS 配置与解析路径 →
+Bonding 与 VLAN → 网络性能调优 →
+实战案例 → 常见坑 →
+容器与虚拟网络的边界 →
+与本篇其他页的关系"展开。
 
 > 内容参考自 Netplan、systemd-networkd、
 > NetworkManager 官方手册与 Arch Wiki，
@@ -52,9 +59,6 @@ active
 # Ubuntu 上是否用 Netplan
 $ ls /etc/netplan/
 00-installer-config.yaml
-
-# RHEL/CentOS 上 NetworkManager 的连接配置
-$ ls /etc/NetworkManager/system-connections/
 ```
 
 两个管理器同时 `active` 是危险状态：
@@ -103,19 +107,11 @@ NetworkManager 与 systemd-networkd
 `/etc/sysconfig/network-scripts/`
 只会得到"改了没反应"。
 
-判断当前格局的命令组合如下，
-换新机器时先跑一遍再动手：
-
-```bash
-systemctl is-active NetworkManager systemd-networkd
-ls /etc/netplan/ 2>/dev/null
-nmcli -t -f NAME,DEVICE connection show --active
-networkctl list 2>/dev/null
-```
-
+判断当前格局，
+换新机器时先跑一遍本节开头的检测命令再动手——
 输出里谁是 `active`、
 谁列出了你的网卡，
-谁就是实际管理者——
+谁就是实际管理者：
 **以输出为准，不以发行版印象为准**。
 
 ## 2. 查看当前网络状态
@@ -140,14 +136,6 @@ $ ip link show
 $ ip -br addr
 lo   UNKNOWN 127.0.0.1/8 ::1/128
 eth0 UP      192.168.1.100/24 fe80::216:3eff:fe12:3456/64
-
-# 查看收发计数与错误
-$ ip -s link show eth0
-3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> ...
-    RX:  bytes packets errs drop fifo frame compressed multicast
-         1048576    8234    0    0    0     0     0        0
-    TX:  bytes packets errs drop fifo colls carrier compressed
-         524288     6102    0    0    0     0    0        0
 ```
 
 `ip link` 的 `state` 字段容易误读：
@@ -156,7 +144,8 @@ $ ip -s link show eth0
 虚拟接口或未插线时常出现 `UP`
 但缺少 `LOWER_UP`，
 此时"接口开着"却不可能通。
-`ip -s` 的 `errs`/`drop` 持续增长
+收发计数用 `ip -s link show eth0` 查看，
+其 `errs`/`drop` 持续增长
 则指向链路层问题
 （双工不匹配、环路、驱动 bug），
 此时应先修链路，再谈上层配置。
@@ -169,10 +158,6 @@ $ ip -s link show eth0
 sudo ip addr add 192.168.1.100/24 dev eth0
 sudo ip link set eth0 up
 sudo ip route add default via 192.168.1.1
-
-# 移除
-sudo ip addr del 192.168.1.100/24 dev eth0
-sudo ip route del default via 192.168.1.1
 ```
 
 临时与永久的分界要牢记：
@@ -626,17 +611,12 @@ $ sudo nmcli connection up office
 
 ### 5.3 观测与排障
 
-```bash
-# 看缓存与查询状态
-$ resolvectl statistics
-$ resolvectl query example.com
-
-# 强制绕过缓存测试
-$ dig +norecurse example.com @192.168.1.1
-
-# 清缓存
-$ sudo resolvectl flush-caches
-```
+观测与排障用这几条命令：
+`resolvectl statistics` 看缓存统计，
+`resolvectl query example.com` 验证单条解析，
+`dig +norecurse example.com @192.168.1.1`
+强制绕过缓存直问指定上游，
+`sudo resolvectl flush-caches` 清缓存。
 
 `dig @服务器`
 可以直接指定上游，
@@ -788,11 +768,7 @@ net.ipv4.tcp_wmem = 4096 65536 16777216
 `/etc/sysctl.d/` 下，
 比直接追加 `/etc/sysctl.conf`
 更易管理与回滚。
-应用改动：
-
-```bash
-$ sudo sysctl --system
-```
+应用改动执行 `sudo sysctl --system` 即可。
 
 `tcp_fin_timeout` 与 `tcp_tw_reuse`
 只影响主动关闭连接的回收节奏，

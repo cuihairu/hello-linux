@@ -95,7 +95,21 @@ EPEL 包的 Prometheus 版本策略偏保守，上线前 `dnf info prometheus` �
 
 ## 3. node_exporter：主机指标从哪来
 
-node_exporter 只做一件事：把 `/proc`、`/sys` 里的 CPU、内存、磁盘、网络读成 Prometheus 文本格式挂在 `:9100/metrics`。它**不**存储历史、**不**发告警，也**不**是 Prometheus 的一部分——分清这个边界，就能理解"node_exporter 挂了只影响新数据采集，已存时序仍可查询"，也能理解多机部署是"每台一个 exporter、中心一个 Prometheus"，而不是每台装全套。安装见第 2 节对照；跨机抓取时在 `prometheus.yml` 的 `node` job 下列出各机 `IP:9100`，抓取失败的实例 `up` 为 0 并进入告警视野——拉模型顺带完成了存活探测。
+node_exporter 只做一件事：把 `/proc`、`/sys` 里的 CPU、内存、磁盘、网络读成 Prometheus 文本格式挂在 `:9100/metrics`。它**不**存储历史、**不**发告警，也**不**是 Prometheus 的一部分——分清这个边界，就能理解"node_exporter 挂了只影响新数据采集，已存时序仍可查询"，也能理解多机部署是"每台一个 exporter、中心一个 Prometheus"，而不是每台装全套。安装见第 2 节对照；跨机抓取时在 `prometheus.yml` 的 `node` job 下列出各机 `IP:9100`，抓取失败的实例 `up` 为 0 并进入告警视野——拉模型顺带完成了存活探测。单独部署与验收的最小流程：
+
+```bash
+# 三系安装（按发行版取其一）
+$ sudo apt install prometheus-node-exporter                # Debian/Ubuntu
+# $ sudo pacman -S prometheus-node-exporter                 # Arch
+# $ sudo dnf install prometheus-node-exporter               # RHEL/CentOS/Rocky（EPEL）
+$ sudo systemctl enable --now node_exporter
+$ curl -s localhost:9100/metrics | head -3
+# HELP node_cpu_seconds_total Seconds the CPUs spent in each mode.
+# TYPE node_cpu_seconds_total counter
+node_cpu_seconds_total{cpu="0",mode="idle"} 1.23456789e+05
+```
+
+`curl` 能吐出以 `# HELP` 开头的指标文本即验收通过——这一步与 exporter 是否已被 Prometheus 抓取无关，后者去 Targets 页面看 `up`。
 
 ## 4. PromQL：查询语言速览
 
@@ -124,7 +138,7 @@ sum(rate(http_requests_total[5m])) by (method)   # 按方法聚合
 topk(5, rate(http_requests_total[5m]))           # 最忙的 5 个实例
 ```
 
-写 PromQL 的固定套路：先确认指标是 counter 还是 gauge → counter 加 `rate`/`increase` → 需要跨实例汇总时 `sum by (标签)` → 排行用 `topk`。标签（`instance`、`job`、`method`）是多维查询的钥匙，`by` 子句决定聚合粒度——聚合前先想清楚"图上一行代表一台机还是一类机"，否则很容易把三台机的内存百分比又平均成一个没有意义的数。PromQL 本身不难，难的是选对指标与窗口：窗口小于两倍抓取间隔必空，窗口远大于业务周期又会把尖刺抹平；与 `pacman -Q` 查"当前装了什么"、journalctl 查"最近发生了什么"一样，查询窗口就是你对问题时间尺度的第一次假设。
+写 PromQL 的固定套路：先确认指标是 counter 还是 gauge → counter 加 `rate`/`increase` → 需要跨实例汇总时 `sum by (标签)` → 排行用 `topk`。标签（`instance`、`job`、`method`）是多维查询的钥匙，`by` 子句决定聚合粒度——聚合前先想清楚"图上一行代表一台机还是一类机"，否则很容易把三台机的内存百分比又平均成一个没有意义的数。PromQL 本身不难，难的是选对指标与窗口：窗口小于两倍抓取间隔必空，窗口远大于业务周期又会把尖刺抹平；与 `pacman -Q` 查"当前装了什么"、journalctl 查"最近发生了什么"一样，查询窗口就是你对问题时间尺度的第一次假设。日常排障可先用浏览器 DevTools 或 Targets 页确认抓取正常，再进入 Explore 交互式试写表达式，确认有数后再固化到面板与告警规则，避免把一次性的猜想直接写进生产规则文件。练习时可先在 Prometheus 自带的 Graph 页交互式补全指标名，确认表达式在历史数据上有值，再原样粘进 Grafana 面板——直接在仪表盘上边改边试，图空白时很难分清是查询写错还是数据本身没有。压测或切换大范围时间轴前，先用较小区间确认逻辑正确，再逐步放宽，能减少一次查爆 TSDB、拖慢整机查询的事故。
 
 ## 5. Grafana：把查询变成可读的面板
 
@@ -134,7 +148,7 @@ topk(5, rate(http_requests_total[5m]))           # 最忙的 5 个实例
 
 ### 5.2 面板设计取舍
 
-一页放二十个图不等于懂监控：首屏只放"红了就要动手"的黄金指标（可用性、延迟、流量、错误、饱和度），明细下钻到第二页。单位、阈值、`by (instance)` 的粒度都会影响误报观感——同一表达式在主机级与集群级面板上阈值不能照抄。Grafana 只读查询，图异常时排查顺序是：数据源 Test → Explore 里手跑同一条 PromQL → 看 `up` 与抓取时间戳，与"图空先查数据链路"的通用排障一致。
+一页放二十个图不等于懂监控：首屏只放"红了就要动手"的黄金指标（可用性、延迟、流量、错误、饱和度），明细下钻到第二页。单位、阈值、`by (instance)` 的粒度都会影响误报观感——同一表达式在主机级与集群级面板上阈值不能照抄。几条能立刻提升可用性的具体做法：给关键面板加告警注解（Alerts → panel annotation），让"这条线为什么红了"直接显示在图上；用 dashboard variable 做实例下拉框（Query 变量取 `label_values(node_uname_info, instance)`），一个仪表盘覆盖全部主机而不是每机复制一份；自动刷新按场景选——排障时 5s/10s 便于观察实时变化，日常巡盘 30s/1m 即可，全站 1s 刷新只会徒增查询压力。Grafana 只读查询，图异常时排查顺序是：数据源 Test → Explore 里手跑同一条 PromQL → 看 `up` 与抓取时间戳，与"图空先查数据链路"的通用排障一致。
 
 ## 6. 告警：从规则到通知
 

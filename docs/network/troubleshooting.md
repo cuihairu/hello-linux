@@ -96,13 +96,6 @@
 $ ip -br addr
 lo   UNKNOWN 127.0.0.1/8 ::1/128
 eth0 UP      192.168.1.100/24 fe80::216:3eff:fe12:3456/64
-
-$ ip -s link show eth0 | head -6
-3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 ...
-    RX:  bytes packets errs drop fifo frame compressed multicast
-         2097152   15802    0    0    0     0     0        0
-    TX:  bytes packets errs drop fifo colls carrier compressed
-         1048576    9021    0    0    0     0    0        0
 ```
 
 三种常见异常各有明确指向：
@@ -112,9 +105,11 @@ $ ip -s link show eth0 | head -6
 或配置文件 `ONBOOT`/`dhcp4` 问题）；
 接口 UP 却没有 IPv4 地址，
 多为 DHCP 失败或静态配置未应用；
-`errs`/`drop` 持续增长
-则指向链路层质量，
-此时上层一切正常也会丢包。
+`ip -s link show eth0` 的 `errs`/`drop`
+持续增长则指向链路层质量，
+此时上层一切正常也会丢包——
+先修链路（双工、环路、驱动），
+再谈上层配置。
 
 回环自检只需一条，
 确认协议栈本身没崩：
@@ -144,16 +139,14 @@ PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.
 $ ip route show
 default via 192.168.1.1 dev eth0 proto dhcp src 192.168.1.100 metric 100
 192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.100 metric 100
-
-$ ip route get 1.1.1.1
-1.1.1.1 via 192.168.1.1 dev eth0 src 192.168.1.100 uid 1000
 ```
 
 缺少 `default via ...` 是高发问题，
 症状是"同网段能通、外网全不通"，
 常见于 DHCP 续租失败
 或手工配置漏了网关。
-`ip route get` 直接给出结论，
+`ip route get 1.1.1.1`
+直接给出这台机器实际选用的出口，
 比通读整张表更快。
 若这一步已经错误，
 后续 ping 公网必失败，
@@ -184,8 +177,6 @@ $ ip route get 1.1.1.1
 ```bash
 $ ss -tlnp | grep :80
 LISTEN 0 511 0.0.0.0:80 0.0.0.0:* users:(("nginx",pid=812,fd=6))
-
-$ ss -tn state established '( dport = :80 or sport = :80 )'
 ```
 
 绑定在 `127.0.0.1:80` 的服务，
@@ -271,8 +262,6 @@ $ ip neigh
 $ ping -c 3 1.1.1.1
 PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
 64 bytes from 1.1.1.1: icmp_seq=1 ttl=57 time=12.4 ms
-64 bytes from 1.1.1.1: icmp_seq=2 ttl=57 time=12.1 ms
-64 bytes from 1.1.1.1: icmp_seq=3 ttl=57 time=12.3 ms
 ```
 
 `ttl=57`
@@ -306,14 +295,11 @@ PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
 就宣布"网络挂了"，
 但这个命令同时依赖网络与 DNS。
 拆开测：
+`ping -c 2 1.1.1.1` 通（网络层正常），
+`ping -c 2 example.com` 却报
+`ping: example.com: Name or service not known`。
 
-```bash
-$ ping -c 2 1.1.1.1          # 网络层：通
-$ ping -c 2 example.com       # 解析：失败
-ping: example.com: Name or service not known
-```
-
-只要第一行通、第二行失败，
+只要 IP 通、域名失败，
 就可以确定问题在解析链路，
 与链路、路由无关。
 解析链路的完整路径
@@ -329,7 +315,6 @@ ping: example.com: Name or service not known
 # 1. 配置文件有没有 nameserver
 $ cat /etc/resolv.conf
 nameserver 192.168.1.1
-search example.com
 
 # 2. 解析顺序是否把 files 排在 dns 前
 $ grep '^hosts' /etc/nsswitch.conf
@@ -357,14 +342,10 @@ resolved 没跑、nameserver 写错）。
 才是出口被拦或上游故障。
 
 启用 systemd-resolved 的系统
-还应查它的状态与缓存：
-
-```bash
-$ resolvectl status | head -20
-$ resolvectl flush-caches
-$ resolvectl query example.com
-```
-
+还应查它的状态与缓存——
+`resolvectl status` 看归属与上游，
+`resolvectl query example.com` 单独验证一条解析，
+`resolvectl flush-caches` 清缓存。
 缓存污染的典型表现是
 "刚才还行、突然不行"，
 `flush-caches` 后立即恢复即可确认。
@@ -417,13 +398,11 @@ traceroute to 93.184.216.34 (93.184.216.34), 15 hops max, 60 byte packets
 想要区分
 "UDP 探测被拦"与"ICMP 被拦"，
 换协议或端口再试：
-
-```bash
-# 用 TCP SYN 探测 443，穿透只放行 TCP 的设备
-$ traceroute -T -p 443 93.184.216.34
-# 用 ICMP echo 探测
-$ traceroute -I 93.184.216.34
-```
+`traceroute -T -p 443`
+用 TCP SYN 探测 443，
+能穿透只放行 TCP 的设备；
+`traceroute -I`
+则改用 ICMP echo 探测。
 
 `-T` 的价值在于：
 如果 TCP 443 能通
@@ -480,13 +459,9 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 一节所描述的取证流程。
 
 另一个方向：
-如果抓包里连入站 SYN 都没有：
-
-```bash
-$ sudo tcpdump -ni eth0 port 80
-# 长时间无输出，而客户端坚持认为"连不上"
-```
-
+如果 `sudo tcpdump -ni eth0 port 80`
+长时间无输出，
+而客户端坚持认为"连不上"，
 说明包根本没到这台机器，
 问题在客户端到本机之间的路径
 （客户端路由、上游设备、
@@ -497,17 +472,13 @@ $ sudo tcpdump -ni eth0 port 80
 
 常用过滤表达式
 （tcpdump 使用 BPF 语法）：
-
-```bash
-sudo tcpdump -ni eth0 'host 192.168.1.50 and port 443'
-sudo tcpdump -ni eth0 'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0'
-sudo tcpdump -ni eth0 -w /tmp/cap.pcap
-```
-
-第一行限定主机与端口，
-第二行只看握手与挥手包
+`'host 192.168.1.50 and port 443'`
+限定主机与端口，
+`'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0'`
+只看握手与挥手包
 （判断连接建立质量的最快路径），
-第三行保存文件供 Wireshark 分析。
+加 `-w /tmp/cap.pcap`
+则保存文件供 Wireshark 分析。
 **永远加 `-n`**——
 默认反查 DNS 在解析故障时
 既拖慢输出又引入误导。
@@ -548,27 +519,22 @@ $ curl -svI https://example.com 2>&1 | grep -E 'Connected|HTTP/'
 一次真实排障的日志式记录，
 可作为模板：
 
-```text
-现象：用户报告 https://app.example.com 打不开，
-      但办公网其他人正常。
+现象：用户报告 `https://app.example.com` 打不开，
+但办公网其他人正常。
 
-1. 本机检查（用户机器）
-   ip -br addr            → 地址正常 192.168.1.50/24
-   ip route get 1.1.1.1   → via 192.168.1.1，路由正常
-   ping -c 2 127.0.0.1    → 通，协议栈正常
-
-2. 网关
-   ping -c 2 192.168.1.1  → 通
-   ping -c 2 1.1.1.1      → 通，出口 OK
-
-3. DNS
-   ping -c 2 app.example.com → Name or service not known
-   dig +short app.example.com @1.1.1.1 → 有结果
-   cat /etc/resolv.conf    → nameserver 指向已下线的旧服务器
-
+1. 本机检查（用户机器）：
+   `ip -br addr` → 地址正常 `192.168.1.50/24`；
+   `ip route get 1.1.1.1` → `via 192.168.1.1`，路由正常；
+   `ping -c 2 127.0.0.1` → 通，协议栈正常。
+2. 网关：
+   `ping -c 2 192.168.1.1` → 通；
+   `ping -c 2 1.1.1.1` → 通，出口 OK。
+3. DNS：
+   `ping -c 2 app.example.com` → Name or service not known；
+   `dig +short app.example.com @1.1.1.1` → 有结果；
+   `cat /etc/resolv.conf` → nameserver 指向已下线的旧服务器。
    结论：网络正常，DNS 配置指向失效服务器。
-   处理：改为 1.1.1.1 / 8.8.8.8，flush-caches 后恢复。
-```
+   处理：改为 1.1.1.1 / 8.8.8.8，`flush-caches` 后恢复。
 
 整个过程没有重启任何服务、
 没有改防火墙，四步之内定位。
@@ -726,12 +692,9 @@ $ iperf3 -c 192.168.1.200 -t 10
 只要末跳 Loss 低即可。
 
 本机侧的软丢包同样要看：
-
-```bash
-$ ip -s link show eth0 | grep -A1 'RX'
-$ ss -s
-$ nstat -az | grep -iE 'Listen|Drop|Retrans'
-```
+`ip -s link show eth0` 的 `drop` 计数、
+`ss -s` 的连接汇总、
+`nstat -az` 里的监听溢出与重传计数。
 
 `ip -s` 的 `drop`
 增长说明网卡或内核缓冲区

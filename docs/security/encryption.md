@@ -201,8 +201,6 @@ Enter passphrase for /home/cui/.ssh/id_ed25519:
 
 密钥登录切换完成后，还有一项收尾容易漏：**把旧口令时代的残留清干净**——`/home/*/.ssh/authorized_keys` 里过期的键、临时加过的 `PermitRootLogin yes`、为方便测试开过的 `PasswordAuthentication yes` 备份文件，都应在切换窗口一并回收。验证方式是再跑一次 `sshd -T | grep -iE 'passwordauth|permitroot'`，确认生效值而不是文件里写了什么；文件与生效值不一致时（drop-in 覆盖、Match 块），以 `sshd -T` 为准——这也是排查"明明关了还能口令登录"的第一入口。
 
-密钥登录切换完成后，还有一项收尾容易漏：**把旧口令时代的残留清干净**——`/home/*/.ssh/authorized_keys` 里过期的键、临时加过的 `PermitRootLogin yes`、为方便测试开过的 `PasswordAuthentication yes` 备份文件，都应在切换窗口一并回收。验证方式是再跑一次 `sshd -T | grep -iE 'passwordauth|permitroot'`，确认生效值而不是文件里写了什么；文件与生效值不一致时（drop-in 覆盖、Match 块），以 `sshd -T` 为准——这也是排查"明明关了还能口令登录"的第一入口。
-
 `authorized_keys` 的权限与属主也是高频故障点：文件属主必须是登录用户本人、权限 `600`，`~/.ssh` 目录 `700`——sshd 出于安全考虑会拒绝权限过宽的密钥文件，症状是"公钥明明贴上去了还让输口令"。排查时先 `ls -la ~/.ssh` 再看 `sshd -T` 的实际生效配置，比反复重装密钥快得多。密钥分发优先用 `ssh-copy-id`，它会自动处理追加与权限；手工 `cat >>` 是权限事故的主要来源。
 
 ## 5. 磁盘加密（LUKS）：静态数据的最后一道闸

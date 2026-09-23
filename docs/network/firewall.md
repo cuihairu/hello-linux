@@ -10,6 +10,12 @@
 它如何决定一个包能不能穿过本机，
 三发行版的默认状态有何不同，
 以及如何用证据证明"是/不是防火墙拦的"。
+本页按"为什么连通性问题总要先问防火墙 →
+三发行版的默认状态 → 三种规则模型：ufw、zone、nft →
+连通性视角的排障路径 → 三发行版安装与启用对照 →
+常见坑 → 何时去安全篇继续"展开，
+三系给出 Debian/Ubuntu（ufw）、Arch（nftables）、
+RHEL/CentOS/Rocky（firewalld）对照。
 
 > 内容参考自 ufw、firewalld、nftables
 > 官方文档与 Arch Wiki，见文末参考资料。

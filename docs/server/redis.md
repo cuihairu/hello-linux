@@ -1,6 +1,6 @@
 # Redis
 
-Redis 是开源的内存数据结构存储，常被同时当作数据库、缓存和消息中间件使用。它存在的理由可以用一组数量级来说明：机械盘随机读大约 10 毫秒，SSD 大约 100 微秒，而内存访问在 100 纳秒量级——同样是一次"按键取值"，内存比机械盘快约五个数量级。电商秒杀计数、网页会话、排行榜这类数据如果每请求都走关系库，磁盘 I/O 会立刻成为瓶颈；把它们放进 Redis，单实例轻松支撑十万级 QPS。但天下没有免费的午餐：内存比磁盘贵、断电即失，于是"哪些数据该进 Redis、数据丢了怎么办、内存满了怎么办"成为使用 Redis 必须先想清楚的三个问题。本页先讲清这些"为什么"，再给出 Debian/Ubuntu（apt）、Arch（pacman）、RHEL/CentOS/Rocky（dnf）三系的安装与配置方法，以及真实终端输出和常见坑。
+Redis 是开源的内存数据结构存储，常被同时当作数据库、缓存和消息中间件使用。它存在的理由可以用一组数量级来说明：机械盘随机读大约 10 毫秒，SSD 大约 100 微秒，而内存访问在 100 纳秒量级——同样是一次"按键取值"，内存比机械盘快约五个数量级。电商秒杀计数、网页会话、排行榜这类数据如果每请求都走关系库，磁盘 I/O 会立刻成为瓶颈；把它们放进 Redis，单实例轻松支撑十万级 QPS。但天下没有免费的午餐：内存比磁盘贵、断电即失，于是"哪些数据该进 Redis、数据丢了怎么办、内存满了怎么办"成为使用 Redis 必须先想清楚的三个问题。本页先讲清这些"为什么"，再给出 Debian/Ubuntu（apt）、Arch（pacman）、RHEL/CentOS/Rocky（dnf）三系的安装与配置方法，以及真实终端输出和常见坑。本页按"为什么 → 三系安装 → 连接与基本命令 → 监听绑定与密码 → 持久化 → 内存与淘汰 → 主从哨兵集群 → 监控与慢查询 → 常见坑"展开。
 
 > 内容参考自 Redis 官方文档与 Arch Wiki，见文末参考资料。
 
@@ -270,7 +270,19 @@ $ redis-cli --cluster create 127.0.0.1:7000 127.0.0.1:7001 127.0.0.1:7002 \
 
 客户端连接集群必须使用集群模式（如 `redis-cli -c` 或应用侧 cluster 模式），否则跨槽 `MGET` 会收到 `MOVED` 重定向错误。哨兵与集群都要求客户端改造：哨兵模式要从 Sentinel 获取当前主地址，集群模式要按槽路由——上生产前先在测试环境把客户端连法跑通，比上线后再补课便宜得多。
 
-## 8. 常见坑
+## 8. 监控与慢查询
+
+`INFO` 是最常用的自检入口：`redis-cli INFO clients` 看连接数，`INFO replication` 看主从状态（`role:master` / `role:slave`、`master_link_status:up`），`INFO stats` 看命中率与拒绝连接数。缓存场景重点盯 `keyspace_hits` 与 `keyspace_misses` 计算命中率，长期低于 90% 通常意味着键设计过散或 TTL 过短。慢查询由慢日志单独记录，阈值单位是微秒：
+
+```bash
+$ redis-cli SLOWLOG GET 2
+1) 1) (integer) 42  2) (integer) 1726800000  3) (integer) 15231
+   4) 1) "LRANGE"  2) "biglist"  3) "0"  4) "-1"
+```
+
+阈值用 `slowlog-log-slower-than 10000`（10ms）与 `slowlog-max-len 128` 控制。`LRANGE key 0 -1` 拉取百万级列表这类命令即使 O(N) 也会拖垮事件循环，应改为分页 `LRANGE` 或拆分数据结构。慢日志只记录超过阈值的命令，不等于全量审计；要长期观测延迟趋势，应把 `INFO` 指标接入 Prometheus——与之对接可用 `redis_exporter` 暴露指标，接入方法见[监控篇](monitoring/prometheus.md)。
+
+## 9. 常见坑
 
 **改了 redis.conf 不生效。** 配置文件只有启动时读取；热改用 `redis-cli CONFIG SET ...`，或改文件后 `systemctl restart redis-server`（Debian）/ `systemctl restart redis`（Arch、RHEL）。确认实际加载的是哪份配置：`redis-cli INFO server | grep config_file`——容器或手工编译场景常出现"改了 /etc 下的文件，进程却读着 /usr/local/etc 的旧配置"。
 
@@ -290,18 +302,6 @@ $ redis-cli --cluster create 127.0.0.1:7000 127.0.0.1:7001 127.0.0.1:7002 \
 $ sysctl vm.overcommit_memory
 vm.overcommit_memory = 1
 ```
-
-## 9. 监控与慢查询
-
-`INFO` 是最常用的自检入口：`redis-cli INFO clients` 看连接数，`INFO replication` 看主从状态（`role:master` / `role:slave`、`master_link_status:up`），`INFO stats` 看命中率与拒绝连接数。缓存场景重点盯 `keyspace_hits` 与 `keyspace_misses` 计算命中率，长期低于 90% 通常意味着键设计过散或 TTL 过短。慢查询由慢日志单独记录，阈值单位是微秒：
-
-```bash
-$ redis-cli SLOWLOG GET 2
-1) 1) (integer) 42  2) (integer) 1726800000  3) (integer) 15231
-   4) 1) "LRANGE"  2) "biglist"  3) "0"  4) "-1"
-```
-
-阈值用 `slowlog-log-slower-than 10000`（10ms）与 `slowlog-max-len 128` 控制。`LRANGE key 0 -1` 拉取百万级列表这类命令即使 O(N) 也会拖垮事件循环，应改为分页 `LRANGE` 或拆分数据结构。慢日志只记录超过阈值的命令，不等于全量审计；要长期观测延迟趋势，应把 `INFO` 指标接入 Prometheus——与之对接可用 `redis_exporter` 暴露指标，接入方法见[监控篇](monitoring/prometheus.md)。
 
 ## 参考资料
 
