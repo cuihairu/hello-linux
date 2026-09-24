@@ -8,7 +8,7 @@
     "docs:preview": "vitepress preview docs",
     "docs:check": "python3 scripts/check_links.py",
     "docs:test": "python3 -m pytest tests/ -q",
-    "docs:cov": "python3 -m pytest tests/ -q --cov=check_links --cov-report=term-missing"
+    "docs:cov": "python3 -m pytest tests/ -q --cov=check_links --cov-branch --cov-report=term-missing"
   },
   "devDependencies": {
     "vitepress": "^1.6.4"

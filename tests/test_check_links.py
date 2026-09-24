@@ -1,6 +1,6 @@
 """scripts/check_links.py 单测。
 
-覆盖率目标：行覆盖 100%。不可达分支见文末 COVERAGE_NOTES。
+覆盖率目标：行覆盖 100% + 分支覆盖 100%（.coveragerc fail_under=100）。不可达分支见文末 COVERAGE_NOTES。
 """
 
 from __future__ import annotations
@@ -728,8 +728,12 @@ def test_main_script_entry(site, monkeypatch, capsys):
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.skipif(
+    not cl.DIST.is_dir(),
+    reason="需先 npm run docs:build；无 dist 时源码级中文锚点近似误报 hardening.md",
+)
 def test_real_site_source_and_config_pass():
-    """真实仓库：源码级 + config 应 0 issues（dist 可选）。"""
+    """真实仓库：源码级 + config 应 0 issues（依赖 dist 精确锚点）。"""
     issues: list[tuple] = []
     stats: Counter = Counter()
     cl.check_source(issues, stats)
@@ -758,5 +762,5 @@ def test_real_site_source_and_config_pass():
 # - L379 目录兜底：path 含 '../' 逃出 rglob 收集，避免读目录崩溃。
 # - 源码级 slug 近似 ≠ VitePress 真实算法：hardening.md 中文标题锚点
 #   在无 dist 时会误报（slugify 不处理全角冒号/引号），有 dist 时走
-#   html_for_md 精确校验 → 通过。test_real_site_* 依赖 dist 存在。
+#   html_for_md 精确校验 → 通过。test_real_site_* 无 dist 时 skipif 跳过。
 # - `if __name__ == "__main__"`：test_main_script_entry 用 runpy 执行。
