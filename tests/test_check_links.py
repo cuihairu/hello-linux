@@ -97,6 +97,10 @@ def test_blank_fences_odd_fence_blanks_to_eof():
         ("/hello-linux/x", False),
         ("#anchor", False),
         ("page.md#a", False),
+        # 带盘符的 Windows 路径按 scheme 解析 → 视为外部
+        (r"C:\Windows\system32", True),
+        # 通用 scheme 形式（不依赖 EXTERNAL_PREFIXES 白名单）
+        ("foo:bar", True),
     ],
 )
 def test_is_external(target: str, expected: bool):
@@ -126,6 +130,10 @@ def test_extract_headings_h6():
         ("123 start", "_123-start"),
         ("a!@#$b", "ab"),
         ("", ""),
+        # 全角数字：isalnum 为真、isdigit 为真 → 保留并加 "_" 前缀
+        ("１２３ start", "_１２３-start"),
+        # ASCII 控制字符（\x01）被丢弃
+        ("a\x01b", "ab"),
     ],
 )
 def test_slugify_vitepress(heading: str, slug: str):
@@ -741,6 +749,105 @@ def test_real_site_source_and_config_pass():
     assert issues == [], issues
     assert stats["md_link"] > 0
     assert stats["config_ok"] > 0
+
+
+# ---------------------------------------------------------------------------
+# 边界与错误路径（CRLF / 非法输入 / IO 失败 / 引号形式 / 退出码优先级）
+# ---------------------------------------------------------------------------
+
+
+def test_crlf_line_endings_in_blank_fences_and_headings():
+    out = cl.blank_fences("a\r\n```\r\nx ](y)\r\n```\r\nb\r\n")
+    assert out == "a\n\n\n\nb"
+    assert cl.extract_headings("# Top\r\n\r\n## Sub ##\r\n") == ["Top", "Sub"]
+
+
+def test_load_ids_invalid_utf8_bytes_replaced(site):
+    h = site.dist / "bad.html"
+    h.write_bytes(b'<div id="ok"></div>\xff\xfe')
+    assert cl.load_ids(h) == {"ok"}
+
+
+def test_resolve_md_target_invalid_inputs_return_none(site):
+    md = write_md(site.docs, "deep/n.md", "# N\n")
+    assert cl.resolve_md_target(md, "") is None
+    assert cl.resolve_md_target(md, "%00null") is None  # 空字节路径不存在
+    assert cl.resolve_md_target(md, "%20%20") is None  # 解码后仅空白
+    assert cl.resolve_md_target(md, "/no/such/abs") is None
+    assert cl.resolve_md_target(md, "#frag") is None
+
+
+def test_link_re_double_quoted_title_only(site):
+    write_md(site.docs, "target.md", "# T\n")
+    write_md(site.docs, "a.md", '# A\n\n[ok](target.md "the title")\n')
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_source(issues, stats)
+    assert stats["internal_ok"] == 1
+    assert not issues
+    # 单引号标题不匹配 LINK_RE（\s+"…" 仅双引号）
+    assert cl.LINK_RE.findall("![i](pic.png 'p')") == []
+
+
+def test_check_source_md_read_error_propagates(site, monkeypatch):
+    write_md(site.docs, "m.md", "# M\n[ok](#m)\n")
+    real = Path.read_text
+
+    def boom(self: Path, *args, **kwargs):
+        if self.suffix == ".md" and self.parent == site.docs:
+            raise OSError("disk error")
+        return real(self, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", boom)
+    with pytest.raises(OSError, match="disk error"):
+        cl.check_source([], Counter())
+
+
+def test_check_config_fragment_link_counts_ok(site):
+    write_md(site.docs, "page.md", "# P\n")
+    cfg = site.vpc / "config.mts"
+    cfg.write_text(
+        "nav: [ { link: '/page#top' }, { link: '#x' }, "
+        "{ link: 'http://e' }, { link: '/#f' } ]\n",
+        encoding="utf-8",
+    )
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_config(issues, stats)
+    assert stats["config_links"] == 4
+    assert stats["config_ok"] == 1
+    assert stats["external"] == 1
+    assert not issues
+
+
+def test_check_html_unquoted_href_ignored(site):
+    write_html(site.dist, "index.html", '<a href=/page.html>x</a><a href="/p2.html">y</a>')
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_html(issues, stats)
+    # 无引号 href 不被 HREF_SRC_RE 匹配 → 不计入 html_all
+    assert stats["html_all"] == 1
+    assert stats["outside_base"] == 1  # /p2.html 不在 BASE 下
+    assert not issues
+
+
+def test_main_zero_checked_reports_full_rate(site, monkeypatch, capsys):
+    # 空站点：无 md 链接、无 config、dist 为空 → total=0 仍报 100%
+    monkeypatch.setattr(sys, "argv", ["check_links.py"])
+    assert cl.main() == 0
+    out = capsys.readouterr().out
+    assert "total=0 rate=100.0000%" in out
+    assert "html: skipped" in out
+
+
+def test_main_dead_link_takes_precedence_over_require_html(site, monkeypatch, capsys):
+    write_md(site.docs, "bad.md", "# B\n\n[d](missing.md)\n")
+    monkeypatch.setattr(sys, "argv", ["check_links.py", "--require-html"])
+    assert cl.main() == 1
+    captured = capsys.readouterr()
+    assert "dead-link" in captured.out
+    # 先命中 failed 分支 → 不打印 --require-html 错误
+    assert "ERROR: --require-html" not in captured.err
 
 
 # ---------------------------------------------------------------------------
