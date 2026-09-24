@@ -1,0 +1,6 @@
+[run]
+source = check_links
+
+[report]
+show_missing = True
+skip_empty = True

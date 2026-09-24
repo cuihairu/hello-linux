@@ -202,7 +202,7 @@ def check_source(issues: list[tuple], stats: Counter) -> None:
             anc = unquote(anc)
         else:
             path, anc = target, None
-        if not path:
+        if not path:  # pragma: no cover — L185 已吞 '#' 开头，不可达
             return
 
         stats["internal"] += 1
@@ -245,7 +245,7 @@ def check_source(issues: list[tuple], stats: Counter) -> None:
                 stats["external"] += 1
                 continue
             path = unquote(t.split("#")[0])
-            if not path:
+            if not path:  # pragma: no cover — L244 已吞 '#' 开头，不可达
                 continue
             cands = [
                 ROOT / path,
