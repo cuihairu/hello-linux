@@ -38,6 +38,14 @@ npm run docs:build
 npm run docs:preview
 ```
 
+链接检查与测试（CI 同款门禁）：
+
+```bash
+npm run docs:check   # 需先 docs:build 才含产物级 HTML 校验
+npm run docs:test    # 单测
+npm run docs:cov     # 覆盖率：行+分支 100% 门禁（fail_under=100）
+```
+
 ## 构建部署
 
 推送到 `main` 分支后自动通过 GitHub Actions 部署到 GitHub Pages。
