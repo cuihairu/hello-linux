@@ -3,6 +3,7 @@ docs/.vitepress/dist
 docs/.vitepress/cache
 docs/.vitepress/.temp
 .coverage
+coverage.json
 htmlcov/
 .pytest_cache/
 __pycache__/
