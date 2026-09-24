@@ -251,11 +251,11 @@ sudo dnf install htop
 ## 参考资料
 
 - `man apt`, `man apt-get`, `man dpkg`, `man dnf`, `man rpm`, `man pacman`
-- 鸟哥的私房菜 - 软件包管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/0510source_manager.php)
+- 鸟哥的私房菜 - 软件包管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0520source_code_and_tarball.php)
 - Arch Wiki - pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
 - Arch Wiki - AUR — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_User_Repository)
 - Debian Wiki - apt — [wiki.debian.org](https://wiki.debian.org/Apt)
-- Ubuntu - PPA / repositories 文档 — [documentation.ubuntu.com](https://documentation.ubuntu.com/ubuntu/howto/manageing-software/)
+- Ubuntu - PPA / repositories 文档 — [documentation.ubuntu.com](https://ubuntu.com/server/docs/package-management)
 - DNF 文档（Fedora） — [dnf.readthedocs.io](https://dnf.readthedocs.io/)
 - Red Hat - Installing software packages with DNF — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/installing_managing_software_with_the_dnf_tool/index)
 - EPEL FAQ — [docs.fedoraproject.org](https://docs.fedoraproject.org/en-US/epel/faq)

@@ -233,11 +233,11 @@ rfkill list all   # 0: WLAN Soft blocked: yes → rfkill unblock；Hard = 物理
 
 - Arch Wiki - Network configuration — [wiki.archlinux.org](https://wiki.archlinux.org/title/Network_configuration)
 - Arch Wiki - Network configuration / Wireless — [wiki.archlinux.org](https://wiki.archlinux.org/title/Network_configuration/Wireless)
-- Arch Wiki - irqbalance — [wiki.archlinux.org](https://wiki.archlinux.org/title/Irqbalance)
+- Arch Wiki - irqbalance — [wiki.archlinux.org](https://wiki.archlinux.org/title/Category:Hardware)
 - Arch Wiki - Improving performance（网络调优上下文） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Improving_performance)
 - Linux Kernel Networking Documentation — [kernel.org](https://www.kernel.org/doc/html/latest/networking/)
 - ethtool(8) 手册 — [man7.org](https://man7.org/linux/man-pages/man8/ethtool.8.html)
 - systemd.net-naming-scheme（可预测接口命名） — [freedesktop.org](https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html)
 - iw(8) 手册 — [kernel.org](https://www.kernel.org/doc/html/latest/networking/regulatory.html)
-- 鸟哥的私房菜 - 连上因特网 — [linux.vbird.org](https://linux.vbird.org/linux_server/0130internet.php)
+- 鸟哥的私房菜 - 连上因特网 — [linux.vbird.org](https://linux.vbird.org/linux_server/rocky9/0150networking.php)
 - Red Hat - RHEL 9 网络性能调优 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/monitoring_and_managing_system_status_and_performance/index)

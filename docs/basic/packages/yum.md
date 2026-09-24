@@ -199,5 +199,5 @@ $ rpm -V nginx                                 # 校验完整性，无输出 = �
 - Fedora 文档 - DNF — [docs.fedoraproject.org](https://docs.fedoraproject.org/en-US/quick-docs/dnf/)
 - EPEL 项目 — [fedoraproject.org/wiki/EPEL](https://fedoraproject.org/wiki/EPEL)
 - Arch Wiki - pacman（对照参考） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
-- 鸟哥的私房菜 - 软件管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0520softwaremanager.php)
+- 鸟哥的私房菜 - 软件管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0520rpm_and_srpm.php)
 - `man dnf`、`man rpm`、`man dnf-versionlock`、`man dnf.conf`

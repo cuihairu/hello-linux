@@ -405,7 +405,7 @@ Nginx 的知识可以收成四条主线：进程与配置结构（master/worker�
 
 - Nginx 官方文档 — [nginx.org/en/docs](https://nginx.org/en/docs/)
 - Nginx Beginner's Guide — [nginx.org/en/docs/beginners_guide.html](https://nginx.org/en/docs/beginners_guide.html)
-- 鸟哥的私房菜 - WWW 服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/0360apache.php)
+- 鸟哥的私房菜 - WWW 服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0360apache.php)
 - Arch Wiki - Nginx — [wiki.archlinux.org](https://wiki.archlinux.org/title/Nginx)
 - Let's Encrypt — [letsencrypt.org](https://letsencrypt.org/)
 - Mozilla SSL Configuration Generator — [ssl-config.mozilla.org](https://ssl-config.mozilla.org/)

@@ -73,8 +73,8 @@
 - Debian 手册 - APT 与 dpkg — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/apt.zh-cn.html)
 - Ubuntu 文档 - APT — [help.ubuntu.com](https://help.ubuntu.com/community/AptGet)
 - Arch Wiki - pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
-- Arch Wiki - AUR — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_user_repository)
+- Arch Wiki - AUR — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_User_Repository)
 - RHEL 9 - 使用 DNF 管理软件 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_software_with_the_dnf_tool/index)
 - Rocky Linux 文档 - DNF — [docs.rockylinux.org](https://docs.rockylinux.org/guides/package_management/)
-- 鸟哥的私房菜 - 软件管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0520softwaremanager.php)
+- 鸟哥的私房菜 - 软件管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0520rpm_and_srpm.php)
 - `man apt`、`man dpkg`、`man dnf`、`man rpm`、`man pacman`

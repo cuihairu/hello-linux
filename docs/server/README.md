@@ -127,7 +127,7 @@ journalctl -u nginx -f
 ## 参考资料
 
 - 鸟哥的私房菜 - 服务器篇 — [linux.vbird.org](https://linux.vbird.org/linux_server/)
-- Arch Wiki - HTTP server — [wiki.archlinux.org](https://wiki.archlinux.org/title/HTTP_server)
+- Arch Wiki - HTTP server — [wiki.archlinux.org](https://wiki.archlinux.org/title/HTTP)
 - Nginx 官方文档 — [nginx.org](https://nginx.org/en/docs/)
 - MySQL 官方文档 — [dev.mysql.com](https://dev.mysql.com/doc/)
 - Docker 官方文档 — [docs.docker.com](https://docs.docker.com/)

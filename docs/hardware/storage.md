@@ -269,5 +269,5 @@ fio --name=rand_read --filename=/data/testfile --size=1G \
 - Linux Kernel Documentation - Block layer — [kernel.org](https://www.kernel.org/doc/html/latest/block/index.html)
 - NVM Express Specification — [nvmexpress.org](https://nvmexpress.org/specifications/)
 - smartmontools Documentation — [smartmontools.org](https://www.smartmontools.org/)
-- 鸟哥的私房菜 - 磁盘与文件系统管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0210disk.php)
+- 鸟哥的私房菜 - 磁盘与文件系统管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0230filesystem.php)
 - Red Hat - RHEL 9 存储管理 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/managing_storage_devices/index)

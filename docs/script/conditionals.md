@@ -110,6 +110,6 @@ $ ./backup-type.sh bogus     # → 用法: ./backup-type.sh {full|incr}，$? = 2
 - `man bash` — Conditional Constructs、test
 - Bash 手册 - Conditional Constructs — [gnu.org](https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html)
 - Arch Wiki - Bash - Conditions — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
-- 鸟哥的私房菜 - 条件判断式 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
+- 鸟哥的私房菜 - 条件判断式 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0320bash.php)
 - Advanced Bash-Scripting Guide - Tests — [tldp.org](https://tldp.org/LDP/abs/html/tests.html)
 - POSIX test — [pubs.opengroup.org](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/test.html)

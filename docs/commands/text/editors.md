@@ -303,13 +303,13 @@ command -v nano && nano file || command -v vim && vim file || vi file
 ## 参考资料
 
 - `man vim`, `man nano`, `man cat`, `man less`, `man more`, `man head`, `man tail`
-- man vim (Arch) — [man.archlinux.org](https://man.archlinux.org/man/vim.1.en)
-- man nano — [man.archlinux.org](https://man.archlinux.org/man/nano.1.en)
-- man less — [man.archlinux.org](https://man.archlinux.org/man/less.1.en)
-- man more — [man.archlinux.org](https://man.archlinux.org/man/more.1.en)
-- man cat — [man.archlinux.org](https://man.archlinux.org/man/cat.1.en)
-- man head — [man.archlinux.org](https://man.archlinux.org/man/head.1.en)
-- man tail — [man.archlinux.org](https://man.archlinux.org/man/tail.1.en)
+- man vim (Arch) — [man.archlinux.org](https://man.archlinux.org/man/vim.1)
+- man nano — [man.archlinux.org](https://man.archlinux.org/man/nano.1)
+- man less — [man.archlinux.org](https://man.archlinux.org/man/less.1)
+- man more — [man.archlinux.org](https://man.archlinux.org/man/more.1)
+- man cat — [man.archlinux.org](https://man.archlinux.org/man/cat.1)
+- man head — [man.archlinux.org](https://man.archlinux.org/man/head.1)
+- man tail — [man.archlinux.org](https://man.archlinux.org/man/tail.1)
 - Vim 手册 — [vim.org](https://www.vim.org/docs.php)
 - Vim 快捷键 cheatsheet — [vim.rtorr.com](https://vim.rtorr.com/)
 - Arch Wiki - Vim — [wiki.archlinux.org](https://wiki.archlinux.org/title/Vim)

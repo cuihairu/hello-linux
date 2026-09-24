@@ -215,7 +215,7 @@ inode 不会变的是硬链接（所以 `ls -li` 看两个硬链接 inode 相同
 
 - `man ls`, `man cp`, `man mv`, `man rm`, `man chmod`, `man chown`, `man mkdir`
 - 鸟哥的私房菜 - 文件与目录管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
-- 鸟哥的私房菜 - Linux 文件权限 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0210filename.php)
+- 鸟哥的私房菜 - Linux 文件权限 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0210filepermission.php)
 - Arch Wiki - File permissions — [wiki.archlinux.org](https://wiki.archlinux.org/title/File_permissions)
 - Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
 - GNU coreutils 手册 — [gnu.org](https://www.gnu.org/software/coreutils/manual/)

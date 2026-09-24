@@ -226,6 +226,6 @@ CSM（Compatibility Support Module）是 UEFI 固件里模拟 Legacy BIOS 的兼
 - Arch Wiki - Unified Extensible Firmware Interface（含 `efibootmgr` 用法） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface)
 - Arch Wiki - Install guide 的分区章节 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Installation_guide)
 - RHEL 9 文档 - 在 UEFI 模式下安装引导装载程序 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/installing_rhel_9/index)
-- 鸟哥的私房菜 - 开机流程分析（含 BIOS/UEFI 对比） — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0430boot.php)
+- 鸟哥的私房菜 - 开机流程分析（含 BIOS/UEFI 对比） — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0510osloader.php)
 - UEFI Forum 规范 — [uefi.org](https://uefi.org/)
 - `man efibootmgr`、`man fdisk`、`man gdisk`、`man lsblk`

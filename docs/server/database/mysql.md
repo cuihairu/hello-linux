@@ -342,6 +342,6 @@ MySQL 运维可以收成四条主线：装对分支（MySQL vs MariaDB、包名�
 
 - MySQL 8.0 官方文档 — [dev.mysql.com/doc/refman/8.0](https://dev.mysql.com/doc/refman/8.0/en/)
 - MariaDB Server 文档 — [mariadb.com/kb](https://mariadb.com/kb/en/documentation/)
-- 鸟哥的私房菜 - MySQL — [linux.vbird.org](https://linux.vbird.org/linux_server/0420mysql.php)
+- 鸟哥的私房菜 - MySQL — [linux.vbird.org](https://wiki.archlinux.org/title/MariaDB)
 - Arch Wiki - MariaDB — [wiki.archlinux.org](https://wiki.archlinux.org/title/MariaDB)
 - MySQL Performance Blog — [percona.com/blog](https://www.percona.com/blog/)

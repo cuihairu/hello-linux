@@ -133,7 +133,7 @@ Hello, World!
 
 - Bash 手册 — [gnu.org](https://www.gnu.org/software/bash/manual/)
 - Arch Wiki - Bash — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
-- 鸟哥的私房菜 - Shell 脚本 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0430bash.php)
+- 鸟哥的私房菜 - Shell 脚本 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bashshell-scripts.php)
 - Advanced Bash-Scripting Guide — [tldp.org](https://tldp.org/LDP/abs/html/)
 - ShellCheck — [shellcheck.net](https://www.shellcheck.net/)
 - Google Shell Style Guide — [google.github.io](https://google.github.io/styleguide/shellguide.html)

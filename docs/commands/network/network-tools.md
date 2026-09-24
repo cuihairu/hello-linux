@@ -212,7 +212,7 @@ nmcli 的常用句型可以收成五类：查状态 `general status`/`device sta
 ## 参考资料
 
 - `man ping`, `man traceroute`, `man mtr`, `man dig`, `man curl`, `man rsync`, `man tcpdump`, `man nmcli`
-- 鸟哥的私房菜 - 网络除错工具与指令示例 — [linux.vbird.org](https://linux.vbird.org/linux_server/0110network_basic.php#tool_ifconfig)
+- 鸟哥的私房菜 - 网络除错工具与指令示例 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0110network_basic.php#tool_ifconfig)
 - Arch Wiki - Network debugging — [wiki.archlinux.org](https://wiki.archlinux.org/title/Network_debugging)
 - Arch Wiki - NetworkManager (nmcli) — [wiki.archlinux.org](https://wiki.archlinux.org/title/NetworkManager)
 - dig 手册（ISC BIND） — [bind9.readthedocs.io](https://bind9.readthedocs.io/en/latest/manpages.html)

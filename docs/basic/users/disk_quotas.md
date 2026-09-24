@@ -115,8 +115,8 @@ $ sudo edquota -g -p template_group developers
 ## 参考资料
 
 - Arch Wiki - Disk quota — [wiki.archlinux.org](https://wiki.archlinux.org/title/Disk_quota)
-- 鸟哥的私房菜 - 磁盘配额 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/043quota.php)
-- XFS 配额管理官方文档 — [xfs.org](https://xfs.org/index.php/XFS_QuotaSupport)
+- 鸟哥的私房菜 - 磁盘配额 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0420quota.php)
+- XFS 配额管理官方文档 — [xfs.org](https://xfs.wiki.kernel.org/)
 - Debian 手册 - 磁盘配额 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - RHEL 9 - 配置配额 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/managing_storage/index)
 - `man quota`、`man repquota`、`man edquota`、`man quotacheck`、`man quotaon`、`man xfs_quota`

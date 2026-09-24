@@ -240,6 +240,6 @@ COMMENT
 - `man bash` — Shell 语法与引号规则
 - Bash 手册 - Quoting — [gnu.org](https://www.gnu.org/software/bash/manual/html_node/Quoting.html)
 - Arch Wiki - Bash — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
-- 鸟哥的私房菜 - 什么是 shell script — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0430bash.php)
-- Advanced Bash-Scripting Guide - Chapter 2 - Starting Out With a Shell Script — [tldp.org](https://tldp.org/LDP/abs/html/startup.html)
+- 鸟哥的私房菜 - 什么是 shell script — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bashshell-scripts.php)
+- Advanced Bash-Scripting Guide - Chapter 2 - Starting Out With a Shell Script — [tldp.org](https://tldp.org/LDP/abs/html/)
 - Google Shell Style Guide - Quoting Conventions — [google.github.io](https://google.github.io/styleguide/shellguide.html)

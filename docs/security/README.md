@@ -96,7 +96,7 @@ sudo dnf install firewalld aide fail2ban lynis gnupg2
 
 - Arch Wiki - Security — [wiki.archlinux.org](https://wiki.archlinux.org/title/Security)
 - Arch Wiki - Pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
-- 鸟哥的私房菜 - 系统安全与权限控制 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0430su.php)
+- 鸟哥的私房菜 - 系统安全与权限控制 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0410accountmanager.php)
 - Debian 安全手册 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - Ubuntu 安全 — [ubuntu.com/security](https://ubuntu.com/security)
 - Red Hat 安全强化 — [redhat.com](https://www.redhat.com/en/topics/security)

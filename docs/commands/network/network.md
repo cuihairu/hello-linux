@@ -278,7 +278,7 @@ Link 3 (ztksetoehl):
 ## 参考资料
 
 - `man ip`, `man ss`, `man ip-rule`, `man resolvectl`, `man nsswitch.conf`, `man systemd-resolved`
-- 鸟哥的私房菜 - 网络基础 — [linux.vbird.org](https://linux.vbird.org/linux_server/0110networkbasic.php)
+- 鸟哥的私房菜 - 网络基础 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0110network_basic.php)
 - Arch Wiki - iproute2 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Iproute2)
 - Arch Wiki - Network configuration — [wiki.archlinux.org](https://wiki.archlinux.org/title/Network_configuration)
 - Arch Wiki - systemd-resolved — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd-resolved)

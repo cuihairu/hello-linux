@@ -72,7 +72,7 @@ Windows 更新常会抢占 NVRAM 启动顺序，把 Windows Boot Manager 放回�
 - Arch Wiki - systemd-boot（Arch 常见替代选择） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd-boot)
 - Arch Wiki - Install guide 的分区与引导章节 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Installation_guide)
 - GNU GRUB 手册 — [gnu.org](https://www.gnu.org/software/grub/manual/grub/)
-- 鸟哥的私房菜 - 开机流程分析 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0430boot.php)
+- 鸟哥的私房菜 - 开机流程分析 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0510osloader.php)
 - RHEL 9 - 在 UEFI 模式下安装 GRUB — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/installing_rhel_9/index)
 - Debian 手册 - 系统启动 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - `man efibootmgr`、`man grub-install`、`man grub-mkconfig`、`man dracut`

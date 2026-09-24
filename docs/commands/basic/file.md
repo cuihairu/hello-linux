@@ -254,7 +254,7 @@ locate -r '\.txt$'
 
 安装情况因发行版而异：本 Ubuntu 演示环境默认**未安装** `locate`（需 `apt install plocate`）；RHEL/CentOS/Rocky 为 `dnf install plocate` 或 `mlocate`；Arch 可用 `pacman -S plocate`。若命令不存在，`find` 是唯一可靠选择。
 
-更多说明见 [Arch Wiki - Locate](https://wiki.archlinux.org/title/Locate) 与 [man find](https://man.archlinux.org/man/find.1.en)。
+更多说明见 [Arch Wiki - Locate](https://wiki.archlinux.org/title/Locate) 与 [man find](https://man.archlinux.org/man/find.1)。
 
 ## 7. 文件比较
 
@@ -433,11 +433,11 @@ fakebin: ELF
 - Arch Wiki - Find — [wiki.archlinux.org](https://wiki.archlinux.org/title/Find)
 - Arch Wiki - Locate — [wiki.archlinux.org](https://wiki.archlinux.org/title/Locate)
 - Arch Wiki - File permissions — [wiki.archlinux.org](https://wiki.archlinux.org/title/File_permissions)
-- man ls — [man.archlinux.org](https://man.archlinux.org/man/ls.1.en)
-- man find — [man.archlinux.org](https://man.archlinux.org/man/find.1.en)
-- man stat — [man.archlinux.org](https://man.archlinux.org/man/stat.1.en)
-- man diff — [man.archlinux.org](https://man.archlinux.org/man/diff.1.en)
-- man ln — [man.archlinux.org](https://man.archlinux.org/man/ln.1.en)
+- man ls — [man.archlinux.org](https://man.archlinux.org/man/ls.1)
+- man find — [man.archlinux.org](https://man.archlinux.org/man/find.1)
+- man stat — [man.archlinux.org](https://man.archlinux.org/man/stat.1)
+- man diff — [man.archlinux.org](https://man.archlinux.org/man/diff.1)
+- man ln — [man.archlinux.org](https://man.archlinux.org/man/ln.1)
 - Linux man pages (man7) — [man7.org](https://man7.org/linux/man-pages/)
 - Debian 手册 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - Rocky Linux 文档 — [docs.rockylinux.org](https://docs.rockylinux.org/)

@@ -148,4 +148,4 @@ macOS 自带的 `dd` 语法相同，但更推荐用 balenaEtcher——图形操�
 - Arch Wiki - UEFI, Secure Boot — [wiki.archlinux.org](https://wiki.archlinux.org/title/UEFI)
 - Debian Installation Manual — [debian.org](https://www.debian.org/releases/stable/installmanual)
 - Ubuntu installation tutorial — [ubuntu.com](https://ubuntu.com/tutorials/install-ubuntu-desktop)
-- 鸟哥的私房菜 - 安装 Linux 前的准备 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0130installlinux/)
+- 鸟哥的私房菜 - 安装 Linux 前的准备 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0157installcentos7.php)

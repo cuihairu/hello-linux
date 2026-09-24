@@ -332,5 +332,5 @@ Sep 22 10:14:02 web01 kernel: nft-input-dropped: IN=ens160 SRC=203.0.113.7 ...
 - Arch Wiki - Iptables — [wiki.archlinux.org](https://wiki.archlinux.org/title/Iptables)
 - firewalld 文档 — [firewalld.org](https://firewalld.org/documentation/)
 - netfilter 项目与文档 — [netfilter.org](https://www.netfilter.org/documentation/)
-- 鸟哥的私房菜 - 系统安全与防火墙 — [linux.vbird.org](https://linux.vbird.org/linux_server/0140tcpip_firewall.php)
+- 鸟哥的私房菜 - 系统安全与防火墙 — [linux.vbird.org](https://linux.vbird.org/linux_server/rocky9/0180firewall.php)
 - Red Hat - 用 firewalld 配置防火墙 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/assembly_using-firewalld-to-manage-the-firewall_configuring-and-managing-networking)

@@ -1041,6 +1041,6 @@ MAC 地址漂移、
 - Arch Wiki - Network configuration — [wiki.archlinux.org](https://wiki.archlinux.org/title/Network_configuration)
 - NetworkManager 手册 — [networkmanager.dev](https://networkmanager.dev/docs/)
 - RHEL 9 配置与管理网络 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/)
-- 鸟哥的私房菜 - 网络配置 — [linux.vbird.org](https://linux.vbird.org/linux_server/0110networkbasic.php)
+- 鸟哥的私房菜 - 网络配置 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0110network_basic.php)
 - `man ip`、`man nmcli`、`man netplan`、
   `man sysctl`、`man ethtool`

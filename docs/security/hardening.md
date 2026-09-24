@@ -338,7 +338,7 @@ Lynis 的 `suggestions` 会包含大量与业务无关的建议，**不要全盘
 - Lynis 安全审计 — [cisofy.com/lynis](https://cisofy.com/lynis/)
 - Arch Wiki - Security — [wiki.archlinux.org](https://wiki.archlinux.org/title/Security)
 - Arch Wiki - Pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
-- 鸟哥的私房菜 - 系统安全与权限控制 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0430su.php)
+- 鸟哥的私房菜 - 系统安全与权限控制 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0410accountmanager.php)
 - Ubuntu 服务器安全文档 — [ubuntu.com/server/docs/security](https://ubuntu.com/server/docs/security)
 - Red Hat - 安全强化指南 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/security_hardening/index)
 - Debian 安全手册 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)

@@ -134,6 +134,6 @@ Shell 处理命令行分两个阶段：**扩展阶段**（变量、命令替换�
 - Bash 手册 - Looping Constructs — [gnu.org](https://www.gnu.org/software/bash/manual/html_node/Looping-Constructs.html)
 - Bash 手册 - pipelines（子 shell 语义） — [gnu.org](https://www.gnu.org/software/bash/manual/html_node/Pipelines.html)
 - Arch Wiki - Bash - Loops — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
-- 鸟哥的私房菜 - 循环 script — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
+- 鸟哥的私房菜 - 循环 script — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0320bash.php)
 - Advanced Bash-Scripting Guide - Loops — [tldp.org](https://tldp.org/LDP/abs/html/loops1.html)
 - Google Shell Style Guide - 读取文件 — [google.github.io](https://google.github.io/styleguide/shellguide.html)

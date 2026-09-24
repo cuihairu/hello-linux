@@ -346,7 +346,7 @@ Master/Minion 架构、ZeroMQ 通道，`salt '*' test.ping` 级别的扇出速�
 ## 参考资料
 
 - Ansible 官方文档 — [docs.ansible.com](https://docs.ansible.com/)
-- Ansible Playbook 常用模块 — [docs.ansible.com/ansible/latest/collections/ansible/builtin/](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/module_index.html)
+- Ansible Playbook 常用模块 — [docs.ansible.com/ansible/latest/collections/ansible/builtin/](https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html)
 - Puppet 文档 — [puppet.com/docs](https://puppet.com/docs/)
 - Chef 文档 — [docs.chef.io](https://docs.chef.io/)
 - SaltProject 文档 — [docs.saltproject.io](https://docs.saltproject.io/)

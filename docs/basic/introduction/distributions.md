@@ -419,7 +419,7 @@ f4c5431b6d4b1e4e7e3f6c8c0a9f...  ubuntu-24.04.2-desktop-amd64.iso
 - CentOS 项目（Stream 说明） — [centos.org](https://www.centos.org/)
 - Arch Linux — [archlinux.org](https://archlinux.org/)
 - Arch Wiki - pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
-- Arch Wiki - Arch as a beginner? — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_Linux_as_a_beginner)
+- Arch Wiki - Arch as a beginner? — [wiki.archlinux.org](https://wiki.archlinux.org/title/General_recommendations)
 - AUR — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_User_Repository)
 - 清华大学开源软件镜像站 — [mirrors.tuna.tsinghua.edu.cn](https://mirrors.tuna.tsinghua.edu.cn/)
 - DistroWatch — [distrowatch.com](https://distrowatch.com/)

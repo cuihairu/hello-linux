@@ -177,5 +177,5 @@ $ sudo apt --fix-broken install     # 再修复依赖关系
 - Debian 手册 - APT 与 dpkg — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/apt.zh-cn.html)
 - Ubuntu 文档 - sources.list 与 deb822 — [help.ubuntu.com](https://help.ubuntu.com/community/SourcesList)
 - Arch Wiki - pacman（对照参考） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
-- 鸟哥的私房菜 - Debian 的软件管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/ubuntu/)
+- 鸟哥的私房菜 - Debian 的软件管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/)
 - `man apt`、`man apt-get`、`man dpkg`、`man apt-mark`、`man sources.list`

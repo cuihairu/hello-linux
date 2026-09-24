@@ -320,12 +320,12 @@ numa_miss       12        9   # 溢到对端——持续涨才值得关注
 ## 参考资料
 
 - Bryant, R. E., & O'Hallaron, D. R.《深入理解计算机系统》（CSAPP），机械工业出版社
-- 鸟哥的私房菜 - 物理内存与虚拟内存 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0150memory.php)
-- Arch Wiki - Memory（含 OOM 与 swap 语义） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Memory)
+- 鸟哥的私房菜 - 物理内存与虚拟内存 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0610hardware.php)
+- Arch Wiki - Memory（含 OOM 与 swap 语义） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Improving_performance)
 - Arch Wiki - Btrfs swapfile 注意事项 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Btrfs#Swap_file)
-- Arch Wiki - NUMA — [wiki.archlinux.org](https://wiki.archlinux.org/title/NUMA)
-- JEDEC DDR4 Standard — [jedec.org](https://www.jedec.org/standards-documents/docs/jesd79-4)
+- Arch Wiki - NUMA — [wiki.archlinux.org](https://wiki.archlinux.org/title/Improving_performance)
+- JEDEC DDR4 Standard — [jedec.org](https://www.jedec.org/standards-documents)
 - JEDEC DDR5 Standard — [jedec.org](https://www.jedec.org/standards-documents/docs/jesd79-5)
 - Linux Kernel Documentation - Memory Management — [kernel.org](https://www.kernel.org/doc/html/latest/mm/index.html)
-- Linux Kernel Documentation - OOM Killer — [kernel.org](https://www.kernel.org/doc/html/latest/mm/concepts.html)
+- Linux Kernel Documentation - OOM Killer — [kernel.org](https://www.kernel.org/doc/html/latest/admin-guide/mm/concepts.html)
 - Red Hat - RHEL 9 内存管理与 tuning — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index)

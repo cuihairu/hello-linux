@@ -294,6 +294,6 @@ LUKS2 是当前默认格式（`cryptsetup` 新版本默认 `--type luks2`），�
 - OpenSSH 手册 — [openssh.com](https://www.openssh.com/manual.html)
 - Arch Wiki - GnuPG — [wiki.archlinux.org](https://wiki.archlinux.org/title/GnuPG)
 - Arch Wiki - Disk/encryption (LUKS) — [wiki.archlinux.org](https://wiki.archlinux.org/title/Disk_encryption)
-- 鸟哥的私房菜 - 系统安全与权限 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0430su.php)
+- 鸟哥的私房菜 - 系统安全与权限 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0410accountmanager.php)
 - Red Hat - 使用 LUKS 对块设备加密 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/security_hardening/encrypting-block-devices-using-luks_security-hardening)
 - Let's Encrypt 文档 — [letsencrypt.org](https://letsencrypt.org/docs/)

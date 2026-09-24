@@ -217,9 +217,9 @@ $ sudo tail -f /var/log/mail.log     # Debian 布局
 ## 参考资料
 
 - Postfix 官方文档 — [postfix.org](https://www.postfix.org/documentation.html)
-- Postfix 配置参考 — [postfix.org/CONF_README](https://www.postfix.org/CONF_README.html)
+- Postfix 配置参考 — [postfix.org/CONF_README](https://www.postfix.org/documentation.html)
 - Dovecot 官方文档 — [doc.dovecot.org](https://doc.dovecot.org/)
 - Arch Wiki: Postfix — [wiki.archlinux.org/title/Postfix](https://wiki.archlinux.org/title/Postfix)
 - Arch Wiki: Dovecot — [wiki.archlinux.org/title/Dovecot](https://wiki.archlinux.org/title/Dovecot)
-- 鸟哥的私房菜 - 邮件服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/0380mail.php)
+- 鸟哥的私房菜 - 邮件服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0380mail.php)
 - OpenDMARC/SPF 概览 — [dmarc.org](https://dmarc.org/)

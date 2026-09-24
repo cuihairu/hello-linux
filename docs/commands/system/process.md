@@ -299,10 +299,10 @@ $ atrm 1                # 删除
 
 ## 参考资料
 
-- 鸟哥的私房菜 - 程序观察与作业管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos8/0430process.php)
-- Arch Wiki - Process management — [wiki.archlinux.org](https://wiki.archlinux.org/title/Process_management)
+- 鸟哥的私房菜 - 程序观察与作业管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0440processcontrol.php)
+- Arch Wiki - Process management — [wiki.archlinux.org](https://wiki.archlinux.org/title/Process)
 - Arch Wiki - systemd — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd)
 - systemd.service(5) 手册（Type= 与 cgroup 语义） — [man7.org](https://man7.org/linux/man-pages/man5/systemd.service.5.html)
 - `man ps`、`man top`、`man kill`、`man pgrep`、`man nice`
-- signals(7) — [man7.org](https://man7.org/linux/man-pages/man7/signals.7.html)
+- signals(7) — [man7.org](https://man7.org/linux/man-pages/man7/signal.7.html)
 - 内存与 OOM 相关见 [内存管理](./memory.md)；监控读数见 [系统监控工具](./monitoring.md)

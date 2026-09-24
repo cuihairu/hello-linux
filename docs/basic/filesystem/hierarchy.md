@@ -199,7 +199,7 @@ du -sh /var/cache/pacman/pkg          # Arch 包缓存大小
 ## 参考资料
 
 - FHS 3.0 — [refspecs.linuxfoundation.org](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html)
-- Arch Wiki - File system hierarchy — [wiki.archlinux.org](https://wiki.archlinux.org/title/File_system_hierarchy)
+- Arch Wiki - File system hierarchy — [wiki.archlinux.org](https://wiki.archlinux.org/title/Filesystem_Hierarchy_Standard)
 - Arch Wiki - pacman/本地数据库 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
 - Debian Reference - 文件系统层次结构 — [debian.org](https://www.debian.org/doc/debian-reference/ch02.zh-cn.html)
 - `man hier`、`man 7 file-hierarchy`（systemd）

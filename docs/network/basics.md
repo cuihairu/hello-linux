@@ -668,7 +668,7 @@ VPN 连通后各跑一遍，
 
 - Arch Wiki - Networking — [wiki.archlinux.org](https://wiki.archlinux.org/title/Networking)
 - Arch Wiki - iproute2 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Iproute2)
-- 鸟哥的私房菜 - 网络基础 — [linux.vbird.org](https://linux.vbird.org/linux_server/0110networkbasic.php)
+- 鸟哥的私房菜 - 网络基础 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0110network_basic.php)
 - RFC 791（Internet Protocol）、RFC 793（Transmission Control Protocol）
 - RFC 1918（私有地址空间）、RFC 1035（DNS 实现与规范）
 - `man ip`、`man ss`、`man nsswitch.conf`、`man resolv.conf`

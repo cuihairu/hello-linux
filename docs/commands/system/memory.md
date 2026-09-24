@@ -325,8 +325,8 @@ $ sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* { @[comm] = count(); }'
 
 ## 参考资料
 
-- 鸟哥的私房菜 - 内存与 swap 管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos8/0530memory.php)
-- Arch Wiki - Memory management / Swap / OOM Killer — [wiki.archlinux.org](https://wiki.archlinux.org/title/Memory)
+- 鸟哥的私房菜 - 内存与 swap 管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0610hardware.php)
+- Arch Wiki - Memory management / Swap / OOM Killer — [wiki.archlinux.org](https://wiki.archlinux.org/title/Improving_performance)
 - Arch Wiki - Sysctl — [wiki.archlinux.org](https://wiki.archlinux.org/title/Sysctl)
 - kernel.org - cgroup v1/v2 与 OOM 文档 — [kernel.org](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html)
 - proc(5) /proc/meminfo — [man7.org](https://man7.org/linux/man-pages/man5/procfs.5.html)

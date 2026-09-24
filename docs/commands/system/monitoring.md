@@ -289,7 +289,7 @@ ps aux --sort=-%mem | head -6
 - sysstat 手册与 sar 指南 — [sysstat.github.io](https://sysstat.github.io/)
 - procps-ng（top/free/vmstat） — [gitlab.com/procps-ng/procps](https://gitlab.com/procps-ng/procps)
 - Brendan Gregg - Linux Performance Methods / USE Method — [brendangregg.com](https://www.brendangregg.com/linuxperf.html)
-- Arch Wiki - Process management / BPFTrace — [wiki.archlinux.org](https://wiki.archlinux.org/title/BPFTrace)
+- Arch Wiki - Process management / BPFTrace — [wiki.archlinux.org](https://wiki.archlinux.org/title/Improving_performance)
 - iostat(1)、mpstat(1)、sar(1)、vmstat(8)、top(1) 手册页 — [man7.org](https://man7.org/linux/man-pages/)
 - 用 USE 方法找瓶颈（Brendan Gregg） — [brendangregg.com/usemethod.html](https://www.brendangregg.com/usemethod.html)
 - Prometheus 监控体系（长期方案） — [server/monitoring/prometheus.md](../../server/monitoring/prometheus.md)

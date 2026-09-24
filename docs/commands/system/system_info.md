@@ -318,7 +318,7 @@ Arch 注意事项：滚动更新下**先保证系统整体是最新的**再装�
 
 ## 参考资料
 
-- 鸟哥的私房菜 - 开机流程、程序与安装软件 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos8/0210filemanager.php)
+- 鸟哥的私房菜 - 开机流程、程序与安装软件 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
 - Arch Wiki - System maintenance — [wiki.archlinux.org](https://wiki.archlinux.org/title/System_maintenance)
 - Arch Wiki - General recommendations — [wiki.archlinux.org](https://wiki.archlinux.org/title/General_recommendations)
 - `man uname`、`man lscpu`、`man lsblk`、`man df`、`man du`、`man ip`

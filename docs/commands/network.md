@@ -244,7 +244,7 @@ Arch 常见 `nftables`/`iptables`（`nft list ruleset`）→
 ## 参考资料
 
 - `man ip`, `man ss`, `man ping`, `man curl`, `man ssh`, `man rsync`, `man dig`
-- 鸟哥的私房菜 - 网络基础与指令 — [linux.vbird.org](https://linux.vbird.org/linux_server/0110networkbasic.php)
+- 鸟哥的私房菜 - 网络基础与指令 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0110network_basic.php)
 - Arch Wiki - Networking — [wiki.archlinux.org](https://wiki.archlinux.org/title/Networking)
 - Arch Wiki - iproute2 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Iproute2)
 - Arch Wiki - SSH — [wiki.archlinux.org](https://wiki.archlinux.org/title/SSH)

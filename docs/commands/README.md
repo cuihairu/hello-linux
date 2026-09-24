@@ -270,7 +270,7 @@ GNU 工具（Linux 上的主流）支持 `--long-option` 和 `-abc` 合并短选
 
 ## 参考资料
 
-- 鸟哥的私房菜 - 命令行与 Shell — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
+- 鸟哥的私房菜 - 命令行与 Shell — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0320bash.php)
 - 鸟哥的私房菜 - 常用命令介绍 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
 - Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
 - Arch Wiki - Bash — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)

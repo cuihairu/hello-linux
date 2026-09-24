@@ -265,7 +265,7 @@ sudo systemctl reload apache2   # 或 httpd
 ## 参考资料
 
 - Apache 官方文档 — [httpd.apache.org/docs](https://httpd.apache.org/docs/)
-- 鸟哥的私房菜 - WWW 服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/0360apache.php)
+- 鸟哥的私房菜 - WWW 服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0360apache.php)
 - Arch Wiki - Apache HTTP Server — [wiki.archlinux.org](https://wiki.archlinux.org/title/Apache_HTTP_Server)
 - Let's Encrypt — [letsencrypt.org](https://letsencrypt.org/)
 - Mozilla SSL Configuration Generator — [ssl-config.mozilla.org](https://ssl-config.mozilla.org/)

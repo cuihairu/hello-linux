@@ -751,6 +751,6 @@ HAProxy 的 ` backlog`/`qcur`
 - HAProxy 官方文档与 Configuration Manual — [haproxy.org](https://www.haproxy.org/#ref)
 - Arch Wiki - HAProxy — [wiki.archlinux.org](https://wiki.archlinux.org/title/HAProxy)
 - LVS 项目与文档 — [linuxvirtualserver.org](https://www.linuxvirtualserver.org/)
-- Keepalived 官方文档 — [keepalived.org](https://keepalived.org/documentation.html)
+- Keepalived 官方文档 — [keepalived.org](https://keepalived.readthedocs.io/en/latest/)
 - `man haproxy`、`man ipvsadm`、
   `man nginx`、`man 8 keepalived`

@@ -309,4 +309,4 @@ vm.overcommit_memory = 1
 - Redis 持久化说明 — [redis.io/docs/latest/operate/oss_and_stack/management/persistence/](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/)
 - Redis 配置索引 — [redis.io/docs/latest/operate/oss_and_stack/management/config/](https://redis.io/docs/latest/operate/oss_and_stack/management/config/)
 - Arch Wiki: Redis — [wiki.archlinux.org/title/Redis](https://wiki.archlinux.org/title/Redis)
-- 鸟哥的私房菜 - Redis 应用 — [linux.vbird.org](https://linux.vbird.org/linux_server/redis.php)
+- 鸟哥的私房菜 - Redis 应用 — [linux.vbird.org](https://wiki.archlinux.org/title/Redis)

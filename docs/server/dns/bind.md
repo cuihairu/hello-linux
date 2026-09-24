@@ -230,6 +230,6 @@ $ sudo journalctl -u named -f              # Debian unit 名为 bind9
 - BIND 9 官方文档 — [bind9.readthedocs.io](https://bind9.readthedocs.io/)
 - Arch Wiki: BIND — [wiki.archlinux.org/title/BIND](https://wiki.archlinux.org/title/BIND)
 - Debian BIND 手册 — [bind9.readthedocs.io](https://bind9.readthedocs.io/en/latest/)
-- 鸟哥的私房菜 - DNS — [linux.vbird.org](https://linux.vbird.org/linux_server/0350dns.php)
+- 鸟哥的私房菜 - DNS — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0350dns.php)
 - RFC 1034/1035 — DNS 规范
 - dig 手册 — [man dig](https://linux.die.net/man/1/dig)

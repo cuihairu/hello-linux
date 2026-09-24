@@ -176,8 +176,8 @@ $ sudo -i        # 以 root 执行：交互式 root shell，会加载 root 的�
 
 - Arch Wiki - Users and groups — [wiki.archlinux.org](https://wiki.archlinux.org/title/Users_and_groups)
 - Arch Wiki - sudo — [wiki.archlinux.org](https://wiki.archlinux.org/title/Sudo)
-- 鸟哥的私房菜 - 用户与群组管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0410account-manager.php)
+- 鸟哥的私房菜 - 用户与群组管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0410accountmanager.php)
 - Debian 手册 - 系统管理员视角 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - RHEL 9 - 管理用户和组 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/using_selinux/)
-- Ubuntu 文档 - sudo — [help.ubuntu.com](https://help.ubuntu.com/community/Sudo)
+- Ubuntu 文档 - sudo — [help.ubuntu.com](https://wiki.archlinux.org/title/Sudo)
 - `man useradd`、`man usermod`、`man userdel`、`man groupadd`、`man gpasswd`、`man sudoers`、`man visudo`

@@ -292,7 +292,7 @@ Shell 没有一等函数对象——不能把函数塞进变量再当值传（Ba
 - `man bash` — Shell Functions（内建命令与 `local`/`return` 语义的权威出处）
 - Bash 手册 - Shell Functions — [gnu.org](https://www.gnu.org/software/bash/manual/html_node/Shell-Functions.html)
 - Arch Wiki - Bash — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)（函数、数组与常见坑的维护者补充）
-- 鸟哥的私房菜 - 函数功能 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bash.php)
+- 鸟哥的私房菜 - 函数功能 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0320bash.php)
 - Advanced Bash-Scripting Guide - Functions — [tldp.org](https://tldp.org/LDP/abs/html/functions.html)
 - Google Shell Style Guide - Function Libraries — [google.github.io](https://google.github.io/styleguide/shellguide.html)
 - ShellCheck wiki — 局部变量、退出码与 `local` 相关告警的触发条件与修复示例
