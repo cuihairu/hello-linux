@@ -22,7 +22,7 @@ DOCS = ROOT / "docs"
 DIST = DOCS / ".vitepress" / "dist"
 BASE = "/hello-linux/"
 
-LINK_RE = re.compile(r"(!?)\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
+LINK_RE = re.compile(r"(!?)\[[^\]]*\]\(([^)\s]+)(?:\s+[\"'][^\"']*[\"'])?\)")
 HTML_A_RE = re.compile(r"""<a\s[^>]*href=["']([^"']+)["']""", re.I)
 HTML_IMG_RE = re.compile(r"""<img\s[^>]*src=["']([^"']+)["']""", re.I)
 REF_DEF_RE = re.compile(r"^\[[^\]]+\]:\s*(\S+)", re.M)

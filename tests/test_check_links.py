@@ -795,16 +795,23 @@ def test_resolve_md_target_invalid_inputs_return_none(site):
     assert cl.resolve_md_target(md, "#frag") is None
 
 
-def test_link_re_double_quoted_title_only(site):
+def test_link_re_quoted_title_both_quote_styles(site):
+    # 正则级：单/双引号标题均应提取 target
+    assert cl.LINK_RE.findall('![i](pic.png "p")') == [("!", "pic.png")]
+    assert cl.LINK_RE.findall("![i](pic.png 'p')") == [("!", "pic.png")]
+    # 行为级：双引号标题链接正常解析
     write_md(site.docs, "target.md", "# T\n")
-    write_md(site.docs, "a.md", '# A\n\n[ok](target.md "the title")\n')
+    write_md(
+        site.docs,
+        "a.md",
+        "# A\n\n[ok](target.md \"the title\")\n[dead](missing.md 'gone')\n",
+    )
     issues: list[tuple] = []
     stats: Counter = Counter()
     cl.check_source(issues, stats)
     assert stats["internal_ok"] == 1
-    assert not issues
-    # 单引号标题不匹配 LINK_RE（\s+"…" 仅双引号）
-    assert cl.LINK_RE.findall("![i](pic.png 'p')") == []
+    # 单引号标题死链不得再漏检（修复前此链接被 LINK_RE 整体忽略）
+    assert any(i[3] == "missing.md" and i[2] == "dead-link" for i in issues)
 
 
 def test_check_source_md_read_error_propagates(site, monkeypatch):
