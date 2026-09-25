@@ -12,6 +12,7 @@ import runpy
 import shutil
 import subprocess
 import sys
+import time
 from collections import Counter
 from pathlib import Path
 from types import SimpleNamespace
@@ -670,10 +671,13 @@ def test_check_html_relative_asset(site):
 
 
 def test_main_docs_missing(monkeypatch, capsys):
+    # docs 缺失分支（L391）优先于 --require-html（L461）：早退且不报 require 错误
     monkeypatch.setattr(cl, "DOCS", Path("/nonexistent/docs-for-test"))
+    monkeypatch.setattr(sys, "argv", ["check_links.py", "--require-html"])
     assert cl.main() == 1
     err = capsys.readouterr().err
     assert "docs/ not found" in err
+    assert "ERROR: --require-html" not in err
 
 
 def test_main_happy_path_with_dist(site, monkeypatch, capsys):
@@ -864,6 +868,73 @@ def test_main_dead_link_takes_precedence_over_require_html(site, monkeypatch, ca
     assert "ERROR: --require-html" not in captured.err
 
 
+def test_check_source_invalid_utf8_propagates(site):
+    # docs 下 md 含非法字节 → L229 严格 utf-8 读抛错（不吞不 replace）
+    (site.docs / "bad.md").write_bytes(b"# B\n\xff\xfe bad\n")
+    with pytest.raises(UnicodeDecodeError):
+        cl.check_source([], Counter())
+    # docs 干净但 README 含非法字节 → L241 同样抛错
+    (site.docs / "bad.md").unlink()
+    (site.root / "README.md").write_bytes(b"[l](x)\n\xff\xfe\n")
+    with pytest.raises(UnicodeDecodeError):
+        cl.check_source([], Counter())
+
+
+def test_check_config_invalid_utf8_and_no_links(site):
+    cfg = site.vpc / "config.mts"
+    cfg.write_bytes(b"nav: [ { link: '/' } ]\n\xff\xfe")
+    with pytest.raises(UnicodeDecodeError):
+        cl.check_config([], Counter())
+    # 合法但无 link 字段 → 计数 0、不进循环、不误报
+    cfg.write_text("export default { themeConfig: {} }\n", encoding="utf-8")
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_config(issues, stats)
+    assert stats["config_links"] == 0
+    assert stats["config_ok"] == 0
+    assert issues == []
+
+
+def test_check_config_read_error_propagates(site, monkeypatch):
+    cfg = site.vpc / "config.mts"
+    cfg.write_text("nav: [ { link: '/' } ]\n", encoding="utf-8")
+    real = Path.read_text
+
+    def boom(self: Path, *args, **kwargs):
+        if self.name == "config.mts":
+            raise OSError("boom-cfg")
+        return real(self, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", boom)
+    with pytest.raises(OSError, match="boom-cfg"):
+        cl.check_config([], Counter())
+
+
+def test_check_html_read_error_propagates(site, monkeypatch):
+    write_html(site.dist, "index.html", '<a href="#x">x</a>')
+    real = Path.read_text
+    state = {"mode": "first", "n": 0}
+
+    def boom(self: Path, *args, **kwargs):
+        if self.suffix == ".html":
+            state["n"] += 1
+            if state["mode"] == "first" and state["n"] >= 1:
+                raise OSError("boom-first")
+            if state["mode"] == "second" and state["n"] >= 2:
+                raise OSError("boom-second")
+        return real(self, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", boom)
+    # 首读 = load_ids（L160）抛错
+    state.update(mode="first", n=0)
+    with pytest.raises(OSError, match="boom-first"):
+        cl.check_html([], Counter())
+    # 二读 = L327 抛错
+    state.update(mode="second", n=0)
+    with pytest.raises(OSError, match="boom-second"):
+        cl.check_html([], Counter())
+
+
 # ---------------------------------------------------------------------------
 # 端到端集成：真实 docs:build → 链接检查全链路 / 输出契约 / 口径一致性
 # ---------------------------------------------------------------------------
@@ -918,6 +989,34 @@ def _concurrent_vitepress_build() -> bool:
         if "vitepress" in cmd and "build" in cmd:
             return True
     return False
+
+
+@pytest.mark.skipif(
+    not Path("/proc").is_dir(),
+    reason="并发探测依赖 /proc（仅 Linux）",
+)
+def test_concurrent_build_guard_three_states(tmp_path):
+    """guard 三态：本仓构建=命中、他仓构建=不误杀、非构建进程文本=不误杀。"""
+
+    def probe(cwd: str, argv: list[str]) -> bool:
+        proc = subprocess.Popen(
+            argv, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+        try:
+            time.sleep(0.3)
+            return _concurrent_vitepress_build()
+        finally:
+            proc.terminate()
+            proc.wait(timeout=10)
+
+    # T1: 本仓库 cwd + 构建形态 argv0(sh) + 关键词 → 竞态命中
+    assert probe(str(REPO_ROOT), ["sh", "-c", "sleep 30 # vitepress build"]) is True
+    # T2: 其他项目 cwd 同命令 → 不误杀
+    assert probe(str(tmp_path), ["sh", "-c", "sleep 30 # vitepress build"]) is False
+    # T3: 本仓库 cwd 但 argv0 为 python（文本含关键词）→ 不误杀
+    assert (
+        probe(str(REPO_ROOT), ["python3", "-c", "print('vitepress build')"]) is False
+    )
 
 
 def test_e2e_real_docs_build_then_link_check():
