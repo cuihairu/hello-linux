@@ -721,8 +721,12 @@ def test_main_favicon_missing(site, monkeypatch, capsys):
     assert "missing" in out
 
 
+@pytest.mark.skipif(
+    not cl.DIST.is_dir(),
+    reason="需先 npm run docs:build；无 dist 时源码级中文锚点近似误报 hardening.md",
+)
 def test_main_script_entry(site, monkeypatch, capsys):
-    """覆盖 __main__ 守卫：以 __name__=='__main__' 执行模块。"""
+    """覆盖 __main__ 守卫：真实仓库全量执行须全绿退出（不再 in (0,1) 宽容）。"""
     write_md(site.docs, "index.md", "# I\n")
     (site.public / "favicon.svg").write_text("<svg/>", encoding="utf-8")
     monkeypatch.setattr(sys, "argv", ["check_links.py"])
@@ -733,7 +737,12 @@ def test_main_script_entry(site, monkeypatch, capsys):
     assert script.is_file()
     with pytest.raises(SystemExit) as ei:
         runpy.run_path(str(script), run_name="__main__")
-    assert ei.value.code in (0, 1)
+    assert ei.value.code == 0
+    out = capsys.readouterr().out
+    m = RESULT_RE.search(out)
+    assert m, out
+    assert int(m[1]) == int(m[3]) and int(m[2]) == 0
+    assert float(m[4]) == 100.0
 
 
 # ---------------------------------------------------------------------------
@@ -862,13 +871,21 @@ def test_main_dead_link_takes_precedence_over_require_html(site, monkeypatch, ca
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RESULT_RE = re.compile(r"RESULT pass=(\d+) fail=(\d+) total=(\d+) rate=([\d.]+)%")
 
+# 真实构建进程的 argv0 形态；排除 grep/python 等仅在命令文本里含关键词的进程
+_BUILD_ARGV0 = {"node", "sh", "bash", "npm", "pnpm", "yarn", "bun", "vitepress"}
+
 
 def _concurrent_vitepress_build() -> bool:
-    """检测其他进程是否正在跑 vitepress build（防并发构建竞态，仅 Linux）。"""
+    """检测本仓库 cwd 内是否有真实 vitepress build 进程（防构建竞态，仅 Linux）。
+
+    三重限定防误杀：cwd 必须属于本仓库（其他项目的 build 无关）、argv0 必须
+    是构建进程形态（排除含关键词的文本命令）、排除自身进程树。
+    """
     try:
         names = os.listdir("/proc")
     except OSError:
         return False
+    repo = str(REPO_ROOT)
     ancestors: set[int] = set()
     pid = os.getpid()
     while pid > 1 and pid not in ancestors:
@@ -885,9 +902,18 @@ def _concurrent_vitepress_build() -> bool:
         if not name.isdigit() or int(name) in ancestors:
             continue
         try:
+            cwd = os.readlink(f"/proc/{name}/cwd")
+        except OSError:
+            continue
+        if cwd != repo and not cwd.startswith(repo + os.sep):
+            continue  # 其他项目的 build 与本仓库 .vitepress 无关
+        try:
             with open(f"/proc/{name}/cmdline", "rb") as f:
                 cmd = f.read().replace(b"\0", b" ").decode("utf-8", "replace")
         except OSError:
+            continue
+        argv0 = Path(cmd.split(" ", 1)[0]).name if cmd else ""
+        if argv0 not in _BUILD_ARGV0:
             continue
         if "vitepress" in cmd and "build" in cmd:
             return True
