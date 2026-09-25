@@ -1154,6 +1154,22 @@ def test_docs_cov_is_docs_test_plus_coverage_only():
     assert "testpaths = tests" in ini
 
 
+def test_no_cover_pragmas_are_registered_with_reason():
+    """不可测点登记核验：pragma 行号清单、行内理由、COVERAGE_NOTES 三者同步。"""
+    src = (REPO_ROOT / "scripts" / "check_links.py").read_text(encoding="utf-8")
+    pragma_lines: list[int] = []
+    for i, line in enumerate(src.splitlines()):
+        if "pragma: no cover" in line:
+            pragma_lines.append(i + 1)
+            # 不可测点必须随行登记不可达理由（不许无理由排除）
+            assert "不可达" in line, f"L{i + 1} pragma 缺少理由"
+    # 不可测点全集：2 处控制流不可达的防御分支；增删必须同步本清单与登记
+    assert pragma_lines == [205, 248]
+    notes = Path(__file__).read_text(encoding="utf-8")
+    for ln in pragma_lines:
+        assert f"L{ln}-{ln + 1}" in notes, f"pragma L{ln} 未在 COVERAGE_NOTES 登记"
+
+
 # ---------------------------------------------------------------------------
 # COVERAGE_NOTES — 不可达分支（pragma 已在源码标注）
 # ---------------------------------------------------------------------------
