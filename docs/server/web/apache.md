@@ -260,7 +260,7 @@ sudo systemctl reload apache2   # 或 httpd
 - 403 但 `ls -la` 正常：查 SELinux `ls -Z`/`restorecon`，以及父目录缺不缺 `x`。
 - 证书不完整：中间证书没打进 fullchain，或私钥与证书不匹配。
 - 2.2 升 2.4 后大片 403：全面替换 Order/Allow/Deny 为 Require。
-- `pacman -S httpd` 后路径对不上教程：Arch 是 `/etc/httpd`，站点进 `conf.d`，无 a2ensite。
+- `pacman -S apache` 后路径对不上教程：Arch 是 `/etc/httpd`，站点进 `conf.d`，无 a2ensite。
 
 ## 参考资料
 
