@@ -48,13 +48,13 @@ MPM（Multi-Processing Module）决定子进程如何组织，是 Apache 性能�
 
 ## 2. 安装
 
-三大发行版的包名不同：Debian/Ubuntu 叫 `apache2`，RHEL 系和 Arch 叫 `httpd`。服务名与包名一致，排错时 `systemctl status` 的目标要对号入座——教程写 `systemctl status httpd`，你在 Debian 上会得到 unit not found。装完后用 `curl -I http://localhost` 验证默认页；打不开先分清是服务没起、防火墙没放行，还是云安全组没开 80，三层从内到外查。
+三大发行版的包名不同：Debian/Ubuntu 叫 `apache2`，RHEL 系叫 `httpd`，Arch 的包名是 `apache`。Debian 与 RHEL 的服务名与包名一致（Arch 的服务名为 `httpd`），排错时 `systemctl status` 的目标要对号入座——教程写 `systemctl status httpd`，你在 Debian 上会得到 unit not found。装完后用 `curl -I http://localhost` 验证默认页；打不开先分清是服务没起、防火墙没放行，还是云安全组没开 80，三层从内到外查。
 
 Debian/Ubuntu 包与服务名均为 `apache2`。先 `sudo apt update` 刷新索引，再 `sudo apt install apache2` 安装，接着用 `sudo systemctl enable --now apache2` 一次完成启用与启动——`enable --now` 等价于先 enable 再 start，是 systemd 下最省事的写法。验证分两步：`apache2 -v` 看版本与编译参数，`curl -I http://localhost` 看默认站点是否响应 200。两步都过了，才说明"装上了且在听"；只跑第一步成功会把"服务没起"误判成"装好了"。
 
 RHEL/CentOS/Fedora 包与服务名均为 `httpd`，把 apt 换成 `sudo dnf install httpd`、服务名换成 `httpd` 即可，其余 systemctl 与 curl 步骤完全相同。SELinux 默认 Enforcing 的机器，后面站点目录还要补上下文，否则会遇到"权限全对仍 403"——这不是 Apache 配置错误，是强制访问控制在拦，详见安全加固节。
 
-Arch Linux 官方仓库提供 `httpd`，用 `sudo pacman -S httpd` 安装。Arch 的配置是单文件 `httpd.conf` 加 `conf.d` 片段，没有 Debian 的 `a2ensite` 软链接体系，启用站点等于把 conf 放进目录并 reload。默认站点根目录是 `/srv/http`，与 Debian/RHEL 的 `/var/www/html` 不同，抄路径时注意；这也是 Arch 用户照搬教程时最容易踩的路径坑。无论哪一系，防火墙都要显式放行：firewalld 用 `firewall-cmd --permanent --add-service=http` 后 reload，UFW 用 `ufw allow 80`；云主机再查安全组——服务启动但 curl 超时时，问题几乎总在网络层而不是 Apache 配置。下面按发行版给出最小安装命令，启动与验证逻辑三系一致。
+Arch Linux 官方仓库的包名为 `apache`，用 `sudo pacman -S apache` 安装，服务单元仍叫 `httpd.service`。Arch 的配置是单文件 `httpd.conf` 加 `conf.d` 片段，没有 Debian 的 `a2ensite` 软链接体系，启用站点等于把 conf 放进目录并 reload。默认站点根目录是 `/srv/http`，与 Debian/RHEL 的 `/var/www/html` 不同，抄路径时注意；这也是 Arch 用户照搬教程时最容易踩的路径坑。无论哪一系，防火墙都要显式放行：firewalld 用 `firewall-cmd --permanent --add-service=http` 后 reload，UFW 用 `ufw allow 80`；云主机再查安全组——服务启动但 curl 超时时，问题几乎总在网络层而不是 Apache 配置。下面按发行版给出最小安装命令，启动与验证逻辑三系一致。
 
 ## 3. 配置文件
 

@@ -40,7 +40,7 @@ pull 模型还带来两个工程收益：目标只需暴露端口、无需知道
 | 升级 | `apt upgrade` | `sudo pacman -Syu` | `dnf upgrade` |
 | 卸载 | `apt remove prometheus` | `sudo pacman -R prometheus` | `dnf remove prometheus` |
 
-Debian/Ubuntu 在 universe 源提供 `prometheus` 全家桶（Prometheus、node_exporter、Alertmanager 分包），一条 `apt install` 即齐；Arch 把它们都放在 extra，`pacman -S prometheus prometheus-node-exporter grafana` 三件套一步到位，systemd 单元随包装好直接 `systemctl enable --now`——三系里安装路径最短。RHEL/Rocky 的 Prometheus 包在 EPEL：先 `dnf install epel-release` 再装，版本往往比上游最新略旧，重要特性需求时用官方静态二进制（见 2.4）对照验证。Grafana 在 Debian/RHEL 都建议加官方仓库以获得较新版本与插件生态，Arch 则官方源即一等公民；装完单元名 Debian/RHEL 叫 `grafana-server`，Arch 包同样提供该 unit——三系验收动作相同：`systemctl status` 看 active，浏览器开 `:3000` 看登录页。升级纪律沿用各系习惯：Debian/RHEL 是 `apt upgrade`/`dnf upgrade`，Arch 保持 `pacman -Syu` 整体滚动，配置文件在包升级时的处理提示（dpkg conffile、`.pacnew`）与其他关键服务一样需要人工过目。
+Debian/Ubuntu 在 universe 源提供 `prometheus` 全家桶（Prometheus、node_exporter、Alertmanager 分包），一条 `apt install` 即齐；Arch 把它们都放在 extra，`pacman -S prometheus prometheus-node-exporter grafana` 三件套一步到位，systemd 单元随包装好直接 `systemctl enable --now`——三系里安装路径最短。RHEL/Rocky 的 Prometheus 包在 EPEL：先 `dnf install epel-release` 再装，版本往往比上游最新略旧，重要特性需求时用官方静态二进制（见 2.4）对照验证。Grafana 在 Debian/RHEL 都建议加官方仓库以获得较新版本与插件生态，Arch 则官方源即一等公民；装完单元名 Debian/RHEL 叫 `grafana-server`，Arch 叫 `grafana`——三系验收动作相同：`systemctl status` 看 active，浏览器开 `:3000` 看登录页。升级纪律沿用各系习惯：Debian/RHEL 是 `apt upgrade`/`dnf upgrade`，Arch 保持 `pacman -Syu` 整体滚动，配置文件在包升级时的处理提示（dpkg conffile、`.pacnew`）与其他关键服务一样需要人工过目。
 
 ### 2.1 Debian/Ubuntu
 
@@ -57,7 +57,7 @@ Debian 的默认配置在 `/etc/prometheus/prometheus.yml`，数据目录 `/var/
 
 ```bash
 $ sudo pacman -S prometheus prometheus-node-exporter grafana
-$ sudo systemctl enable --now prometheus node_exporter grafana-server
+$ sudo systemctl enable --now prometheus node_exporter grafana
 ```
 
 Arch 上三件套全在 extra，`pacman -S` 装完 unit 即可用；配置路径与上游一致：`/etc/prometheus/prometheus.yml`、`/etc/prometheus/alertmanager.yml`（若同时装了 `alertmanager` 包）、告警规则默认目录 `/etc/prometheus/`。与 Debian 拆包风格不同，Arch 惯例是把默认配置全部铺进 `/etc` 并标记为 backup，升级时若你改过会生成 `.pacnew`——`pacman -Ql prometheus | grep yml` 能快速列出包内全部 YAML，确认哪些是"出厂文件、改前可对照"。日常维护仍归 `pacman -Syu`，Prometheus 与 exporter 同仓库滚动，版本天然匹配。安装进度条与依赖解析输出对排障没有信息量，验收只看 `systemctl status` 与 `pacman -Qi` 两行即可。

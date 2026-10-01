@@ -233,7 +233,7 @@ HTTPS = HTTP + TLS，证书用于证明"我确实是 example.com"，密钥用于
 
 ### 6.1 Let's Encrypt 免费证书
 
-certbot 的 nginx 插件自动改写 server 块、安装续期 timer，是最省事的路径。证书 90 天有效，装完必须 `renew --dry-run` 确认续期链路，否则到期当天全站不信任——很多事故不是没续，是续成功却没 reload。三系安装为 `apt install certbot python3-certbot-nginx`、`dnf install certbot python3-certbot-nginx`、`pacman -S certbot`（nginx 插件视版本在官方源或 AUR），也可 `--webroot` 手动部署。续期 hook 里记得 `nginx -t && systemctl reload nginx`，只换证书不 reload 时旧连接可能仍握着旧证；监控证书剩余天数比监控进程更早暴露问题。
+certbot 的 nginx 插件自动改写 server 块、安装续期 timer，是最省事的路径。证书 90 天有效，装完必须 `renew --dry-run` 确认续期链路，否则到期当天全站不信任——很多事故不是没续，是续成功却没 reload。三系安装为 `apt install certbot python3-certbot-nginx`、`dnf install certbot python3-certbot-nginx`、`pacman -S certbot certbot-nginx`（Arch 侧插件包名为 `certbot-nginx`，在官方 extra 源），也可 `--webroot` 手动部署。续期 hook 里记得 `nginx -t && systemctl reload nginx`，只换证书不 reload 时旧连接可能仍握着旧证；监控证书剩余天数比监控进程更早暴露问题。
 
 获取：`sudo certbot --nginx -d example.com -d www.example.com`；验证续期：`sudo certbot renew --dry-run`。插件会改写 server 块并安装 timer，跑完仍建议 `nginx -t` 再 reload 一次，确认自动改写干净。
 
