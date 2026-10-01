@@ -690,7 +690,7 @@ tar -cf - /path | pbzip2 > backup.tar.bz2
 - `man tar`, `man gzip`, `man bzip2`, `man xz`, `man zstd`, `man zip`, `man unzip`, `man split`
 - GNU tar 手册 — [gnu.org](https://www.gnu.org/software/tar/manual/)
 - gzip 手册 — [gnu.org](https://www.gnu.org/software/gzip/manual/gzip.html)
-- bzip2 手册 — [sourceware.org](https://sourceware.org/bzip2/manual.html)
+- bzip2 手册 — [sourceware.org](https://sourceware.org/bzip2/manual/manual.html)
 - xz / xz-utils 文档 — [tukaani.org](https://tukaani.org/xz/)
 - zstd 手册 — [github.com](https://github.com/facebook/zstd/blob/dev/programs/zstd.1.md)
 - 7-Zip 官方文档 — [7-zip.org](https://www.7-zip.org/faq.html)

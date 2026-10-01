@@ -128,7 +128,7 @@ TOP 5 IP:
 - GNU Grep 手册 — [gnu.org](https://www.gnu.org/software/grep/manual/)
 - GNU Sed 手册 — [gnu.org](https://www.gnu.org/software/sed/manual/)
 - GNU Awk 手册 — [gnu.org](https://www.gnu.org/software/gawk/manual/)
-- The AWK Programming Language — [awk-lang.org](https://awk-lang.org/)
+- The AWK Programming Language — [awk.dev](https://awk.dev/)
 - 鸟哥的私房菜 - 文本处理器 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0330regularex.php)
 - Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
 - 命令篇 - 文本处理命令 — [docs/commands/text/text_processing.md](../commands/text/text_processing.md)
