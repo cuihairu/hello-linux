@@ -1,5 +1,11 @@
 # Hello Linux
 
+<div align="center">
+
+![Hello Linux](docs/public/logo.svg)
+
+</div>
+
 从零开始学习 Linux，参考鸟哥的私房菜和 Arch Wiki，覆盖 Debian/Ubuntu、Arch、RHEL/CentOS/Rocky 三系。
 
 ## 内容
