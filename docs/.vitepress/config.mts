@@ -12,46 +12,6 @@ export default defineConfig({
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap' }],
-    // Chinese typography & brand styles
-    ['style', `
-      :root {
-        --vp-doc-font-family: 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans KR', system-ui, sans-serif;
-      }
-      .vp-doc > p:first-of-type { text-indent: 2em; }
-      .vp-doc > p { text-indent: 2em; line-height: 1.75; margin: 1em 0; }
-      .vp-doc > p:first-child { text-indent: 0; }
-      .vp-doc table { border-collapse: separate; border-spacing: 0; width: 100%; margin: 1.5em 0; border-radius: 8px; overflow: hidden; }
-      .vp-doc th { background: #f8fafc; color: #1e293b; font-weight: 600; padding: 0.75em 1em; border-bottom: 2px solid #e2e8f0; text-align: left; }
-      .vp-doc td { padding: 0.6em 1em; border-bottom: 1px solid #e2e8f0; }
-      .vp-doc tbody tr:nth-child(even) td { background: #fafbfc; }
-      .vp-doc tbody tr:hover td { background: #f1f5f9; }
-      .vp-doc code { background: #f1f5f9; padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; }
-      .vp-doc :not(pre) > code { background: #f1f5f9; }
-      .vp-doc blockquote { margin: 1.5em 0; padding: 0.75em 1.25em; color: #475569; border-left: 4px solid #3b82f6; background: #eff6ff; border-radius: 0 8px 8px 0; }
-      .vp-doc blockquote p { margin: 0.5em 0; text-indent: 0; }
-      .vp-doc h1, .vp-doc h2, .vp-doc h3, .vp-doc h4, .vp-doc h5, .vp-doc h6 { margin-top: 1.8em; margin-bottom: 0.6em; font-weight: 600; line-height: 1.35; color: #1e293b; }
-      .vp-doc h1 { font-size: 2rem; padding-bottom: 0.4em; border-bottom: 1px solid #e2e8f0; }
-      .vp-doc h2 { font-size: 1.6rem; margin-top: 2em; }
-      .vp-doc h3 { font-size: 1.3rem; }
-      .VPHero { padding: 3.5em 1.5em; }
-      .VPHero h1 { font-size: 2.75rem; line-height: 1.15; }
-      .VPHero p { font-size: 1.3rem; color: #64748b; margin: 1.2em 0; }
-      .VPNavBarMenuLink { color: #2d3748; transition: color 0.15s; }
-      .VPNavBarMenuLink:hover { color: #3b82f6; }
-      .VPSidebar { width: 260px; }
-      .VPSidebar .nav a { color: #334155; margin: 0.15em 0; font-size: 0.92rem; }
-      .VPSidebar .nav a.active { color: #3b82f6; font-weight: 550; }
-      .VPSidebar .nav .group > .item { font-weight: 600; color: #1e293b; }
-      .VPFooter { margin-top: 4em; padding-top: 2em; border-top: 1px solid #e2e8f0; color: #64748b; }
-      .DocSearch-Button-Container { background: #f1f5f9; border-radius: 6px; }
-      .VPNavBarMenuLink:focus-visible, .VPSwitch:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
-      .vp-doc pre { border-radius: 8px; overflow: auto; }
-      .vp-doc ul, .vp-doc ol { margin: 1em 0; padding-left: 1.5em; }
-      .vp-doc li { margin: 0.4em 0; line-height: 1.7; }
-      .vp-doc li > p { text-indent: 0; margin: 0.2em 0; }
-      .vp-doc img { border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-      .vp-doc hr { border: none; border-top: 1px solid #e2e8f0; margin: 2.5em 0; }
-    `]
   ],
   themeConfig: {
     logo: '/logo.svg',
