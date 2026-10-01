@@ -199,7 +199,7 @@ $ sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" \
 
 `--permanent` 忘了 `--reload` 的症状是"明明加了规则却不生效"，重启后又"莫名其妙好了"——排障时先用 `firewall-cmd --list-all`（runtime）和 `firewall-cmd --list-all --permanent` 对比，一眼就能看出两者是否同步。另一个坑是**接口绑定**：接口属于哪个 zone 决定它套用哪套规则，用 `firewall-cmd --get-zone-of-interface=ens160` 确认，不要假设接口一定在 `public`。
 
-runtime/permanent 双视图带来的另一个隐性风险是**"临时规则"被当成永久规则**：不带 `--permanent` 的改动在 reload 或重启后消失，同事复现你的环境时发现规则不在，互相怀疑"你是不是没保存"。团队协作时把规则写法固化进脚本（全部带 `--permanent`，末尾统一 `--reload`），或反过来全部先 runtime 验证再批量 permanent 化——**一个团队只选一种节奏**，比每个人按当天心情选更不容易出事。
+runtime/permanent 双视图带来的另一个隐性风险是**临时规则被当成永久规则**：不带 `--permanent` 的改动在 reload 或重启后消失，同事复现你的环境时发现规则不在，互相怀疑"你是不是没保存"。团队协作时把规则写法固化进脚本（全部带 `--permanent`，末尾统一 `--reload`），或反过来全部先 runtime 验证再批量 permanent 化——**一个团队只选一种节奏**，比每个人按当天心情选更不容易出事。
 
 ## 5. nftables 与 iptables：Arch 与网关场景
 
