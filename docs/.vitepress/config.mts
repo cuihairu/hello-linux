@@ -16,7 +16,7 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '基础篇', link: '/basic/overview' },
-      { text: '命令篇', link: '/commands/basic/file' },
+      { text: '命令篇', link: '/commands/basic' },
       { text: '硬件篇', link: '/hardware/architecture' },
       { text: '服务器篇', link: '/server/web/nginx' },
       { text: '系统管理', link: '/system-management/performance' },
@@ -25,7 +25,7 @@ export default defineConfig({
       { text: '网络篇', link: '/network/basics' },
       { text: '目录', link: '/SUMMARY' }
     ],
-    sidebar: {
+    sidebar: [...Object.values({
       '/basic/': [
         {
           text: '基础篇',
@@ -520,7 +520,8 @@ export default defineConfig({
           ]
         }
       ]
-    },
+      }).flat().map((section) => ({ ...section, collapsed: true }))
+    ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/cuihairu/hello-linux' }
     ],
