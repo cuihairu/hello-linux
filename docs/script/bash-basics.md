@@ -40,7 +40,7 @@ Arch 上 `/bin/sh` 也指向 bash，所以"在 Arch 测过、搬到 Debian 就�
 ```bash
 #!/bin/bash
 # 脚本描述: 示例脚本
-# 作者: Your Name
+# 作者: 你的名字
 # 日期: 2026-09-22
 # 用法: ./script.sh <参数>
 

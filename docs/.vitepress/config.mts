@@ -554,7 +554,7 @@ export default defineConfig({
     },
     footer: {
       message: '基于 Apache License 2.0 许可发布',
-      copyright: '© 2024 Hello Linux'
+      copyright: '© 2024-2026 Hello Linux'
     }
   }
 })
