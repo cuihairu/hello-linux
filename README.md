@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Hello Linux](docs/public/logo.svg)
+<img src="docs/public/logo.svg" width="64" alt="Hello Linux">
 
 </div>
 
