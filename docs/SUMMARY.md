@@ -77,10 +77,20 @@
 - [性能优化](./system-management/performance.md)
 - [备份与恢复](./system-management/backup-and-recovery.md)
 - [自动化运维](./system-management/automation.md)
+- [例行性工作排程](./system-management/scheduled-tasks.md)
+- [systemd 进阶](./system-management/services-systemd.md)
+- [日志系统管理](./system-management/logging.md)
+- [开机流程与引导排错](./system-management/boot-process.md)
+- [开机流程详解](./system-management/boot-process.md)
+- [日志系统](./system-management/logging.md)
+- [计划任务](./system-management/scheduled-tasks.md)
+- [systemd 服务与程序管理](./system-management/services-systemd.md)
 
 ## 服务器篇
 
 - [服务器篇](./server/README.md)
+- [网络参数配置](./server/network-parameters.md)
+- [路由与 NAT](./server/routing-nat.md)
 - [Web 服务器](./server/web/nginx.md)
 - [Apache](./server/web/apache.md)
 - [数据库](./server/database/mysql.md)
@@ -90,6 +100,11 @@
 - [监控](./server/monitoring/prometheus.md)
 - [DNS](./server/dns/bind.md)
 - [邮件](./server/mail/postfix.md)
+- [DHCP 服务器](./server/dhcp.md)
+- [NFS 服务器](./server/nfs.md)
+- [时间服务 (NTP/chrony)](./server/ntp.md)
+- [路由与 NAT](./server/routing-nat.md)
+- [Samba 文件共享](./server/samba.md)
 
 ## 脚本篇
 
@@ -122,3 +137,21 @@
 - [网络监控](./network/network-monitoring.md)
 - [网络配置基础](./network/network-configuration.md)
 - [网络故障排除](./network/troubleshooting.md)
+- [TCP/IP 要点](./network/tcpip-essentials.md)
+- [网络命令实战](./network/commands-practice.md)
+
+## 源码篇
+
+- [源码篇](./source/README.md)
+- [源码获取与目录导读](./source/source-tree.md)
+- [内核编译与模块开发](./source/build-and-modules.md)
+- [跟踪工具](./source/tracing-tools.md)
+- [进程管理与调度](./source/process-scheduling.md)
+- [系统调用路径](./source/syscall-path.md)
+- [中断与时钟](./source/interrupt-timers.md)
+- [内存管理](./source/memory-management.md)
+- [VFS 与 ext4](./source/vfs-ext4.md)
+- [网络栈](./source/network-stack.md)
+- [设备驱动框架](./source/driver-framework.md)
+- [IPC](./source/ipc.md)
+- [用户态源码选读](./source/userland.md)

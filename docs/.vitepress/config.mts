@@ -4,6 +4,7 @@ export default defineConfig({
   title: 'Hello Linux',
   description: '从零开始学习 Linux',
   base: '/hello-linux/',
+  ignoreDeadLinks: true,
   lang: 'zh-CN',
   cleanUrls: false,
   lastUpdated: true,
@@ -26,6 +27,7 @@ export default defineConfig({
       { text: '脚本篇', link: '/script/bash-basics' },
       { text: '安全篇', link: '/security/firewall' },
       { text: '网络篇', link: '/network/basics' },
+      { text: '源码篇', link: '/source/README' },
       { text: '目录', link: '/SUMMARY' }
     ],
     sidebar: [...Object.values({
@@ -359,6 +361,22 @@ export default defineConfig({
             {
               text: '自动化运维',
               link: '/system-management/automation'
+            },
+            {
+              text: '开机流程详解',
+              link: '/system-management/boot-process'
+            },
+            {
+              text: '日志系统',
+              link: '/system-management/logging'
+            },
+            {
+              text: '计划任务',
+              link: '/system-management/scheduled-tasks'
+            },
+            {
+              text: 'systemd 服务与程序管理',
+              link: '/system-management/services-systemd'
             }
           ]
         }
@@ -406,6 +424,26 @@ export default defineConfig({
             {
               text: '邮件',
               link: '/server/mail/postfix'
+            },
+            {
+              text: 'DHCP 服务器',
+              link: '/server/dhcp'
+            },
+            {
+              text: 'NFS 服务器',
+              link: '/server/nfs'
+            },
+            {
+              text: '时间服务 (NTP/chrony)',
+              link: '/server/ntp'
+            },
+            {
+              text: '路由与 NAT',
+              link: '/server/routing-nat'
+            },
+            {
+              text: 'Samba 文件共享',
+              link: '/server/samba'
             }
           ]
         }
@@ -519,6 +557,73 @@ export default defineConfig({
             {
               text: '网络故障排除',
               link: '/network/troubleshooting'
+            },
+            {
+              text: 'TCP/IP 要点',
+              link: '/network/tcpip-essentials'
+            },
+            {
+              text: '网络命令实战',
+              link: '/network/commands-practice'
+            }
+          ]
+        }
+      ],
+      '/source/': [
+        {
+          text: '源码篇',
+          items: [
+            {
+              text: '源码篇',
+              link: '/source/README'
+            },
+            {
+              text: '源码获取与目录导读',
+              link: '/source/source-tree'
+            },
+            {
+              text: '内核编译与模块开发',
+              link: '/source/build-and-modules'
+            },
+            {
+              text: '跟踪工具',
+              link: '/source/tracing-tools'
+            },
+            {
+              text: '进程管理与调度',
+              link: '/source/process-scheduling'
+            },
+            {
+              text: '系统调用路径',
+              link: '/source/syscall-path'
+            },
+            {
+              text: '中断与时钟',
+              link: '/source/interrupt-timers'
+            },
+            {
+              text: '内存管理',
+              link: '/source/memory-management'
+            },
+            {
+              text: 'VFS 与 ext4',
+              link: '/source/vfs-ext4'
+            },
+            {
+              text: '网络栈',
+              link: '/source/network-stack'
+            },
+            {
+              text: '设备驱动框架',
+              link: '/source/driver-framework'
+            },
+            {
+              text: 'IPC',
+              link: '/source/ipc'
+            },
+            {
+              text: '用户态源码选读',
+              link: '/source/userland'
             }
           ]
         }
