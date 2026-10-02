@@ -4,6 +4,15 @@
   --vp-c-brand-2: #2563eb;
   --vp-c-brand-3: #1d4ed8;
   --vp-c-brand-soft: #eff6ff;
+  /* 表格斑马纹/悬停（明暗双态各自取值） */
+  --hl-row-alt: #fafbfc;
+  --hl-row-hover: #f1f5f9;
+}
+
+.dark {
+  --vp-c-brand-soft: #3b82f61a;
+  --hl-row-alt: #232329;
+  --hl-row-hover: #28282f;
 }
 
 /* 中文正文排版 */
@@ -37,13 +46,13 @@
   margin-bottom: 0.6em;
   font-weight: 600;
   line-height: 1.35;
-  color: #1e293b;
+  color: var(--vp-c-text-1);
 }
 
 .vp-doc h1 {
   font-size: 2rem;
   padding-bottom: 0.4em;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .vp-doc h2 {
@@ -66,37 +75,37 @@
 }
 
 .vp-doc th {
-  background: #f8fafc;
-  color: #1e293b;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
   font-weight: 600;
   padding: 0.75em 1em;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--vp-c-border);
   text-align: left;
 }
 
 .vp-doc td {
   padding: 0.6em 1em;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .vp-doc tbody tr:nth-child(even) td {
-  background: #fafbfc;
+  background: var(--hl-row-alt);
 }
 
 .vp-doc tbody tr:hover td {
-  background: #f1f5f9;
+  background: var(--hl-row-hover);
 }
 
 /* 代码块与行内代码 */
 .vp-doc code {
-  background: #f1f5f9;
+  background: var(--vp-code-bg);
   padding: 0.2em 0.4em;
   border-radius: 4px;
   font-size: 0.9em;
 }
 
 .vp-doc :not(pre) > code {
-  background: #f1f5f9;
+  background: var(--vp-code-bg);
 }
 
 .vp-doc pre {
@@ -108,7 +117,7 @@
 .vp-doc blockquote {
   margin: 1.5em 0;
   padding: 0.75em 1.25em;
-  color: #475569;
+  color: var(--vp-c-text-2);
   border-left: 4px solid var(--vp-c-brand-1);
   background: var(--vp-c-brand-soft);
   border-radius: 0 8px 8px 0;
@@ -145,7 +154,7 @@
 /* 分割线 */
 .vp-doc hr {
   border: none;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--vp-c-divider);
   margin: 2.5em 0;
 }
 
@@ -161,14 +170,14 @@
 
 .VPHero p {
   font-size: 1.3rem;
-  color: #64748b;
+  color: var(--vp-c-text-2);
   margin: 1.2em 0;
   text-indent: 0;
 }
 
 /* 导航栏 */
 .VPNavBarMenuLink {
-  color: #2d3748;
+  color: var(--vp-c-text-1);
   transition: color 0.15s;
 }
 
@@ -182,7 +191,7 @@
 }
 
 .VPSidebar .nav a {
-  color: #334155;
+  color: var(--vp-c-text-2);
   margin: 0.15em 0;
   font-size: 0.92rem;
 }
@@ -194,20 +203,20 @@
 
 .VPSidebar .nav .group > .item {
   font-weight: 600;
-  color: #1e293b;
+  color: var(--vp-c-text-1);
 }
 
 /* 页脚 */
 .VPFooter {
   margin-top: 4em;
   padding-top: 2em;
-  border-top: 1px solid #e2e8f0;
-  color: #64748b;
+  border-top: 1px solid var(--vp-c-border);
+  color: var(--vp-c-text-2);
 }
 
 /* 搜索 */
 .DocSearch-Button-Container {
-  background: #f1f5f9;
+  background: var(--vp-c-bg-soft);
   border-radius: 6px;
 }
 
