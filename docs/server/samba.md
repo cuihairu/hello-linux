@@ -352,7 +352,38 @@ Windows 资源管理器地址栏直接输 `\\192.168.1.100\data`，弹出的认�
 
 **Excel/文档被占用，删不掉也改不了。** "文件正被另一进程使用"类提示先别怪杀毒软件——`sudo smbstatus` 的 Locked files 栏直接给出占用进程号、用户与锁模式（见 3.3 节）。oplock（机会锁）让客户端本地缓存读写以提速，代价是并发编辑时的锁协调：正常情况下第二个客户端打开会触发锁降级、拿到只读副本；僵死锁（客户端异常断开后未释放）用 `smbcontrol smbd close-share 共享名` 踢会话，或按 smbstatus 给出的 PID 直接处置。把"删不掉先 smbstatus"写进值班手册，比让用户反复保存试探省一轮来回。
 
-## 参考资料
+**大文件传输中途断开/卡死 —— MTU 或协商加密导致分片。** `ping -s 1472 -M do server` 测 PMTU；若通不了，要么交换机/虚拟化层 MTU 偏小（设 9000 启用巨型帧），要么 `smb encrypt = required` 导致 SMB 包加密开销挤占载荷。对策：在 `[global]` 显式加 `socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=131072 SO_SNDBUF=131072` 增大内核收发缓冲、降低交互时延；对明文环境可暂时 `smb encrypt = desired` 观察是否恢复，再回头解 MTU 根因。
+
+**多通道未生效 —— 网卡多 IP 但客户端仍单通道。** `smbstatus -S` 看同一用户是否出现多行不同 IP；若只有单行，检查 `[global] server multi channel support = yes` 与客户端 SMB3.1.1+（Windows 10 1709+、Server 2016+、Linux cifs.ko 4.13+）。另一个隐形条件：多 IP 必须在**同一子网**或有可达路由，且接口未被 `interfaces`/`bind interfaces only` 显式排除。排查口诀：服务端开关、客户端版本、同子网、接口白名单——四条全绿才聚合。
+
+**日志暴增填满磁盘 —— log level 过高或未切分。** 生产环境 `log level = 1`（仅错误/警告），调试时临时改 `2`/`3` 且限时回滚；`max log size = 10240`（10 MB 轮转）、`log file = /var/log/samba/%m.log` 按客户端分文件。若已爆满：`ls -lh /var/log/samba/` 找大头、`rm` 掉旧轮转、改配置 `systemctl reload smbd`，别用 `logrotate` 的外部切分——Samba 自带轮转更贴合它的写入模式。
+
+---
+
+## 8. SMB3 加密与签名（企业级最小加固）
+
+在 `[global]` 新增：
+
+```ini
+# 仅允许 SMB2.1 以上，强制加密与签名
+server min protocol = SMB2_10
+smb encrypt = required      # 握手即加密，拒绝明文
+server signing = mandatory  # 拒绝未签名数据包
+```
+
+验证：
+
+```bash
+# 客户端连接时强制加密
+smbclient //server/data -U smbuser -e
+# -e 参数要求加密；若服务端 smb encrypt = required 则不加 -e 也会被拒
+```
+
+> **兼容性**：Windows 8 / Server 2012 以上原生支持；macOS 10.10+ 支持；Linux cifs.ko 3.7+ 支持。老旧 XP/2003 客户端将彻底无法连接——这是预期行为。
+
+---
+
+## 9. 参考资料
 
 - Samba 官方文档 — [samba.org/samba/docs](https://www.samba.org/samba/docs/)
 - Arch Wiki: Samba — [wiki.archlinux.org/title/Samba](https://wiki.archlinux.org/title/Samba)

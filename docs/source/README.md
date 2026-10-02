@@ -42,8 +42,8 @@
 
 ## 与其他篇的关系
 
-- 基础篇（[进程与进程管理](../basic/users/account_management.md)、[内存](../hardware/memory.md)）给出使用者视角的概念，本篇给出实现视角的机制，两相对照理解最深
-- 系统管理篇的 [systemd 进阶](../system-management/services-systemd.md)、[日志系统](../system-management/logging.md)讲管理面，本篇 [用户态源码选读](./userland.md)会掀开 systemd 的一角
+- [命令篇 · 进程管理](../commands/system/process.md)与[硬件篇 · 内存](../hardware/memory.md)给出使用者视角的概念，本篇给出实现视角的机制，两相对照理解最深
+- 系统管理篇的 [systemd 服务与程序管理](../system-management/services-systemd.md)、[日志系统管理](../system-management/logging.md)讲管理面，本篇 [用户态源码选读](./userland.md)会掀开 systemd 的一角
 - 网络篇（[TCP/IP 要点](../network/tcpip-essentials.md)）讲协议行为，本篇 [网络栈](./network-stack.md)讲这些行为在哪几行代码里发生
 
 ## 章节导读

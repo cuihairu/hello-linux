@@ -33,6 +33,9 @@ Linux 之所以能撑起今天绝大部分服务器与云基础设施，
    一次数据包从发出到返回经过了什么、
    `ip` 和 `ss` 如何对应到模型的各层。
    这一站不求快，模型错了后面全是补丁。
+   握手/挥手状态机、报文结构与窗口等细节在
+   [TCP/IP 要点](./tcpip-essentials.md)展开，
+   可与本站交替阅读。
 2. **学会配置**：读[网络配置基础](./network-configuration.md)，
    理解 Netplan、systemd-networkd、
    NetworkManager（`nmcli`）、ifcfg
@@ -44,6 +47,8 @@ Linux 之所以能撑起今天绝大部分服务器与云基础设施，
    内化成肌肉记忆，
    并学会用 `tcpdump`、`traceroute` 拿到证据
    而不是猜测。
+   配套的[网络命令实战](./commands-practice.md)
+   给出可跟跑的演练与真实输出，把语法练成手感。
 4. **守住边界**：读[防火墙](./firewall.md)，
    理解 ufw、firewalld、nftables 三系默认状态
    与 zone/规则模型，
@@ -79,6 +84,8 @@ Linux 之所以能撑起今天绝大部分服务器与云基础设施，
 | [网络监控](./network-monitoring.md) | SNMP 场景、Prometheus + node_exporter、带宽与延迟的持续观测 | 要长期盯着网络的人 |
 | [VPN](./vpn.md) | WireGuard/OpenVPN 实操，IPsec 概念，隧道如何与路由协作 | 远程办公与组网的人 |
 | [负载均衡](./load-balancing.md) | L4/L7 差异、Nginx 与 HAProxy 选型、健康检查与 Keepalived | 要扛流量的人 |
+| [TCP/IP 要点](./tcpip-essentials.md) | 三次握手/四次挥手状态机、报文与窗口、重传与延迟成因 | 想看懂抓包与慢请求的人 |
+| [网络命令实战](./commands-practice.md) | ip/ss/ping/traceroute/dig/tcpdump 组合演练、真实输出解读 | 要把命令变成手感的人 |
 
 各页均可独立阅读，
 但配置页依赖基础页的概念，

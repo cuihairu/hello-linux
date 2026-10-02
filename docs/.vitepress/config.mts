@@ -363,20 +363,20 @@ export default defineConfig({
               link: '/system-management/automation'
             },
             {
-              text: '开机流程详解',
-              link: '/system-management/boot-process'
-            },
-            {
-              text: '日志系统',
-              link: '/system-management/logging'
-            },
-            {
-              text: '计划任务',
+              text: '例行性工作排程',
               link: '/system-management/scheduled-tasks'
             },
             {
               text: 'systemd 服务与程序管理',
               link: '/system-management/services-systemd'
+            },
+            {
+              text: '日志系统管理',
+              link: '/system-management/logging'
+            },
+            {
+              text: '开机流程与引导排错',
+              link: '/system-management/boot-process'
             }
           ]
         }
@@ -388,6 +388,14 @@ export default defineConfig({
             {
               text: '服务器篇',
               link: '/server/README'
+            },
+            {
+              text: '网络参数配置',
+              link: '/server/network-parameters'
+            },
+            {
+              text: '路由与 NAT',
+              link: '/server/routing-nat'
             },
             {
               text: 'Web 服务器',
@@ -430,20 +438,16 @@ export default defineConfig({
               link: '/server/dhcp'
             },
             {
+              text: 'Samba 文件共享',
+              link: '/server/samba'
+            },
+            {
               text: 'NFS 服务器',
               link: '/server/nfs'
             },
             {
-              text: '时间服务 (NTP/chrony)',
+              text: 'NTP 时间服务',
               link: '/server/ntp'
-            },
-            {
-              text: '路由与 NAT',
-              link: '/server/routing-nat'
-            },
-            {
-              text: 'Samba 文件共享',
-              link: '/server/samba'
             }
           ]
         }
@@ -518,6 +522,14 @@ export default defineConfig({
             {
               text: '安全加固',
               link: '/security/hardening'
+            },
+            {
+              text: 'PAM 与 sudo',
+              link: '/security/pam-sudo'
+            },
+            {
+              text: 'SELinux 实战',
+              link: '/security/selinux'
             }
           ]
         }
@@ -590,16 +602,12 @@ export default defineConfig({
               link: '/source/tracing-tools'
             },
             {
-              text: '进程管理与调度',
-              link: '/source/process-scheduling'
-            },
-            {
               text: '系统调用路径',
               link: '/source/syscall-path'
             },
             {
-              text: '中断与时钟',
-              link: '/source/interrupt-timers'
+              text: '进程管理与调度',
+              link: '/source/process-scheduling'
             },
             {
               text: '内存管理',
@@ -612,6 +620,10 @@ export default defineConfig({
             {
               text: '网络栈',
               link: '/source/network-stack'
+            },
+            {
+              text: '中断与时钟',
+              link: '/source/interrupt-timers'
             },
             {
               text: '设备驱动框架',

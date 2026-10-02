@@ -8,7 +8,7 @@
 
 - 建立"认证（PAM）"与"授权（sudo）"分层的权限心智模型
 - 读懂 `/etc/pam.d/` 规则文件：模块类型、控制标志、调用顺序
-- 独立配置登录失败锁定（pam_faillock）与密码复杂度（pam_pwquality），并能验证生效
+- 独立配置登录失败锁定（pam_faillock）、密码复杂度（pam_pwquality）与登录来源限制（pam_access），并能验证生效
 - 掌握 sudoers 四元组语法、别名分组与 NOPASSWD 的适用边界
 - 识别白名单里的提权后门（find/vi/pager 的 shell 逃逸），建立"命令白名单"的审查直觉
 
@@ -36,7 +36,15 @@ sshd 进程 ──服务名 "sshd"──▶ libpam ──▶ /etc/pam.d/sshd
                                         └── password …   pam_pwquality (改密时才走)
 ```
 
-模块本身是 `/usr/lib/` 下的共享库（Debian 在 `/usr/lib/x86_64-linux-gnu/security/`，Arch 与 RHEL 在 `/usr/lib/security/`——`ls` 这个目录就知道系统有哪些积木），规则文件只是搭积木的图纸。同一块积木被所有服务复用：`pam_unix.so` 既替 sshd 核对密码，也替 su、sudo 干同样的活。想理解一台机器的认证行为，与其读十份教程，不如把 `/etc/pam.d/` 里五六个高频文件通读一遍——每个都是十几行、语法相同的清单，这是 PAM 设计给管理员的可读性红利。
+模块本身是 `/usr/lib/` 下的共享库（Debian 在 `/usr/lib/x86_64-linux-gnu/security/`，Arch 与 RHEL 在 `/usr/lib/security/`——`ls` 这个目录就知道系统有哪些积木），规则文件只是搭积木的图纸。同一块积木被所有服务复用：`pam_unix.so` 既替 sshd 核对密码，也替 su、sudo 干同样的活。想理解一台机器的认证行为，与其读十份教程，不如把 `/etc/pam.d/` 里五六个高频文件通读一遍——每个都是十几行、语法相同的清单，这是 PAM 设计给管理员的可读性红利。看清一个系统里到底有多少扇门，一条命令就够：
+
+```bash
+$ ls -m /etc/pam.d/
+chfn, chpasswd, chsh, common-account, common-auth, common-password,
+common-session, common-session-noninteractive, cron, login, newusers, other,
+passwd, remote, runuser, runuser-l, sshd, su, su-l, sudo, sudo-i
+# 每个名字一份关卡清单；改 common-* 一处，所有 @include 它的服务一起变
+```
 
 ## 3. PAM 规则实战：读懂与修改
 
@@ -126,11 +134,15 @@ $ echo 'correct-horse-battery-staple' | pwscore
 
 注意 `pwscore` 校验的是它自己的默认配置，读不读 `pwquality.conf` 取决于发行版打包——它适合当"语感训练器"体会什么口令得分高，生产验证仍以真实 `passwd` 交互为准。改完这两处后，纪律是**先在第二个终端验证登录与改密，再关掉第一个窗口**——PAM 改坏的典型症状不是报错，而是所有人都登不进来。
 
-### 3.5 sudo 自己也要过 PAM
+### 3.5 改动的验收清单
+
+任何一处 PAM 改动，验收到"另一个会话真的能登录"才算完，四步走一遍即可收工：`visudo -c` 式的预检在此没有等价物（PAM 无官方语法检查工具），所以更依赖流程——先 `pam-auth-update --test`（Debian）或 `authselect check`（RHEL）确认没改崩公共栈的引用关系；再在**第二个终端**用 `ssh testuser@localhost` 走一遍目标场景（要验 faillock 就故意输错到锁定）；然后 `journalctl -u ssh -e` 看 PAM 报的每一行——`Failed password` 是预期内的测试痕迹，`error: PAM: ...` 才是栈被改坏的铁证；最后清点 `faillock`/`pwscore` 的观测面与预期一致。四步里任何一步失败，都退回改前状态再想——这就是 PAM 改动的"先验证、再生效"，与 DNS 改 serial、防火墙改规则同一套保守变更观。
+
+### 3.6 sudo 自己也要过 PAM
 
 容易忽略的一环：你敲 `sudo` 时，sudo 这个程序同样要认证"你是不是你"——`/etc/pam.d/sudo` 就是它的关卡文件（Debian 系照例 `@include common-auth`，Arch/RHEL 引 `system-auth`）。所以 3.3 节给 `common-auth` 加的 faillock，ssh 登录与 sudo 提权两条路同时被保护——公共栈的好处在这里兑现。一个例外同样值得知道：root 自己跑 `sudo` 从不问密码——sudoers 里的 `root ALL=(ALL:ALL) ALL` 在授权层直接放行，根本走不到认证；而普通用户连续 `sudo` 几分钟内不重复问密码，则是 sudo 自己的时间戳缓存（`/run/sudo/ts/` 下按用户与终端记账），与 PAM 无关——`sudo -k` 手工作废缓存、下次必问，交接终端前的肌肉记忆。
 
-### 3.6 session 段：登录的"搭台"与"拆台"
+### 3.7 session 段：登录的"搭台"与"拆台"
 
 `auth` 判完身份就完了吗？还差 session 段给登录搭台：把用户环境、资源上限、审计、cgroup 一并备好。两个高频模块值得单独认识——`pam_limits.so` 读 `/etc/security/limits.conf` 决定这个会话的文件句柄与进程数上限（大服务必须调，否则 `Too many open files` 来自登录那一刻的隐形天花板），`pam_systemd.so` 把登录会话注册给 systemd-logind，`loginctl` 看到的会话、切用户时的环境继承，都由它起头。二者都有与直觉不符的互动：limits 配了却不生效时，先确认 `session required pam_limits.so` 这行确实在 session 栈里（Debian 系看 `common-session`，RHEL/Arch 看 `system-auth`——三系落点又不同），再确认自己是不是经由不走 session 段的路子进来，session 没走完自然没搭台：
 
@@ -143,6 +155,30 @@ $ loginctl show-session $(loginctl | awk '$3=="alice"{print $1; exit}') | head -
 ```
 
 `session` 段"拆台"的一面同样要懂：注销时模块按栈序逆向清理，谁建了临时文件、谁销了审计——改 session 段时留意顺序语义（`optional` 的清理模块被挪位，可能留下无人回收的会话账目），这也是为什么安全审计类模块（如 `pam_loginuid`）应标 `required`：审计不全的登录，比不登录更危险。另一个对照场景是 systemd 服务单元直接拉起的进程——它们根本不经 PAM，资源上限归 `LimitNOFILE=` 管，别拿着 limits.conf 去查服务的句柄问题，两套账本互不相干。
+
+### 3.8 密钥登录绕过 PAM 了吗
+
+常被问到的一个问题：配了 SSH 密钥，密码那道关是不是就形同虚设？对一半。`PubkeyAuthentication yes` 时 sshd 校验公钥，不再调用 `pam_authenticate`——`auth` 栈里核对密码的那行根本不参与，`faillock` 的失败计数也只随密码尝试上涨：拿一把泄露的私钥登录，密码锁定管不着它。但 `account` 与 `session` 两个栈照常执行——账号过期（`chage -E 2026-01-01`）对密钥登录同样一票拒绝，`pam_limits` 的句柄上限、`pam_systemd` 的会话登记对密钥会话照常生效。反过来的坑更常见：`usermod -L` 锁的是密码字段（`/etc/shadow` 里加 `!` 前缀），封住的只是 `auth` 栈——**锁账号锁不住密钥登录**。要真断掉一个人的接入，三选一：删掉他的 `authorized_keys` 条目、把登录 shell 改成 `/sbin/nologin`、或用 `chage -E` 把账号过期——后两条正是靠 `account` 栈才生效。
+
+### 3.9 登录来源限制：pam_access
+
+有的防线比密码更靠前——"这个来源根本不许来"。`pam_access.so` 读 `/etc/security/access.conf`，每行一条规则，格式为 **`+`/`-` : 用户/组 : 来源**，典型用途是"root 只准从运维跳板机 ssh"。规则**自上而下、第一条命中的生效**，所以放行必须写在兜底拒绝之前——顺序反了，第一条 `-:root:ALL` 就把跳板机也关在门外：
+
+```text
+# /etc/security/access.conf
+# 规则自上而下，第一条命中即生效：先放行跳板机，再兜底拒绝其余来源
++:root:192.168.56.10
+-:root:ALL
+```
+
+三个字段各有讲究：组要写成 `(wheel)` 括号形式——`@` 开头是 netgroup（网络组），别拿它当用户组用；来源支持 IP、`192.168.56.` 这样的网段、主机名与 `LOCAL`（本地会话；注意 `ssh root@localhost` 走的也是网络连接，不算 `LOCAL`——这是 `access.conf(5)` 点名的细节）；来源字段同样支持 `EXCEPT`，`-:root:ALL EXCEPT 192.168.56.10` 一行顶上面两行。接线方面，`pam_access` 默认没被任何服务文件启用：Debian/Ubuntu 的 `/etc/pam.d/sshd` 里留了一行被注释的 `account required pam_access.so`，取消注释即生效；RHEL/Arch 的 sshd 文件没有这行，在 `account` 段自己补同一行即可（`sshd` 这个文件不在 authselect 管辖范围，直接改是安全的）。它接在 `account` 栈——与 3.8 节的过期检查同一道关口。验证要从白名单之外发起（已配好密钥的前提下，拦下你的只能是 account 栈）：
+
+```bash
+$ ssh root@192.168.56.10        # 从 192.168.56.55（非白名单）发起
+Permission denied (publickey,password).
+$ journalctl -t sshd --since "5 min ago" | grep pam_access
+Oct 03 10:21:47 db1 sshd[2101]: pam_access(sshd:account): access denied for user `root' from `192.168.56.55'
+```
 
 ## 4. sudo 完整语法：白名单怎么写
 
@@ -170,6 +206,30 @@ $ sudo visudo -c
 /etc/sudoers: parsed OK
 /etc/sudoers.d/ops: parsed OK
 ```
+
+`visudo -c -f` 还是 CI 与上线检查里的一道闸：拿一份写坏的文件过安检，它把错误精确到行列，并整个拒绝这份文件（`-c` 只读不写；0440 的系统片段自己读不到时才需要 `sudo`）：
+
+```bash
+$ printf 'user ALL=(ALL) ALL\nbad line here ((\n' > /tmp/bad
+$ visudo -c -f /tmp/bad
+/tmp/bad:2:10: syntax error: expecting '=' but found 'h'
+bad line here ((
+         ^
+visudo: invalid sudoers file
+$ echo $?
+1
+```
+
+旧版 sudo（1.8 及更早，RHEL 8 一类）报的是 `>>> /tmp/bad: syntax error near line 2 <<<`——格式有别，拒绝落盘的结论一致。
+
+写法的危险与收敛，四行对照表收束本节的要义：
+
+| 危险写法 | 为什么危险 | 收敛写法 |
+|---------|-----------|---------|
+| `(ALL) ALL`（给非管理员） | 等价授予 root，白名单名存实亡 | 逐条列举业务命令的绝对路径 |
+| `/usr/bin/find *` | `*` 吞下任意参数，`-exec` 复活 shell | 写死完整命令与固定参数，如 `find /var/backup -name '*.log'` |
+| `NOPASSWD: ALL`（凭"效率"给） | 无人再核验身份，等于换人免密 root | 单条高频、低危的命令才配 NOPASSWD |
+| `ALL, !/usr/bin/su`（"排除高危"） | 排除一条而已，其余一切早已放行——虚假的安全感 | 正面列举要放行的，别在拒绝上做文章 |
 
 ### 4.2 查询与验证
 
@@ -209,6 +269,15 @@ $ sudo git log -p       # pager 内：!sh 回车
 ```
 
 由此得出白名单的审查原则：**凡能执行任意代码的命令，一律不给白名单**——编辑器、pager、解释器（python/perl/node 的 REPL 与 `-c`）、编译器、能 `-exec`/`--exec` 的 find/tar、包管理器（下一节的头号案例）。这条原则比背漏洞清单耐用：清单会过时，"命令的腹地能力"这个视角不会。给运维放行时，优先选自带参数收敛的工具（`systemctl restart nginx` 写死服务名）、或干脆包一层只干一件事的脚本，把脚本放进白名单——脚本属 root、不可被白名单用户改写，才有资格当"命令"。
+
+sudoers 其实为这类隐患准备了一块积木——`NOEXEC:` 标签，加在命令前让 sudo 在该命令内部拦下任何 `execve` 调用，`find -exec`、`vi :!sh` 会当场收到 `EPERM` 而无法换壳：
+
+```text
+# 被迫放行 find 时的止损写法——腹地仍在，但 shell 换不出来
+ops  ALL=(root) NOEXEC: /usr/bin/find /var/backup -name '*.log'
+```
+
+`NOEXEC` 是补丁不是护身符：拦得住 `execve`，拦不住被放行程序自身逻辑里的越权（读敏感文件、改它有权改的一切），能正面列举就别依赖它兜底。实现细节一句带过：现代 Linux 上 sudo 用 seccomp 在系统调用层拦下 `execve`，早年版本与部分平台靠注入 `noexec` 的 LD_PRELOAD 库兜底——两条路的共同点是"只管换进程，不管该进程能干什么"。
 
 ### 5.2 审计：谁在什么时候借了 root
 

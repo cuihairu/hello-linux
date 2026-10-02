@@ -16,10 +16,12 @@
 
 ## 章节导读
 
-本篇按"先 Web、再数据、再周边"的顺序编排，建议按序阅读：
+本篇按"先网络、再 Web、再数据、再周边"的顺序编排，建议按序阅读：
 
 | 章节 | 内容 | 阅读建议 |
 |------|------|---------|
+| [网络参数配置](./network-parameters.md) | 网卡命名、IP/路由持久化、sysctl 网络参数 | 服务器联网第一步，所有服务章节的前置 |
+| [路由与 NAT](./routing-nat.md) | 策略路由、iptables/nftables NAT、端口转发 | 单机做网关、内网共享上网 |
 | [Web 服务器](./web/nginx.md) | Nginx 安装配置、反向代理、负载均衡、HTTPS | 入门首选，现代架构的流量入口 |
 | [Apache](./web/apache.md) | Apache HTTP Server 详细配置 | 传统 LAMP、.htaccess 生态仍在大量使用 |
 | [数据库](./database/mysql.md) | MySQL/MariaDB 安装配置、用户权限、备份恢复 | 与 Web 配合的核心存储 |
@@ -29,6 +31,10 @@
 | [监控](./monitoring/prometheus.md) | Prometheus + Grafana 监控方案 | 上线后必补的可观测性 |
 | [DNS](./dns/bind.md) | BIND DNS 服务器配置 | 自建域名解析、内网 DNS |
 | [邮件](./mail/postfix.md) | Postfix 邮件服务器配置 | 系统通知、告警邮件 |
+| [DHCP 服务器](./dhcp.md) | dhcpd/Kea 地址分配、租约与静态保留 | 内网自动分配 IP |
+| [Samba 文件共享](./samba.md) | smb.conf、用户映射、多端客户端访问 | 跨平台共享目录 |
+| [NFS 服务器](./nfs.md) | exports 导出、fsid=0、客户端挂载与排错 | Linux 间共享，容器与备份常用 |
+| [NTP 时间服务](./ntp.md) | chrony 配置、时间层级与漂移补偿 | 日志时间一致、多机协作基础 |
 
 Nginx 和 Apache 都是 HTTP 服务器，选型原则很简单：新项目、以反向代理和静态资源为主的场景优先 Nginx；已有大量 `.htaccess` 或依赖 `mod_php` 的遗留系统继续用 Apache。两者可以并存，也可以互为反向代理的前后端，相关章节会分别展开。
 

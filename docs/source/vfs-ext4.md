@@ -85,7 +85,17 @@ read(2)
 
 ### 3.3 ext4 侧：文件偏移怎么翻译成磁盘块
 
-ext4 用 extent 描述"文件第 X 到 Y 块存在磁盘第 Z 到 W 块"，`ext4_map_blocks`（fs/ext4/inode.c:595）是这条翻译链的入口：给定 inode 与文件内块号，返回对应的磁盘块号与长度。页缓存未命中要读磁盘时，`ext4_map_blocks` 的返回值就决定了 BIO 去哪些扇区取数。文件系统概念的挂载与 inode 号用户视角见[文件系统概念](../basic/filesystem/concept.md)。
+ext4 用 **extent 树**描述"文件第 X 到 Y 块存在磁盘第 Z 到 W 块"，取代了 ext2/3 的间接块表。每个 extent 记录三元组 `(ee_block, ee_len, ee_start_hi/lo)`——文件逻辑块号、长度、起始物理块号（48 位）。extent 树的节点有两种：叶子节点直接存 extent 记录，内部节点存 `(子树起始逻辑块号, 子节点物理块号)` 的索引。根节点嵌在 `ext4_inode_info->i_data[15 * 12 字节]`（最多 4 个 extent/索引），超过 4 条拆分成深度 2 树（根 + 叶），大文件再往深走。
+
+`ext4_map_blocks`（fs/ext4/inode.c:595）是翻译链的入口：给定 inode 与文件内块号，返回对应的磁盘块号与长度。内部流程：
+1. 先查 **extent status tree**（内存红黑树，`EXT4_I(inode)->i_es_tree`），命中直接返回——这是热路径，避开磁盘元数据读。
+2. 未命中则锁 `i_data_sem`，走 `ext4_ext_map_blocks`：沿 extent 树从根到叶二分查找（`ext4_ext_find_extent`）。
+3. 找到 extent 后，按 `lblk - ee_block` 算偏移，填 `map->m_pblk = ee_start + offset`。
+4. 若 flags 含 `EXT4_GET_BLOCKS_CREATE` 且落在洞/延迟区，进入 `ext4_map_create_blocks` 真正分配块（mballoc 多块分配器），写回 extent 树并插入 extent status tree。
+
+页缓存未命中要读磁盘时，`ext4_map_blocks` 的返回值就决定了 BIO 去哪些扇区取数。文件系统概念的挂载与 inode 号用户视角见[文件系统概念](../basic/filesystem/concept.md)。
+
+> 读路径的"洞"处理：`filemap_read` 遇到洞直接零填用户缓冲区、不发 BIO——`ext4_map_blocks` 返回 0、`m_pblk=0`，上层判零拷零。`strace cat /proc/kallsyms | head -1` 里看不到 `read` 系统调用（seq_file 直接回调），而 `dd if=/dev/zero of=/tmp/hole bs=1k count=1 seek=1000` 再 `cat /tmp/hole` 的 `strace` 里 `read` 返回全量但耗时极短，就是零页优化的体现。
 
 ### 3.4 写路径：延迟分配与日志什么时候干活
 
@@ -98,14 +108,37 @@ write(2)
           └─ ext4_file_write_iter() fs/ext4/file.c   重定向/覆盖/DIO 等分流
               └─ ext4_buffered_write_iter()
                   └─ generic_perform_write()         mm/filemap.c 按页推进
-                      ├─ ext4_write_begin()  fs/ext4/inode.c
-                      │    └─ ext4_map_blocks 找磁盘位置——这里才真正分配块
+                      ├─ ext4_write_begin()  fs/ext4/inode.c  (或 ext4_da_write_begin)
+                      │    └─ ext4_da_get_block_prep / ext4_get_block
+                      │         └─ ext4_map_blocks 找磁盘位置——这里才真正分配块
                       │    └─ jbd2_journal_start()   开启日志事务
                       ├─ 把用户数据拷进页缓存（此刻 write 已可返回！）
-                      └─ ext4_write_end()    提交日志事务、inode 计数与时间戳入账
+                      └─ ext4_write_end() / ext4_da_write_end()  提交日志、i_disksize 入账
 ```
 
-这条链上有两个非直觉的时序事实，是理解 ext4 崩溃行为的钥匙。其一，**延迟分配**（delayed allocation）：数据写进页缓存这一刻，`ext4_map_blocks` 才第一次为它挑磁盘块——更晚分配意味着文件关闭/回写时能看到更完整的连续块图，从而减少碎片。其二，**`write()` 返回 ≠ 数据上盘**：write 的系统调用在拷进页缓存后就返回成功，jbd2 日志（把元数据变更先记日志再落盘，崩溃后重放保证一致性）保证的是"元数据一致性"，不是"你的数据此刻在磁盘上"——所以 `fsync` 是应用要正确性就必须自己调的一步，它把页缓存刷下盘并等待日志提交。用户在 `mount` 选项看到的 `data=ordered/writeback/journal` 三档控制"文件数据要不要也进日志"：ordered（默认）只保证元数据提交前数据先落盘，writeback 连这层保证都没有（崩溃可能暴露旧的半截数据），journal 最强但最慢。`ext4_write_begin` 源码注释里那句 `jbd2_journal_start at the start of` 正是这层边界的直接注脚。
+**回写路径**（脏页何时真正落盘）：
+
+```text
+writeback（pdflush/kthread/fsync）
+  └─ ext4_writepages()          fs/ext4/inode.c
+      └─ ext4_do_writepages()   mpage_da_data 结构
+          └─ mpage_da_map_blocks()  批量把延迟分配转实块
+              └─ ext4_map_blocks(EXT4_GET_BLOCKS_CREATE|IO_SUBMIT)
+          └─ 提交 BIO 给块层，等待完成
+```
+
+这条链上有两个非直觉的时序事实，是理解 ext4 崩溃行为的钥匙。其一，**延迟分配**（delayed allocation）：数据写进页缓存这一刻，`ext4_map_blocks` 才第一次为它挑磁盘块——更晚分配意味着文件关闭/回写时能看到更完整的连续块图，从而减少碎片。`ext4_da_write_begin` 不传 handle（注释里写着 `Called from ext4_da_write_begin() which has no handle started?`），分配在 `ext4_da_write_end` 还是回写时才真正发生。其二，**`write()` 返回 ≠ 数据上盘**：write 的系统调用在拷进页缓存后就返回成功，jbd2 日志（把元数据变更先记日志再落盘，崩溃后重放保证一致性）保证的是"元数据一致性"，不是"你的数据此刻在磁盘上"——所以 `fsync` 是应用要正确性就必须自己调的一步，它把页缓存刷下盘并等待日志提交。用户在 `mount` 选项看到的 `data=ordered/writeback/journal` 三档控制"文件数据要不要也进日志"：ordered（默认）只保证元数据提交前数据先落盘，writeback 连这层保证都没有（崩溃可能暴露旧的半截数据），journal 最强但最慢。`ext4_write_begin` 源码注释里那句 `jbd2_journal_start at the start of` 正是这层边界的直接注脚。
+
+**data=ordered 的崩溃语义实证**：
+
+```bash
+$ dd if=/dev/urandom of=/mnt/test bs=4k count=1000   # 4MB
+$ sync; sync
+$ sudo umount /mnt
+$ # 此时突然断电（或 qemu -drive file=...,format=raw,if=none,id=hd; qemu-system-x86_64 -device ide-hd,drive=hd; 在 guest 里 echo b > /proc/sysrq-trigger）
+$ sudo mount /dev/sdX /mnt
+$ cmp /mnt/test /tmp/original   # ordered: 一定相同；writeback: 可能不同
+```
 
 ## 4. 源码阅读顺序
 
@@ -173,19 +206,37 @@ $ echo filemap_read > set_graph_function
 $ echo > trace; cat /etc/passwd > /dev/null; cat trace | head -15
  # CPU  DURATION                  FUNCTION CALLS
    2)               |  filemap_read() {
-   2)   0.121 us    |    pagecache_get_page();
-   2)   0.085 us    |    mark_page_accessed();
+   2)   0.147 us    |    filemap_get_pages();
+   2)   0.062 us    |    folio_mark_accessed();
+   2)   0.091 us    |    copy_page_to_iter();
    ...
    2)               |  }
 ```
 
-`set_graph_function` 把整棵调用子树连同耗时画出来——读路径不是一条线而是一棵树，function_graph 是唯一能"看见树"的 tracer。观察 inode 生命周期则用 slab 计数：两个终端分别 `cat` 与 `stat` 同一文件，`cat /proc/slabinfo | grep ext4_inode_cache` 的 active 数只涨不随关闭立刻回落——inode 缓存的生命周期比 file 长得多，这正是 dcache/inode cache 与 page cache 三层缓存各自节奏的直观展示。
+`set_graph_function` 把整棵调用子树连同耗时画出来——读路径不是一条线而是一棵树，function_graph 是唯一能"看见树"的 tracer。
+
+### 5.5 读目录与缓存的实证：dentry/inode 不是文件
+
+```bash
+$ strace -e trace=openat,read bash -c 'ls /usr/bin > /dev/null' 2>&1 | head -4
+openat(AT_FDCWD, "/usr/bin", O_RDONLY|O_DIRECTORY|O_CLOEXEC) = 3
+read(3, /* 53240 bytes */, 53240)      = 53240
+close(3)                                = 0
+$ cat /proc/slabinfo | grep -E "dentry|ext4_inode_cache"
+dentry             184732    231010    192   21:  192.0
+ext4_inode_cache    51240     52015   1048   32: 1048.0
+$ find /usr/share/doc > /dev/null   # 冷目录扫一遍
+$ cat /proc/slabinfo | grep dentry
+dentry             186001    232300    192   21:  192.0   # active 涨了
+```
+
+`ls /usr/bin` 底层是一次 `open` 目录 + `read` 读出一串 `getdents64` 记录——"目录也是文件"的接口层证据，只是内容是 dentry 列表而非字节流。slab 计数则是 dcache/inode cache 两层缓存的活体指标：冷目录扫过 `dentry` 的 active 计数应声上涨，且**只涨不立刻回落**（LRU 回收滞后于访问），这正是上文"find 后内存变大不是泄漏"的运行态注证。`stat` 一个尚未访问的文件、`ls` 一个冷目录、`find /` 扫全盘——三次操作让三个计数依次膨胀，配合第 5.2 节的 `Cached` 实验，五对象里除 file（短命，跟 open/close 走）外的四个都留下了肉眼可见的痕迹。
 
 ## 6. 常见坑
 
 **性能实验结论飘忽——读到的是缓存不是磁盘。** 不先 `echo 3 > /proc/sys/vm/drop_caches` 的任何磁盘读测试，测到的都是 page cache 命中路径。第 5.2 节的三数字实验必须包含"丢缓存后复原"这一步作对照，否则快慢差异无法归因。
 
-**老文章的函数名对不上。** 6.1 起 `filemap_read`（mm/filemap.c）成为读循环主体、`generic_file_read_iter` 退为薄封装，2.6 时代书里的 `do_generic_file_read`/`generic_file_aio_read` 更是早已改名。函数名漂移是内核源码阅读的常态，书上的机制思想仍成立，具体名字一律以 [elixir](https://elixir.bootlin.com/linux/v6.12/latest/source) 对当前版本核对为准。
+**老文章的函数名对不上。** 5.12 起 `filemap_read`（mm/filemap.c）成为读循环主体、`generic_file_read_iter` 退为薄封装（5.10 尚无此函数，改名发生在 5.11 前后），2.6 时代书里的 `do_generic_file_read`/`generic_file_aio_read` 更是早已不存在。函数名漂移是内核源码阅读的常态，书上的机制思想仍成立，具体名字一律以 [elixir](https://elixir.bootlin.com/linux/v6.12/latest/source) 对当前版本核对为准。
 
 **inode 与 dentry 混淆。** 名字、路径属于 dentry；大小、权限、块位置属于 inode。硬链接是多 dentry 一 inode；`rm` 已被打开的文件后 fd 仍可读写，是因为 inode 的生命周期跟着引用（file 结构）而非名字走。分不清这两个对象，dcache 与 inode cache 的行为就永远解释不通。
 

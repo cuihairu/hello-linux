@@ -12,6 +12,16 @@
 - 用 strace/ftrace/bpftrace 四个实验，把静态调用链在真机上"看见"
 - 避开跨架构调用号、函数名版本差异、vDSO 不可见这三类高频误解
 
+本页五段式导航（本篇各模块章统一骨架）：
+
+| 段 | 本页对应 | 一句话 |
+|---|---------|--------|
+| ① 核心数据结构 | §2 | `sys_call_table`、`SYSCALL_DEFINE`、`pt_regs`、vDSO |
+| ② 关键函数调用路径 | §3 | `entry_SYSCALL_64 → ... → vfs_write` 全链与返回之路 |
+| ③ 源码阅读顺序 | §4 | 四个文件，每步读什么、跳过什么 |
+| ④ 实操跟踪 | §5 | strace/ftrace/bpftrace/tracepoint 五连实验 |
+| ⑤ 延伸资料 | §7 | 三本书各取什么、版本警告怎么用 |
+
 ## 1. 系统调用为什么存在
 
 ### 1.1 用户态与内核态：一堵墙、一扇门
@@ -21,6 +31,24 @@
 ### 1.2 库函数不是系统调用
 
 初学者最常见的混淆在这一层：`printf`、`fwrite`、`malloc` 都是**库函数**，运行在用户态；`write`、`brk` 才是**系统调用**，要过门。库函数往往把多次逻辑操作合并成少数系统调用：`printf` 把内容攒进用户态缓冲区，直到缓冲满、显式 `fflush` 或程序退出才真正调一次 `write`；`malloc` 大块地向内核要内存（`brk`/`mmap`），小块地在用户态自己切分。用 strace 看一眼就明白——循环 `printf` 一百次，`write(1, ...)` 可能只出现一两次。这个"缓冲层"解释了很多表面怪象：程序崩了最后几行日志没出来（缓冲没 flush）、重定向到文件后输出顺序变了（全缓冲替换了行缓冲）、`strace` 里"少调了几次"（根本没发生，不是丢了）。读内核源码之前先把这条边界划清，才知道自己追的到底是 libc 的代码还是内核的代码。
+
+门的开销也值得亲手量一次——它是本篇后面所有性能故事的量纲：
+
+```bash
+$ time /bin/true          # 不开 strace：进程创建与退出的基线
+real 0m0.002s
+$ time strace -c /bin/true 2>/dev/null   # 逐条拦截的代价
+% time     seconds    usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+  0.00    0.000009           4         2           read
+  ...                                                       (若干文件/内存调用)
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000365                  30           1 total
+```
+
+同样的 `true`，挂上逐条拦截的 strace 后慢一个数量级——strace 用的 `ptrace` 与系统调用走同一条门（每次都要停住目标、复制参数、再放行），这还只是旁观的代价。内核里 `tracepoint` 比 ftrace 的 function tracer 更省、ftrace 又比断点更省的层级差（[跟踪工具](./tracing-tools.md) §1 的选型表），根源都是同一个三角：侵入度、信息量、开销，不可兼得。
+
+最后补一个时代注脚：系统调用的设计并非一成不变。Linux 的调用号从 2.6 时代的三百上下一路长到 v6.12 的 462 号（`mseal`），但 `write` 这类"一次一次过门"的根本形态没变——变化来自对成本的回应：`io_uring` 把提交与完成的系统调用做成内核共享环，一次挂号、成批过门，专门为高频小 IO 设计。先读懂单次调用的全程（本页），再看 `io_uring` 就能明白它省的到底是哪几段——读源码的乐趣之一，就是设计意图的时序也随之展开。
 
 ### 1.3 本页在源码篇的位置
 
@@ -39,7 +67,7 @@ const sys_call_ptr_t sys_call_table[] = {
 };
 ```
 
-数组本体只有一行，条目来自一个**构建时生成**的头文件 `asm/syscalls_64.h`：内核构建系统根据系统调用表（`kernel/sys_ni.c` 与各处 `SYSCALL_DEFINE` 的登记）生成 `__SYSCALL(nr, sym)` 宏序列，同一份头文件被以三种不同宏定义包含三次——一次生成 extern 声明，一次填充这张表，一次生成 `x64_sys_call()` 的 switch 分发。调用号就是数组下标：x86-64 上 `write` 是 1 号，`read` 是 0 号，它们在 `<asm/unistd_64.h>` 中定义且**架构间互不相同**（详见 §6）。这张表是"号→函数"的唯一真相源，但注意 v6.12 的 `do_syscall_64` 并不直接下标查表，而是调用 switch 版的 `x64_sys_call()`——间接跳转面更小，对 Spectre 类推测执行攻击更友好；两条路殊途同归，都落在 `__x64_sys_write` 这样的包装函数上。
+数组本体只有一行，条目来自一个**构建时生成**的头文件 `asm/syscalls_64.h`：内核构建系统根据系统调用表（`kernel/sys_ni.c` 与各处 `SYSCALL_DEFINE` 的登记）生成 `__SYSCALL(nr, sym)` 宏序列，同一份头文件被以三种不同宏定义包含三次——一次生成 extern 声明，一次填充这张表，一次生成 `x64_sys_call()` 的 switch 分发。调用号就是数组下标：x86-64 上 `write` 是 1 号，`read` 是 0 号，它们在 `<asm/unistd_64.h>` 中定义且**架构间互不相同**（详见 §6）。这张表是"号→函数"的唯一真相源，但注意 v6.12 的 `do_syscall_64` 并不直接下标查表，而是调用 switch 版的 `x64_sys_call()`——间接跳转面更小，对 Spectre 类推测执行攻击更友好；两条路殊途同归，都落在 `__x64_sys_write` 这样的包装函数上。两个工程细节顺手记下：其一，表长由 `NR_syscalls` 宏界定，构建时按 `syscall_64.tbl` 生成，未分配的调用号槽位统一填 `sys_ni_syscall`——"没实现"与"不存在"在内核眼里是同一个函数，统一回 `-ENOSYS`，这也是"乱写一个号"总得到同一个错误的机制原因；其二，调用号编排并非连续铺满，`syscall_64.tbl` 里留有历史空洞，读表时看到跳号不必以为缺文件。`syscall_64.tbl` 本身是理解全表的最佳入口——一张纯文本表，谁在哪一号、落哪个实现函数、是否兼容调用，三列看尽。
 
 ### 2.2 SYSCALL_DEFINE：把自己挂上表的宏
 
@@ -123,7 +151,11 @@ write() 返回 rax：成功是写入字节数，失败是 -errno
 
 ## 4. 源码阅读顺序 ③
 
-第一次读这条链，不要从 `init/main.c` 顺流而下，按"从门到账本"的顺序四步走，每步都有明确的"读什么、跳过什么"：
+第一次读这条链，不要从 `init/main.c` 顺流而下，按"从门到账本"的顺序四步走，每步都有明确的"读什么、跳过什么"。先备好三条退路，读不动时别硬啃：
+
+- **先跑再读**：把 §5 的前两个实验先做一遍再回来——手上见过动态形状，静态代码的每一行才有落点；
+- **用交叉引用代替线性翻**：在 elixir.bootlin.com 上点任何函数名跳定义与调用方，比在编辑器里追跳转快；本页出现的每个函数名都能这样一键直达（选 v6.12 版本，见参考资料）；
+- **一次只追一条边**：今天只回答"`fdget_pos` 怎么把 1 号 fd 变成 `struct file`"，明天再问下一个——追调用链最忌二十个 tab 同时开，每个都读了三行。
 
 **第一步：`arch/x86/entry/entry_64.S` 只读 `SYM_CODE_START(entry_SYSCALL_64)` 一段**（用编辑器跳到该符号，上下约两百行）。汇编别怕，这段注释密集且模式重复，核心骨架摘出来只有这几行（v6.12，示意节选）：
 
@@ -244,9 +276,28 @@ Attaching 1 probe...
 
 挂一个 `kprobe:vfs_write`，按进程名计数，Ctrl-C 出账单。三十秒就能回答"谁在写盘"这类值班问题——这正是把源码知识变成运维武器的最短路径：知道 `vfs_write` 是所有写路径的咽喉，才知道探针该挂在哪。
 
+### 5.5 兑现 SYSCALL_METADATA：直接看 pt_regs 里的参数
+
+§2.2 说过宏会展开出 ftrace 事件——这里是它的兑现场：
+
+```bash
+# cd /sys/kernel/tracing
+# echo 1 > events/syscalls/sys_enter_write/enable
+# echo 1 > events/syscalls/sys_exit_write/enable
+# echo > trace
+$ echo x > /tmp/t
+# cat trace | grep -E "sys_(enter|exit)_write" | tail -2
+  <...>-4127  [000] ....1  1234.567890: sys_enter: fd: 1, buf: 0x7ffd.., count: 2
+  <...>-4127  [000] ....2  1234.567891: sys_exit_write: 0x2
+```
+
+`sys_enter` 里的 `fd/buf/count` 正是内核从 `pt_regs` 的 `di/si/dx` 拆出来的那三个值——§2.3 的结构在此以事件形态现身。两个实验连起来看就是完整的观察闭环：`sys_enter_*` 捕进入（参数、调用号语义），`kprobe:vfs_write` 捕到达内核深处的（所有入口殊途同归的地方），`sys_exit_*` 捕返回（返回值与耗时）。写内核脚本时这条"入口事件 + 深处探针"的组合拳，比单点探针多回答一个关键问题：**这个调用走没走到**——参数错在入口、逻辑错在深处，一分开就定位了。
+
+五个实验做完，用三个问题自检是否真的"看见"了这条链：`write` 在本机是多少号调用（x86-64 上是 1，见 §2.1）；§5.3 的叶子函数是不是本机文件系统的 `write_iter`（输出若清一色是 `pipe_write` 之类，说明跟错了对象）；§5.5 打印的三个参数与 §5.1 strace 报的是否逐字一致（一致就证明 strace 与 tracepoint 读的是同一份 `pt_regs` 快照）。三个都点头，静态调用链才算真正长在了这台机器上——§6 的每条坑、后续每一章的实操，都是在这一层上的叠加。
+
 ## 6. 常见坑
 
-**strace 里 write 的 buf 是地址还是内容？** strace 默认好心地把缓冲区解引用显示为字符串，但它在显示 `-e trace=write` 与参数dump 上有两档：想稳定拿到完整缓冲内容，用 `strace -e write=1` 这类 `write=fd` 选项，它会对写往指定 fd 的数据做十六进制/文本 dump——长缓冲、二进制内容时是唯一可靠读法。
+**strace 里 write 的 buf 是地址还是内容？** strace 默认好心地把缓冲区解引用显示为字符串，但它在显示 `-e trace=write` 与参数 dump 上有两档：想稳定拿到完整缓冲内容，用 `strace -e write=1` 这类 `write=fd` 选项，它会对写往指定 fd 的数据做十六进制/文本 dump——长缓冲、二进制内容时是唯一可靠读法。
 
 **拿 i386 的调用号用在 x86-64 上。** 调用号是每张表自己的编号：x86-64 的 1 是 `write`，i386 的 1 是 `exit`、4 才是 `write`。跨架构调试时若把架构记错，寄存器里塞的号会命中完全不同的调用，症状千奇百怪。核对的权威位置是内核源码的 `<asm/unistd_{64,32}.h>`（构建时生成），或 man 2 手册页末尾的对照表。
 
@@ -257,6 +308,10 @@ Attaching 1 probe...
 **vDSO 调用在 strace 里消失了。** `gettimeofday`/`clock_gettime` 走 vDSO 在用户态完成，不产生 `syscall` 事件——"strace 里没有"不等于"没执行"。基准测试若发现测时间本身的开销比被测操作还大，先想想 vDSO；确认路径可用 `ltrace` 或直接读 `LD_SHOW_AUXV=1 /bin/true` 输出里的 `AT_SYSINFO_EHDR`（vDSO 映射地址）。
 
 **把 `= -1` 当成了字节数。** strace 输出里 `= -1 EBADF (Bad file descriptor)` 是"返回 -1 且 errno=EBADF"的人读格式；内核深处返回的其实是 `-EBADF`（负值 errno），glibc 包装层负责翻译。写跟踪脚本解析 strace 输出时要按"负数即失败"分支，别把它混进成功路径统计。
+
+**写满 count 才算成功？`write` 的短写是常态。** `write` 返回值小于 `count` 不是错误（管道缓冲满、磁盘空间不足、被信号打断都可能短写），而是"请继续"——网络编程里 `while (n > 0) { n -= write(fd, p, n); ... }` 的循环不是防御性冗余，是正统写法。vfs 层往下每种 `write_iter` 实现的短写语义都可能不同，读 [VFS 与 ext4](./vfs-ext4.md) 时会看到 `generic_perform_write` 如何用 `iov_iter_count` 补齐。判读 strace 时同理：`write(1, ..., 8192) = 4096` 是合法结局，不是 bug。
+
+**strace 里冒出 `?restart_syscall`。** 信号打断系统调用后内核用 `restart_syscall` 续上（§3.3 的 `-ERESTARTSYS` 路径），strace 把这个"续集"显示成问号开头的伪调用——它不是真实系统调用、调用号表里查不到，脚本统计 syscall 分布时要排除。同族现象是 `write(..., 10000000000000000000) = -1 EFAULT`——`size_t` 溢出与参数验证在 `__se_sys_write` 的符号扩展层就拦住了。
 
 ## 7. 延伸资料 ⑤
 
@@ -275,6 +330,7 @@ Wolfgang Mauerer《深入Linux内核架构》适合当字典查细节——本�
 ## 参考资料
 
 - Linux 内核源码 v6.12 — [elixir.bootlin.com/linux/v6.12](https://elixir.bootlin.com/linux/v6.12/latest/source)
+- x86-64 系统调用表原文 — [arch/x86/entry/syscalls/syscall_64.tbl](https://elixir.bootlin.com/linux/v6.12/source/arch/x86/entry/syscalls/syscall_64.tbl)
 - man 2 syscall — [man7.org/linux/man-pages/man2/syscall.2](https://man7.org/linux/man-pages/man2/syscall.2.html)
 - man 2 write — [man7.org/linux/man-pages/man2/write.2](https://man7.org/linux/man-pages/man2/write.2.html)
 - man 7 vdso — [man7.org/linux/man-pages/man7/vdso.7](https://man7.org/linux/man-pages/man7/vdso.7.html)

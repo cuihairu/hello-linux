@@ -78,13 +78,9 @@
 - [备份与恢复](./system-management/backup-and-recovery.md)
 - [自动化运维](./system-management/automation.md)
 - [例行性工作排程](./system-management/scheduled-tasks.md)
-- [systemd 进阶](./system-management/services-systemd.md)
+- [systemd 服务与程序管理](./system-management/services-systemd.md)
 - [日志系统管理](./system-management/logging.md)
 - [开机流程与引导排错](./system-management/boot-process.md)
-- [开机流程详解](./system-management/boot-process.md)
-- [日志系统](./system-management/logging.md)
-- [计划任务](./system-management/scheduled-tasks.md)
-- [systemd 服务与程序管理](./system-management/services-systemd.md)
 
 ## 服务器篇
 
@@ -101,10 +97,9 @@
 - [DNS](./server/dns/bind.md)
 - [邮件](./server/mail/postfix.md)
 - [DHCP 服务器](./server/dhcp.md)
-- [NFS 服务器](./server/nfs.md)
-- [时间服务 (NTP/chrony)](./server/ntp.md)
-- [路由与 NAT](./server/routing-nat.md)
 - [Samba 文件共享](./server/samba.md)
+- [NFS 服务器](./server/nfs.md)
+- [NTP 时间服务](./server/ntp.md)
 
 ## 脚本篇
 
@@ -126,6 +121,8 @@
 - [入侵检测](./security/intrusion-detection.md)
 - [加密技术](./security/encryption.md)
 - [安全加固](./security/hardening.md)
+- [PAM 与 sudo](./security/pam-sudo.md)
+- [SELinux 实战](./security/selinux.md)
 
 ## 网络篇
 
@@ -146,12 +143,12 @@
 - [源码获取与目录导读](./source/source-tree.md)
 - [内核编译与模块开发](./source/build-and-modules.md)
 - [跟踪工具](./source/tracing-tools.md)
-- [进程管理与调度](./source/process-scheduling.md)
 - [系统调用路径](./source/syscall-path.md)
-- [中断与时钟](./source/interrupt-timers.md)
+- [进程管理与调度](./source/process-scheduling.md)
 - [内存管理](./source/memory-management.md)
 - [VFS 与 ext4](./source/vfs-ext4.md)
 - [网络栈](./source/network-stack.md)
+- [中断与时钟](./source/interrupt-timers.md)
 - [设备驱动框架](./source/driver-framework.md)
 - [IPC](./source/ipc.md)
 - [用户态源码选读](./source/userland.md)
