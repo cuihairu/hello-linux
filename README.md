@@ -64,6 +64,10 @@ npm run docs:cov     # 覆盖率：行+分支 100% 门禁（fail_under=100）
 - [Debian 手册](https://www.debian.org/doc/manuals/debian-handbook/)
 - [RHEL 文档](https://docs.redhat.com/)
 
+## 维护备注
+
+- 2026-10：清理了一条悬空 stash（基于 `9c8c35f` 的旧 WIP，混合了首页卡片去 emoji、README 标题重排、内联样式迁出与 vitepress 升级）。经 merge-tree 实测其中两处文件与迁移后的现行内容冲突；样式迁出与依赖升级两项已由后续提交以最终形态落地（`theme/style.css` 及其深色模式修复、`package.json` 的 `2.0.0-alpha.20`），首页卡片 emoji 为现行约定风格（`style.css` 中"去装饰 emoji"仅指文档内表格），故丢弃不作迁移。
+
 ## 许可证
 
 [Apache License 2.0](LICENSE)
