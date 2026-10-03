@@ -53,6 +53,26 @@ npm run docs:test    # 单测
 npm run docs:cov     # 覆盖率：行+分支 100% 门禁（fail_under=100）
 ```
 
+## 仓库脚本
+
+| 脚本 | 用途 |
+|------|------|
+| `scripts/check_links.py` | 链接检查器：源码级（md 链接/锚点/图片）+ 产物级（HTML 链接/锚点/资源）。`npm run docs:check` 即调用它，CI 额外加 `--require-html` 强制产物级校验 |
+| `scripts/tree_art.py` | 多色字符画树渲染器：种子化高程 + 湿度双场生成岛屿世界，河流刻蚀入海，quadtree 字符组合叠加地形/水系/生物群落三通道配色。零第三方依赖，`--seed` 决定世界、同种子输出可复现 |
+
+`tree_art.py` 用法（均已实跑验证）：
+
+```bash
+# 终端 ANSI 真彩输出（默认 160×64）
+python3 scripts/tree_art.py --seed 7
+
+# 静默模式 + 输出带图例的预览 HTML
+python3 scripts/tree_art.py --seed 7 --w 80 --h 32 --quiet --html tree.html
+
+# 配合 --png 截图出效果图（依赖 playwright）
+python3 scripts/tree_art.py --seed 7 --html tree.html --png tree.png
+```
+
 ## 构建部署
 
 推送到 `main` 分支后自动通过 GitHub Actions 部署到 GitHub Pages。
