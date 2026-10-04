@@ -258,7 +258,7 @@ $ ntpq -p
 
 ## 参考资料
 
-- chrony 官方文档 — [chrony-project.org/doc](https://chrony-project.org/doc/)
+- chrony 官方文档 — [chrony-project.org/documentation.html](https://chrony-project.org/documentation.html)
 - Arch Wiki: Chrony — [wiki.archlinux.org/title/Chrony](https://wiki.archlinux.org/title/Chrony)
 - Arch Wiki: System time — [wiki.archlinux.org/title/System_time](https://wiki.archlinux.org/title/System_time)
 - NTP Pool 项目 — [www.ntppool.org](https://www.ntppool.org/)

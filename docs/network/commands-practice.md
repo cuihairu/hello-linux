@@ -276,7 +276,7 @@ $ ip route get 1.1.1.1 from 192.168.57.10 iif eth1
 ## 参考资料
 
 - man 手册：[ip(8)](https://man7.org/linux/man-pages/man8/ip.8.html)、[ss(8)](https://man7.org/linux/man-pages/man8/ss.8.html)
-- man 手册：[ping(1)](https://man7.org/linux/man-pages/man1/ping.1.html)、[mtr(8)](https://man7.org/linux/man-pages/man8/mtr.8.html)
+- man 手册：[ping(8)](https://man.archlinux.org/man/ping.8.en)、[mtr(8)](https://man.archlinux.org/man/mtr.8.en)
 - iperf3 官方 — [iperf.fr](https://iperf.fr/)
 - tcpdump 官方 — [tcpdump.org](https://www.tcpdump.org/)
 - 鸟哥的私房菜 — 网络侦错 [linux.vbird.org](https://linux.vbird.org/)

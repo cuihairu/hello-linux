@@ -844,5 +844,5 @@ $ iperf3 -c 192.168.1.200 -t 10
 - tcpdump 官方手册 — [tcpdump.org](https://www.tcpdump.org/manpages/)
 - Arch Wiki - Network troubleshooting — [wiki.archlinux.org](https://wiki.archlinux.org/title/Network_configuration)
 - Red Hat - Troubleshooting network connectivity — [redhat.com](https://docs.redhat.com/)
-- Cisco - 路由与连通性排查思路（方法论可迁移） — [cisco.com](https://www.cisco.com/c/en/us/support/docs/ip/routing-protocols/21284-troubleshooting-guide.html)
+- Cisco - BGP 常见问题排查（排障方法论参考） — [cisco.com](https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/22166-bgp-trouble-main.html)
 - 鸟哥的私房菜 - 网络除错 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0110network_basic.php)

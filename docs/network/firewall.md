@@ -482,5 +482,5 @@ failed
 - UFW Manual — [manpages.debian.org](https://manpages.debian.org/bookworm/ufw/ufw.8.en.html)
 - firewalld 官方文档 — [firewalld.org](https://firewalld.org/documentation/)
 - nftables wiki — [wiki.nftables.org](https://wiki.nftables.org/)
-- RHEL 9 使用 firewalld 配置防火墙 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_firewalls/)
+- RHEL 9 使用 firewalld 配置防火墙 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_firewalls_and_packet_filters/)
 - `man ufw`、`man firewall-cmd`、`man nft`

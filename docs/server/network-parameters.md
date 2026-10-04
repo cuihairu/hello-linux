@@ -198,6 +198,6 @@ LISTEN 0      511    0.0.0.0:80          users:(("nginx",pid=940))
 
 - Arch Wiki: systemd-resolved — [wiki.archlinux.org/title/Systemd-resolved](https://wiki.archlinux.org/title/Systemd-resolved)
 - Arch Wiki: Network configuration — [wiki.archlinux.org/title/Network_configuration](https://wiki.archlinux.org/title/Network_configuration)
-- Arch Wiki: Network configuration/Checklist（上线检查单的思想来源） — [wiki.archlinux.org/title/Network_configuration/Checklist](https://wiki.archlinux.org/title/Network_configuration/Checklist)
+- Arch Wiki: Network configuration（其中 Checklist 一节为上线检查单的思想来源） — [wiki.archlinux.org/title/Network_configuration](https://wiki.archlinux.org/title/Network_configuration)
 - systemd 手册 — man hostnamectl、man systemd-resolved、man nsswitch.conf
 - 鸟哥的私房菜 - 网络参数配置 — [linux.vbird.org](https://linux.vbird.org/linux_server/)

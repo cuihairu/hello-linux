@@ -299,4 +299,4 @@ $ dmesg | tail -2
 - Debian Wiki: NFS — [wiki.debian.org/NFS](https://wiki.debian.org/NFS)
 - exports 手册（导出选项全集） — [man 5 exports](https://man7.org/linux/man-pages/man5/exports.5.html)
 - nfs 手册（客户端挂载选项，hard/soft/timeo） — [man 5 nfs](https://man7.org/linux/man-pages/man5/nfs.5.html)
-- 鸟哥的私房菜 - NFS 服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0650nfs.php)
+- 鸟哥的私房菜 - NFS 服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0330nfs.php)

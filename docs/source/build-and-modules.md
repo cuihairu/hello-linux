@@ -337,7 +337,7 @@ $ uname -r
 
 ## 参考资料
 
-- The Linux Kernel — docs.kernel.org — [process/howto.rst](https://docs.kernel.org/process/howto.rst)（内核开发流程官方指南）
+- The Linux Kernel — docs.kernel.org — [process/howto.html](https://docs.kernel.org/process/howto.html)（内核开发流程官方指南）
 - 内核树内 `Documentation/kbuild/` — Kbuild/Kconfig 构建系统文档
 - 内核树内 `Documentation/admin-guide/modules.rst` — 模块打包与装载管理
 - Linux Kernel Module Programming Guide — [tldp.org/LDP/lkmpg/2.6/html/](https://tldp.org/LDP/lkmpg/2.6/html/)（TLDP 持续修订，跟新内核走）

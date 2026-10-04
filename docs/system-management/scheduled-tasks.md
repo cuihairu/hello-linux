@@ -247,7 +247,7 @@ $ systemd-analyze calendar "Tue *-*-* 03:17:00"
 
 ## 参考资料
 
-- at(1) 手册 — [man7.org/linux/man-pages/man1/at.1.html](https://man7.org/linux/man-pages/man1/at.1.html)
+- at(1) 手册 — [man.archlinux.org/man/at.1.en](https://man.archlinux.org/man/at.1.en)
 - crontab(5) 手册 — [man7.org/linux/man-pages/man5/crontab.5.html](https://man7.org/linux/man-pages/man5/crontab.5.html)
 - systemd.timer 官方文档 — [freedesktop.org/software/systemd/man/systemd.timer.html](https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
 - systemd.time（OnCalendar 语法） — [freedesktop.org/software/systemd/man/systemd.time.html](https://www.freedesktop.org/software/systemd/man/systemd.time.html)
