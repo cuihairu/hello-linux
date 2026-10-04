@@ -494,6 +494,7 @@ def test_check_config_paths(site):
     cl.check_config(issues, stats)
     # http + "/"
     assert stats["external"] == 2
+    assert stats["config_external"] == 2
     assert stats["config_links"] == 12
     # 成功：overview.md / README.md / index / dirpage/index / filepage(dir) / onlydist / dironly
     assert stats["config_ok"] == 7
@@ -692,6 +693,9 @@ def test_main_happy_path_with_dist(site, monkeypatch, capsys):
     assert "RESULT pass=" in out
     assert "html:" in out
     assert "issues: 0" in out
+    # config 报告行应体现 '/' 这一外部链接，避免 links/ok 差数被误读为死链
+    assert "config:" in out
+    assert "'external': 1" in out
 
 
 def test_main_fail_returns_1(site, monkeypatch, capsys):

@@ -269,6 +269,7 @@ def check_config(issues: list[tuple], stats: Counter) -> None:
     for link in links:
         if link.startswith("http") or link == "/":
             stats["external"] += 1
+            stats["config_external"] += 1
             continue
         if link.startswith("#"):
             continue
@@ -437,7 +438,11 @@ def main() -> int:
     )
     print(
         "config:",
-        {"links": stats["config_links"], "ok": stats["config_ok"]},
+        {
+            "links": stats["config_links"],
+            "ok": stats["config_ok"],
+            "external": stats["config_external"],
+        },
     )
     if stats["html_skipped"]:
         print("html: skipped (dist missing — run npm run docs:build first for full check)")
