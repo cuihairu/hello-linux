@@ -3,9 +3,11 @@
 
 模式：
   1) 源码级：扫描 docs/**/*.md 的内部链接、锚点、图片（围栏内跳过）
-  2) 产物级（可选）：docs/.vitepress/dist 存在时，校验全部 HTML 的 href/src/id
+  2) 索引级：SUMMARY.md 必须覆盖全部内容页（无孤儿页），且每个条目都出现在
+     config.mts 的 nav/sidebar 中（无目录外页面）；首页与 SUMMARY 自身豁免
+  3) 产物级（可选）：docs/.vitepress/dist 存在时，校验全部 HTML 的 href/src/id
 
-退出码：0 = 100% 通过；1 = 存在死链或错误锚点。
+退出码：0 = 100% 通过；1 = 存在死链、错误锚点或索引不一致。
 """
 
 from __future__ import annotations
@@ -202,7 +204,7 @@ def check_source(issues: list[tuple], stats: Counter) -> None:
             anc = unquote(anc)
         else:
             path, anc = target, None
-        if not path:  # pragma: no cover — L185 已吞 '#' 开头，不可达
+        if not path:  # pragma: no cover — L187 已吞 '#' 开头，不可达
             return
 
         stats["internal"] += 1
@@ -245,7 +247,7 @@ def check_source(issues: list[tuple], stats: Counter) -> None:
                 stats["external"] += 1
                 continue
             path = unquote(t.split("#")[0])
-            if not path:  # pragma: no cover — L244 已吞 '#' 开头，不可达
+            if not path:  # pragma: no cover — L246 已吞 '#' 开头，不可达
                 continue
             cands = [
                 ROOT / path,
@@ -298,6 +300,49 @@ def check_config(issues: list[tuple], stats: Counter) -> None:
             issues.append(
                 ("docs/.vitepress/config.mts", "config", "dead-link", link)
             )
+
+
+def check_index(issues: list[tuple], stats: Counter) -> None:
+    summary = DOCS / "SUMMARY.md"
+    if not summary.exists():
+        return
+
+    entries: set[str] = set()
+    text = blank_fences(summary.read_text(encoding="utf-8"))
+    for m in LINK_RE.finditer(text):
+        target = m.group(2)
+        if is_external(target):
+            stats["external"] += 1
+            continue
+        rel = unquote(target.split("#", 1)[0]).lstrip("./")
+        if rel:
+            entries.add(rel)
+    stats["index_entries"] = len(entries)
+
+    config_routes: set[str] = set()
+    cfg = DOCS / ".vitepress" / "config.mts"
+    if cfg.exists():
+        for link in re.findall(r"link:\s*'([^']+)'", cfg.read_text(encoding="utf-8")):
+            config_routes.add(link.split("#", 1)[0].rstrip("/"))
+
+    for p in md_files():
+        rel = p.relative_to(DOCS).as_posix()
+        if rel in ("SUMMARY.md", "index.md"):
+            stats["index_exempt"] += 1
+            continue
+        if rel in entries:
+            stats["index_listed"] += 1
+        else:
+            issues.append((f"docs/{rel}", "index", "orphan-page", "not in SUMMARY.md"))
+            stats["index_orphan"] += 1
+
+    for rel in sorted(entries):
+        route = "/" + rel.removesuffix(".md")
+        if route in config_routes:
+            stats["index_sidebar_ok"] += 1
+        else:
+            issues.append(("docs/SUMMARY.md", "index", "not-in-sidebar", route))
+            stats["index_unlisted"] += 1
 
 
 def route_of(h: Path) -> str:
@@ -398,6 +443,7 @@ def main() -> int:
 
     check_source(issues, stats)
     check_config(issues, stats)
+    check_index(issues, stats)
     check_html(issues, stats)
 
     # Public assets referenced by config head/logo
@@ -416,6 +462,10 @@ def main() -> int:
         + stats["ref_def"]
         + stats["anchor_same"]
         + stats["config_ok"]
+        + stats["index_listed"]
+        + stats["index_orphan"]
+        + stats["index_sidebar_ok"]
+        + stats["index_unlisted"]
     )
     html_checked = stats["html_same"] + stats["html_int"]
     total_checked = src_checked + html_checked
@@ -442,6 +492,17 @@ def main() -> int:
             "links": stats["config_links"],
             "ok": stats["config_ok"],
             "external": stats["config_external"],
+        },
+    )
+    print(
+        "index:",
+        {
+            "entries": stats["index_entries"],
+            "listed": stats["index_listed"],
+            "orphan": stats["index_orphan"],
+            "sidebar_ok": stats["index_sidebar_ok"],
+            "unlisted": stats["index_unlisted"],
+            "exempt": stats["index_exempt"],
         },
     )
     if stats["html_skipped"]:

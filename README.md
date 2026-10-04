@@ -57,7 +57,7 @@ npm run docs:cov     # 覆盖率：行+分支 100% 门禁（fail_under=100）
 
 | 脚本 | 用途 |
 |------|------|
-| `scripts/check_links.py` | 链接检查器：源码级（md 链接/锚点/图片）+ 产物级（HTML 链接/锚点/资源）。`npm run docs:check` 即调用它，CI 额外加 `--require-html` 强制产物级校验 |
+| `scripts/check_links.py` | 链接检查器：源码级（md 链接/锚点/图片）+ 索引级（SUMMARY 必须覆盖全部内容页、每个条目均出现在 nav/sidebar）+ 产物级（HTML 链接/锚点/资源）。`npm run docs:check` 即调用它，CI 额外加 `--require-html` 强制产物级校验 |
 | `scripts/tree_art.py` | 多色字符画树渲染器：种子化高程 + 湿度双场生成岛屿世界，河流刻蚀入海，quadtree 字符组合叠加地形/水系/生物群落三通道配色。零第三方依赖，`--seed` 决定世界、同种子输出可复现 |
 
 `tree_art.py` 用法（均已实跑验证）：

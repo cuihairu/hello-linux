@@ -884,7 +884,7 @@ def test_check_source_invalid_utf8_propagates(site):
     (site.docs / "bad.md").write_bytes(b"# B\n\xff\xfe bad\n")
     with pytest.raises(UnicodeDecodeError):
         cl.check_source([], Counter())
-    # docs 干净但 README 含非法字节 → L241 同样抛错
+    # docs 干净但 README 含非法字节 → L243 同样抛错
     (site.docs / "bad.md").unlink()
     (site.root / "README.md").write_bytes(b"[l](x)\n\xff\xfe\n")
     with pytest.raises(UnicodeDecodeError):
@@ -1158,6 +1158,111 @@ def test_docs_cov_is_docs_test_plus_coverage_only():
     assert "testpaths = tests" in ini
 
 
+# ---------------------------------------------------------------------------
+# check_index
+# ---------------------------------------------------------------------------
+
+
+def test_check_index_skips_without_summary(site):
+    write_md(site.docs, "a.md", "# A\n")
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_index(issues, stats)
+    assert issues == []
+    assert stats["index_entries"] == 0
+
+
+def test_check_index_full_pass(site):
+    write_md(site.docs, "index.md", "# I\n")
+    write_md(site.docs, "guide.md", "# G\n")
+    write_md(site.docs, "basic/overview.md", "# O\n")
+    (site.docs / "SUMMARY.md").write_text(
+        "\n".join(
+            [
+                "# 目录",
+                "",
+                "- [首页](./index.md)",
+                "- [指南](./guide.md)",
+                "- [概览](./basic/overview.md)",
+                "- [外站](https://example.com)",
+                "- [锚点](#anchor)",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    (site.vpc / "config.mts").write_text(
+        "\n".join(
+            [
+                "export default {",
+                "  themeConfig: {",
+                "    nav: [",
+                "      { text: 'i', link: '/' },",
+                "      { text: 's', link: '/SUMMARY' },",
+                "      { text: 'x', link: '/index' },",
+                "      { text: 'g', link: '/guide' },",
+                "      { text: 'o', link: '/basic/overview' },",
+                "    ]",
+                "  }",
+                "}",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_index(issues, stats)
+    assert issues == []
+    assert stats["index_entries"] == 3  # index.md、guide.md、basic/overview.md
+    assert stats["index_listed"] == 2
+    assert stats["index_exempt"] == 2  # index.md + SUMMARY.md 自身
+    assert stats["index_orphan"] == 0
+    assert stats["index_sidebar_ok"] == 3  # /index、/guide、/basic/overview
+    assert stats["index_unlisted"] == 0
+
+
+def test_check_index_flags_orphan(site):
+    write_md(site.docs, "listed.md", "# L\n")
+    write_md(site.docs, "hidden/orphan.md", "# H\n")
+    write_md(site.docs, "index.md", "# I\n")
+    (site.docs / "SUMMARY.md").write_text("- [L](./listed.md)\n", encoding="utf-8")
+    (site.vpc / "config.mts").write_text(
+        "themeConfig: { nav: [{ link: '/listed' }] }", encoding="utf-8"
+    )
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_index(issues, stats)
+    assert ("docs/hidden/orphan.md", "index", "orphan-page", "not in SUMMARY.md") in issues
+    assert stats["index_orphan"] == 1
+    assert stats["index_listed"] == 1
+    assert stats["index_sidebar_ok"] == 1
+    assert stats["index_unlisted"] == 0
+
+
+def test_check_index_flags_unlisted_when_config_missing(site):
+    write_md(site.docs, "guide.md", "# G\n")
+    (site.docs / "SUMMARY.md").write_text("- [G](./guide.md)\n", encoding="utf-8")
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_index(issues, stats)  # config.mts 不存在 ⇒ 全部条目视为未入导航
+    assert ("docs/SUMMARY.md", "index", "not-in-sidebar", "/guide") in issues
+    assert stats["index_unlisted"] == 1
+    assert stats["index_sidebar_ok"] == 0
+
+
+def test_check_index_flags_unlisted_route(site):
+    write_md(site.docs, "guide.md", "# G\n")
+    (site.docs / "SUMMARY.md").write_text("- [G](./guide.md#intro)\n", encoding="utf-8")
+    (site.vpc / "config.mts").write_text(
+        "themeConfig: { nav: [{ link: '/other' }] }", encoding="utf-8"
+    )
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_index(issues, stats)
+    assert ("docs/SUMMARY.md", "index", "not-in-sidebar", "/guide") in issues
+    assert stats["index_entries"] == 1  # 锚点剥离后仍是一个条目
+    assert stats["index_unlisted"] == 1
+
+
 def test_no_cover_pragmas_are_registered_with_reason():
     """不可测点登记核验：pragma 行号清单、行内理由、COVERAGE_NOTES 三者同步。"""
     src = (REPO_ROOT / "scripts" / "check_links.py").read_text(encoding="utf-8")
@@ -1168,7 +1273,7 @@ def test_no_cover_pragmas_are_registered_with_reason():
             # 不可测点必须随行登记不可达理由（不许无理由排除）
             assert "不可达" in line, f"L{i + 1} pragma 缺少理由"
     # 不可测点全集：2 处控制流不可达的防御分支；增删必须同步本清单与登记
-    assert pragma_lines == [205, 248]
+    assert pragma_lines == [207, 250]
     notes = Path(__file__).read_text(encoding="utf-8")
     for ln in pragma_lines:
         assert f"L{ln}-{ln + 1}" in notes, f"pragma L{ln} 未在 COVERAGE_NOTES 登记"
@@ -1178,13 +1283,13 @@ def test_no_cover_pragmas_are_registered_with_reason():
 # COVERAGE_NOTES — 不可达分支（pragma 已在源码标注）
 # ---------------------------------------------------------------------------
 #
-# 1) check_source.check() L205-206 `if not path: return`
+# 1) check_source.check() L207-208 `if not path: return`
 #    可达条件：target 含 '#' 且 split 首段为空 ⇒ target 以 '#' 开头。
-#    但 L185 已对 startswith('#') 整支 return，L177 已吞空串。
+#    但 L187 已对 startswith('#') 整支 return，L179 已吞空串。
 #    ⇒ 此防御分支在控制流上不可达。源码标 `# pragma: no cover`。
 #
-# 2) check_source README L248-249 `if not path: continue`
-#    path = unquote(t.split('#')[0])。t 不以 '#' 开头（L244 已 continue）
+# 2) check_source README L250-251 `if not path: continue`
+#    path = unquote(t.split('#')[0])。t 不以 '#' 开头（L246 已 continue）
 #    且非空（LINK_RE 要求 [^)\s]+），则 split 首段非空；unquote 不会把
 #    非空串解码为空串 ⇒ 不可达。源码标 `# pragma: no cover`。
 #
