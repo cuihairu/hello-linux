@@ -7,6 +7,13 @@ export default defineConfig({
   lang: 'zh-CN',
   cleanUrls: false,
   lastUpdated: true,
+  sitemap: {
+    hostname: 'https://cuihairu.github.io',
+    // sub-path 站点：new URL 的基准语义会丢弃 hostname 中的路径，
+    // base 必须拼在每条 item.url 上（item.url 无前导斜杠，首页为 ''）
+    transformItems: (items) =>
+      items.map((item) => ({ ...item, url: '/hello-linux/' + item.url })),
+  },
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/hello-linux/favicon.svg' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
