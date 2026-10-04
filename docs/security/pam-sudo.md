@@ -136,7 +136,7 @@ $ echo 'correct-horse-battery-staple' | pwscore
 
 ### 3.5 改动的验收清单
 
-任何一处 PAM 改动，验收到"另一个会话真的能登录"才算完，四步走一遍即可收工：`visudo -c` 式的预检在此没有等价物（PAM 无官方语法检查工具），所以更依赖流程——先 `pam-auth-update --test`（Debian）或 `authselect check`（RHEL）确认没改崩公共栈的引用关系；再在**第二个终端**用 `ssh testuser@localhost` 走一遍目标场景（要验 faillock 就故意输错到锁定）；然后 `journalctl -u ssh -e` 看 PAM 报的每一行——`Failed password` 是预期内的测试痕迹，`error: PAM: ...` 才是栈被改坏的铁证；最后清点 `faillock`/`pwscore` 的观测面与预期一致。四步里任何一步失败，都退回改前状态再想——这就是 PAM 改动的"先验证、再生效"，与 DNS 改 serial、防火墙改规则同一套保守变更观。
+任何一处 PAM 改动，验收到"另一个会话真的能登录"才算完，四步走一遍即可收工：`visudo -c` 式的预检在此没有等价物（PAM 无官方语法检查工具），所以更依赖流程——先 `pam-auth-update --test`（Debian）或 `authselect check`（RHEL）确认没改崩公共栈的引用关系；再在**第二个终端**用 `ssh testuser@localhost` 走一遍目标场景（要验 faillock 就故意输错到锁定）；然后 `journalctl -u ssh -e` 看 PAM 报的每一行：`Failed password` 是预期内的测试痕迹，`error: PAM: ...` 才是栈被改坏的铁证；最后清点 `faillock`/`pwscore` 的观测面与预期一致。四步里任何一步失败，都退回改前状态再想——这就是 PAM 改动的"先验证、再生效"，与 DNS 改 serial、防火墙改规则同一套保守变更观。
 
 ### 3.6 sudo 自己也要过 PAM
 

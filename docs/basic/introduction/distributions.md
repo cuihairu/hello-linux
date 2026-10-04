@@ -62,12 +62,7 @@ Total Download Size:  12.40 MiB
 
 ### 2.1 Debian
 
-- **创立**：1993 年，Ian Murdock
-- **理念**：稳定性优先、自由软件、社区治理
-- **发布周期**：约 2-3 年一个 stable
-- **支持周期**：由安全团队提供（历史上的 LTS 由单独项目延续，官方当前策略见其官网）
-- **包管理**：APT / dpkg，包格式 `.deb`
-- **官网**：https://www.debian.org/
+Debian 1993 年由 Ian Murdock 创立，稳定性优先、自由软件、社区治理这三条理念从项目早期延续至今。它约 2-3 年发布一个 stable，安全更新由安全团队长期提供（历史上的 LTS 由单独项目延续，当前策略见官网 https://www.debian.org/ ）。包管理是 APT / dpkg，包格式 `.deb`。
 
 Debian 在三大家族里以"保守得令人安心"著称：进入 stable 的软件版本基本冻结，只接受安全与重要修复。代价是仓库里的软件往往比上游旧一年半载——想用新工具，要么等 Ubuntu/Fedora 那样的快节奏发行版，要么自行使用 backports 或容器。
 
@@ -106,12 +101,7 @@ The following packages will be upgraded:
 
 ### 2.2 Ubuntu
 
-- **创立**：2004 年，Mark Shuttleworth（Canonical）
-- **基础**：基于 Debian unstable 整合
-- **发布周期**：每 6 个月，偶数年 4 月发布 LTS
-- **支持周期**：普通版 9 个月，LTS 5 年（可付费扩展至 10 年）
-- **包管理**：APT / dpkg，另引入 snap 作为补充打包格式
-- **官网**：https://ubuntu.com/
+Ubuntu 2004 年由 Mark Shuttleworth 在 Canonical 主导创立，底子是 Debian unstable 的整合。它每 6 个月出一个版本，偶数年 4 月的版本带 LTS 标签：普通版支持 9 个月，LTS 5 年（可付费扩展至 10 年）。包管理沿用 APT / dpkg，另引入 snap 作为补充打包格式（官网：https://ubuntu.com/ ）。
 
 ```bash
 # 查看 Ubuntu 版本
@@ -170,12 +160,7 @@ Debian (1993)
 
 ### 3.1 RHEL（Red Hat Enterprise Linux）
 
-- **创立**：2000 年（从 Red Hat Linux 分离出商业产品线）
-- **理念**：企业级稳定性、认证生态、商业订阅支持
-- **发布周期**：约 3 年一个大版本
-- **支持周期**：10 年（可扩展）
-- **包管理**：DNF / RPM（历史上为 YUM），包格式 `.rpm`
-- **官网**：https://www.redhat.com/
+RHEL 2000 年从 Red Hat Linux 分离出商业产品线，主打企业级稳定性、认证生态与商业订阅支持。约 3 年一个大版本，支持周期 10 年（可扩展）。包管理是 DNF / RPM（历史上为 YUM），包格式 `.rpm`（官网：https://www.redhat.com/ ）。
 
 RHEL 的价值不在软件新旧，而在**可预期性**：内核与关键组件长期只收补丁不换代，大量商业软件（数据库、虚拟化、安全产品）以它为认证基准，运维团队的自动化脚本也因此可以多年不变。这也是为什么"企业服务器"推荐表里它总是常客。
 
@@ -200,11 +185,7 @@ Complete!
 
 ### 3.2 Fedora
 
-- **创立**：2003 年
-- **定位**：RHEL 的上游试验场，技术前沿
-- **发布周期**：每 6 个月
-- **支持周期**：约 13 个月
-- **官网**：https://fedoraproject.org/
+Fedora 2003 年创立，定位是 RHEL 的上游试验场：每 6 个月一个版本，每个版本约维护 13 个月（官网：https://fedoraproject.org/ ）。
 
 ```bash
 $ cat /etc/fedora-release
@@ -237,11 +218,7 @@ Fedora (2003, 上游试验)
 
 ### 4.1 定位与哲学
 
-- **创立**：2002 年，Judd Vinet
-- **理念**：极简主义、用户自主、KISS（Keep It Simple, Stupid）
-- **发布模型**：**滚动更新**，`/etc/os-release` 中没有 `VERSION_ID`，只有 `BUILD_ID=rolling`
-- **包管理**：`pacman`，包格式 `.pkg.tar.zst`
-- **官网**：https://archlinux.org/
+Arch Linux 2002 年由 Judd Vinet 创立，理念是极简主义、用户自主与 KISS（Keep It Simple, Stupid）。它采用滚动更新，`/etc/os-release` 里没有 `VERSION_ID`，只有 `BUILD_ID=rolling`；包管理是 `pacman`，包格式 `.pkg.tar.zst`（官网：https://archlinux.org/ ）。
 
 Arch 常被贴上"高手专属"的标签，其实它更准确的定位是**教学系统**：安装过程要求你亲手分区、挂载、配引导、装 `pacman` 引导出的基础系统，等于把发行版的组装过程在你面前拆开演示一遍。Arch Wiki 对这些步骤的文档质量极高，以至于 Debian 和 RHEL 用户也经常去查——这是 Arch 对整个 Linux 社区最大的隐性贡献。
 

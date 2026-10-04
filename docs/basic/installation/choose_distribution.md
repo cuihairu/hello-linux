@@ -91,7 +91,7 @@ sudo pacman -S package    # 若同步数据库后直接装，等价于制造部�
 | 需求 | 推荐 | 理由 |
 |------|------|------|
 | 企业生产、要求长期稳定 | Rocky Linux / AlmaLinux | RHEL 兼容、10 年支持、与 CentOS 同源的免费方案（CentOS 8 已于 2021 年底停止） |
-| 追求极致稳定、不追新软件 | Debian stable | 社区驱动、无商业绑定、Docker 基础镜像主流之一 |
+| 优先稳定、不追新软件 | Debian stable | 社区驱动、无商业绑定、Docker 基础镜像主流之一 |
 | 个人项目、快速起步 | Ubuntu Server LTS | 文档多、云厂商镜像全、云原生工具链默认支持好 |
 | 容器 / Kubernetes | Ubuntu Server | Docker、kubeadm、各云厂商节点镜像对 Ubuntu 支持最完整 |
 | 想学"最裸的 Linux" | Arch（服务器版安装） | 可控性最高，但需自行解决所有运维细节 |

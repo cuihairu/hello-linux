@@ -156,7 +156,7 @@ $ sudo dpkg --configure -a          # 先完成所有"已解包未配置"的包
 $ sudo apt --fix-broken install     # 再修复依赖关系
 ```
 
-`dpkg --configure -a` 处理的是"文件已复制、postinst 脚本没跑完"的半安装状态（apt 中断、断电后常见）；`apt --fix-broken install` 处理的是依赖图缺口。两者互补，修复脚本里通常按上述顺序各跑一遍。`dpkg` 状态错乱到极致时才考虑 `sudo dpkg --configure -a --force-confnew`，它会丢弃旧配置重新跑脚本。
+`dpkg --configure -a` 处理的是"文件已复制、postinst 脚本没跑完"的半安装状态（apt 中断、断电后常见）；`apt --fix-broken install` 处理的是依赖图缺口。两者互补，修复脚本里通常按上述顺序各跑一遍。`dpkg` 状态错乱到上面两条都治不了时才考虑 `sudo dpkg --configure -a --force-confnew`，它会丢弃旧配置重新跑脚本。
 
 ## 8. 常见坑
 

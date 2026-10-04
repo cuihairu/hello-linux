@@ -121,9 +121,9 @@ $ sudo ausearch -m avc -ts today | audit2why -a
 
 | 命令 | 修改来源 | 持久性 | 典型用途 |
 |------|---------|--------|---------|
-| `chcon` | 直接指定 type，**不查策略** | ❌ 重启/restorecon 即被覆盖 | 临时验证"改了标签业务是否恢复" |
-| `restorecon` | 按策略文件里的默认规则**恢复** | ✅ 恢复的就是策略值 | 纠正被 chcon/拷贝弄乱的标签 |
-| `semanage fcontext -a` | 向策略数据库**新增**路径→type 规则 | ✅ 之后 restorecon 才能还原到这个新值 | 为自定义路径（如 `/data/www`）定义永久标签 |
+| `chcon` | 直接指定 type，**不查策略** | 重启/restorecon 即被覆盖 | 临时验证"改了标签业务是否恢复" |
+| `restorecon` | 按策略文件里的默认规则**恢复** | 恢复的就是策略值 | 纠正被 chcon/拷贝弄乱的标签 |
+| `semanage fcontext -a` | 向策略数据库**新增**路径→type 规则 | 之后 restorecon 才能还原到这个新值 | 为自定义路径（如 `/data/www`）定义永久标签 |
 
 最常见的翻车现场是：给 `/data/www` 下的新站点 `chcon -t httpd_sys_content_t`，当场好了；过两天一跑 `restorecon -R /data/www/`，标签被打回 `default_t`，因为策略里根本没规定这个路径。正确的持久化写法是先把规则写进策略数据库，再让 `restorecon` 对齐：
 

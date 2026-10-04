@@ -1,6 +1,6 @@
 # 日志轮转
 
-日志文件不会自己变小：一个不停写日志的服务，一个月就能把 `/var/log` 撑满，进而拖垮数据库、让 `grep` 假死、把采集器压垮。轮转不是"可选的优化"，而是所有会产生日志的系统的必答题——logrotate 用一套声明式配置回答四个问题：**多久转一次、多大就转、转完留几份、旧文件怎么压**。本页从"不轮转会怎样"讲起，拆解 `/etc/logrotate.conf` 与 `/etc/logrotate.d/` 的分工、`postrotate` 与 `copytruncate` 在"程序握着旧句柄"场景下的选择依据，并给出为自研服务写一条可用规则、用 `logrotate -d` 验证的完整流程；同时厘清 logrotate 管文本文件、journal 空间回收走 journald 这条容易混淆的边界。
+日志文件不会自己变小：一个不停写日志的服务，一个月就能把 `/var/log` 撑满，进而拖垮数据库、让 `grep` 假死、把采集器压垮。轮转不是"可选的优化"，而是所有会产生日志的系统的必答题——logrotate 用一套声明式配置回答四个问题：**多久转一次、多大就转、转完留几份、旧文件怎么压**。本页从"不轮转会怎样"讲起，拆解 `/etc/logrotate.conf` 与 `/etc/logrotate.d/` 的分工、`postrotate` 与 `copytruncate` 在"程序握着旧句柄"场景下的选择依据，并给出为自己的服务写一条可用规则、用 `logrotate -d` 验证的完整流程；同时厘清 logrotate 管文本文件、journal 空间回收走 journald 这条容易混淆的边界。
 
 > 内容参考自 logrotate 手册与 Arch Wiki，见文末参考资料。
 
@@ -9,7 +9,7 @@
 - 说清为什么日志必须轮转，以及不轮转的两种典型事故（写满磁盘、查询变慢）
 - 读懂 logrotate 配置结构：全局段、应用段、每行选项各解决什么问题
 - 掌握 postrotate 与 copytruncate 的选择依据，知道程序握着旧句柄时怎么办
-- 会为自研服务写一条可用的轮转规则，并用 `logrotate -d` 验证
+- 会为自己的服务写一条可用的轮转规则，并用 `logrotate -d` 验证
 - 分清 logrotate 管文本文件、journal 空间回收走 journald 的边界
 
 ## 1. 为什么必须轮转

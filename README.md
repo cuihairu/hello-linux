@@ -87,7 +87,7 @@ python3 scripts/tree_art.py --seed 7 --html tree.html --png tree.png
 ## 维护备注
 
 - 2026-10：站点巡检轮（对照 SUMMARY 清单核对 127 页实际一致性 + 参考资料外链抽样）。结论：页面与清单一致，无薄页/空章节；`check_links` 静态与产物级检查 23462/23462 全绿。外链抽样 54 页 / 291 条：269 正常，确定 10 处失效并已换用实测可达的替代（docs.kernel.org 后缀迁移、Arch Wiki Checklist 并入主条目、chrony 文档路径迁移、鸟哥 NFS 章节号变更、man7 下架命令 at/ping/mtr 换 man.archlinux.org、RHEL 9 防火墙指南从 `configuring_and_managing_firewalls` 迁至 `configuring_firewalls_and_packet_filters`（含 security 篇 RHEL 8 时代 assembly 路径）、Cisco 21284 文档退役换 22166 BGP 排障页）；7 处反爬假阳性保留（elixir.bootlin.com ×5、cisecurity.org ×2，带 UA 实测 200）；6 处网络瞬态（000/ERR）登记不动（security.appspot.com、proftpd.org、hub.docker.com、wireguard.com、openvpn.net、libreswan.org）。
-- 2026-10：清理了一条悬空 stash（基于 `9c8c35f` 的旧 WIP，混合了首页卡片去 emoji、README 标题重排、内联样式迁出与 vitepress 升级）。经 merge-tree 实测其中两处文件与迁移后的现行内容冲突；样式迁出与依赖升级两项已由后续提交以最终形态落地（`theme/style.css` 及其深色模式修复、`package.json` 的 `2.0.0-alpha.20`），首页卡片 emoji 为现行约定风格（`style.css` 中"去装饰 emoji"仅指文档内表格），故丢弃不作迁移。
+- 2026-10：清理了一条悬空 stash（基于 `9c8c35f` 的旧 WIP，混合了首页卡片去 emoji、README 标题重排、内联样式迁出与 vitepress 升级）。经 merge-tree 实测其中两处文件与迁移后的现行内容冲突；样式迁出与依赖升级两项已由后续提交以最终形态落地（`theme/style.css` 及其深色模式修复、`package.json` 的 `2.0.0-alpha.20`），首页卡片 emoji 在当时是约定风格（`style.css` 中"去装饰 emoji"仅指文档内表格；该批 emoji 后随 2026-10 的版式清理移除），故丢弃不作迁移。
 
 ## 许可证
 

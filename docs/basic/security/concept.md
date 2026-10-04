@@ -22,12 +22,12 @@
 DAC 的判断路径：
   进程 uid=33 (www-data)
   目标文件 /etc/shadow  owner=root group=shadow  权限 0640
-  → www-data 不在 root 也不在 shadow 组 → 拒绝 ✗
+  → www-data 不在 root 也不在 shadow 组 → 拒绝
 
 看起来安全？换个目标：
   目标文件 /var/lib/nginx/../../etc/ssh/sshd_config  （经漏洞构造的路径）
   若任何环节把权限放宽、或进程实际仍持有 root 能力（capabilities 未清干净）：
-  进程 uid=0 → DAC 直接放行 ✓ ← 灾难发生在这里
+  进程 uid=0 → DAC 直接放行 ← 灾难发生在这里
 ```
 
 DAC 无法回答的问题是：**"一个 Web 服务器进程，应不应该有权限读 SSH 配置或写系统目录？"**——无论运行它的用户是谁，这个问题的答案都应当是"不应该"。DAC 把这个决定权交给了文件所有者（通常是 root 自己），于是漏洞一旦突破第一层用户身份，后面再无拦截。
