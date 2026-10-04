@@ -276,6 +276,6 @@ GNU 工具（Linux 上的主流）支持 `--long-option` 和 `-abc` 合并短选
 - Arch Wiki - Bash — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
 - Arch Wiki - Pacman — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
 - Debian 手册 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
-- Red Hat 文档中心 - Getting started with the command line — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/getting_started_with_the_red_hat_enterprise_linux_console/index)
+- 鸟哥的私房菜 - 基础篇（命令行入门） — [linux.vbird.org](https://linux.vbird.org/linux_basic/)
 - Linux man pages（man7.org） — [man7.org](https://man7.org/linux/man-pages/)
 - POSIX.1-2017 Shell Command Language — [pubs.opengroup.org](https://pubs.opengroup.org/onlinepubs/9699919799/)

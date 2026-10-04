@@ -698,4 +698,4 @@ tar -cf - /path | pbzip2 > backup.tar.bz2
 - Arch Wiki - zstd — [wiki.archlinux.org](https://wiki.archlinux.org/title/General_recommendations)
 - 鸟哥的私房菜 - 压缩与打包指令 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0240tarcompress.php)
 - Debian 手册 - 归档与压缩 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
-- Red Hat 文档 - Compressing and archiving files — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/compressing_and_archiving_files/index)
+- GNU tar 手册 - 打包与压缩 — [gnu.org](https://www.gnu.org/software/tar/manual/)

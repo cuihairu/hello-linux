@@ -257,5 +257,5 @@ sudo dnf install htop
 - Debian Wiki - apt — [wiki.debian.org](https://wiki.debian.org/Apt)
 - Ubuntu - PPA / repositories 文档 — [documentation.ubuntu.com](https://ubuntu.com/server/docs/package-management)
 - DNF 文档（Fedora） — [dnf.readthedocs.io](https://dnf.readthedocs.io/)
-- Red Hat - Installing software packages with DNF — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/installing_managing_software_with_the_dnf_tool/index)
+- Red Hat - Installing software packages with DNF — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_software_with_the_dnf_tool/index)
 - EPEL FAQ — [docs.fedoraproject.org](https://docs.fedoraproject.org/en-US/epel/faq)

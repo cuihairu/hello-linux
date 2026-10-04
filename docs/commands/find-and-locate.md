@@ -843,7 +843,7 @@ find /var/log -name "*.log" -mtime -3 -exec grep -l "timeout" {} +
 - Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
 - Arch Wiki - Pacman（`pacman -S` 安装 plocate/fd/ripgrep） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
 - Debian 手册 - 包管理与 findutils/grep — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
-- Red Hat 文档 - Searching files and file contents — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/searching_files_and_file_contents/index)
+- GNU findutils 手册 - find 与 locate 用法 — [gnu.org](https://www.gnu.org/software/findutils/manual/)
 - fd 项目页 — [github.com](https://github.com/sharkdp/fd)
 - ripgrep 项目页 — [github.com](https://github.com/BurntSushi/ripgrep)
 - 鸟哥的私房菜 - 文件搜寻与挂载 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)

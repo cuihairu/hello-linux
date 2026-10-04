@@ -229,6 +229,6 @@ sudo reboot
 - Arch Wiki - systemd-boot（替代方案对照） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd-boot)
 - Arch Wiki - Kernel parameters — [wiki.archlinux.org](https://wiki.archlinux.org/title/Kernel_parameters)
 - Debian Wiki - GRUB — [wiki.debian.org](https://wiki.debian.org/GRUB)
-- RHEL 9 - 使用 GRUB2 配置系统引导 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_monitoring_and_updating_the_kernel/assembly_manually-adding-a-kernel-command-line-parameter_using-kernel-command-line-parameters)
+- RHEL 9 - 使用 GRUB2 配置系统引导（内核命令行参数章节） — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_monitoring_and_updating_the_kernel/)
 - 鸟哥的私房菜 - 开机流程与 GRUB — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0510osloader.php)
 - `man grub-install`、`man grub-mkconfig`、`man grub-reboot`、`man os-prober`

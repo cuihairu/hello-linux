@@ -130,4 +130,4 @@ $ getfacl -R /srv/projects | sudo setfacl --restore=/dev/stdin
 - 鸟哥的私房菜 - 文件权限与 ACL — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0210filepermission.php)
 - `man getfacl`、`man setfacl`、`man acl`
 - Debian 手册 - 权限与 ACL — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
-- RHEL 9 - 使用 ACL — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/managing_storage/index)
+- RHEL 9 - 使用 ACL — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/managing_storage_devices/index)
