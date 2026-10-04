@@ -5,7 +5,8 @@
   1) 源码级：扫描 docs/**/*.md 的内部链接、锚点、图片（围栏内跳过）
   2) 索引级：SUMMARY.md 必须覆盖全部内容页（无孤儿页），且每个条目都出现在
      config.mts 的 nav/sidebar 中（无目录外页面）；首页与 SUMMARY 自身豁免
-  3) 产物级（可选）：docs/.vitepress/dist 存在时，校验全部 HTML 的 href/src/id
+  3) 产物级（可选）：docs/.vitepress/dist 存在时，校验全部 HTML 的 href/src/id，
+     并与 sitemap.xml 双向对账（每条 loc 可达、每个页面在册、404 豁免）
 
 退出码：0 = 100% 通过；1 = 存在死链、错误锚点或索引不一致。
 """
@@ -17,7 +18,7 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
-from urllib.parse import unquote, urljoin
+from urllib.parse import unquote, urljoin, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
@@ -204,7 +205,7 @@ def check_source(issues: list[tuple], stats: Counter) -> None:
             anc = unquote(anc)
         else:
             path, anc = target, None
-        if not path:  # pragma: no cover — L187 已吞 '#' 开头，不可达
+        if not path:  # pragma: no cover — L188 已吞 '#' 开头，不可达
             return
 
         stats["internal"] += 1
@@ -247,7 +248,7 @@ def check_source(issues: list[tuple], stats: Counter) -> None:
                 stats["external"] += 1
                 continue
             path = unquote(t.split("#")[0])
-            if not path:  # pragma: no cover — L246 已吞 '#' 开头，不可达
+            if not path:  # pragma: no cover — L247 已吞 '#' 开头，不可达
                 continue
             cands = [
                 ROOT / path,
@@ -356,6 +357,60 @@ def route_of(h: Path) -> str:
     return "/" + rel
 
 
+SITEMAP_LOC_RE = re.compile(r"<loc>([^<]+)</loc>")
+
+
+def check_sitemap(issues: list[tuple], stats: Counter) -> None:
+    """sitemap.xml 与构建产物双向对账：每条 loc 可达，每个页面在册。"""
+    if not DIST.is_dir():
+        return
+    smap = DIST / "sitemap.xml"
+    if not smap.exists():
+        cfg = DOCS / ".vitepress" / "config.mts"
+        if cfg.exists() and re.search(r"sitemap:\s*\{", cfg.read_text(encoding="utf-8")):
+            issues.append(
+                ("docs/.vitepress/dist/sitemap.xml", "sitemap", "missing", "config 声明了 sitemap")
+            )
+            stats["smap_missing_file"] = 1
+        return
+
+    text = smap.read_text(encoding="utf-8", errors="replace")
+    seen: set[str] = set()
+    for loc in SITEMAP_LOC_RE.findall(text):
+        stats["smap_locs"] += 1
+        path = unquote(urlsplit(loc).path)
+        rel = path[len(BASE):] if path.startswith(BASE) else path.lstrip("/")
+        target: Path | None = None
+        if rel in ("", "index.html"):
+            cands = ["index.html"]
+        elif rel.endswith(".html"):
+            cands = [rel, rel[:-5], rel[:-5] + "/index.html"]
+        elif rel.endswith("/"):
+            cands = [rel + "index.html", rel]
+        else:
+            cands = [rel + ".html", rel, rel.rstrip("/") + "/index.html"]
+        for c in cands:
+            if (DIST / c).is_file():
+                target = DIST / c
+                break
+        if target is None:
+            issues.append(("docs/.vitepress/dist/sitemap.xml", "sitemap", "dead-loc", loc))
+            stats["smap_loc_dead"] += 1
+            continue
+        stats["smap_loc_ok"] += 1
+        seen.add(route_of(target))
+
+    for h in DIST.rglob("*.html"):
+        route = route_of(h)
+        if route == "/404":
+            continue
+        if route in seen:
+            stats["smap_page_ok"] += 1
+        else:
+            issues.append(("docs/.vitepress/dist/sitemap.xml", "sitemap", "not-in-sitemap", route))
+            stats["smap_page_missing"] += 1
+
+
 def check_html(issues: list[tuple], stats: Counter) -> None:
     if not DIST.is_dir():
         stats["html_skipped"] = 1
@@ -444,6 +499,7 @@ def main() -> int:
     check_source(issues, stats)
     check_config(issues, stats)
     check_index(issues, stats)
+    check_sitemap(issues, stats)
     check_html(issues, stats)
 
     # Public assets referenced by config head/logo
@@ -466,6 +522,11 @@ def main() -> int:
         + stats["index_orphan"]
         + stats["index_sidebar_ok"]
         + stats["index_unlisted"]
+        + stats["smap_loc_ok"]
+        + stats["smap_loc_dead"]
+        + stats["smap_missing_file"]
+        + stats["smap_page_ok"]
+        + stats["smap_page_missing"]
     )
     html_checked = stats["html_same"] + stats["html_int"]
     total_checked = src_checked + html_checked
@@ -503,6 +564,17 @@ def main() -> int:
             "sidebar_ok": stats["index_sidebar_ok"],
             "unlisted": stats["index_unlisted"],
             "exempt": stats["index_exempt"],
+        },
+    )
+    print(
+        "sitemap:",
+        {
+            "locs": stats["smap_locs"],
+            "loc_ok": stats["smap_loc_ok"],
+            "loc_dead": stats["smap_loc_dead"],
+            "page_ok": stats["smap_page_ok"],
+            "page_missing": stats["smap_page_missing"],
+            "missing_file": stats["smap_missing_file"],
         },
     )
     if stats["html_skipped"]:

@@ -635,7 +635,7 @@ def test_check_html_path_empty_continue(site):
 
 
 def test_check_html_dir_index_fallback(site):
-    """L379：path 以 .html 结尾且 cands 全 miss，但 DIST/path/index.html 存在。
+    """L479：path 以 .html 结尾且 cands 全 miss，但 DIST/path/index.html 存在。
 
     path 含 `../` 逃出 DIST.rglob 收集范围（rglob 不会把 ../x.html 目录
     当成 html 文件），从而避免 load_ids 读目录崩溃。
@@ -1263,6 +1263,124 @@ def test_check_index_flags_unlisted_route(site):
     assert stats["index_unlisted"] == 1
 
 
+# ---------------------------------------------------------------------------
+# check_sitemap
+# ---------------------------------------------------------------------------
+
+
+def _write_sitemap(site, locs: list[str]) -> None:
+    body = "".join(f"<url><loc>{loc}</loc></url>" for loc in locs)
+    (site.dist / "sitemap.xml").write_text(
+        f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>',
+        encoding="utf-8",
+    )
+
+
+def test_check_sitemap_skips_without_dist(site, monkeypatch):
+    monkeypatch.setattr(cl, "DIST", site.root / "nope")
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_sitemap(issues, stats)
+    assert issues == []
+    assert not stats
+
+
+def test_check_sitemap_missing_file_no_config_is_silent(site):
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_sitemap(issues, stats)  # 无 sitemap.xml 且无 config.mts ⇒ 跳过
+    assert issues == []
+    assert not stats
+
+
+def test_check_sitemap_missing_file_without_sitemap_config_is_silent(site):
+    (site.vpc / "config.mts").write_text("export default {}", encoding="utf-8")
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_sitemap(issues, stats)  # config 未声明 sitemap ⇒ 不校验
+    assert issues == []
+    assert not stats
+
+
+def test_check_sitemap_missing_file_with_sitemap_config_flags(site):
+    (site.vpc / "config.mts").write_text(
+        "sitemap: { hostname: 'https://example.com' }", encoding="utf-8"
+    )
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_sitemap(issues, stats)
+    assert issues == [
+        ("docs/.vitepress/dist/sitemap.xml", "sitemap", "missing", "config 声明了 sitemap")
+    ]
+    assert stats["smap_missing_file"] == 1
+
+
+def test_check_sitemap_full_pass(site):
+    d = site.dist
+    write_html(d, "index.html", "<html></html>")
+    write_html(d, "guide.html", "<html></html>")
+    write_html(d, "sub/index.html", "<html></html>")
+    write_html(d, "clean/index.html", "<html></html>")
+    write_html(d, "other.html", "<html></html>")
+    write_html(d, "404.html", "<html></html>")
+    _write_sitemap(
+        site,
+        [
+            "https://cuihairu.github.io/hello-linux/",  # 首页（rel 为空）
+            "https://cuihairu.github.io/hello-linux/index.html",
+            "https://cuihairu.github.io/hello-linux/guide.html",
+            "https://cuihairu.github.io/hello-linux/sub/",  # 目录形态
+            "https://cuihairu.github.io/hello-linux/clean",  # 无后缀，走第三候选
+            "https://elsewhere.example.com/other.html",  # 非 BASE 前缀
+        ],
+    )
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_sitemap(issues, stats)
+    assert issues == []
+    assert stats["smap_locs"] == 6
+    assert stats["smap_loc_ok"] == 6
+    assert stats["smap_loc_dead"] == 0
+    # 404.html 不入 sitemap，豁免后不计 page_missing
+    assert stats["smap_page_ok"] == 5
+    assert stats["smap_page_missing"] == 0
+
+
+def test_check_sitemap_flags_dead_loc(site):
+    _write_sitemap(site, ["https://cuihairu.github.io/hello-linux/gone.html"])
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_sitemap(issues, stats)
+    assert issues == [
+        (
+            "docs/.vitepress/dist/sitemap.xml",
+            "sitemap",
+            "dead-loc",
+            "https://cuihairu.github.io/hello-linux/gone.html",
+        )
+    ]
+    assert stats["smap_locs"] == 1
+    assert stats["smap_loc_dead"] == 1
+    assert stats["smap_loc_ok"] == 0
+    assert stats["smap_page_ok"] == 0
+
+
+def test_check_sitemap_flags_page_missing(site):
+    d = site.dist
+    write_html(d, "index.html", "<html></html>")
+    write_html(d, "extra.html", "<html></html>")
+    write_html(d, "404.html", "<html></html>")
+    _write_sitemap(site, ["https://cuihairu.github.io/hello-linux/"])
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_sitemap(issues, stats)
+    assert issues == [
+        ("docs/.vitepress/dist/sitemap.xml", "sitemap", "not-in-sitemap", "/extra")
+    ]
+    assert stats["smap_page_ok"] == 1
+    assert stats["smap_page_missing"] == 1
+
+
 def test_no_cover_pragmas_are_registered_with_reason():
     """不可测点登记核验：pragma 行号清单、行内理由、COVERAGE_NOTES 三者同步。"""
     src = (REPO_ROOT / "scripts" / "check_links.py").read_text(encoding="utf-8")
@@ -1273,7 +1391,7 @@ def test_no_cover_pragmas_are_registered_with_reason():
             # 不可测点必须随行登记不可达理由（不许无理由排除）
             assert "不可达" in line, f"L{i + 1} pragma 缺少理由"
     # 不可测点全集：2 处控制流不可达的防御分支；增删必须同步本清单与登记
-    assert pragma_lines == [207, 250]
+    assert pragma_lines == [208, 251]
     notes = Path(__file__).read_text(encoding="utf-8")
     for ln in pragma_lines:
         assert f"L{ln}-{ln + 1}" in notes, f"pragma L{ln} 未在 COVERAGE_NOTES 登记"
@@ -1283,19 +1401,19 @@ def test_no_cover_pragmas_are_registered_with_reason():
 # COVERAGE_NOTES — 不可达分支（pragma 已在源码标注）
 # ---------------------------------------------------------------------------
 #
-# 1) check_source.check() L207-208 `if not path: return`
+# 1) check_source.check() L208-209 `if not path: return`
 #    可达条件：target 含 '#' 且 split 首段为空 ⇒ target 以 '#' 开头。
-#    但 L187 已对 startswith('#') 整支 return，L179 已吞空串。
+#    但 L188 已对 startswith('#') 整支 return，L180 已吞空串。
 #    ⇒ 此防御分支在控制流上不可达。源码标 `# pragma: no cover`。
 #
-# 2) check_source README L250-251 `if not path: continue`
-#    path = unquote(t.split('#')[0])。t 不以 '#' 开头（L246 已 continue）
+# 2) check_source README L251-252 `if not path: continue`
+#    path = unquote(t.split('#')[0])。t 不以 '#' 开头（L247 已 continue）
 #    且非空（LINK_RE 要求 [^)\s]+），则 split 首段非空；unquote 不会把
 #    非空串解码为空串 ⇒ 不可达。源码标 `# pragma: no cover`。
 #
 # 已知非不可达、但需说明的边界：
-# - L219 suffix != '.md'：链接到存在的非 md 文件带锚点（测试已覆盖）。
-# - L379 目录兜底：path 含 '../' 逃出 rglob 收集，避免读目录崩溃。
+# - L221 suffix != '.md'：链接到存在的非 md 文件带锚点（测试已覆盖）。
+# - L479 目录兜底：path 含 '../' 逃出 rglob 收集，避免读目录崩溃。
 # - 源码级 slug 近似 ≠ VitePress 真实算法：hardening.md 中文标题锚点
 #   在无 dist 时会误报（slugify 不处理全角冒号/引号），有 dist 时走
 #   html_for_md 精确校验 → 通过。test_real_site_* 无 dist 时 skipif 跳过。
