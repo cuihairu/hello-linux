@@ -439,8 +439,8 @@ def test_render_html_empty_row_skips_span_append():
     assert '<pre id="scene"></pre>' in html
 
 
-def test_snap_png_drives_playwright(monkeypatch):
-    calls: dict = {}
+def _install_fake_playwright(monkeypatch, calls: dict) -> None:
+    """注入假 playwright.sync_api，调用轨迹记入 calls。"""
 
     class _Loc:
         def screenshot(self, path):
@@ -481,6 +481,10 @@ def test_snap_png_drives_playwright(monkeypatch):
     monkeypatch.setitem(sys.modules, "playwright", pkg)
     monkeypatch.setitem(sys.modules, "playwright.sync_api", api)
 
+
+def test_snap_png_drives_playwright(monkeypatch):
+    calls: dict = {}
+    _install_fake_playwright(monkeypatch, calls)
     ta.snap_png("/tmp/scene.html", "/tmp/scene.png")
     assert calls["goto"] == "file:///tmp/scene.html"
     assert calls["locator"] == "body"
@@ -526,6 +530,27 @@ def test_main_png_requires_html(monkeypatch):
     )
     with pytest.raises(AssertionError, match="--png 需要 --html"):
         ta.main()
+
+
+def test_main_png_success_uses_snap_png(monkeypatch, tmp_path):
+    """main 的 --png 成功路径：写入 HTML 后交 playwright 截图。
+
+    该行在 3.11 的 trace 归因下从未被断言失败路径波及，必须真实执行。
+    """
+    calls: dict = {}
+    _install_fake_playwright(monkeypatch, calls)
+    html = tmp_path / "p.html"
+    png = tmp_path / "p.png"
+    monkeypatch.setattr(
+        sys, "argv",
+        ["tree_art.py", "--quiet", "--seed", "3", "--w", "16", "--h", "8",
+         "--html", str(html), "--png", str(png)],
+    )
+    ta.main()
+    assert html.is_file()
+    assert calls["goto"] == f"file://{html}"
+    assert calls["shot"] == str(png)
+    assert calls["closed"] is True
 
 
 def test_main_script_entry(monkeypatch, tmp_path, capsys):
