@@ -9,7 +9,10 @@ from __future__ import annotations
 
 import random
 import re
+import runpy
 import sys
+import types
+from pathlib import Path
 
 import pytest
 
@@ -191,6 +194,75 @@ def test_world_span_single_cell_and_whole():
 
 
 # ---------------------------------------------------------------------------
+# _carve_rivers 控制流（白盒：受控抖动序列驱动三条难达分支）
+# ---------------------------------------------------------------------------
+
+
+class _SeqRng:
+    """按调用顺序吐值的 rng 替身（序列用尽后回落固定 fill）。"""
+
+    def __init__(self, seq, fill: float = 0.5):
+        self._seq = list(seq)
+        self._fill = fill
+
+    def random(self) -> float:
+        return self._seq.pop(0) if self._seq else self._fill
+
+
+def _bare_world(w: int, h: int, elev_v: float) -> ta.World:
+    """绕过噪声生成的裸世界：只填 _carve_rivers 所需字段。"""
+    world = ta.World.__new__(ta.World)
+    world.w, world.h = w, h
+    world.elev = [[elev_v] * w for _ in range(h)]
+    world.moist = [[0.0] * w for _ in range(h)]
+    world.rivers = 0
+    return world
+
+
+def test_carve_rivers_lake_when_path_hits_local_depression():
+    # 36×36 全域 0.95（非湿非水），仅 S/P1/P2 三格处于湿区。
+    # 受控抖动让 S→P1→P2 连续三步判为「上坡」⇒ 第三步 stuck=3 就地成湖。
+    w = _bare_world(36, 36, 0.95)
+    w.moist[1][1] = 0.9
+    w.elev[1][1] = 0.70   # S 源头（湿区候选，分最高先入列）
+    w.elev[1][2] = 0.705  # P1
+    w.elev[2][2] = 0.706  # P2
+    rng = _SeqRng(
+        # S 扫描 8 邻：P1 居第 5 位取 0 抖动(0.705)、P2 第 8 位 0 抖动(0.706)
+        [0.5, 0.5, 0.5, 0.5, 0.0, 0.5, 0.5, 0.0]
+        # P1 扫描：S 第 4 位 1.0→0.712、P2 第 7 位 0.4→0.7108（严格最小且 ≥0.709）
+        + [0.5, 0.5, 0.5, 1.0, 0.5, 0.5, 0.4, 0.5]
+        # P2 扫描：S 第 1 位 1.0→0.712、P1 第 2 位 0.5→0.711 ≥ 0.710 ⇒ stuck=3
+        + [1.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+    )
+    w._carve_rivers(rng)
+    assert w.rivers == 1          # 仅 S 入选：P1/P2 距源 1~1.4 格 < 6 被间距拒绝
+    assert w.river[1][1] is True  # 源
+    assert w.river[1][2] is True  # P1
+    assert w.river[2][2] is True  # P2 就地成湖（stuck≥3 标记后 break）
+    assert w.river[3][2] is False  # 成湖后不再延伸
+
+
+def test_carve_rivers_loop_exhaustion_falls_to_else():
+    # w=2 ⇒ 单源循环上限 w*2=4 次；抖动把路径梳成竖直下行 4 个全为新格，
+    # 不回河、不入海、不成湖 ⇒ for 按条件耗尽走 else（pass）。
+    w = _bare_world(2, 8, 0.70)
+    w.moist[0][0] = 0.9
+    rng = _SeqRng(
+        # (0,0)：3 个在界邻居，目标 (0,1) 居第 2 位
+        [1.0, 0.0, 1.0]
+        # (0,1)、(0,2)、(0,3)：各 5 个在界邻居，目标 (0,y+1) 均居第 4 位
+        + [1.0, 1.0, 1.0, 0.0, 1.0] * 3
+    )
+    w._carve_rivers(rng)
+    assert w.rivers == 6  # 其余湿格同样入列（间距 2/6 < 1 格距）凑满 6 源上限
+    assert w.river[0][0] is True
+    assert w.river[1][0] is True
+    assert w.river[2][0] is True
+    assert w.river[3][0] is True  # 恰好 4 次新格迭代后耗尽 → else 分支
+
+
+# ---------------------------------------------------------------------------
 # build_quadtree
 # ---------------------------------------------------------------------------
 
@@ -361,6 +433,62 @@ def test_render_html_escapes_ampersand_and_runs_spans():
     assert not re.search(r"&(?!amp;)", html)  # 全文无裸 &
 
 
+def test_render_html_empty_row_skips_span_append():
+    # 空行：循环体不执行、run 仍空 ⇒ 尾部 span 追加分支不触发
+    html = ta.render_html([[]], [[]], 0)
+    assert '<pre id="scene"></pre>' in html
+
+
+def test_snap_png_drives_playwright(monkeypatch):
+    calls: dict = {}
+
+    class _Loc:
+        def screenshot(self, path):
+            calls["shot"] = path
+
+    class _Page:
+        def goto(self, url):
+            calls["goto"] = url
+
+        def locator(self, sel):
+            calls["locator"] = sel
+            return _Loc()
+
+    class _Browser:
+        def new_page(self, device_scale_factor=None):
+            calls["dsf"] = device_scale_factor
+            return _Page()
+
+        def close(self):
+            calls["closed"] = True
+
+    class _Chromium:
+        def launch(self):
+            return _Browser()
+
+    class _Pw:
+        chromium = _Chromium()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+    pkg = types.ModuleType("playwright")
+    api = types.ModuleType("playwright.sync_api")
+    api.sync_playwright = lambda: _Pw()  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "playwright", pkg)
+    monkeypatch.setitem(sys.modules, "playwright.sync_api", api)
+
+    ta.snap_png("/tmp/scene.html", "/tmp/scene.png")
+    assert calls["goto"] == "file:///tmp/scene.html"
+    assert calls["locator"] == "body"
+    assert calls["dsf"] == 2
+    assert calls["shot"] == "/tmp/scene.png"
+    assert calls["closed"] is True
+
+
 # ---------------------------------------------------------------------------
 # CLI 入口 main()
 # ---------------------------------------------------------------------------
@@ -398,3 +526,18 @@ def test_main_png_requires_html(monkeypatch):
     )
     with pytest.raises(AssertionError, match="--png 需要 --html"):
         ta.main()
+
+
+def test_main_script_entry(monkeypatch, tmp_path, capsys):
+    """__main__ 守卫：真实脚本以 quiet 模式全量执行并落 HTML。"""
+    html = tmp_path / "entry.html"
+    monkeypatch.setattr(
+        sys, "argv",
+        ["tree_art.py", "--seed", "3", "--w", "16", "--h", "8",
+         "--quiet", "--html", str(html)],
+    )
+    script = Path(ta.__file__)
+    assert script.is_file()
+    runpy.run_path(str(script), run_name="__main__")
+    assert html.is_file()
+    assert capsys.readouterr().out == ""

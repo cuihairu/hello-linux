@@ -1,5 +1,7 @@
 [run]
-source = check_links
+source =
+    check_links
+    tree_art
 branch = True
 
 [report]

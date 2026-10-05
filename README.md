@@ -50,7 +50,7 @@ npm run docs:preview
 ```bash
 npm run docs:check   # 需先 docs:build 才含产物级 HTML 校验
 npm run docs:test    # 单测
-npm run docs:cov     # 覆盖率：行+分支 100% 门禁（fail_under=100）
+npm run docs:cov     # 覆盖率：check_links 与 tree_art 行+分支 100% 门禁（fail_under=100）
 ```
 
 ## 仓库脚本
