@@ -289,8 +289,8 @@ def render_html(chars, colors, seed: int) -> str:
             parts.append(f'<span style="color:{hexc(last)}">{"".join(run)}</span>')
         rows.append("".join(parts))
     legend = " ".join(
-        f'<span style="color:{hexc(v[3])}">▙</span>{k}'
-        for k, v in PALETTE.items()
+        f'<span style="color:{hexc(v[3])}">▙</span>{v[0]}'  # v[0] 即注释里的「图例名」
+        for v in PALETTE.values()
     )
     return f"""<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
