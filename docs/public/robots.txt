@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cuihairu.github.io/hello-linux/sitemap.xml

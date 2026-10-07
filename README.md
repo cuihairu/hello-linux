@@ -75,7 +75,7 @@ python3 scripts/tree_art.py --seed 7 --html tree.html --png tree.png
 
 ## 构建部署
 
-推送到 `main` 分支后自动通过 GitHub Actions 部署到 GitHub Pages。构建时生成 `sitemap.xml`（收录全部内容页、自动跟随新增页面；sub-path 站点的 base 拼接在 `transformItems` 内完成）。
+推送到 `main` 分支后自动通过 GitHub Actions 部署到 GitHub Pages。构建时生成 `sitemap.xml`（收录全部内容页、自动跟随新增页面；sub-path 站点的 base 拼接在 `transformItems` 内完成）。`robots.txt` 放行全站收录并指向上述 sitemap。
 
 ## 参考资料
 
