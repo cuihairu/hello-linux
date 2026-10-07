@@ -1,15 +1,15 @@
+<p align="center"><img src="docs/public/logo.svg" width="64" height="64" alt="logo" /></p>
+
 # Hello Linux
 
-<div align="center">
+<p align="center"><img src="docs/public/badges/topic.svg" alt="topic" /> <img src="docs/public/badges/docs.svg" alt="docs" /></p>
+<p align="center"><img src="docs/public/badges/license.svg" alt="CC BY 4.0" /></p>
 
-<img src="docs/public/logo.svg" width="64" alt="Hello Linux">
+<div align="center">
 
 </div>
 
 从零开始学习 Linux，参考鸟哥的私房菜和 Arch Wiki，覆盖 Debian/Ubuntu、Arch、RHEL/CentOS/Rocky 三系。
-
-<p align="center"><img src="docs/public/badges/topic.svg" alt="topic" /> <img src="docs/public/badges/docs.svg" alt="docs" /></p>
-<p align="center"><img src="docs/public/badges/license.svg" alt="CC BY 4.0" /></p>
 
 ## 内容
 
