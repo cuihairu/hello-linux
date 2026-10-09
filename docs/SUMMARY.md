@@ -160,10 +160,6 @@
 - [IPC](./source/ipc.md)
 - [用户态源码选读](./source/userland.md)
 
-## 知识点
-
-- [知识点整理](./knowledge.md)
-
 ## 研究篇
 
 - [研究篇](./research/README.md)
@@ -172,3 +168,7 @@
 - [应用场景调研](./research/application-scenarios.md)
 - [覆盖核对与差异表](./research/coverage-matrix.md)
 - [缺口补全与核对修订](./research/gap-fill.md)
+
+## 知识点
+
+- [知识点整理](./knowledge.md)
