@@ -45,7 +45,7 @@
 | `web.archive.org`、`linuxcommand.org`、`man7.org`、`pubs.opengroup.org`、`tldp.org`、镜像 `vbird.org.cn`、`wiki.archlinux.org.cn` | — | 均 200 | 通道全部恢复 |
 | `www.gnu.org` | 断网轮失败 | 仍失败（curl 连接层 000，重试一次同样） | 域名级问题持续存在，GNU 手册引用维持依赖既有核验轮记录（B 级），不做新引用 |
 | `docs.redhat.com` | 403 反爬 | 403（预期内） | 反爬行为与既往一致，双通道仲裁结论（B 级）不变 |
-| 四本英文书（The Linux Command Line 等） | C 级仅书目 | linuxcommand.org 200，出版方入口可达 | 维持 C 级：目录未取回，仍不得在正文中引用其章节结构；C→A 升级留待取回目录原文 |
+| 四本英文书（The Linux Command Line 等） | C 级仅书目 | linuxcommand.org 200，出版方入口可达 | 当日续测完成 C→A：TLCL 与 USAH 目录实取升 A 级，Debian Handbook 章目录一并实取；How Linux Works 与 Linux Bible 维持 C 级，明细见 §4.2 |
 
 复测口径：curl 带浏览器 UA，`--max-time 15`，各域首页/目录页直访一次（瞬态不重试原则与既往巡检一致，唯 `www.gnu.org` 做了一次重试以排除偶发）。
 
@@ -57,3 +57,17 @@
 | 桌面图形栈页：RHEL/Rocky 最小化 X 组名 `base-x` | Fedora comps（pagure 原始文件）与 Rocky comps 多路取源 | 均不可达（pagure raw 404、Rocky comps 无此文件、wayback 无快照）——**未确证**。页内措辞已降级：去掉照抄式组名，改为以 `dnf group list` 实测输出为准，并注明本稿核对时无法从公开 comps 源确证 |
 | 交叉编译页：`dtc` 在 RHEL 系的包来源（疑经 EPEL） | CentOS Stream 9 镜像目录（AppStream/BaseOS Packages 列表） | `dtc-1.6.0-7.el9` 就在 AppStream——EL9 直装，页内已改为「EL9 已在 AppStream；更老版本若缺则经 EPEL」，标记撤 |
 | 交叉编译页：RHEL 系 gdb 是否自带多架构目标 | Fedora gdb.spec 源（src.fedoraproject.org） | spec 明确 `--enable-targets` 全目标构建——RHEL 系 gdb 一个二进制通吃，页内已改为肯定陈述，标记撤 |
+
+### 4.2 四本英文书与 Debian Handbook 的 C→A 升级（2026-10-09 续测）
+
+§4 表末行登记的「C→A 升级留待取回目录原文」当日续办，逐本处置如下，章题照录落点在[权威书籍调研](./authoritative-books.md) 2.1 节：
+
+| 书 | 取回来源 | 结果 |
+|----|---------|------|
+| The Linux Command Line | linuxcommand.org/tlcl.php 书目页 + 官方免费 PDF `TLCL-25.12A`（SourceForge 官方项目直下，533 页） | 升 A：第 7 网络版（PDF 版权页 © 2026），4 部 36 章目录实取 |
+| UNIX and Linux System Administration Handbook | 官方站 admin.com（站内自述第五版）样张目录 samples/TOC.pdf | 升 A：4 篇 31 章目录实取 |
+| The Debian Handbook | debian-handbook.info 官方在线版目录页（stable，Debian 11 Bullseye） | 升 A：16 章目录实取（此书在 §4 表中原为「章级目录托管在 debian-handbook.info，本轮未取」项） |
+| How Linux Works | nostarch.com 产品页实取 | 维持 C：页内无目录区块、无样章 PDF 链接 |
+| The Linux Bible | Wiley 产品页实取（ISBN 9781119909792） | 维持 C：仅书目字段，目录由前端脚本渲染，静态抓取不可得 |
+
+引用纪律随之更新：A 级三本可在正文引用章节结构（分部与章题），C 级两本仍按「书名 + 出版方 + 入口」形态引用。

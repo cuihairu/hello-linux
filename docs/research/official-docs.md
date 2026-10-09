@@ -70,12 +70,12 @@
 
 | 文档 | 入口 | 本仓引用 | 本轮状态 |
 |------|------|---------|---------|
-| Debian 官方手册 | [debian.org/doc/manuals/debian-handbook](https://www.debian.org/doc/manuals/debian-handbook/) | 29 条 `www.debian.org` + 9 条 `wiki.debian.org` | C 级：本轮境外链路中断，未取正文；手册的包管理、系统管理、LVM、安全章节是既有引用方向 |
+| Debian 官方手册 | [debian.org/doc/manuals/debian-handbook](https://www.debian.org/doc/manuals/debian-handbook/) | 29 条 `www.debian.org` + 9 条 `wiki.debian.org` | 入口 C 级升级中：2026-10-09 复测落地页 200；章级目录经官方在线版（debian-handbook.info，Bullseye）实取，16 章结构见[权威书籍调研](./authoritative-books.md) 2.1 节，正文细节仍未取 |
 | 内核文档 | [docs.kernel.org](https://docs.kernel.org/)、[www.kernel.org](https://www.kernel.org/) | 9 + 25 条 | C 级：同上；README 记录过后继链核验轮的路径迁移修复 |
 | Red Hat 文档 | [docs.redhat.com](https://docs.redhat.com/) | 40 条，覆盖 40 页 | B 级：仓库外链核查轮已确认可达（403 反爬，双通道仲裁） |
 | GNU 工具手册 | [www.gnu.org](https://www.gnu.org/)（coreutils、bash、findutils、tar 等） | 36 条，21 页 | B 级：既有核验轮通过 |
 | Arch 手册页 | [man.archlinux.org](https://man.archlinux.org/) | 40 条，10 页 | B 级：README 记录过 42 处被本机出口限速、按 wayback 快照判定存活 |
-| systemd 文档 | [systemd.io](https://systemd.io/) | 无直接引用 | C 级：本轮未取；systemd 系统管理页目前靠 ArchWiki 与 RHEL 文档支撑，属下一轮可补的引用缺口 |
+| systemd 文档 | [systemd.io](https://systemd.io/) | 2 条（services-systemd、boot-process 两页，2026-10-09 补链） | 引用缺口已清：两页各补一条官方入口（URL 均 200 实测），明细见[缺口补全与核对修订](./gap-fill.md) §2 第 4 条 |
 | 内核源码浏览 | [elixir.bootlin.com](https://elixir.bootlin.com/) | 34 条，11 页 | B 级：带 UA 实测 200，README 记录为反爬假阳性 |
 
 引用口径：本仓外链在上一轮站点巡检里做过 54 页 / 291 条抽样（README 维护备注），269 条正常、10 处失效已换替代、10 处反爬假阳性保留、6 处网络瞬态登记不动。本轮境外链路整体中断，不改变该结论，也不重复计数。
