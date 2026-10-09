@@ -177,7 +177,7 @@ $ sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f tls.ldif
 $ sudo chown openldap:openldap /etc/ldap/tls/*.key && sudo chmod 600 /etc/ldap/tls/*.key
 ```
 
-三件套各管一头：证书文件对外亮明身份，私钥文件供握手签名，CA 证书用于校验客户端证书（做双向认证时必需，单向 TLS 也建议配上）。证书的 CN/SAN 必须与客户端连接用的主机名一致——签给 `ldap.example.com` 的证书，客户端用 IP 连就过不了主机名校验，这是排错节的老熟客。配完还要让 slapd 监听 636：Debian 系改 `/etc/default/slapd` 的 `SLAPD_SERVICES="ldap:/// ldaps:///"`，RHEL 系改 `/etc/sysconfig/slapd` 的 `SLAPD_URLS`，Arch 用 systemd 单元覆盖（路径随版本核实），改完 restart。
+三件套各管一头：证书文件对外亮明身份，私钥文件供握手签名，CA 证书用于校验客户端证书（做双向认证时必需，单向 TLS 也建议配上）。证书的 CN/SAN 必须与客户端连接用的主机名一致——签给 `ldap.example.com` 的证书，客户端用 IP 连就过不了主机名校验，这是排错节的老熟客。配完还要让 slapd 监听 636：Debian 系改 `/etc/default/slapd` 的 `SLAPD_SERVICES="ldap:/// ldaps:///"`，RHEL 系改 `/etc/sysconfig/slapd` 的 `SLAPD_URLS`，Arch 改 `/etc/conf.d/slapd` 的 `SLAPD_URLS` 后 restart（`slapd.service` 读取的环境文件，Arch Wiki OpenLDAP 页现行说明）。
 
 ### 4.2 客户端 CA 信任与两种加密路径
 
@@ -248,7 +248,7 @@ access_provider = ldap
 ldap_access_filter = memberOf=cn=dba,ou=groups,dc=example,dc=com
 ```
 
-改动前先在目录侧对账：`ldapsearch -x -H ldaps://ldap.example.com -b ou=groups,dc=example,dc=com '(cn=dba)' memberUid` 列出组内登录名，与预期名单核对。两个注意点：OpenLDAP 默认不产出 memberOf 属性，需启用 memberof overlay（载入方式随版本核实）；过滤器配错时 SSSD 是默认拒绝而非放行——方向安全，但会把自己也锁在外面，改完留一个已登录会话再验证。sudo 规则入库一句带过：sudo 自带一套 LDAP schema，把 sudoers 规则作为条目写进目录即可十机共享一份（Debian 系为此拆出 sudo-ldap 包）；多数团队先用更轻的组合——组成员资格放目录、本地 sudoers 只写一行 `%ops ALL=(ALL:ALL) ALL`，到这一步已够用。末了是缓存失效：SSSD 在本地缓存目录数据，目录侧改了属性（加组、改名），客户端要等缓存过期或 `sudo sss_cache -E` 手动清空（用户、组、凭证一起失效）。排障口诀：目录改了、客户端没反应，先 `sss_cache -E` 再怀疑配置——顺序反了会白查半天。
+改动前先在目录侧对账：`ldapsearch -x -H ldaps://ldap.example.com -b ou=groups,dc=example,dc=com '(cn=dba)' memberUid` 列出组内登录名，与预期名单核对。两个注意点：OpenLDAP 默认不产出 memberOf 属性，需启用 memberof overlay：动态配置经 back-config 载入（`olcModuleLoad: memberof` 加 `olcOverlay: memberof`，参数族 2.5 起改名 `olcMemberOfConfig`），slapd.conf 静态部署直接写 `overlay memberof`（man slapo-memberof(5) 与 OpenLDAP 2.6 管理指南）；过滤器配错时 SSSD 是默认拒绝而非放行——方向安全，但会把自己也锁在外面，改完留一个已登录会话再验证。sudo 规则入库一句带过：sudo 自带一套 LDAP schema，把 sudoers 规则作为条目写进目录即可十机共享一份（Debian 系为此拆出 sudo-ldap 包）；多数团队先用更轻的组合——组成员资格放目录、本地 sudoers 只写一行 `%ops ALL=(ALL:ALL) ALL`，到这一步已够用。末了是缓存失效：SSSD 在本地缓存目录数据，目录侧改了属性（加组、改名），客户端要等缓存过期或 `sudo sss_cache -E` 手动清空（用户、组、凭证一起失效）。排障口诀：目录改了、客户端没反应，先 `sss_cache -E` 再怀疑配置——顺序反了会白查半天。
 
 ## 7. 访问控制：olcAccess
 

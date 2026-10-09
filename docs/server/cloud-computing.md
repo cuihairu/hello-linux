@@ -103,7 +103,7 @@ i-0abc123def456
 
 **实例启动后没有 IP。** DHCP 客户端没起或 cloud-init 网络阶段失败：`cloud-init status` 卡在 network 阶段，日志里查网卡名与镜像内配置（`/etc/cloud/cloud.cfg` 的 network 段或 netplan/network-scripts 配置）是否对得上宿主网络。
 
-**磁盘没有随规格扩容。** growpart 模块负责首启扩根分区，没生效查它：日志搜 growpart，常见于自定义镜像里缺 cloud-utils-growpart（RHEL 系包名随版本核实）。
+**磁盘没有随规格扩容。** growpart 模块负责首启扩根分区，没生效查它：日志搜 growpart，常见于自定义镜像里缺 cloud-utils-growpart（EL9 AppStream 实测在库：cloud-utils-growpart-0.31-10.el9）。
 
 **runcmd 静默没跑。** 多半是 YAML 嵌套写错，被解析成了一条命令。`cloud-init schema` 预校验能抓大半；跑过的每条命令在 `/var/log/cloud-init-output.log` 有输出留档。
 

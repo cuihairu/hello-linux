@@ -77,6 +77,18 @@
 | 交叉编译页：`dtc` 在 RHEL 系的包来源（疑经 EPEL） | CentOS Stream 9 镜像目录（AppStream/BaseOS Packages 列表） | `dtc-1.6.0-7.el9` 就在 AppStream——EL9 直装，页内已改为「EL9 已在 AppStream；更老版本若缺则经 EPEL」，标记撤 |
 | 交叉编译页：RHEL 系 gdb 是否自带多架构目标 | Fedora gdb.spec 源（src.fedoraproject.org） | spec 明确 `--enable-targets` 全目标构建——RHEL 系 gdb 一个二进制通吃，页内已改为肯定陈述，标记撤 |
 
+### 4.1.1 页内「随版本核实」标记的核实（2026-10-10 轮）
+
+上轮核查后新增与残留的 5 处标记逐条核实，四个页面全部撤标改肯定句：
+
+| 条目 | 核实方式 | 结果与处置 |
+|------|---------|-----------|
+| SSH 页：`TrustedUserCAKeys` 条目 | 本机 man sshd_config（OpenSSH 10.2p1）直读 | 条目存在，拼写为 TrustedUserCAKeys（页内原 TrustedUserCAkeys 系笔误，一并改正）；标记撤，改为「指令以 man sshd_config 为准」 |
+| 云计算页：cloud-utils-growpart 的 RHEL 系包名 | CentOS Stream 9 AppStream Packages 目录列表 | `cloud-utils-growpart-0.31-10.el9` 在库；标记撤，改为肯定句并附实测版本 |
+| LDAP 页：Arch slapd 监听配置路径 | Arch Wiki OpenLDAP 页实取 | `/etc/conf.d/slapd` 的 `SLAPD_URLS` 由 slapd.service 读取；标记撤，改为肯定句（此前「systemd 单元覆盖」措辞不确，已换成实测路径） |
+| LDAP 页：memberof overlay 载入方式 | man slapo-memberof(5)（manpages.ubuntu.com）+ OpenLDAP 2.6 管理指南（openldap.org，两源均 200） | 动态配置经 back-config 载入（`olcModuleLoad: memberof` + `olcOverlay: memberof`；2.5 起参数族改名 `olcMemberOfConfig`），slapd.conf 静态部署写 `overlay memberof`——语法跨 2.4/2.5/2.6 稳定，标记撤 |
+| CI/CD 页：Gitea Actions 兼容程度 | docs.gitea.com 官方文档（web_reader 通道渲染取文） | 官方口径：1.19 起内置、设计上与 GitHub Actions 兼容且存在差异（有 Compared to GitHub Actions 专页）；标记撤，改为肯定句，参考资料补 Gitea 文档链接 |
+
 ### 4.2 四本英文书与 Debian Handbook 的 C→A 升级（2026-10-09 续测）
 
 §4 表末行登记的「C→A 升级留待取回目录原文」当日续办，逐本处置如下，章题照录落点在[权威书籍调研](./authoritative-books.md) 2.1 节：

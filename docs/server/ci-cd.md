@@ -28,7 +28,7 @@
 | 托管 SaaS | GitHub 提供 | gitlab.com 提供 | 需自建 |
 | 适合场景 | 代码在 GitHub、中小团队 | 自托管 GitLab 已在用 | 存量流程复杂、插件生态依赖重 |
 
-选型一句话：代码托管在哪，流水线就先看哪家的内置方案——集成成本最低；托管平台满足不了（内网构建机、特殊硬件、合规要求）再自建 runner，这不需要换平台；Jenkins 的价值在存量，新项目起 Jenkins 已经很少见。自托管 Git 生态里 Gitea 也兼容 Actions 语义（兼容程度随版本核实），小团队可以一并考虑。
+选型一句话：代码托管在哪，流水线就先看哪家的内置方案——集成成本最低；托管平台满足不了（内网构建机、特殊硬件、合规要求）再自建 runner，这不需要换平台；Jenkins 的价值在存量，新项目起 Jenkins 已经很少见。自托管 Git 生态里 Gitea 从 1.19 起内置 Actions，官方口径为与 GitHub Actions 兼容设计、存在差异（官方文档有 Compared to GitHub Actions 专页），小团队可以一并考虑。
 
 ## 3. 流水线解剖
 
@@ -107,6 +107,7 @@ jobs:
 
 - GitHub Actions 文档 — [docs.github.com/actions](https://docs.github.com/actions)
 - GitLab CI/CD 文档 — [docs.gitlab.com/ci/](https://docs.gitlab.com/ci/)
+- Gitea Actions 文档（含 Compared to GitHub Actions 专页） — [docs.gitea.com/usage/actions/](https://docs.gitea.com/usage/actions/)
 - Jenkins 用户文档 — [jenkins.io/doc/](https://www.jenkins.io/doc/)
 - UNIX and Linux System Administration Handbook 第 5 版第 26 章（Continuous Integration and Delivery） — [admin.com](https://www.admin.com/)
 - man 手册 — man systemd.unit、man systemctl

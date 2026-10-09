@@ -108,7 +108,7 @@ RHEL 系改端口后漏掉 `semanage` 是最常见的「改完连不上」：ssh
 密钥认证与 root 禁用之外，还有三层可选加固，按成本从低到高：
 
 - **爆破限速**：fail2ban 盯 journal 里的认证失败，超限封 IP；轻量替代是 nftables 对单 IP 的新建连接限速。本仓[入侵检测](../security/intrusion-detection.md)页有对应工具链。
-- **证书认证**：用 CA 签发用户证书，`TrustedUserCAkeys` 指定信任的 CA 公钥，免掉逐机维护 `authorized_keys`。适合机器与人员都多的团队，具体指令随版本核实。
+- **证书认证**：用 CA 签发用户证书，`TrustedUserCAKeys` 指定信任的 CA 公钥，免掉逐机维护 `authorized_keys`。适合机器与人员都多的团队，指令以 man sshd_config 为准（本机 OpenSSH 10.2 实测条目存在）。
 - **双因素**：`AuthenticationMethods publickey,keyboard-interactive` 叠加 PAM 第二因子，本仓[PAM 与 sudo](../security/pam-sudo.md)页讲 PAM 接线。
 
 每加一项都要能说出防的是什么攻击、可能影响哪类客户端，说不出就不加——这条纪律的完整论述在[安全加固](../security/hardening.md)。
