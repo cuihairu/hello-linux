@@ -34,6 +34,21 @@
 - **LDAP 统一账号**（触发：应用场景调研 1.4 节——运维主线缺「多机账号一致性」）。已补 [LDAP 统一账号管理](../server/ldap.md)，接入服务器篇目录。
 - **systemd 文档引用缺口**（触发：官方文档调研 §3 登记）。已在 services-systemd、boot-process 两页补 systemd.io 官方入口，见 §2 修订第 4 条。
 
+### 3.1 第二批登记不补（2026-10-10，USAH/TLCL 逐章核对轮）
+
+触发：[覆盖核对与差异表](./coverage-matrix.md) §4（USAH 31 章）、§5（TLCL 36 章）逐章判定。逐类登记如下，均属有意识不写，日后定位变化可重启：
+
+| 主题 | 出处 | 不补理由 |
+|------|------|---------|
+| 打印 CUPS | USAH 第 12 章、TLCL 第 22 章 | 桌面办公外围场景，与服务器运维主线弱相关；CUPS 已在 [systemd 服务与程序管理](../system-management/services-systemd.md) 作单元示例出现 |
+| SSO 完整部署 | USAH 第 17 章 | Kerberos KDC 与域集成需要域环境支撑，超出单机学习定位；[LDAP 统一账号管理](../server/ldap.md) 已衔接 Kerberos 与 FreeIPA 概念 |
+| readline 键绑定与 history 扩展 | TLCL 第 8 章 | 终端使用习惯类技巧；任务控制（jobs/fg/bg）等核心已由[进程管理](../commands/system/process.md)覆盖 |
+| 格式化输出小工具（nl/fold/pr） | TLCL 第 21 章 | 低频排版工具；printf 与 fmt 已在[文本处理](../commands/text/text_processing.md) |
+| 提示符定制（PS1） | TLCL 第 13 章 | 终端个人配置，不影响系统管理主线 |
+| shell 杂项技巧 | TLCL 第 36 章 | 杂项合集；核心技巧（heredoc、进程替换）已散见脚本篇[循环](../script/loops.md)与[实战案例](../script/examples.md) |
+
+另有 USAH 第 30 章（机房设施与带外管理）、第 31 章（组织流程与软技能）在差异表判「不覆盖」：前者属数据中心运维范畴，后者非系统技术主题，不进本登记表。
+
 ## 4. 待复测（2026-10-08 断网轮降级项）与复测结果（2026-10-09 已执行）
 
 原网络状况见[总览](./README.md)：2026-10-08 出境链路中断，调研降级为镜像实取 + 既有核验记录。**2026-10-09 出口恢复，以下复测当日完成**：

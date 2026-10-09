@@ -31,6 +31,6 @@
 - 确认 6 个缺口，全部补页：Arch 包管理入口页、LVM 实操、桌面图形栈、KVM 虚拟化、AppArmor、应用场景。
 - 后续增量（2026-10-09）：首轮登记不补的两项已补页（[交叉编译与嵌入式](../source/cross-compile.md)、[LDAP 统一账号管理](../server/ldap.md)），缺口页累计 8 个；systemd 官方文档引用补链；页内「随版本核实」标记逐条核实或降级；TLCL、USAH、Debian Handbook 三本目录实取完成 C→A 升级，明细见 [缺口补全与核对修订](./gap-fill.md)。
 - 调研产出的知识点收拢已成单页 [知识点整理](../knowledge.md)：核心概念、书籍与文档要点、场景与坑，逐条带来源标注回链本篇各页。
-- 后续增量（2026-10-10）：差异表部分覆盖项 SSH 补独立页面 [SSH 远程登录](../server/ssh.md)（服务器篇），差异表与本页 §1 判定同步升级；同日基础篇「第二十一章」补 [源码编译与 Tarball 安装](../basic/packages/tarball.md)，差异表 §1 判定升级；USAH 5e 扩展选题 Cloud Computing 与 Continuous Integration and Delivery 落成 [云计算与 cloud-init](../server/cloud-computing.md)、[CI/CD 与持续交付](../server/ci-cd.md)两页，登记见 [缺口补全与核对修订](./gap-fill.md)。
+- 后续增量（2026-10-10）：差异表部分覆盖项 SSH 补独立页面 [SSH 远程登录](../server/ssh.md)（服务器篇），差异表与本页 §1 判定同步升级；同日基础篇「第二十一章」补 [源码编译与 Tarball 安装](../basic/packages/tarball.md)，差异表 §1 判定升级；USAH 5e 扩展选题 Cloud Computing 与 Continuous Integration and Delivery 落成 [云计算与 cloud-init](../server/cloud-computing.md)、[CI/CD 与持续交付](../server/ci-cd.md)两页，登记见 [缺口补全与核对修订](./gap-fill.md)。同日 USAH 5e 31 章、TLCL 36 章全部逐条对照进[覆盖核对与差异表](./coverage-matrix.md) §4、§5，暴露的落点逐条判定，登记不补 6 类见 gap-fill §3。
 - 修订 3 处：存储篇里"LVM 实操归基础篇与系统管理篇"的指向此前没有落点，现指向新页；README 篇章表与参考资料补入研究篇；基础篇软件安装章的目录补齐第三系。
 - 全仓外链 965 条、160 个域名，前四位是 `wiki.archlinux.org`（238 条 / 111 页）、`linux.vbird.org`（100 条 / 94 页）、`man7.org`（49 条 / 29 页）、`docs.redhat.com`（40 条 / 40 页）——权威来源的实际引用密度与调研结论一致。
