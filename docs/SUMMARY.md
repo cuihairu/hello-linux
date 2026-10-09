@@ -99,6 +99,8 @@
 - [FTP](./server/ftp.md)
 - [容器](./server/container/docker.md)
 - [KVM 虚拟化](./server/virtualization/kvm.md)
+- [云计算与 cloud-init](./server/cloud-computing.md)
+- [CI/CD 与持续交付](./server/ci-cd.md)
 - [LDAP 统一账号管理](./server/ldap.md)
 - [监控](./server/monitoring/prometheus.md)
 - [DNS](./server/dns/bind.md)

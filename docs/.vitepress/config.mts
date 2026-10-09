@@ -454,6 +454,14 @@ export default defineConfig({
               link: '/server/virtualization/kvm'
             },
             {
+              text: '云计算与 cloud-init',
+              link: '/server/cloud-computing'
+            },
+            {
+              text: 'CI/CD 与持续交付',
+              link: '/server/ci-cd'
+            },
+            {
               text: 'LDAP 统一账号管理',
               link: '/server/ldap'
             },

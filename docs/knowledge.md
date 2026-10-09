@@ -61,12 +61,12 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 | 鸟哥的 Linux 私房菜·基础学习篇（CentOS 7 版，25 章） | 鸟哥 | A | 磁盘与文件系统、BASH 与脚本、账号与 ACL、例行调度、服务与日志、开机流程、软件安装、内核编译——基础篇主骨架 |
 | 鸟哥的 Linux 私房菜·服务器架设篇（RockyLinux 9 版，12 章） | 鸟哥 | A | 虚拟机、安全强化、网络规划、防火墙、DNS/DHCP/NTP、SSH、LDAP——服务器篇主骨架 |
 | The Linux Command Line（第 7 网络版，4 部 36 章） | William Shotts（自发布，CC BY-NC-ND；印刷版 No Starch Press） | A | shell 用法到脚本工程：变量、流程控制、位置参数、数组——命令篇与脚本篇的深度基准 |
-| UNIX and Linux System Administration Handbook（第 5 版，4 篇 31 章） | Evi Nemeth、Garth Snyder、Trent R. Hein、Ben Whaley、James Ma（Addison-Wesley） | A | 基础管理、网络、存储、运维四篇；其中 Cloud Computing、Containers、Continuous Integration and Delivery 三章本仓尚未单页成文 |
+| UNIX and Linux System Administration Handbook（第 5 版，4 篇 31 章） | Evi Nemeth、Garth Snyder、Trent R. Hein、Ben Whaley、James Ma（Addison-Wesley） | A | 基础管理、网络、存储、运维四篇；Containers 已由[容器](./server/container/docker.md)、Cloud Computing 与 Continuous Integration and Delivery 已由[云计算与 cloud-init](./server/cloud-computing.md)、[CI/CD 与持续交付](./server/ci-cd.md)（2026-10-10）落点 |
 | The Debian Handbook（Bullseye 版，16 章） | Raphaël Hertzog、Roland Mas | A | Debian 项目、安装、APT、服务、安全——Debian 系的权威坐标 |
 | How Linux Works | Brian Ward（No Starch Press） | C | 定位是机制解释基准；产品页无目录可取，只有书名与出版方可用 |
 | The Linux Bible | Christopher Negus（Wiley） | C | 定位是发行版广度基准；产品页目录由脚本渲染，静态抓取拿不到 |
 
-两本鸟哥对本仓的核对结论各有三条落点（源代码与 Tarball、X Window、虚拟机、LDAP 等），逐条表在[覆盖核对与差异表](./research/coverage-matrix.md) §1、§2。USAH 5e 里未单页的三章是下一轮扩展的现成选题。
+两本鸟哥对本仓的核对结论各有三条落点（源代码与 Tarball、X Window、虚拟机、LDAP 等），逐条表在[覆盖核对与差异表](./research/coverage-matrix.md) §1、§2。USAH 5e 未单页的三章（Cloud Computing、Containers、Continuous Integration and Delivery）已于 2026-10-10 由[云计算与 cloud-init](./server/cloud-computing.md)、[CI/CD 与持续交付](./server/ci-cd.md)两页落点；USAH 的全章逐条核对尚未展开，差异表目前按鸟哥与 ArchWiki 核对。
 
 ## 官方文档要点
 
@@ -102,7 +102,7 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 - 服务器与云：安装 → [网络参数](./server/network-parameters.md) → [SSH 远程登录](./server/ssh.md) → [Nginx](./server/web/nginx.md) → [性能优化](./system-management/performance.md) → [安全加固](./security/hardening.md)
 - 边缘与嵌入式：[体系结构](./hardware/architecture.md) → [驱动框架](./source/driver-framework.md) → [交叉编译](./source/cross-compile.md) → [内核编译](./source/build-and-modules.md)
 - 桌面与开发：[选发行版](./basic/installation/choose_distribution.md) → [安装过程](./basic/installation/process.md) → [桌面图形栈](./hardware/desktop-stack.md) → [KVM](./server/virtualization/kvm.md)
-- 运维自动化：[自动化运维](./system-management/automation.md) → [排程](./system-management/scheduled-tasks.md) → [监控](./server/monitoring/prometheus.md) → [备份](./system-management/backup-and-recovery.md) → [LDAP](./server/ldap.md)
+- 运维自动化：[自动化运维](./system-management/automation.md) → [CI/CD 与持续交付](./server/ci-cd.md) → [排程](./system-management/scheduled-tasks.md) → [监控](./server/monitoring/prometheus.md) → [备份](./system-management/backup-and-recovery.md) → [LDAP](./server/ldap.md)
 
 ## 常见坑与误区
 

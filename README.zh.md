@@ -25,7 +25,7 @@
 | [命令篇](https://cuihairu.github.io/hello-linux/commands/basic/file.html) | 文件/目录/文本/查找/压缩/系统/网络/包管理命令参考 |
 | [硬件篇](https://cuihairu.github.io/hello-linux/hardware/architecture.html) | 体系结构、CPU、内存、存储、网络设备 |
 | [系统管理篇](https://cuihairu.github.io/hello-linux/system-management/performance.html) | 性能优化、备份恢复、自动化运维、例行性工作、systemd 服务、日志系统、开机流程 |
-| [服务器篇](https://cuihairu.github.io/hello-linux/server/web/nginx.html) | 网络参数、路由 NAT、SSH、Web 服务器、数据库、Redis、FTP、容器、监控、DNS、邮件、DHCP、Samba、NFS、NTP |
+| [服务器篇](https://cuihairu.github.io/hello-linux/server/web/nginx.html) | 网络参数、路由 NAT、SSH、Web 服务器、数据库、Redis、FTP、容器、云计算、CI/CD、监控、DNS、邮件、DHCP、Samba、NFS、NTP |
 | [脚本篇](https://cuihairu.github.io/hello-linux/script/bash-basics.html) | Bash 基础、变量、条件判断、循环、函数、文本处理、正则表达式、调试、实战案例 |
 | [安全篇](https://cuihairu.github.io/hello-linux/security/firewall.html) | 防火墙、入侵检测、加密技术、安全加固、PAM/sudo、SELinux 实战 |
 | [网络篇](https://cuihairu.github.io/hello-linux/network/basics.html) | 网络基础、防火墙、VPN、负载均衡、网络监控、配置基础、故障排除、TCP/IP 要点、命令实战 |

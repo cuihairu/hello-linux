@@ -26,7 +26,7 @@ features:
     details: 9章 例行性工作、systemd、日志与开机流程，性能优化、备份恢复、LVM 与自动化运维
     link: /system-management/performance
   - title: 服务器篇
-    details: 19章 网络参数与路由 NAT，SSH，Web/DB/Redis/FTP/容器/KVM/LDAP/监控/DNS/邮件，DHCP/Samba/NFS/NTP
+    details: 21章 网络参数与路由 NAT，SSH，Web/DB/Redis/FTP/容器/KVM/云计算/CI-CD/LDAP/监控/DNS/邮件，DHCP/Samba/NFS/NTP
     link: /server/web/nginx
   - title: 脚本篇
     details: 10章 Bash基础到调试与实战案例

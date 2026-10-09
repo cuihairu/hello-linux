@@ -30,6 +30,8 @@
 | [FTP](./ftp.md) | vsftpd 安装配置、用户管理、安全设置 | 老系统对接时仍会遇到 |
 | [容器](./container/docker.md) | Docker 安装、镜像管理、Compose、K8s 入门 | 现代部署的主流方式 |
 | [KVM 虚拟化](./virtualization/kvm.md) | KVM/QEMU/libvirt 栈、virt-install 建机、网络与存储、快照克隆 | 要跑异构内核或整机隔离时 |
+| [云计算与 cloud-init](./cloud-computing.md) | IaaS/PaaS/SaaS 模型、实例与镜像、cloud-init 注入、metadata、安全组 | 上云或自建镜像前必读 |
+| [CI/CD 与持续交付](./ci-cd.md) | 三平台流水线、制品与镜像、部署策略、secrets 红线 | 变更多起来之后的第一笔投资 |
 | [LDAP 统一账号管理](./ldap.md) | OpenLDAP 服务端与目录树、SSSD 客户端接入、TLS 与访问控制 | 多机账号要一个出口管时 |
 | [监控](./monitoring/prometheus.md) | Prometheus + Grafana 监控方案 | 上线后必补的可观测性 |
 | [DNS](./dns/bind.md) | BIND DNS 服务器配置 | 自建域名解析、内网 DNS |

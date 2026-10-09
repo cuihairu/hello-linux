@@ -16,6 +16,8 @@
 | [LDAP 统一账号管理](../server/ldap.md)（2026-10-09 增量） | 差异表鸟哥服务器篇「第十一章」与本页 §3 次条登记 | 目录服务模型（DN/LDIF/schema）、OpenLDAP 三系安装（含 RHEL 8 起移除 openldap-servers 的实情与 Rocky plus/EPEL 替代）、cn=config、建树与查询、TLS、SSSD 客户端接入、olcAccess 访问控制 |
 | [SSH 远程登录](../server/ssh.md)（2026-10-10 增量） | 差异表鸟哥服务器篇「第十章」由部分覆盖升级（客户端用法此前散在命令篇与安全篇） | openssh-server 三系安装（含服务名 sshd/ssh 差异）、密钥认证闭环、sshd_config 核心项与 Match/drop-in、~/.ssh/config、防火墙与 SELinux 端口标签、常见故障 |
 | [源码编译与 Tarball 安装](../basic/packages/tarball.md)（2026-10-10 增量） | 差异表鸟哥基础篇「第二十一章」由部分覆盖升级（源码编译安装此前无独立小节） | 源码安装的取舍判断、三系工具链组、configure 检测与 --prefix、六步标准流程、config.log 读法、卸载两解法（DESTDIR 清单与 GNU stow）、与包管理器的边界、常见故障 |
+| [云计算与 cloud-init](../server/cloud-computing.md)（2026-10-10 增量） | USAH 5e「Cloud Computing」章对照（[权威书籍调研](./authoritative-books.md) 2.1 实取目录）登记的扩展选题 | IaaS/PaaS/SaaS 模型、实例与镜像、cloud-init 三系安装与四段单元链、#cloud-config 用户数据、NoCloud 与 metadata 服务、安全组与 VPC 概念、私有云一瞥、常见故障 |
+| [CI/CD 与持续交付](../server/ci-cd.md)（2026-10-10 增量） | USAH 5e「Continuous Integration and Delivery」章对照登记的扩展选题 | CI 与 CD 分界、三平台对照（GitHub Actions/GitLab CI/Jenkins）、流水线解剖与最小示例、制品与镜像两种交付物、四档部署策略、secrets 红线、常见故障 |
 
 ## 2. 本轮修订（3 处，均注明触发）
 
