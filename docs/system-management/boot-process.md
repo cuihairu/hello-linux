@@ -262,5 +262,6 @@ multi-user.target +0.0s
 - Arch Wiki: GRUB — [wiki.archlinux.org/title/GRUB](https://wiki.archlinux.org/title/GRUB)
 - Arch Wiki: Mkinitcpio — [wiki.archlinux.org/title/Mkinitcpio](https://wiki.archlinux.org/title/Mkinitcpio)
 - systemd-analyze 手册 — [freedesktop.org](https://www.freedesktop.org/software/systemd/man/systemd-analyze.html)
+- systemd 启动流程官方说明 — [systemd.io/BOOT](https://systemd.io/BOOT)（固件之后到用户态的官方口径）
 - 鸟哥的私房菜 — 开机流程、关机流程 — [linux.vbird.org](https://linux.vbird.org/)
 - man dracut / man mkinitcpio / man initramfs-tools（三系 initramfs 工具各自的手册）

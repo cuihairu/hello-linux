@@ -445,6 +445,10 @@ export default defineConfig({
               link: '/server/virtualization/kvm'
             },
             {
+              text: 'LDAP 统一账号管理',
+              link: '/server/ldap'
+            },
+            {
               text: '监控',
               link: '/server/monitoring/prometheus'
             },
@@ -623,6 +627,10 @@ export default defineConfig({
             {
               text: '内核编译与模块开发',
               link: '/source/build-and-modules'
+            },
+            {
+              text: '交叉编译与嵌入式',
+              link: '/source/cross-compile'
             },
             {
               text: '跟踪工具',

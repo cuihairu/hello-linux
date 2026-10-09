@@ -196,7 +196,7 @@ echo "exec openbox-session" > ~/.xinitrc   # startx 默认读它决定启动什�
 startx                              # 进入 openbox，退出即回到控制台
 ```
 
-RHEL/Rocky 的组安装粒度较粗，最小化做法是安装 `base-x` 组再补一个 WM（组名随大版本有变动，先用 `dnf group list --installed | grep -i x` 核实）；`dnf groupinstall "Server with GUI"` 则直接给出 GNOME + GDM 的完整图形环境。装完检查默认启动目标：最小化安装的服务器常停在 `multi-user.target`，不切换就见不到登录界面。
+RHEL/Rocky 的组安装粒度较粗，最小化做法是装 X 窗口基础组再补一个 WM——组名随大版本有变动，以 `dnf group list` 的实际输出为准（`base-x` 这类名字在本稿核对时无法从公开 comps 源确证，勿照抄，先查再装）；`dnf groupinstall "Server with GUI"` 则直接给出 GNOME + GDM 的完整图形环境。装完检查默认启动目标：最小化安装的服务器常停在 `multi-user.target`，不切换就见不到登录界面。
 
 ```bash
 systemctl get-default               # 当前默认目标

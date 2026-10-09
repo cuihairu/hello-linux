@@ -26,7 +26,7 @@ features:
     details: 9章 例行性工作、systemd、日志与开机流程，性能优化、备份恢复、LVM 与自动化运维
     link: /system-management/performance
   - title: 服务器篇
-    details: 17章 网络参数与路由 NAT，Web/DB/Redis/FTP/容器/KVM 虚拟化/监控/DNS/邮件，DHCP/Samba/NFS/NTP
+    details: 18章 网络参数与路由 NAT，Web/DB/Redis/FTP/容器/KVM/LDAP/监控/DNS/邮件，DHCP/Samba/NFS/NTP
     link: /server/web/nginx
   - title: 脚本篇
     details: 10章 Bash基础到调试与实战案例
@@ -38,7 +38,7 @@ features:
     details: 10章 网络基础、TCP/IP 要点与命令实战，负载均衡与故障排除
     link: /network/basics
   - title: 源码篇
-    details: 13章 内核源码导读：获取与编译，调度、内存、VFS、网络栈、中断、IPC、驱动与系统调用
+    details: 14章 内核源码导读：获取与编译、交叉编译与嵌入式，调度、内存、VFS、网络栈、中断、IPC、驱动与系统调用
     link: /source/README
   - title: 研究篇
     details: 权威书籍与官方文档调研、应用场景、覆盖核对与缺口补全记录

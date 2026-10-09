@@ -345,5 +345,6 @@ $ systemctl analyze critical-chain nginx.service  # 它所在的真正关键路�
 - systemd.service(5) 官方手册 — [freedesktop.org](https://www.freedesktop.org/software/systemd/man/systemd.service.html)
 - Arch Wiki: Systemd — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd)
 - systemd 官方文档索引 — [freedesktop.org/software/systemd](https://www.freedesktop.org/software/systemd/)
+- systemd 项目文档门户 — [systemd.io](https://systemd.io/)（设计文档与专题索引，含单元类型、cgroup 委派等主题）
 - man systemctl / man systemd-delta / man systemd.resource-control
 - 鸟哥的私房菜 — [linux.vbird.org](https://linux.vbird.org/)
