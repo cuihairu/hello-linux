@@ -4,46 +4,46 @@
 
 ## 1. 本仓外链引用统计（A 级，本地全量扫描）
 
-统计口径：扫描 `docs/**/*.md` 里全部 `http(s)://` 链接，按域名归并，2026-10-08 本地执行。
+统计口径：扫描 `docs/**/*.md` 里 Markdown 链接语法 `](http(s)://…)` 的全部外链目标，按域名归并；2026-10-08 初测，2026-10-10 复测。
 
-- 全仓外链 965 处，160 个域名；其中 953 处、157 个域名是真实来源，另 12 处是 `example.com`、`localhost` 这类示例域名，不计入来源统计。
-- 覆盖页面 128 个（含首页与目录页），平均每个页面 7.5 条外链。
+- 全仓外链 964 处，160 个域名；本轮口径下 `example.com`、`localhost` 类示例域名 0 处。
+- 覆盖页面 141 个（含首页与目录页），平均每个页面 6.8 条外链。
 
 ### 1.1 按来源归类
 
 | 来源类别 | 引用条数 | 涉及页面 |
 |---------|---------|---------|
-| ArchWiki 与 Arch 官方（`wiki.archlinux.org`、`man.archlinux.org`、`archlinux.org`） | 302 | 112 |
-| 鸟哥的私房菜（`linux.vbird.org`） | 100 | 94 |
-| 内核相关（`www.kernel.org`、`docs.kernel.org`、`elixir.bootlin.com`） | 70 | 29 |
-| Red Hat 与 Fedora（`docs.redhat.com`、`access.redhat.com`、`docs.fedoraproject.org`） | 58 | 47 |
-| GNU、POSIX 与 TLDP（`www.gnu.org`、`tldp.org`、`pubs.opengroup.org`） | 50 | 24 |
-| 手册站（`man7.org` 等） | 50 | 30 |
-| Debian 官方（`www.debian.org`、`wiki.debian.org`） | 40 | 34 |
-| 项目官方文档（Docker、Ansible、Prometheus、nginx、MySQL、Redis、BIND 等） | 37 | 18 |
-| Ubuntu（`ubuntu.com`、`help.ubuntu.com`、`netplan.io`） | 27 | 16 |
-| RHEL 兼容发行版（`docs.rockylinux.org` 等） | 13 | 11 |
+| ArchWiki 与 Arch 官方（`wiki.archlinux.org`、`man.archlinux.org`、`archlinux.org`） | 302 | 122 |
+| 鸟哥的私房菜（`linux.vbird.org`） | 102 | 96 |
+| Red Hat 与 Fedora（`docs.redhat.com`、`access.redhat.com`、`docs.fedoraproject.org`） | 55 | 50 |
+| 内核相关（`www.kernel.org`、`docs.kernel.org`、`elixir.bootlin.com`） | 74 | 32 |
+| GNU、POSIX 与 TLDP（`www.gnu.org`、`tldp.org`、`pubs.opengroup.org`） | 54 | 27 |
+| 手册站（`man7.org` 等） | 51 | 31 |
+| 项目官方文档（Docker、Ansible、Prometheus、nginx、MySQL、Redis、BIND 等） | 50 | 25 |
+| Debian 官方（`www.debian.org`、`wiki.debian.org`） | 37 | 35 |
+| Ubuntu（`ubuntu.com`、`help.ubuntu.com`、`netplan.io`） | 21 | 20 |
+| RHEL 兼容发行版（`docs.rockylinux.org` 等） | 17 | 13 |
 
 ### 1.2 单域名前十
 
 | 域名 | 条数 | 页面数 |
 |------|------|-------|
-| `wiki.archlinux.org` | 238 | 111 |
-| `linux.vbird.org` | 100 | 94 |
-| `man7.org` | 49 | 29 |
-| `docs.redhat.com` | 40 | 40 |
-| `man.archlinux.org` | 40 | 10 |
-| `www.gnu.org` | 36 | 21 |
-| `elixir.bootlin.com` | 34 | 11 |
-| `www.debian.org` | 29 | 26 |
+| `wiki.archlinux.org` | 251 | 120 |
+| `linux.vbird.org` | 102 | 96 |
+| `man7.org` | 51 | 31 |
+| `docs.redhat.com` | 46 | 46 |
+| `man.archlinux.org` | 43 | 13 |
+| `www.gnu.org` | 40 | 24 |
+| `elixir.bootlin.com` | 36 | 13 |
+| `www.debian.org` | 28 | 28 |
 | `www.kernel.org` | 25 | 21 |
-| `github.com` | 17 | 13 |
+| `github.com` | 16 | 12 |
 
-两个数字值得注意：`docs.redhat.com` 的 40 条引用散布在 40 个页面上（每页一条，典型的「每章挂一条官方出处」），`man.archlinux.org` 的 40 条集中在 10 个页面（命令速查页密集引用）。README 维护备注记录过 docs.redhat.com 全域 403 反爬，链接可达性靠双通道仲裁确认，属 B 级。
+两个数字值得注意：`docs.redhat.com` 的 46 条引用散布在 46 个页面上（每页一条，典型的「每章挂一条官方出处」），`man.archlinux.org` 的 43 条集中在 13 个页面（命令速查页密集引用）。README 维护备注记录过 docs.redhat.com 全域 403 反爬，链接可达性靠双通道仲裁确认，属 B 级。
 
 ## 2. ArchWiki（A 级，本轮实取结构）
 
-官方站 `wiki.archlinux.org` 本轮不可达，类目结构取自中文镜像 `wiki.archlinux.org.cn` 的目录页。该镜像未获 Arch 官方承认，**只用于取类目树与条目数，不用于取正文**；正文引用一律写官方 `wiki.archlinux.org` 地址（本仓 238 条引用全部指向官方域名）。
+官方站 `wiki.archlinux.org` 本轮不可达，类目结构取自中文镜像 `wiki.archlinux.org.cn` 的目录页。该镜像未获 Arch 官方承认，**只用于取类目树与条目数，不用于取正文**；正文引用一律写官方 `wiki.archlinux.org` 地址（本仓 251 条引用全部指向官方域名）。
 
 镜像目录页给出 8 个顶级类目、336 条编号条目，条目后的数字是该类目在镜像上的页面数。与本仓相关的二级类目：
 
@@ -55,7 +55,7 @@
 | 4.2 CPU / 4.16 存储 | 9 / 17 | 硬件篇 · CPU、存储设备 |
 | 4.6 显卡图形 / 4.15 声音 | 33 / 21 | 无落点，属硬件外设类缺口 |
 | 6.4 防火墙 / 6.7 网络配置 / 6.8 网络监控 | — / 10 / 11 | 网络篇与安全篇对应页 |
-| 6.12 服务器 / 6.3.2 邮件服务器 | 20 / 30 | 服务器篇（15 页）与 `mail/postfix` |
+| 6.12 服务器 / 6.3.2 邮件服务器 | 20 / 30 | 服务器篇（21 页）与 `mail/postfix` |
 | 8.8 文件系统 | 46 | 基础篇 · 文件系统（3 页）+ LVM 新页 |
 | 8.12 内核 | 37 | 源码篇（11 页） |
 | 8.18 软件包管理 | 26 | 基础篇 · 软件安装 + 命令篇 · 包管理命令 |
@@ -70,12 +70,12 @@
 
 | 文档 | 入口 | 本仓引用 | 本轮状态 |
 |------|------|---------|---------|
-| Debian 官方手册 | [debian.org/doc/manuals/debian-handbook](https://www.debian.org/doc/manuals/debian-handbook/) | 29 条 `www.debian.org` + 9 条 `wiki.debian.org` | 入口 C 级升级中：2026-10-09 复测落地页 200；章级目录经官方在线版（debian-handbook.info，Bullseye）实取，16 章结构见[权威书籍调研](./authoritative-books.md) 2.1 节，正文细节仍未取 |
-| 内核文档 | [docs.kernel.org](https://docs.kernel.org/)、[www.kernel.org](https://www.kernel.org/) | 9 + 25 条 | C 级：同上；README 记录过后继链核验轮的路径迁移修复 |
-| Red Hat 文档 | [docs.redhat.com](https://docs.redhat.com/) | 40 条，覆盖 40 页 | B 级：仓库外链核查轮已确认可达（403 反爬，双通道仲裁） |
-| GNU 工具手册 | [www.gnu.org](https://www.gnu.org/)（coreutils、bash、findutils、tar 等） | 36 条，21 页 | B 级：既有核验轮通过 |
-| Arch 手册页 | [man.archlinux.org](https://man.archlinux.org/) | 40 条，10 页 | B 级：README 记录过 42 处被本机出口限速、按 wayback 快照判定存活 |
+| Debian 官方手册 | [debian.org/doc/manuals/debian-handbook](https://www.debian.org/doc/manuals/debian-handbook/) | 28 条 `www.debian.org` + 9 条 `wiki.debian.org` | 入口 C 级升级中：2026-10-09 复测落地页 200；章级目录经官方在线版（debian-handbook.info，Bullseye）实取，16 章结构见[权威书籍调研](./authoritative-books.md) 2.1 节，正文细节仍未取 |
+| 内核文档 | [docs.kernel.org](https://docs.kernel.org/)、[www.kernel.org](https://www.kernel.org/) | 13 + 25 条 | C 级：同上；README 记录过后继链核验轮的路径迁移修复 |
+| Red Hat 文档 | [docs.redhat.com](https://docs.redhat.com/) | 46 条，覆盖 46 页 | B 级：仓库外链核查轮已确认可达（403 反爬，双通道仲裁） |
+| GNU 工具手册 | [www.gnu.org](https://www.gnu.org/)（coreutils、bash、findutils、tar 等） | 40 条，24 页 | B 级：既有核验轮通过 |
+| Arch 手册页 | [man.archlinux.org](https://man.archlinux.org/) | 43 条，13 页 | 2026-10-10 复测：带 UA 直测 200，此前 wayback 快照佐证撤 |
 | systemd 文档 | [systemd.io](https://systemd.io/) | 2 条（services-systemd、boot-process 两页，2026-10-09 补链） | 引用缺口已清：两页各补一条官方入口（URL 均 200 实测），明细见[缺口补全与核对修订](./gap-fill.md) §2 第 4 条 |
-| 内核源码浏览 | [elixir.bootlin.com](https://elixir.bootlin.com/) | 34 条，11 页 | B 级：带 UA 实测 200，README 记录为反爬假阳性 |
+| 内核源码浏览 | [elixir.bootlin.com](https://elixir.bootlin.com/) | 36 条，13 页 | B 级：带 UA 实测 200，README 记录为反爬假阳性 |
 
-引用口径：本仓外链在上一轮站点巡检里做过 54 页 / 291 条抽样（README 维护备注），269 条正常、10 处失效已换替代、10 处反爬假阳性保留、6 处网络瞬态登记不动。本轮境外链路整体中断，不改变该结论，也不重复计数。
+引用口径：本仓外链在上一轮站点巡检里做过 54 页 / 291 条抽样（README 维护备注），269 条正常、10 处失效已换替代、10 处反爬假阳性保留、6 处网络瞬态登记不动。2026-10-10 复测：6 处瞬态 5 处转 200（确认为当时瞬态），proftpd.org 仍 000（DNS 解析为 198.18.x.x 假地址，出口侧问题，wayback 有快照）维持保留；elixir.bootlin.com、cisecurity.org、man.archlinux.org、groups.google.com 四处 wayback 佐证项带 UA 直测 200，佐证撤；help.ubuntu.com 503 为反爬（非 404）维持保留。

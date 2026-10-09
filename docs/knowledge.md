@@ -70,7 +70,7 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 
 ## 官方文档要点
 
-各来源的可达性与反爬判定见[官方文档调研](./research/official-docs.md)。全仓外链 965 条、160 个域名，前四位是 `wiki.archlinux.org`（238 条 / 111 页）、`linux.vbird.org`（100 条 / 94 页）、`man7.org`（49 条 / 29 页）、`docs.redhat.com`（40 条 / 40 页）——引用密度与调研结论一致。
+各来源的可达性与反爬判定见[官方文档调研](./research/official-docs.md)。全仓外链 964 条、160 个域名（2026-10-10 复测），前四位是 `wiki.archlinux.org`（251 条 / 120 页）、`linux.vbird.org`（102 条 / 96 页）、`man7.org`（51 条 / 31 页）、`docs.redhat.com`（46 条 / 46 页）——引用密度与调研结论一致。
 
 | 来源 | 入口 | 要点 | 级别 |
 |------|------|------|------|
