@@ -76,6 +76,7 @@
 |------|-----------|--------|
 | [性能优化](./performance.md) | 观测优先于调优的为什么、负载/内存/IO 三角、`load` 与 CPU%、`available` 与 `free` 等常见误读、USE 方法与有证据的调优 | 被"服务器好慢"折磨的人 |
 | [备份与恢复](./backup-and-recovery.md) | 3-2-1 策略每个数字防什么、rsync 增量 vs 硬链接快照 vs 整盘镜像、恢复演练才是真备份、cron 与 timer 的三系调度差异 | 负责数据安全的人 |
+| [LVM 逻辑卷管理](./lvm.md) | PV/VG/LV 三层模型、建卷与扩缩容、快照回滚、pvmove 换盘、与 RAID/LUKS 的栈序 | 要在线扩盘、做快照或换盘的人 |
 | [自动化运维](./automation.md) | 何时写脚本 vs 何时用 Ansible、幂等为什么重要、cron vs timer vs 流水线、与脚本篇的分工 | 要把重复劳动交出去的人 |
 | [例行性工作排程](./scheduled-tasks.md) | at/cron/systemd timer 三代调度怎么选、crontab 语法与日志、anacron 补位、timer 单元实战 | 要把活交给机器按时跑的人 |
 | [systemd 服务与程序管理](./services-systemd.md) | unit 结构与依赖、target、journal 联动、资源控制与 systemctl 排错 | 被 systemctl/journalctl 困住的人 |

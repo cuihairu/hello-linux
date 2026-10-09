@@ -27,13 +27,13 @@ ArchWiki 目录页（镜像实取）把「视觉美化」（25 页）、「图�
 | 场景 | 关键要求 | 本仓现状 | 处置 |
 |------|---------|---------|------|
 | 服务器与云 | 三系命令并排、存量系统迁移视角、多架构 | 服务器篇 15 页 + 系统管理篇 7 页，三系对照贯穿全仓 | 已覆盖 |
-| 边缘与嵌入式 | 交叉编译、设备树、启动链路、无图形界面 | 只有设备树提及，无嵌入式入口 | 记为缺口，本轮先补场景页给出阅读路径，交叉编译专题留待下一轮 |
+| 边缘与嵌入式 | 交叉编译、设备树、启动链路、无图形界面 | 此前只有设备树提及，无嵌入式入口 | 已补页（交叉编译与嵌入式），阅读路径见 4.2 节 |
 | 桌面与开发 | Xorg/Wayland、显示管理器、桌面环境、输入法与字体 | 零散提及 | 补页（桌面图形栈） |
-| 运维自动化 | 调度、编排、监控、备份、账号一致性 | 四条主线已有，账号一致性缺 | 补 LVM（存储运维）、AppArmor（安全运维），LDAP 记为下一轮 |
+| 运维自动化 | 调度、编排、监控、备份、账号一致性 | 四条主线已有，账号一致性缺 | 已补 LVM、AppArmor、LDAP 三页 |
 | 安全合规 | MAC 强制访问控制在两套发行版上的差异 | SELinux 5 页成体系，AppArmor 只有对照表一行 | 补页（AppArmor） |
 | 虚拟化 | KVM/libvirt 建机与网络，与容器的分工 | 硬件篇给了安装命令，服务器篇只有容器页 | 补页（KVM 虚拟化） |
 
-「记为缺口但本轮不补」的两项（嵌入式交叉编译专题、LDAP 统一账号）登记在 [缺口补全与核对修订](./gap-fill.md) 的待办里，避免下次调研重复排查。
+原先「记为缺口但本轮不补」的两项（嵌入式交叉编译专题、LDAP 统一账号）已在后续增量补齐，落成 [交叉编译与嵌入式](../source/cross-compile.md) 与 [LDAP 统一账号管理](../server/ldap.md) 两页；补全记录见 [缺口补全与核对修订](./gap-fill.md)。
 
 ## 4. 场景阅读路径
 
@@ -51,8 +51,9 @@ ArchWiki 目录页（镜像实取）把「视觉美化」（25 页）、「图�
 
 1. [计算机体系结构](../hardware/architecture.md)，ARM、RISC-V 等架构与设备树的硬件视角
 2. [设备驱动框架](../source/driver-framework.md)，设备树如何落到驱动
-3. [内核编译与模块开发](../source/build-and-modules.md)，内核裁剪与编译的落点
-4. [开机流程与引导排错](../system-management/boot-process.md)，无图形界面设备的启动链路
+3. [交叉编译与嵌入式](../source/cross-compile.md)，交叉工具链、内核裁剪、rootfs 与 U-Boot 启动链
+4. [内核编译与模块开发](../source/build-and-modules.md)，内核裁剪与编译的落点
+5. [开机流程与引导排错](../system-management/boot-process.md)，无图形界面设备的启动链路
 
 ### 4.3 桌面与开发
 
@@ -68,7 +69,8 @@ ArchWiki 目录页（镜像实取）把「视觉美化」（25 页）、「图�
 2. [例行性工作排程](../system-management/scheduled-tasks.md)，cron 与 systemd timer
 3. [Prometheus + Grafana](../server/monitoring/prometheus.md)，监控主线
 4. [备份与恢复](../system-management/backup-and-recovery.md)，故障前的兜底手段
-5. [账号管理](../basic/users/account_management.md)，单机账号是基线，多机一致性（LDAP）记为下一轮
+5. [账号管理](../basic/users/account_management.md)，单机账号是基线
+6. [LDAP 统一账号管理](../server/ldap.md)，多机账号一个出口管
 
 ## 5. 参考资料
 

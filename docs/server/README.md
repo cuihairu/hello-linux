@@ -28,6 +28,8 @@
 | [Redis](./redis.md) | Redis 安装配置、数据结构、持久化、集群 | 缓存与会话存储 |
 | [FTP](./ftp.md) | vsftpd 安装配置、用户管理、安全设置 | 老系统对接时仍会遇到 |
 | [容器](./container/docker.md) | Docker 安装、镜像管理、Compose、K8s 入门 | 现代部署的主流方式 |
+| [KVM 虚拟化](./virtualization/kvm.md) | KVM/QEMU/libvirt 栈、virt-install 建机、网络与存储、快照克隆 | 要跑异构内核或整机隔离时 |
+| [LDAP 统一账号管理](./ldap.md) | OpenLDAP 服务端与目录树、SSSD 客户端接入、TLS 与访问控制 | 多机账号要一个出口管时 |
 | [监控](./monitoring/prometheus.md) | Prometheus + Grafana 监控方案 | 上线后必补的可观测性 |
 | [DNS](./dns/bind.md) | BIND DNS 服务器配置 | 自建域名解析、内网 DNS |
 | [邮件](./mail/postfix.md) | Postfix 邮件服务器配置 | 系统通知、告警邮件 |

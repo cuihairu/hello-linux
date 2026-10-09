@@ -52,6 +52,7 @@
 |------|------|---------|
 | [源码获取与目录导读](./source-tree.md) | kernel.org/git 获取源码、目录地图、Kbuild 体系、在线浏览 | 本篇第 1 步 |
 | [内核编译与模块开发](./build-and-modules.md) | menuconfig、编译安装、hello-world 模块真实跑通 | 本篇第 2 步，正反馈最快的入口 |
+| [交叉编译与嵌入式](./cross-compile.md) | 交叉工具链、ARCH/CROSS_COMPILE、设备树、BusyBox rootfs、U-Boot 与 QEMU 验证 | 要把内核做给非 x86 架构的人 |
 | [跟踪工具](./tracing-tools.md) | strace/ftrace/bpftrace/gdb+QEMU 四层观察体系 | 本篇第 3 步，模块章的实操都靠它 |
 | [系统调用](./syscall-path.md) | 一次 write() 从用户态到内核的全程 | 模块章起点：所有路径的入口 |
 | [进程管理/调度](./process-scheduling.md) | task_struct、fork 路径、CFS→EEVDF、上下文切换 | 核心模块 |
