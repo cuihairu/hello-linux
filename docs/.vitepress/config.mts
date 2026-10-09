@@ -35,6 +35,7 @@ export default defineConfig({
       { text: '网络篇', link: '/network/basics' },
       { text: '源码篇', link: '/source/README' },
       { text: '研究篇', link: '/research/README' },
+      { text: '知识点', link: '/knowledge' },
       { text: '目录', link: '/SUMMARY' }
     ],
     sidebar: [...Object.values({

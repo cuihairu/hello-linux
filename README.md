@@ -31,6 +31,7 @@ Learn Linux from the ground up, with VBird's Linux notes and the Arch Wiki as th
 | [Networking](https://cuihairu.github.io/hello-linux/network/basics.html) | Networking basics, firewalls, VPN, load balancing, network monitoring, configuration fundamentals, troubleshooting, TCP/IP essentials, command practice |
 | [Kernel Source](https://cuihairu.github.io/hello-linux/source/README.html) | Obtaining and building the kernel source, scheduling, memory, VFS, the network stack, interrupts, IPC, drivers, system calls |
 | [Research](https://cuihairu.github.io/hello-linux/research/README.html) | Surveys of authoritative books and official documentation, application scenarios, the coverage matrix, and the gap-fill record |
+| [Knowledge Notes](https://cuihairu.github.io/hello-linux/knowledge.html) | The survey output consolidated: core concepts, key points from the books and official documentation, application scenarios, and common pitfalls |
 
 The full table of contents is at [SUMMARY](https://cuihairu.github.io/hello-linux/SUMMARY.html).
 
@@ -94,6 +95,7 @@ Pushes to the `main` branch are deployed to GitHub Pages automatically through G
 - [The Debian Handbook](https://www.debian.org/doc/manuals/debian-handbook/)
 - [RHEL documentation](https://docs.redhat.com/)
 - On-site survey: [Research section](https://cuihairu.github.io/hello-linux/research/README.html) (source comparison and coverage audit of this repo)
+- Consolidated notes: [Knowledge Notes](https://cuihairu.github.io/hello-linux/knowledge.html) (concepts, books, documentation, scenarios, and pitfalls in one page)
 
 ## Maintenance notes
 
