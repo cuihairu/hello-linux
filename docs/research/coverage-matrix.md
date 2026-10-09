@@ -74,7 +74,7 @@
 | 6.4 防火墙 / 6.7 网络配置 / 6.8 网络监控 | [防火墙](../network/firewall.md)、[网络配置基础](../network/network-configuration.md)、[网络监控](../network/network-monitoring.md) | 已覆盖 |
 | 6.12 服务器 / 6.3.2 邮件服务器 | [服务器篇](../server/README.md) 21 页、[邮件](../server/mail/postfix.md) | 已覆盖 |
 | 8.8 文件系统 | [文件系统](../basic/filesystem.md)、新页 [LVM 逻辑卷管理](../system-management/lvm.md) | 已覆盖 |
-| 8.12 内核 | [源码篇](../source/README.md) 11 页 | 已覆盖 |
+| 8.12 内核 | [源码篇](../source/README.md) 14 页 | 已覆盖 |
 | 8.18 软件包管理 | [软件安装](../basic/packages.md)、新页 [Pacman 包管理](../basic/packages/pacman.md)、[包管理命令](../commands/package/package.md) | 已覆盖 |
 | 8.20 安全 | [安全篇](../security/README.md)、[SELinux 概念](../basic/security/concept.md)、新页 [AppArmor 实战](../security/apparmor.md) | 已覆盖（两套 MAC 齐） |
 | 8.23 虚拟化 | [容器](../server/container/docker.md)、新页 [KVM 虚拟化](../server/virtualization/kvm.md) | 已覆盖 |
