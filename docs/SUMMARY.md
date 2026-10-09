@@ -23,6 +23,7 @@
   - [APT 包管理](./basic/packages/apt.md)
   - [YUM/DNF 包管理](./basic/packages/yum.md)
   - [Pacman 包管理](./basic/packages/pacman.md)
+  - [源码编译与 Tarball 安装](./basic/packages/tarball.md)
 - [用户管理](./basic/users.md)
   - [账号管理](./basic/users/account_management.md)
   - [ACL 权限控制](./basic/users/acl_permissions.md)

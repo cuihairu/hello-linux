@@ -76,7 +76,7 @@
 - [开机流程](./boot.md) — 从按下电源到登录提示符之间发生了什么。
   - [BIOS 与 UEFI](./boot/bios_uefi.md) — 两种固件模式的差异，以及为什么磁盘分区表要跟着变。
   - [GRUB 引导程序](./boot/grub.md) — 引导器如何找到内核，引导失败如何抢救。
-- [软件安装](./packages.md) — 三系包管理器（APT / DNF / pacman）的原理与操作对照。
+- [软件安装](./packages.md) — 三系包管理器（APT / DNF / pacman）的原理与操作对照，外加源码编译与 Tarball 安装的兜底路线。
   - [APT 包管理](./packages/apt.md) — Debian/Ubuntu 的 `apt` 与 `dpkg`，仓库、依赖与源配置。
   - [YUM/DNF 包管理](./packages/yum.md) — RHEL/CentOS/Rocky 的 `dnf` 与 RPM，模块流与 EPEL。
 - [用户管理](./users.md) — 账号、组、权限如何构成多用户系统的第一道防线。

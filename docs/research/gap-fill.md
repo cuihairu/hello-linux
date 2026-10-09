@@ -15,6 +15,7 @@
 | [交叉编译与嵌入式](../source/cross-compile.md)（2026-10-09 增量） | 差异表场景行「边缘与嵌入式」与本页 §3 首条登记 | 交叉工具链三元组、内核交叉编译（ARCH/CROSS_COMPILE）、设备树、BusyBox rootfs 与 initramfs、U-Boot 引导链、QEMU 异架构验证、gdb 交叉调试 |
 | [LDAP 统一账号管理](../server/ldap.md)（2026-10-09 增量） | 差异表鸟哥服务器篇「第十一章」与本页 §3 次条登记 | 目录服务模型（DN/LDIF/schema）、OpenLDAP 三系安装（含 RHEL 8 起移除 openldap-servers 的实情与 Rocky plus/EPEL 替代）、cn=config、建树与查询、TLS、SSSD 客户端接入、olcAccess 访问控制 |
 | [SSH 远程登录](../server/ssh.md)（2026-10-10 增量） | 差异表鸟哥服务器篇「第十章」由部分覆盖升级（客户端用法此前散在命令篇与安全篇） | openssh-server 三系安装（含服务名 sshd/ssh 差异）、密钥认证闭环、sshd_config 核心项与 Match/drop-in、~/.ssh/config、防火墙与 SELinux 端口标签、常见故障 |
+| [源码编译与 Tarball 安装](../basic/packages/tarball.md)（2026-10-10 增量） | 差异表鸟哥基础篇「第二十一章」由部分覆盖升级（源码编译安装此前无独立小节） | 源码安装的取舍判断、三系工具链组、configure 检测与 --prefix、六步标准流程、config.log 读法、卸载两解法（DESTDIR 清单与 GNU stow）、与包管理器的边界、常见故障 |
 
 ## 2. 本轮修订（3 处，均注明触发）
 

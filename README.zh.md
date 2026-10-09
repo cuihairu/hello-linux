@@ -21,7 +21,7 @@
 
 | 篇章 | 说明 |
 |------|------|
-| [基础篇](https://cuihairu.github.io/hello-linux/basic/overview.html) | 概念、安装、文件系统、开机流程、包管理、用户管理、服务、安全、日志 |
+| [基础篇](https://cuihairu.github.io/hello-linux/basic/overview.html) | 概念、安装、文件系统、开机流程、包管理与源码编译、用户管理、服务、安全、日志 |
 | [命令篇](https://cuihairu.github.io/hello-linux/commands/basic/file.html) | 文件/目录/文本/查找/压缩/系统/网络/包管理命令参考 |
 | [硬件篇](https://cuihairu.github.io/hello-linux/hardware/architecture.html) | 体系结构、CPU、内存、存储、网络设备 |
 | [系统管理篇](https://cuihairu.github.io/hello-linux/system-management/performance.html) | 性能优化、备份恢复、自动化运维、例行性工作、systemd 服务、日志系统、开机流程 |

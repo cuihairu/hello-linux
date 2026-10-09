@@ -139,6 +139,10 @@ export default defineConfig({
                 {
                   text: 'Pacman 包管理',
                   link: '/basic/packages/pacman'
+                },
+                {
+                  text: '源码编译与 Tarball 安装',
+                  link: '/basic/packages/tarball'
                 }
               ]
             },

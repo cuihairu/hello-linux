@@ -14,7 +14,7 @@ hero:
       link: https://github.com/cuihairu/hello-linux
 features:
   - title: 基础篇
-    details: 37章 从Linux简介到SELinux，系统服务与日志全链路，APT/DNF/Pacman 三系包管理
+    details: 38章 从Linux简介到SELinux，系统服务与日志全链路，APT/DNF/Pacman 三系包管理与源码编译
     link: /basic/overview
   - title: 命令篇
     details: 20章 核心命令参考，文件/文本/查找/压缩/系统/网络/包管理

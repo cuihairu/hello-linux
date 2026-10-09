@@ -36,7 +36,7 @@
 
 ### 1.3 两篇目录对本仓的要求
 
-- 基础篇 25 章里，第二十一章（源代码与 Tarball）仍无独立小节（部分覆盖）；第二十三章（X Window）已由[桌面图形栈](../hardware/desktop-stack.md)落点；磁盘分割、备份、内核编译等主题分别落在硬件篇、系统管理篇与源码篇。
+- 基础篇 25 章里，第二十一章（源代码与 Tarball）已由[源码编译与 Tarball 安装](../basic/packages/tarball.md)（2026-10-10）落点；第二十三章（X Window）已由[桌面图形栈](../hardware/desktop-stack.md)落点；磁盘分割、备份、内核编译等主题分别落在硬件篇、系统管理篇与源码篇。
 - 服务器篇 12 章里，第一、二章（虚拟机）已由 [KVM 虚拟化](../server/virtualization/kvm.md)、第十一章（LDAP）已由 [LDAP 统一账号管理](../server/ldap.md)、第十章的 SSH 已由 [SSH 远程登录](../server/ssh.md)（2026-10-10）落点。
 - 逐条对照见 [覆盖核对与差异表](./coverage-matrix.md)。
 

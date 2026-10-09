@@ -38,7 +38,7 @@
 | 第十八章 | 认识与分析日志 | [系统日志](../basic/log/syslog.md)、[日志系统管理](../system-management/logging.md) | 已覆盖 |
 | 第十九章 | 开机流程、模块管理与 Loader | [开机流程](../basic/boot.md)、[开机流程与引导排错](../system-management/boot-process.md) | 已覆盖 |
 | 第二十章 | 基础系统设置与备份策略 | [系统配置工具](../basic/services/configuration_tools.md)、[备份与恢复](../system-management/backup-and-recovery.md) | 已覆盖 |
-| 第二十一章 | 软件安装：源代码与 Tarball | [压缩与归档](../commands/compression.md) 涉及 tarball | 部分覆盖（源码编译安装无独立小节） |
+| 第二十一章 | 软件安装：源代码与 Tarball | 新页 [源码编译与 Tarball 安装](../basic/packages/tarball.md)（2026-10-10） | 部分覆盖→已补页 |
 | 第二十二章 | 软件安装 RPM、SRPM 与 YUM | [APT 包管理](../basic/packages/apt.md)、[YUM/DNF 包管理](../basic/packages/yum.md)、新页 [Pacman 包管理](../basic/packages/pacman.md) | 已覆盖（三系齐，Arch 系本轮补页） |
 | 第二十三章 | X Window 设置介绍 | 新页 [桌面图形栈](../hardware/desktop-stack.md) | 缺口→本轮补页 |
 | 第二十四章 | Linux 内核编译与管理 | [源码篇](../source/README.md)、[内核编译与模块开发](../source/build-and-modules.md) | 已覆盖 |
@@ -101,7 +101,7 @@
 |------|------|------|
 | 缺口→已补页 | 9 | Arch 包管理（Pacman）、LVM 实操、桌面图形栈、KVM 虚拟化、AppArmor、应用场景页；后续增量补齐：交叉编译与嵌入式、LDAP 统一账号（2026-10-09）、SSH 远程登录（2026-10-10） |
 | 缺口→登记后补齐 | 2 | 嵌入式交叉编译专题、LDAP 统一账号（首轮登记、次轮补页，已并入上行） |
-| 部分覆盖→本轮修订 | 3 | 存储篇 LVM 指向落地、基础篇软件安装章目录补第三系、systemd 官方文档引用补链（services-systemd、boot-process 两页） |
+| 部分覆盖→本轮修订与补页 | 4 | 存储篇 LVM 指向落地、基础篇软件安装章目录补第三系、systemd 官方文档引用补链（services-systemd、boot-process 两页）；源码编译与 Tarball 补页（2026-10-10） |
 | 不覆盖（有意） | 4 类 | 笔记本适配、开发工具链、点对点/流媒体、VoIP |
 
 本轮补页与修订的执行记录见[缺口补全与核对修订](./gap-fill.md)。

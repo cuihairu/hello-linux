@@ -21,7 +21,7 @@ Learn Linux from the ground up, with VBird's Linux notes and the Arch Wiki as th
 
 | Section | Description |
 |------|------|
-| [Fundamentals](https://cuihairu.github.io/hello-linux/basic/overview.html) | Concepts, installation, filesystems, the boot process, package management, user management, services, security, logging |
+| [Fundamentals](https://cuihairu.github.io/hello-linux/basic/overview.html) | Concepts, installation, filesystems, the boot process, package management and source compilation, user management, services, security, logging |
 | [Commands](https://cuihairu.github.io/hello-linux/commands/basic/file.html) | Command reference for files/directories, text processing, searching, compression, system, networking, and package management |
 | [Hardware](https://cuihairu.github.io/hello-linux/hardware/architecture.html) | Architecture, CPU, memory, storage, network devices |
 | [System Administration](https://cuihairu.github.io/hello-linux/system-management/performance.html) | Performance tuning, backup and recovery, operations automation, scheduled jobs, systemd services, logging, the boot process |
