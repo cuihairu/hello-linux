@@ -418,6 +418,10 @@ export default defineConfig({
               link: '/server/routing-nat'
             },
             {
+              text: 'SSH 远程登录',
+              link: '/server/ssh'
+            },
+            {
               text: 'Web 服务器',
               link: '/server/web/nginx'
             },

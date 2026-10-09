@@ -90,6 +90,7 @@
 - [服务器篇](./server/README.md)
 - [网络参数配置](./server/network-parameters.md)
 - [路由与 NAT](./server/routing-nat.md)
+- [SSH 远程登录](./server/ssh.md)
 - [Web 服务器](./server/web/nginx.md)
 - [Apache](./server/web/apache.md)
 - [数据库](./server/database/mysql.md)

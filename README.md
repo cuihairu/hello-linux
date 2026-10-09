@@ -25,7 +25,7 @@ Learn Linux from the ground up, with VBird's Linux notes and the Arch Wiki as th
 | [Commands](https://cuihairu.github.io/hello-linux/commands/basic/file.html) | Command reference for files/directories, text processing, searching, compression, system, networking, and package management |
 | [Hardware](https://cuihairu.github.io/hello-linux/hardware/architecture.html) | Architecture, CPU, memory, storage, network devices |
 | [System Administration](https://cuihairu.github.io/hello-linux/system-management/performance.html) | Performance tuning, backup and recovery, operations automation, scheduled jobs, systemd services, logging, the boot process |
-| [Servers](https://cuihairu.github.io/hello-linux/server/web/nginx.html) | Network parameters, routing and NAT, web servers, databases, Redis, FTP, containers, monitoring, DNS, mail, DHCP, Samba, NFS, NTP |
+| [Servers](https://cuihairu.github.io/hello-linux/server/web/nginx.html) | Network parameters, routing and NAT, SSH, web servers, databases, Redis, FTP, containers, monitoring, DNS, mail, DHCP, Samba, NFS, NTP |
 | [Scripting](https://cuihairu.github.io/hello-linux/script/bash-basics.html) | Bash basics, variables, conditionals, loops, functions, text processing, regular expressions, debugging, worked examples |
 | [Security](https://cuihairu.github.io/hello-linux/security/firewall.html) | Firewalls, intrusion detection, cryptography, hardening, PAM/sudo, hands-on SELinux |
 | [Networking](https://cuihairu.github.io/hello-linux/network/basics.html) | Networking basics, firewalls, VPN, load balancing, network monitoring, configuration fundamentals, troubleshooting, TCP/IP essentials, command practice |

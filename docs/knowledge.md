@@ -99,7 +99,7 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 
 阅读路径按场景各给一条（从装机到进阶），完整版在[应用场景调研](./research/application-scenarios.md) §4：
 
-- 服务器与云：安装 → [网络参数](./server/network-parameters.md) → [Nginx](./server/web/nginx.md) → [性能优化](./system-management/performance.md) → [安全加固](./security/hardening.md)
+- 服务器与云：安装 → [网络参数](./server/network-parameters.md) → [SSH 远程登录](./server/ssh.md) → [Nginx](./server/web/nginx.md) → [性能优化](./system-management/performance.md) → [安全加固](./security/hardening.md)
 - 边缘与嵌入式：[体系结构](./hardware/architecture.md) → [驱动框架](./source/driver-framework.md) → [交叉编译](./source/cross-compile.md) → [内核编译](./source/build-and-modules.md)
 - 桌面与开发：[选发行版](./basic/installation/choose_distribution.md) → [安装过程](./basic/installation/process.md) → [桌面图形栈](./hardware/desktop-stack.md) → [KVM](./server/virtualization/kvm.md)
 - 运维自动化：[自动化运维](./system-management/automation.md) → [排程](./system-management/scheduled-tasks.md) → [监控](./server/monitoring/prometheus.md) → [备份](./system-management/backup-and-recovery.md) → [LDAP](./server/ldap.md)

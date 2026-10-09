@@ -22,6 +22,7 @@
 |------|------|---------|
 | [网络参数配置](./network-parameters.md) | 网卡命名、IP/路由持久化、sysctl 网络参数 | 服务器联网第一步，所有服务章节的前置 |
 | [路由与 NAT](./routing-nat.md) | 策略路由、iptables/nftables NAT、端口转发 | 单机做网关、内网共享上网 |
+| [SSH 远程登录](./ssh.md) | openssh-server 三系安装、密钥认证、sshd_config、客户端 config、防火墙与 SELinux、排错 | 服务器联网后的第一件事 |
 | [Web 服务器](./web/nginx.md) | Nginx 安装配置、反向代理、负载均衡、HTTPS | 入门首选，现代架构的流量入口 |
 | [Apache](./web/apache.md) | Apache HTTP Server 详细配置 | 传统 LAMP、.htaccess 生态仍在大量使用 |
 | [数据库](./database/mysql.md) | MySQL/MariaDB 安装配置、用户权限、备份恢复 | 与 Web 配合的核心存储 |
