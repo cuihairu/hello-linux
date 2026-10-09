@@ -34,6 +34,7 @@ export default defineConfig({
       { text: '安全篇', link: '/security/firewall' },
       { text: '网络篇', link: '/network/basics' },
       { text: '源码篇', link: '/source/README' },
+      { text: '研究篇', link: '/research/README' },
       { text: '目录', link: '/SUMMARY' }
     ],
     sidebar: [...Object.values({
@@ -133,6 +134,10 @@ export default defineConfig({
                 {
                   text: 'YUM/DNF 包管理',
                   link: '/basic/packages/yum'
+                },
+                {
+                  text: 'Pacman 包管理',
+                  link: '/basic/packages/pacman'
                 }
               ]
             },
@@ -342,6 +347,10 @@ export default defineConfig({
               link: '/hardware/storage'
             },
             {
+              text: '桌面图形栈',
+              link: '/hardware/desktop-stack'
+            },
+            {
               text: '网络设备',
               link: '/hardware/network'
             }
@@ -363,6 +372,10 @@ export default defineConfig({
             {
               text: '备份与恢复',
               link: '/system-management/backup-and-recovery'
+            },
+            {
+              text: 'LVM 逻辑卷管理',
+              link: '/system-management/lvm'
             },
             {
               text: '自动化运维',
@@ -426,6 +439,10 @@ export default defineConfig({
             {
               text: '容器',
               link: '/server/container/docker'
+            },
+            {
+              text: 'KVM 虚拟化',
+              link: '/server/virtualization/kvm'
             },
             {
               text: '监控',
@@ -536,6 +553,10 @@ export default defineConfig({
             {
               text: 'SELinux 实战',
               link: '/security/selinux'
+            },
+            {
+              text: 'AppArmor 实战',
+              link: '/security/apparmor'
             }
           ]
         }
@@ -642,6 +663,37 @@ export default defineConfig({
             {
               text: '用户态源码选读',
               link: '/source/userland'
+            }
+          ]
+        }
+      ],
+      '/research/': [
+        {
+          text: '研究篇',
+          items: [
+            {
+              text: '研究篇',
+              link: '/research/README'
+            },
+            {
+              text: '权威书籍调研',
+              link: '/research/authoritative-books'
+            },
+            {
+              text: '官方文档调研',
+              link: '/research/official-docs'
+            },
+            {
+              text: '应用场景调研',
+              link: '/research/application-scenarios'
+            },
+            {
+              text: '覆盖核对与差异表',
+              link: '/research/coverage-matrix'
+            },
+            {
+              text: '缺口补全与核对修订',
+              link: '/research/gap-fill'
             }
           ]
         }

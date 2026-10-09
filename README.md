@@ -30,6 +30,7 @@ Learn Linux from the ground up, with VBird's Linux notes and the Arch Wiki as th
 | [Security](https://cuihairu.github.io/hello-linux/security/firewall.html) | Firewalls, intrusion detection, cryptography, hardening, PAM/sudo, hands-on SELinux |
 | [Networking](https://cuihairu.github.io/hello-linux/network/basics.html) | Networking basics, firewalls, VPN, load balancing, network monitoring, configuration fundamentals, troubleshooting, TCP/IP essentials, command practice |
 | [Kernel Source](https://cuihairu.github.io/hello-linux/source/README.html) | Obtaining and building the kernel source, scheduling, memory, VFS, the network stack, interrupts, IPC, drivers, system calls |
+| [Research](https://cuihairu.github.io/hello-linux/research/README.html) | Surveys of authoritative books and official documentation, application scenarios, the coverage matrix, and the gap-fill record |
 
 The full table of contents is at [SUMMARY](https://cuihairu.github.io/hello-linux/SUMMARY.html).
 
@@ -92,6 +93,7 @@ Pushes to the `main` branch are deployed to GitHub Pages automatically through G
 - [Arch Wiki](https://wiki.archlinux.org/)
 - [The Debian Handbook](https://www.debian.org/doc/manuals/debian-handbook/)
 - [RHEL documentation](https://docs.redhat.com/)
+- On-site survey: [Research section](https://cuihairu.github.io/hello-linux/research/README.html) (source comparison and coverage audit of this repo)
 
 ## Maintenance notes
 

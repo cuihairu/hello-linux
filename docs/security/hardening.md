@@ -251,7 +251,7 @@ SUID 清单里出现不认识的二进制值得深挖（`getcap -r / 2>/dev/null
 | 拒绝日志 | `/var/log/kern.log`、journal 中 apparmor 记录 | 视所启方案而定 | `/var/log/audit/audit.log`，用 `ausearch` |
 | 排障主命令 | `aa-status`、`dmesg \| grep apparmor` | — | `ausearch -m avc`、`sealert` |
 
-在 Ubuntu 上执行 `getenforce` 得到空输出或 `command not found`，**不是你操作错了，是这台机器根本不用 SELinux**。三系在这一层的共同建议是：**不要因为"挡手"就关闭 MAC**——RHEL 系关掉 SELinux 会连带失去大量服务的类型标签假设；Ubuntu 关 AppArmor 等于拆掉第二道闸。正确姿势是读拒绝日志做最小放行，概念与命令详解见[基础篇 · 安全基础](../basic/security.md)，本篇只负责把"三系默认不同"钉进基线清单。
+在 Ubuntu 上执行 `getenforce` 得到空输出或 `command not found`，**不是你操作错了，是这台机器根本不用 SELinux**。三系在这一层的共同建议是：**不要因为"挡手"就关闭 MAC**——RHEL 系关掉 SELinux 会连带失去大量服务的类型标签假设；Ubuntu 关 AppArmor 等于拆掉第二道闸。正确姿势是读拒绝日志做最小放行，概念与命令详解见[基础篇 · 安全基础](../basic/security.md)，SELinux 的诊断闭环见[SELinux 实战](../security/selinux.md)，AppArmor 的 profile 写法与 `aa-logprof` 修正轨迹见[AppArmor 实战](../security/apparmor.md)，本篇只负责把"三系默认不同"钉进基线清单。
 
 "最小放行"在操作上意味着一条固定路径：复现拒绝 → 从日志抄下完整的 avc/denial → 用 `audit2allow`（SELinux）或 `aa-genprof`（AppArmor）生成候选规则 → **人工删掉与本次业务无关的宽泛项** → 应用并复测。最后一步的"人工删减"不可省略：直接采纳工具输出，常见结果是给进程开了一整类权限，防线等于从"按需"退化成"按工具默认"。放行规则要像防火墙规则一样进配置仓库、可 diff、可回滚——MAC 策略和 iptables 一样，是会被同事与自动化反复改写的活配置。
 

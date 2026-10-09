@@ -22,6 +22,7 @@
 - [软件安装](./basic/packages.md)
   - [APT 包管理](./basic/packages/apt.md)
   - [YUM/DNF 包管理](./basic/packages/yum.md)
+  - [Pacman 包管理](./basic/packages/pacman.md)
 - [用户管理](./basic/users.md)
   - [账号管理](./basic/users/account_management.md)
   - [ACL 权限控制](./basic/users/acl_permissions.md)
@@ -69,6 +70,7 @@
 - [CPU](./hardware/cpu.md)
 - [内存](./hardware/memory.md)
 - [存储设备](./hardware/storage.md)
+- [桌面图形栈](./hardware/desktop-stack.md)
 - [网络设备](./hardware/network.md)
 
 ## 系统管理篇
@@ -76,6 +78,7 @@
 - [系统管理篇](./system-management/README.md)
 - [性能优化](./system-management/performance.md)
 - [备份与恢复](./system-management/backup-and-recovery.md)
+- [LVM 逻辑卷管理](./system-management/lvm.md)
 - [自动化运维](./system-management/automation.md)
 - [例行性工作排程](./system-management/scheduled-tasks.md)
 - [systemd 服务与程序管理](./system-management/services-systemd.md)
@@ -93,6 +96,7 @@
 - [Redis](./server/redis.md)
 - [FTP](./server/ftp.md)
 - [容器](./server/container/docker.md)
+- [KVM 虚拟化](./server/virtualization/kvm.md)
 - [监控](./server/monitoring/prometheus.md)
 - [DNS](./server/dns/bind.md)
 - [邮件](./server/mail/postfix.md)
@@ -123,6 +127,7 @@
 - [安全加固](./security/hardening.md)
 - [PAM 与 sudo](./security/pam-sudo.md)
 - [SELinux 实战](./security/selinux.md)
+- [AppArmor 实战](./security/apparmor.md)
 
 ## 网络篇
 
@@ -152,3 +157,12 @@
 - [设备驱动框架](./source/driver-framework.md)
 - [IPC](./source/ipc.md)
 - [用户态源码选读](./source/userland.md)
+
+## 研究篇
+
+- [研究篇](./research/README.md)
+- [权威书籍调研](./research/authoritative-books.md)
+- [官方文档调研](./research/official-docs.md)
+- [应用场景调研](./research/application-scenarios.md)
+- [覆盖核对与差异表](./research/coverage-matrix.md)
+- [缺口补全与核对修订](./research/gap-fill.md)

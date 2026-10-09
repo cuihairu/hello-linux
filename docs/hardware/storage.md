@@ -35,7 +35,7 @@ major minor  #blocks  name
  253        0   52428800 dm-0        ← device-mapper 设备（LVM/加密卷都挂这层）
 ```
 
-**device-mapper** 是块层之上的虚拟化层：LVM 卷、LUKS 加密、RAID1 镜像都可以把多个物理盘"捏"成一个虚拟块设备（`/dev/dm-*`、`/dev/mapper/*`）。理解它才能看懂 `lsblk` 里 `sda3 → vg0-lvroot → /` 这种多层结构——LVM 的实操归[基础篇与系统管理篇](../system-management/README.md)，本篇只需认出层级关系。
+**device-mapper** 是块层之上的虚拟化层：LVM 卷、LUKS 加密、RAID1 镜像都可以把多个物理盘"捏"成一个虚拟块设备（`/dev/dm-*`、`/dev/mapper/*`）。理解它才能看懂 `lsblk` 里 `sda3 → vg0-lvroot → /` 这种多层结构——LVM 的实操归[系统管理篇 · LVM 逻辑卷管理](../system-management/lvm.md)，本篇只需认出层级关系。
 
 ## 2. 设备类型：HDD、SATA SSD 与 NVMe
 

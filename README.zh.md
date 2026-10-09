@@ -30,6 +30,7 @@
 | [安全篇](https://cuihairu.github.io/hello-linux/security/firewall.html) | 防火墙、入侵检测、加密技术、安全加固、PAM/sudo、SELinux 实战 |
 | [网络篇](https://cuihairu.github.io/hello-linux/network/basics.html) | 网络基础、防火墙、VPN、负载均衡、网络监控、配置基础、故障排除、TCP/IP 要点、命令实战 |
 | [源码篇](https://cuihairu.github.io/hello-linux/source/README.html) | 内核源码获取与编译、调度、内存、VFS、网络栈、中断、IPC、驱动、系统调用 |
+| [研究篇](https://cuihairu.github.io/hello-linux/research/README.html) | 权威书籍与官方文档调研、应用场景、覆盖核对与差异表、缺口补全与修订记录 |
 
 完整目录见 [SUMMARY](https://cuihairu.github.io/hello-linux/SUMMARY.html)。
 
@@ -92,6 +93,7 @@ python3 scripts/tree_art.py --seed 7 --html tree.html --png tree.png
 - [Arch Wiki](https://wiki.archlinux.org/)
 - [Debian 手册](https://www.debian.org/doc/manuals/debian-handbook/)
 - [RHEL 文档](https://docs.redhat.com/)
+- 站内调研：[研究篇 · 知识调查](https://cuihairu.github.io/hello-linux/research/README.html)（权威来源对照与本仓覆盖核对）
 
 ## 维护备注
 

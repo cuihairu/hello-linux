@@ -112,7 +112,7 @@
 | 发布模型 | 固定周期（Ubuntu LTS 每两年） | 滚动更新，无版本号 | 固定周期（约 3 年，支持 10 年） |
 | 典型场景 | 桌面入门、通用服务器 | 学习、极简定制、滚动尝鲜 | 企业生产、认证生态 |
 
-需要注意两处本篇的覆盖范围：软件安装章目前以 APT 和 DNF 为主线展开，Arch 的 `pacman` 系统用法在[发行版简介](./introduction/distributions.md)中有完整对照；安全基础章的 SELinux 内容对 Debian/Ubuntu 和 Arch 同样适用，但那两个家族默认不启用，阅读时请把命令标注视为"启用后可用"。
+需要注意两处本篇的覆盖范围：软件安装章以 APT、DNF、Pacman 三页对应三系（见[软件安装](./packages.md)），Arch 的 `pacman` 系统用法见 [Pacman 包管理](./packages/pacman.md)，[发行版简介](./introduction/distributions.md)另有发行版层面的对照；安全基础章的 SELinux 内容对 Debian/Ubuntu 和 Arch 同样适用，但那两个家族默认不启用，阅读时请把命令标注视为"启用后可用"。
 
 ## 前置建议
 
