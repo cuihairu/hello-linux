@@ -35,4 +35,4 @@
 - 后续增量（2026-10-10 次轮）：剩余两本 C 级书目完成 C→A 升级——How Linux Works 3e 经 No Starch 新版产品页 + 官方详细目录 PDF 实取（17 章），The Linux Bible 经 Wiley 第 11 版产品页 + 官方 TOC PDF 实取（6 部 31 章，顺带更正原登记的无效 ISBN）。两本随即逐章对照进[覆盖核对与差异表](./coverage-matrix.md) §7、§8（已覆盖 15 / 27 章），登记不补 4 类见 gap-fill §3.3——至此五本英文权威书全部 A 级并逐章对照完毕，无 C 级书目残留。
 - 修订 3 处：存储篇里"LVM 实操归基础篇与系统管理篇"的指向此前没有落点，现指向新页；README 篇章表与参考资料补入研究篇；基础篇软件安装章的目录补齐第三系。
 - 「随版本核实」标记清账（2026-10-10）：ssh、ldap、cloud-computing、ci-cd 四页残留 5 处标记逐条核实完毕（man sshd_config、CentOS Stream 9 镜像、Arch Wiki、man slapo-memberof + OpenLDAP 管理指南、docs.gitea.com 五路取证），全部撤标改肯定句，顺带改正 TrustedUserCAkeys 拼写笔误，明细见 [缺口补全与核对修订](./gap-fill.md) §4.1.1。
-- 全仓外链 964 条、160 个域名（2026-10-10 复测），前四位是 `wiki.archlinux.org`（251 条 / 120 页）、`linux.vbird.org`（102 条 / 96 页）、`man7.org`（51 条 / 31 页）、`docs.redhat.com`（46 条 / 46 页）——权威来源的实际引用密度与调研结论一致。
+- 全仓外链 970 条、162 个域名（2026-10-10 复测，含 How Linux Works / Linux Bible 目录来源补链），前四位是 `wiki.archlinux.org`（251 条 / 120 页）、`linux.vbird.org`（102 条 / 96 页）、`man7.org`（51 条 / 31 页）、`docs.redhat.com`（46 条 / 46 页）——权威来源的实际引用密度与调研结论一致。
