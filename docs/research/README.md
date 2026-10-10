@@ -36,3 +36,4 @@
 - 修订 3 处：存储篇里"LVM 实操归基础篇与系统管理篇"的指向此前没有落点，现指向新页；README 篇章表与参考资料补入研究篇；基础篇软件安装章的目录补齐第三系。
 - 「随版本核实」标记清账（2026-10-10）：ssh、ldap、cloud-computing、ci-cd 四页残留 5 处标记逐条核实完毕（man sshd_config、CentOS Stream 9 镜像、Arch Wiki、man slapo-memberof + OpenLDAP 管理指南、docs.gitea.com 五路取证），全部撤标改肯定句，顺带改正 TrustedUserCAkeys 拼写笔误，明细见 [缺口补全与核对修订](./gap-fill.md) §4.1.1。
 - 全仓外链 970 条、162 个域名（2026-10-10 复测，含 How Linux Works / Linux Bible 目录来源补链），前四位是 `wiki.archlinux.org`（251 条 / 120 页）、`linux.vbird.org`（102 条 / 96 页）、`man7.org`（51 条 / 31 页）、`docs.redhat.com`（46 条 / 46 页）——权威来源的实际引用密度与调研结论一致。
+- 交叉统计同步（2026-10-10 三轮）：知识点页来源表的 Debian（37 条）、内核文档（C→A，随官方文档调研 §4.4 升级）、Red Hat（46 条）、GNU（40 条）、man 页（51 / 43 条）五处计数与分级、[官方文档调研](./official-docs.md) §3 的 systemd 引用数（2→5 条）、[权威书籍调研](./authoritative-books.md) §3 的鸟哥引用数（100/94→102/96 页）按当日全量扫描口径对齐；[差异表](./coverage-matrix.md) §9 补入虚拟化行（与本篇 §2 六条要求对齐），[应用场景调研](./application-scenarios.md) §2 处置列统一收口为「已补页」。

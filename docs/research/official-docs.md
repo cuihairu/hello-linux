@@ -75,7 +75,7 @@
 | Red Hat 文档 | [docs.redhat.com](https://docs.redhat.com/) | 46 条，覆盖 46 页 | B 级：仓库外链核查轮已确认可达（403 反爬，双通道仲裁） |
 | GNU 工具手册 | [www.gnu.org](https://www.gnu.org/)（coreutils、bash、findutils、tar 等） | 40 条，24 页 | B 级：既有核验轮通过 |
 | Arch 手册页 | [man.archlinux.org](https://man.archlinux.org/) | 43 条，13 页 | 2026-10-10 复测：带 UA 直测 200，此前 wayback 快照佐证撤 |
-| systemd 文档 | [systemd.io](https://systemd.io/) | 2 条（services-systemd、boot-process 两页，2026-10-09 补链） | 引用缺口已清：两页各补一条官方入口（URL 均 200 实测），明细见[缺口补全与核对修订](./gap-fill.md) §2 第 4 条 |
+| systemd 文档 | [systemd.io](https://systemd.io/) | 5 条（services-systemd、boot-process 两页 2026-10-09 补链，另研究篇与知识点页各引入口） | 引用缺口已清：两页各补一条官方入口（URL 均 200 实测），明细见[缺口补全与核对修订](./gap-fill.md) §2 第 4 条 |
 | 内核源码浏览 | [elixir.bootlin.com](https://elixir.bootlin.com/) | 36 条，13 页 | B 级：带 UA 实测 200，README 记录为反爬假阳性 |
 
 引用口径：本仓外链在上一轮站点巡检里做过 54 页 / 291 条抽样（README 维护备注），269 条正常、10 处失效已换替代、10 处反爬假阳性保留、6 处网络瞬态登记不动。2026-10-10 复测：6 处瞬态 5 处转 200（确认为当时瞬态），proftpd.org 仍 000（DNS 解析为 198.18.x.x 假地址，出口侧问题，wayback 有快照）维持保留；elixir.bootlin.com、cisecurity.org、man.archlinux.org、groups.google.com 四处 wayback 佐证项带 UA 直测 200，佐证撤；help.ubuntu.com 503 为反爬（非 404）维持保留。

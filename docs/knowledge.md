@@ -76,12 +76,12 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 |------|------|------|------|
 | ArchWiki | [wiki.archlinux.org](https://wiki.archlinux.org/title/Table_of_contents) | 8 大类、337 条编号条目（2026-10-09 官方直取）；与服务器运维相关的类目逐条对到了本仓页面 | A |
 | 鸟哥官方站 | [linux.vbird.org](https://linux.vbird.org/) | 两篇目录共 36 个章标题，2026-10-09 官方直取与镜像逐条一致 | A |
-| Debian 手册 | [debian.org/doc/manuals/debian-handbook](https://www.debian.org/doc/manuals/debian-handbook/) | 29 条站内引用；章级目录（Bullseye 版 16 章）已经由官方在线版实取 | 入口 A / 正文未取 |
-| 内核文档 | [docs.kernel.org](https://docs.kernel.org/) | 源码篇的坐标来源；文档分区未逐条取回 | C |
+| Debian 手册 | [debian.org/doc/manuals/debian-handbook](https://www.debian.org/doc/manuals/debian-handbook/) | 37 条站内引用（`www.debian.org` 28 + `wiki.debian.org` 9）；章级目录（Bullseye 版 16 章）已经由官方在线版实取 | 入口 A / 正文未取 |
+| 内核文档 | [docs.kernel.org](https://docs.kernel.org/) | 源码篇的坐标来源；2026-10-10 官方首页实取 21 个顶级分区，本仓 13 条引用分布于 scheduler、process、networking、mm、kbuild、devicetree 六区 | A |
 | systemd 文档 | [systemd.io](https://systemd.io/) | 设计文档门户与 [BOOT 启动流程](https://systemd.io/BOOT)官方说明，两个系统管理页已补链 | A |
-| Red Hat 文档 | [docs.redhat.com](https://docs.redhat.com/) | 40 条引用；对 curl 返回 403 反爬，靠仓库既有双通道仲裁记录支撑 | B |
-| GNU 手册 | [www.gnu.org](https://www.gnu.org/) | coreutils、bash、findutils、tar 等 36 条引用；出口对该域连接层失败持续，维持既有核验 | B |
-| man 页 | [man7.org](https://man7.org/)、[man.archlinux.org](https://man.archlinux.org/) | 49 条与 40 条引用，系统调用与命令语义的第一落点 | B |
+| Red Hat 文档 | [docs.redhat.com](https://docs.redhat.com/) | 46 条引用（每页一条）；对 curl 返回 403 反爬，靠仓库既有双通道仲裁记录支撑 | B |
+| GNU 手册 | [www.gnu.org](https://www.gnu.org/) | coreutils、bash、findutils、tar 等 40 条引用；出口对该域连接层失败持续，维持既有核验 | B |
+| man 页 | [man7.org](https://man7.org/)、[man.archlinux.org](https://man.archlinux.org/) | 51 条与 43 条引用，系统调用与命令语义的第一落点 | B |
 | 内核源码检索 | [elixir.bootlin.com](https://elixir.bootlin.com/) | 带 UA 实测 200；此前的不可达判定属反爬假阳性 | B |
 
 ## 应用场景
