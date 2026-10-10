@@ -137,3 +137,7 @@
 | The Linux Bible | Wiley 官方[第 11 版产品页](https://www.wiley.com/en-us/linux-bible-11th-edition-p-9781394317462)（ISBN 978-1-394-31746-2，2025-12，896 页）+ 页内官方 TOC PDF（`media.wiley.com/product_data/excerpt/68/13943174/1394317468-12.pdf`） | 升 A：6 部 31 章（第 11 版目录）。§4.2 记录的「目录由前端脚本渲染」系旧版页面结论；另原登记 ISBN `9781119909792` 在出版方页面与公开检索均无对应，以官方页实取 ISBN 更正 |
 
 辅助通道记录：Google Books API 当日配额超限（429）、OpenLibrary 无目录字段，均未采用；两本书的目录最终都来自出版方自有页面/样张文件，属 A 级一手来源。至此五本英文书全部升 A，逐章对照见[覆盖核对与差异表](./coverage-matrix.md) §7、§8。
+
+### 4.4 docs.kernel.org 文档分区取回（2026-10-10）
+
+§4 表中 docs.kernel.org「文档分区未逐条取回，维持 C 级」项当日续办：官方首页实取 200，21 个顶级分区与本仓 6 个引用区域（scheduler、process、networking、mm、kbuild、devicetree）均确认可达，[官方文档调研](./official-docs.md) §3 该行升 A。文档正文仍不逐篇引用——A 级升级只针对分区结构与入口，正文细节引用沿用内核源码（elixir）优先的既有纪律。

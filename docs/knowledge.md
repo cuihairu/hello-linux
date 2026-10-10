@@ -129,9 +129,9 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 
 ## 来源与口径
 
-- **A 级**：2026-10-08/09/10 本机实取。书籍目录（两份鸟哥、TLCL、USAH、Debian Handbook、How Linux Works、The Linux Bible）、ArchWiki 类目结构、openEuler/Anolis 场景表述、systemd.io、TLCL 官方 PDF。
+- **A 级**：2026-10-08/09/10 本机实取。书籍目录（两份鸟哥、TLCL、USAH、Debian Handbook、How Linux Works、The Linux Bible）、ArchWiki 类目结构、docs.kernel.org 分区结构、openEuler/Anolis 场景表述、systemd.io、TLCL 官方 PDF。
 - **B 级**：仓库既有外链核验轮的记录。Red Hat、GNU、man 页、elixir 的可达性结论出自 README 维护备注。
-- **C 级 / 来源未考**：docs.kernel.org 的文档分区（未逐条取）；Debian 手册正文（入口与章目录已取，内容未逐章读）；Red Hat 与 GNU 的正文细节（反爬与出口受限）。
+- **C 级 / 来源未考**：Debian 手册正文（入口与章目录已取，内容未逐章读）；Red Hat 与 GNU 的正文细节（反爬与出口受限）。
 - 复测记录与「随版本核实」条目的逐条处置在[缺口补全与核对修订](./research/gap-fill.md) §4、§4.1。
 
 ## 参考资料

@@ -71,7 +71,7 @@
 | 文档 | 入口 | 本仓引用 | 本轮状态 |
 |------|------|---------|---------|
 | Debian 官方手册 | [debian.org/doc/manuals/debian-handbook](https://www.debian.org/doc/manuals/debian-handbook/) | 28 条 `www.debian.org` + 9 条 `wiki.debian.org` | 入口 C 级升级中：2026-10-09 复测落地页 200；章级目录经官方在线版（debian-handbook.info，Bullseye）实取，16 章结构见[权威书籍调研](./authoritative-books.md) 2.1 节，正文细节仍未取 |
-| 内核文档 | [docs.kernel.org](https://docs.kernel.org/)、[www.kernel.org](https://www.kernel.org/) | 13 + 25 条 | C 级：同上；README 记录过后继链核验轮的路径迁移修复 |
+| 内核文档 | [docs.kernel.org](https://docs.kernel.org/)、[www.kernel.org](https://www.kernel.org/) | 13 + 25 条 | 2026-10-10 升 A：官方首页实取 200，解析出 21 个顶级分区（maintainer、process、core-api、driver-api、locking、doc-guide、dev-tools、kernel-hacking、trace、fault-injection、livepatch、rust、admin-guide、kbuild、tools、userspace-api、firmware-guide、devicetree、arch、staging、translations），另有未列入首页的 `scheduler/` 直访 200。本仓 13 条引用分布于 scheduler、process、networking、mm、kbuild、devicetree 六个区域，均属 admin-guide 与核心机制文档范围；README 记录过后继链核验轮的路径迁移修复 |
 | Red Hat 文档 | [docs.redhat.com](https://docs.redhat.com/) | 46 条，覆盖 46 页 | B 级：仓库外链核查轮已确认可达（403 反爬，双通道仲裁） |
 | GNU 工具手册 | [www.gnu.org](https://www.gnu.org/)（coreutils、bash、findutils、tar 等） | 40 条，24 页 | B 级：既有核验轮通过 |
 | Arch 手册页 | [man.archlinux.org](https://man.archlinux.org/) | 43 条，13 页 | 2026-10-10 复测：带 UA 直测 200，此前 wayback 快照佐证撤 |
