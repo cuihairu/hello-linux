@@ -1,6 +1,6 @@
 # 权威书籍调研
 
-调研目的：弄清同类书把哪些主题当成必讲内容，再拿这些主题逐条对照本仓目录。本页给出的两份鸟哥目录与三本英文书（The Linux Command Line、USAH、Debian Handbook）的章节结构均为实取（A 级），其余英文书只给书目信息（C 级），不含任何未经取回的章节细节。
+调研目的：弄清同类书把哪些主题当成必讲内容，再拿这些主题逐条对照本仓目录。本页给出的两份鸟哥目录与五本英文书（The Linux Command Line、USAH、Debian Handbook、How Linux Works、The Linux Bible）的章节结构均为实取（A 级），不含任何未经取回的章节细节。
 
 ## 1. 鸟哥的 Linux 私房菜（A 级，2026-10-08 实取）
 
@@ -40,17 +40,19 @@
 - 服务器篇 12 章里，第一、二章（虚拟机）已由 [KVM 虚拟化](../server/virtualization/kvm.md)、第十一章（LDAP）已由 [LDAP 统一账号管理](../server/ldap.md)、第十章的 SSH 已由 [SSH 远程登录](../server/ssh.md)（2026-10-10）落点。
 - 逐条对照见 [覆盖核对与差异表](./coverage-matrix.md)。
 
-## 2. 英文权威书籍（三本 A 级、两本 C 级）
+## 2. 英文权威书籍（五本 A 级）
 
-英文系统管理领域流通最广的四本书加 Debian Handbook 在此登记，供后续补课用。首轮境外链路中断，只登记了书目信息；2026-10-09 出口恢复后按登记续办 C→A 升级：The Linux Command Line 与 USAH 的官方目录原文已实取，连同 Debian Handbook 的官方在线目录一并升为 A 级；How Linux Works 与 The Linux Bible 的官方页面拿不到目录，维持 C 级。
+英文系统管理领域流通最广的四本书加 Debian Handbook 在此登记。首轮境外链路中断，只登记了书目信息；2026-10-09 出口恢复后按登记续办 C→A 升级：The Linux Command Line 与 USAH 的官方目录原文已实取，连同 Debian Handbook 的官方在线目录一并升为 A 级；2026-10-10 第二轮续测把剩余两本也升为 A 级（见 §2.3）——至此五本全部取回目录，不再有 C 级书目。
 
-### 2.1 目录已实取（A 级，2026-10-09）
+### 2.1 目录已实取（A 级）
 
 | 书名 | 作者 / 出版方 | 实取来源与结论 |
 |------|--------------|---------------|
-| The Linux Command Line | William Shotts（印刷版 No Starch Press） | 作者自发布，CC BY-NC-ND。[书目页](https://linuxcommand.org/tlcl.php)与官方免费 PDF `TLCL-25.12A`（[SourceForge 官方项目](https://sourceforge.net/projects/linuxcommand/)）实取：第 7 网络版（PDF 版权页 © 2026，533 页），4 部 36 章 |
-| UNIX and Linux System Administration Handbook | Evi Nemeth、Garth Snyder、Trent R. Hein、Ben Whaley、James Ma，Addison-Wesley | [官方站 admin.com](https://www.admin.com/) 自述第五版，[样张目录 PDF](https://www.admin.com/samples/TOC.pdf) 实取：4 篇 31 章 |
-| The Debian Handbook | Raphaël Hertzog、Roland Mas | [官方在线版目录页](https://debian-handbook.info/browse/stable/)实取：stable 即 Debian 11 Bullseye 版，16 章 |
+| The Linux Command Line | William Shotts（印刷版 No Starch Press） | 作者自发布，CC BY-NC-ND。[书目页](https://linuxcommand.org/tlcl.php)与官方免费 PDF `TLCL-25.12A`（[SourceForge 官方项目](https://sourceforge.net/projects/linuxcommand/)）实取（2026-10-09）：第 7 网络版（PDF 版权页 © 2026，533 页），4 部 36 章 |
+| UNIX and Linux System Administration Handbook | Evi Nemeth、Garth Snyder、Trent R. Hein、Ben Whaley、James Ma，Addison-Wesley | [官方站 admin.com](https://www.admin.com/) 自述第五版，[样张目录 PDF](https://www.admin.com/samples/TOC.pdf) 实取（2026-10-09）：4 篇 31 章 |
+| The Debian Handbook | Raphaël Hertzog、Roland Mas | [官方在线版目录页](https://debian-handbook.info/browse/stable/)实取（2026-10-09）：stable 即 Debian 11 Bullseye 版，16 章 |
+| How Linux Works, 3rd Edition | Brian Ward，No Starch Press | [官方产品页](https://nostarch.com/howlinuxworks3)（2026-10-10 实取，页内 Table of contents 区块）+[官方详细目录 PDF](https://nostarch.com/download/samples/HLW3rd_DTOC.pdf) 交叉核对：Introduction + 17 章；产品页章列表第 15 章误标为 "The Big Picture"，详细目录 PDF 作 "Development Tools"，以 PDF 为准 |
+| The Linux Bible, 11th Edition | Christopher Negus，Wiley | [Wiley 官方产品页](https://www.wiley.com/en-us/linux-bible-11th-edition-p-9781394317462)（2026-10-10 实取：ISBN 978-1-394-31746-2，2025-12，896 页）+ 页内官方 [Table of Contents PDF](https://media.wiley.com/product_data/excerpt/68/13943174/1394317468-12.pdf) 实取：6 部 31 章。原登记 ISBN `9781119909792` 在出版方页面与公开检索中均无对应，无法复现，本轮以官方页实取 ISBN 更正 |
 
 **The Linux Command Line**（4 部 36 章，章题照录自 PDF 目录）：
 
@@ -72,16 +74,49 @@
 
 **The Debian Handbook**（16 章，章题照录自官方在线目录）：The Debian Project；Presenting the Case Study；Analyzing the Existing Setup and Migrating；Installation；Packaging System: Tools and Fundamental Principles；Maintenance and Updates: The APT Tools；Solving Problems and Finding Relevant Information；Basic Configuration: Network, Accounts, Printing…；Unix Services；Network Infrastructure；Network Services: Postfix, Apache, NFS, Samba, Squid, LDAP, SIP, XMPP, TURN；Advanced Administration；Workstation；Security；Creating a Debian Package；Conclusion: Debian's Future
 
-对照含义：TLCL 第 14 章（Package Management）、第 19–20 章（Regular Expressions、Text Processing）等与命令篇、脚本篇逐条对应；三本 A 级书的全部章节已逐条对照进[覆盖核对与差异表](./coverage-matrix.md)（USAH 见 §4、TLCL 见 §5、Debian Handbook 见 §6），Cloud Computing 与 Continuous Integration and Delivery 已由 2026-10-10 补页落点。
+**How Linux Works, 3rd Edition**（Introduction + 17 章，章题照录自官方详细目录 PDF）：
 
-### 2.2 维持 C 级（官方页无目录可取）
+| 章 | 题 |
+|----|----|
+| 第 1 章 | The Big Picture |
+| 第 2 章 | Basic Commands and Directory Hierarchy |
+| 第 3 章 | Devices |
+| 第 4 章 | Disks and Filesystems |
+| 第 5 章 | How the Linux Kernel Boots |
+| 第 6 章 | How User Space Starts |
+| 第 7 章 | System Configuration: Logging, System Time, Batch Jobs, and Users |
+| 第 8 章 | A Closer Look at Processes and Resource Utilization |
+| 第 9 章 | Understanding Your Network and Its Configuration |
+| 第 10 章 | Network Applications and Services |
+| 第 11 章 | Introduction to Shell Scripts |
+| 第 12 章 | Network File Transfer and Sharing |
+| 第 13 章 | User Environments |
+| 第 14 章 | A Brief Survey of the Linux Desktop and Printing |
+| 第 15 章 | Development Tools |
+| 第 16 章 | Introduction to Compiling Software from C Source Code |
+| 第 17 章 | Virtualization |
 
-| 书名 | 作者 / 出版方 | 获取入口 | 处置原因 |
-|------|--------------|---------|---------|
-| How Linux Works | Brian Ward，No Starch Press | 出版方 [nostarch.com](https://nostarch.com/how-linux-works-3rd-edition) | 产品页实取：无目录区块，也无样章 PDF 链接，无处取章节结构 |
-| The Linux Bible | Christopher Negus，Wiley | 出版方 Wiley 产品页（ISBN 9781119909792） | 产品页实取：仅书目字段，目录由前端脚本渲染，静态抓取拿不到 |
+**The Linux Bible, 11th Edition**（6 部 31 章，章题照录自官方 TOC PDF）：
 
-引用纪律：2.2 两本在本仓正文中只允许以「书名 + 出版方 + 入口」形态出现，不得引用具体章节、页码或版本年份，直到取回目录原文；2.1 三本可引用其章节结构（分部与章题），目录之外的正文细节仍不引用。
+| 部 | 章 |
+|----|----|
+| Part I: Getting Started（第 1–2 章） | Starting with Linux；Creating the Perfect Linux Desktop |
+| Part II: Becoming a Linux Power User（第 3–7 章） | Using the Shell；Moving Around the Filesystem；Working with Text Files；Managing Running Processes；Writing Simple Shell Scripts |
+| Part III: Becoming a Linux System Administrator（第 8–12 章） | Learning System Administration；Installing Linux；Getting and Managing Software；Managing User Accounts；Managing Disks and Filesystems |
+| Part IV: Becoming a Linux Server Administrator（第 13–22 章） | Understanding Server Administration；Administering Networking；Starting and Stopping Services；Configuring a Print Server；Configuring a Web Server；Configuring an FTP Server；Configuring a Windows File Sharing (Samba) Server；Configuring an NFS File Server；Troubleshooting Linux；Configuring an Artificial Intelligence Chatbot |
+| Part V: Learning Linux Security Techniques（第 23–26 章） | Understanding Basic Linux Security；Understanding Advanced Linux Security；Enhancing Linux Security with SELinux；Securing Linux on a Network |
+| Part VI: Engaging with Cloud Computing（第 27–31 章） | Shifting to Clouds and Containers；Using Linux for Cloud Computing；Deploying Linux to the Cloud；Automating Apps and Infrastructure with Ansible；Deploying Applications as Containers with Kubernetes |
+
+对照含义：TLCL 第 14 章（Package Management）、第 19–20 章（Regular Expressions、Text Processing）等与命令篇、脚本篇逐条对应；五本 A 级书的全部章节已逐条对照进[覆盖核对与差异表](./coverage-matrix.md)（USAH 见 §4、TLCL 见 §5、Debian Handbook 见 §6、How Linux Works 见 §7、Linux Bible 见 §8），Cloud Computing 与 Continuous Integration and Delivery 已由 2026-10-10 补页落点。
+
+### 2.2 C→A 升级记录（两轮）
+
+| 轮次 | 书 | 结果 |
+|------|----|------|
+| 2026-10-09（首轮） | TLCL、USAH、Debian Handbook | 官方目录原文实取升 A，明细见[缺口补全与核对修订](./gap-fill.md) §4.2 |
+| 2026-10-10（次轮） | How Linux Works、The Linux Bible | 首轮判定「官方页无目录可取」系产品页旧版布局所致。次轮检索到 No Starch 新版产品页（含 Contents 区块与详细目录 PDF）与 Wiley 第 11 版产品页（含 TOC PDF 链接），两本目录均从出版方一手材料实取升 A，明细见 gap-fill §4.3 |
+
+引用纪律：五本均可在正文引用其章节结构（分部与章题）；目录之外的正文细节仍不引用。两轮升级后不再有 C 级书目。
 
 ## 3. 与鸟哥的分工
 

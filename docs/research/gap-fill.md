@@ -60,6 +60,19 @@
 
 另有第 2 章（Presenting the Case Study，全书连贯叙事载体）、第 16 章（Conclusion，社区展望）判「不覆盖」，非技术主题，不进本登记表。
 
+### 3.3 第四批登记不补（2026-10-10 次轮，How Linux Works / Linux Bible 逐章核对）
+
+触发：[覆盖核对与差异表](./coverage-matrix.md) §7（How Linux Works 3e 17 章）、§8（Linux Bible 11e 31 章）逐章判定——五本 A 级英文书最后两本完成对照。逐类登记如下：
+
+| 主题 | 出处 | 不补理由 |
+|------|------|---------|
+| 设备文件与 udev 规则 | HLW 第 3 章 Devices | 设备节点与 sysfs 的语义已散见[存储设备](../hardware/storage.md)、[目录结构](../basic/filesystem/hierarchy.md)与源码篇驱动框架，udev 规则细节属设备适配范畴（与 ArchWiki 4.9 笔记本适配同判据） |
+| 云厂商控制台部署 | Linux Bible 第 29 章 | 特定平台（AWS 等）控制台实操，超出单机学习定位；[云计算与 cloud-init](../server/cloud-computing.md) 已覆盖 IaaS 模型、实例与镜像、安全组与 VPC 等跨云通用机制 |
+| Kubernetes 多节点编排 | Linux Bible 第 31 章、HLW 第 17 章 17.2.4 小节 | 编排系统超出单机定位；[容器](../server/container/docker.md) Compose 节已写明「超出单机范围（多节点调度、滚动升级、服务发现）后再评估 Kubernetes」的边界判断，落点即判断本身 |
+| AI Chatbot 本地部署 | Linux Bible 第 22 章 | LLM 应用部署属应用软件范畴，与「学 Linux 系统本身」定位不同（第 11 版新增章，无既有对照压力） |
+
+另有 HLW 第 15 章（Development Tools，gcc/make/lex/yacc）沿用 ArchWiki 核对轮「2.x 开发工具链不覆盖」判定；Linux Bible 第 16 章（Configuring a Print Server）沿用打印登记（USAH 第 12 章），均不重复入表。
+
 ## 4. 待复测（2026-10-08 断网轮降级项）与复测结果（2026-10-09 已执行）
 
 原网络状况见[总览](./README.md)：2026-10-08 出境链路中断，调研降级为镜像实取 + 既有核验记录。**2026-10-09 出口恢复，以下复测当日完成**：
@@ -113,3 +126,14 @@
 | The Linux Bible | Wiley 产品页实取（ISBN 9781119909792） | 维持 C：仅书目字段，目录由前端脚本渲染，静态抓取不可得 |
 
 引用纪律随之更新：A 级三本可在正文引用章节结构（分部与章题），C 级两本仍按「书名 + 出版方 + 入口」形态引用。
+
+### 4.3 剩余两本英文书的 C→A 升级（2026-10-10 次轮）
+
+§4.2 表中「维持 C」的两本当日续办完毕，各找到出版方一手目录来源：
+
+| 书 | 取回来源 | 结果 |
+|----|---------|------|
+| How Linux Works, 3rd Edition | nostarch.com 新版[产品页](https://nostarch.com/howlinuxworks3)（Table of contents 区块，含完整章列表）+ 官方[详细目录 PDF](https://nostarch.com/download/samples/HLW3rd_DTOC.pdf) 交叉核对 | 升 A：Introduction + 17 章。产品页章列表第 15 章误标 "The Big Picture"，详细目录 PDF 作 "Development Tools"，以 PDF 为准并在[权威书籍调研](./authoritative-books.md) 2.1 节留档。§4.2 记录的旧产品页（`/how-linux-works-3rd-edition`）已 404，「无目录区块」结论系旧版页面布局所致 |
+| The Linux Bible | Wiley 官方[第 11 版产品页](https://www.wiley.com/en-us/linux-bible-11th-edition-p-9781394317462)（ISBN 978-1-394-31746-2，2025-12，896 页）+ 页内官方 TOC PDF（`media.wiley.com/product_data/excerpt/68/13943174/1394317468-12.pdf`） | 升 A：6 部 31 章（第 11 版目录）。§4.2 记录的「目录由前端脚本渲染」系旧版页面结论；另原登记 ISBN `9781119909792` 在出版方页面与公开检索均无对应，以官方页实取 ISBN 更正 |
+
+辅助通道记录：Google Books API 当日配额超限（429）、OpenLibrary 无目录字段，均未采用；两本书的目录最终都来自出版方自有页面/样张文件，属 A 级一手来源。至此五本英文书全部升 A，逐章对照见[覆盖核对与差异表](./coverage-matrix.md) §7、§8。

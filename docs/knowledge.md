@@ -54,7 +54,7 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 
 ## 权威书籍要点
 
-七本书的定位与实测目录见[权威书籍调研](./research/authoritative-books.md)。前五本目录原文已实取（A 级），后两本只有书目信息（C 级，目录未取回，不引章节细节）。
+七本书的定位与实测目录见[权威书籍调研](./research/authoritative-books.md)。七本目录原文均已实取（A 级）。
 
 | 书名 | 作者 / 出版方 | 级别 | 对应知识点 |
 |------|--------------|------|-----------|
@@ -63,10 +63,10 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 | The Linux Command Line（第 7 网络版，4 部 36 章） | William Shotts（自发布，CC BY-NC-ND；印刷版 No Starch Press） | A | shell 用法到脚本工程：变量、流程控制、位置参数、数组——命令篇与脚本篇的深度基准 |
 | UNIX and Linux System Administration Handbook（第 5 版，4 篇 31 章） | Evi Nemeth、Garth Snyder、Trent R. Hein、Ben Whaley、James Ma（Addison-Wesley） | A | 基础管理、网络、存储、运维四篇；Containers 已由[容器](./server/container/docker.md)、Cloud Computing 与 Continuous Integration and Delivery 已由[云计算与 cloud-init](./server/cloud-computing.md)、[CI/CD 与持续交付](./server/ci-cd.md)（2026-10-10）落点 |
 | The Debian Handbook（Bullseye 版，16 章） | Raphaël Hertzog、Roland Mas | A | Debian 项目、安装、APT、服务、安全——Debian 系的权威坐标 |
-| How Linux Works | Brian Ward（No Starch Press） | C | 定位是机制解释基准；产品页无目录可取，只有书名与出版方可用 |
-| The Linux Bible | Christopher Negus（Wiley） | C | 定位是发行版广度基准；产品页目录由脚本渲染，静态抓取拿不到 |
+| How Linux Works（第 3 版，Introduction + 17 章） | Brian Ward（No Starch Press） | A | 机制解释基准：内核启动、用户空间启动、进程与资源、cgroups、虚拟化——源码篇与系统管理篇的「how/why」坐标 |
+| The Linux Bible（第 11 版，6 部 31 章） | Christopher Negus（Wiley） | A | 发行版广度基准：桌面到服务器、安全、云与 Ansible/Kubernetes——服务器篇与安全篇的广度坐标 |
 
-两本鸟哥对本仓的核对结论各有三条落点（源代码与 Tarball、X Window、虚拟机、LDAP 等），逐条表在[覆盖核对与差异表](./research/coverage-matrix.md) §1、§2。USAH 31 章、TLCL 36 章与 Debian Handbook 16 章已于 2026-10-10 逐条核对进差异表 §4、§5、§6：USAH 的 Cloud Computing 与 Continuous Integration and Delivery 由[云计算与 cloud-init](./server/cloud-computing.md)、[CI/CD 与持续交付](./server/ci-cd.md)落点，其余章节绝大多数有既有页面支撑，打印、SSO 完整部署、提示符定制、实时通信代理、Debian 打包等 10 项登记不补。
+两本鸟哥对本仓的核对结论各有三条落点（源代码与 Tarball、X Window、虚拟机、LDAP 等），逐条表在[覆盖核对与差异表](./research/coverage-matrix.md) §1、§2。五本英文书 31 + 36 + 16 + 17 + 31 章已于 2026-10-10 全部逐条核对进差异表 §4–§8：USAH 的 Cloud Computing 与 Continuous Integration and Delivery 由[云计算与 cloud-init](./server/cloud-computing.md)、[CI/CD 与持续交付](./server/ci-cd.md)落点，其余章节绝大多数有既有页面支撑，打印、SSO 完整部署、提示符定制、实时通信代理、Debian 打包、udev、云厂商控制台、Kubernetes、AI Chatbot 等 12 项登记不补。
 
 ## 官方文档要点
 
@@ -122,16 +122,16 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 调研方法上的坑同样值得留档，核对记录见[缺口补全与核对修订](./research/gap-fill.md) §4：
 
 - **镜像站有时差。** ArchWiki 官方 337 条对镜像 336 条，个别类目计数 ±1 属正常；两份鸟哥目录官方与镜像逐条一致。镜像取的结构要回头对官方。
-- **出版方页面未必给目录。** Wiley 产品页由前端脚本渲染，静态抓取只剩 ISBN；No Starch 产品页没有目录区块。书目标 C 级不是偷懒，是拿不到。
+- **出版方页面未必给目录，但要换布局再试。** 首轮 Wiley 产品页由前端脚本渲染、No Starch 旧版产品页没有目录区块，两本只拿到 ISBN；次轮换到新版产品页与官方 TOC PDF（media.wiley.com 样张、nostarch.com/download/samples）后全部取回。书目标 C 级不是偷懒，是当轮真拿不到——留入口，日后换通道再试。
 - **反爬表现各不一样。** docs.redhat.com 403、freedesktop man 页 418、elixir 带 UA 就 200（假阳性）、gnu.org 连接层 000 且重试仍败。判定可达性要带 UA、多通道交叉，别被单一 curl 结果带偏。
 - **文案数字别照抄。** TLCL 站点文案写 596 页，官方 PDF 实测 533 页（同一第 7 网络版）。引用以到手版本实测为准。
 - **查无实据就降级。** 页内标「随版本核实」的条目，核实得了就撤标记写肯定句，核实不了就改措辞留档，不硬写。
 
 ## 来源与口径
 
-- **A 级**：2026-10-08/09 本机实取。书籍目录（两份鸟哥、TLCL、USAH、Debian Handbook）、ArchWiki 类目结构、openEuler/Anolis 场景表述、systemd.io、TLCL 官方 PDF。
+- **A 级**：2026-10-08/09/10 本机实取。书籍目录（两份鸟哥、TLCL、USAH、Debian Handbook、How Linux Works、The Linux Bible）、ArchWiki 类目结构、openEuler/Anolis 场景表述、systemd.io、TLCL 官方 PDF。
 - **B 级**：仓库既有外链核验轮的记录。Red Hat、GNU、man 页、elixir 的可达性结论出自 README 维护备注。
-- **C 级 / 来源未考**：How Linux Works 与 The Linux Bible 的章节结构（目录未取回，正文不得引用）；docs.kernel.org 的文档分区（未逐条取）；Debian 手册正文（入口与章目录已取，内容未逐章读）；Red Hat 与 GNU 的正文细节（反爬与出口受限）。
+- **C 级 / 来源未考**：docs.kernel.org 的文档分区（未逐条取）；Debian 手册正文（入口与章目录已取，内容未逐章读）；Red Hat 与 GNU 的正文细节（反爬与出口受限）。
 - 复测记录与「随版本核实」条目的逐条处置在[缺口补全与核对修订](./research/gap-fill.md) §4、§4.1。
 
 ## 参考资料

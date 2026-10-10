@@ -193,7 +193,73 @@
 
 16 章判定小计：已覆盖 12、部分覆盖→登记不补 2（实时通信与代理服务、Debian 打包工作流）、不覆盖 2（案例叙事章、社区展望章）。
 
-## 7. 按应用场景核对
+## 7. 按 How Linux Works 3e 核对（17 章）
+
+来源目录见[权威书籍调研](./authoritative-books.md) 2.1 节（nostarch.com 官方产品页 + 详细目录 PDF，A 级，2026-10-10 实取）。此书讲内核与系统机制的「how/why」，逐章判定如下。
+
+| How Linux Works 章节 | 主题 | 本仓落点 | 判定 |
+|----------------------|------|---------|------|
+| 第 1 章 | The Big Picture | [技术概论](../basic/overview.md)、[Linux 简介](../basic/introduction.md) | 已覆盖 |
+| 第 2 章 | Basic Commands and Directory Hierarchy | [基本命令](../commands/basic.md)、[目录结构](../basic/filesystem/hierarchy.md) | 已覆盖 |
+| 第 3 章 | Devices | 设备文件一行见[目录结构](../basic/filesystem/hierarchy.md)，sysfs 语义散见源码篇与[存储设备](../hardware/storage.md)；用户态的设备文件、udev 规则、sysfs 查询无独立落点 | 部分覆盖→登记不补 |
+| 第 4 章 | Disks and Filesystems | [文件系统](../basic/filesystem.md)、[存储设备](../hardware/storage.md)、[LVM 逻辑卷管理](../system-management/lvm.md) | 已覆盖 |
+| 第 5 章 | How the Linux Kernel Boots | [开机流程](../basic/boot.md)、[开机流程与引导排错](../system-management/boot-process.md) | 已覆盖 |
+| 第 6 章 | How User Space Starts | [开机流程与引导排错](../system-management/boot-process.md)、[systemd 服务与程序管理](../system-management/services-systemd.md) | 已覆盖 |
+| 第 7 章 | System Configuration: Logging, System Time, Batch Jobs, and Users | [日志系统管理](../system-management/logging.md)、[例行性工作排程](../system-management/scheduled-tasks.md)、[NTP 时间服务](../server/ntp.md)、[账号管理](../basic/users/account_management.md)、[PAM 与 sudo](../security/pam-sudo.md) | 已覆盖 |
+| 第 8 章 | A Closer Look at Processes and Resource Utilization | [进程管理](../commands/system/process.md)、[系统监控工具](../commands/system/monitoring.md)、[性能优化](../system-management/performance.md)；cgroups 见容器与 KVM 页 | 已覆盖 |
+| 第 9 章 | Understanding Your Network and Its Configuration | [网络配置基础](../network/network-configuration.md)、[TCP/IP 要点](../network/tcpip-essentials.md)、[路由与 NAT](../server/routing-nat.md)、[防火墙](../network/firewall.md) | 已覆盖 |
+| 第 10 章 | Network Applications and Services | [SSH 远程登录](../server/ssh.md)（fail2ban 衔接[入侵检测](../security/intrusion-detection.md)）、[网络工具](../commands/network/network-tools.md) | 已覆盖 |
+| 第 11 章 | Introduction to Shell Scripts | [脚本篇](../script/README.md) 全篇 | 已覆盖 |
+| 第 12 章 | Network File Transfer and Sharing | rsync 见[备份与恢复](../system-management/backup-and-recovery.md)、[NFS](../server/nfs.md)、[Samba](../server/samba.md)；SSHFS 未单列 | 已覆盖（SSHFS 未单列） |
+| 第 13 章 | User Environments | [变量与数据类型](../script/variables.md)（环境变量与启动文件）；提示符部分沿用 TLCL 第 13 章登记 | 已覆盖 |
+| 第 14 章 | A Brief Survey of the Linux Desktop and Printing | [桌面图形栈](../hardware/desktop-stack.md)；打印部分同 USAH 第 12 章判定 | 已覆盖（打印不覆盖登记） |
+| 第 15 章 | Development Tools | gcc/make/lex/yacc 开发工具链，ArchWiki 核对轮已判 2.x 开发工具链不覆盖，沿用 | 不覆盖（登记） |
+| 第 16 章 | Introduction to Compiling Software from C Source Code | [源码编译与 Tarball 安装](../basic/packages/tarball.md) | 已覆盖 |
+| 第 17 章 | Virtualization | [KVM 虚拟化](../server/virtualization/kvm.md)、[容器](../server/container/docker.md)；章内 Kubernetes 小节同 Linux Bible 第 31 章判定 | 已覆盖 |
+
+17 章判定小计：已覆盖 15、部分覆盖→登记不补 1（设备文件与 udev）、不覆盖 1（开发工具链，沿用既有判定）。
+
+## 8. 按 The Linux Bible 11e 核对（31 章）
+
+来源目录见[权威书籍调研](./authoritative-books.md) 2.1 节（Wiley 官方产品页 + TOC PDF，A 级，2026-10-10 实取）。此书面向入门到中级的发行版实操，逐章判定如下。
+
+| Linux Bible 章节 | 主题 | 本仓落点 | 判定 |
+|------------------|------|---------|------|
+| 第 1 章 | Starting with Linux | [Linux 简介](../basic/introduction.md)、[技术概论](../basic/overview.md)、[选择合适的发行版](../basic/installation/choose_distribution.md) | 已覆盖 |
+| 第 2 章 | Creating the Perfect Linux Desktop | [桌面图形栈](../hardware/desktop-stack.md) | 已覆盖 |
+| 第 3 章 | Using the Shell | [Bash 基础](../script/bash-basics.md)、[基本命令](../commands/basic.md) | 已覆盖 |
+| 第 4 章 | Moving Around the Filesystem | [目录操作](../commands/basic/directory.md)、[文件操作](../commands/basic/file.md) | 已覆盖 |
+| 第 5 章 | Working with Text Files | [文本编辑和查看工具](../commands/text/editors.md)、[文本处理](../commands/text/text_processing.md) | 已覆盖 |
+| 第 6 章 | Managing Running Processes | [进程管理](../commands/system/process.md) | 已覆盖 |
+| 第 7 章 | Writing Simple Shell Scripts | [Bash 基础](../script/bash-basics.md)、[脚本篇](../script/README.md) | 已覆盖 |
+| 第 8 章 | Learning System Administration | [系统管理篇](../system-management/README.md) 全篇 | 已覆盖 |
+| 第 9 章 | Installing Linux | [安装 Linux](../basic/installation.md)（三系并写） | 已覆盖 |
+| 第 10 章 | Getting and Managing Software | [软件安装](../basic/packages.md) 章四页、[包管理命令](../commands/package/package.md) | 已覆盖 |
+| 第 11 章 | Managing User Accounts | [账号管理](../basic/users/account_management.md) | 已覆盖 |
+| 第 12 章 | Managing Disks and Filesystems | [文件系统](../basic/filesystem.md)、[存储设备](../hardware/storage.md)、[LVM 逻辑卷管理](../system-management/lvm.md) | 已覆盖 |
+| 第 13 章 | Understanding Server Administration | [服务器篇](../server/README.md)、[SSH 远程登录](../server/ssh.md)、[系统监控工具](../commands/system/monitoring.md) | 已覆盖 |
+| 第 14 章 | Administering Networking | [网络配置基础](../network/network-configuration.md)、[网络管理命令](../commands/network/network.md) | 已覆盖 |
+| 第 15 章 | Starting and Stopping Services | [systemd 服务与程序管理](../system-management/services-systemd.md) | 已覆盖 |
+| 第 16 章 | Configuring a Print Server | 同 USAH 第 12 章判定 | 不覆盖（登记） |
+| 第 17 章 | Configuring a Web Server | [Nginx](../server/web/nginx.md)、[Apache](../server/web/apache.md) | 已覆盖 |
+| 第 18 章 | Configuring an FTP Server | [FTP 服务器](../server/ftp.md) | 已覆盖 |
+| 第 19 章 | Configuring a Windows File Sharing (Samba) Server | [Samba](../server/samba.md) | 已覆盖 |
+| 第 20 章 | Configuring an NFS File Server | [NFS](../server/nfs.md) | 已覆盖 |
+| 第 21 章 | Troubleshooting Linux | [网络故障排除](../network/troubleshooting.md)、[脚本调试](../script/debugging.md)、[开机流程与引导排错](../system-management/boot-process.md) | 已覆盖 |
+| 第 22 章 | Configuring an Artificial Intelligence Chatbot | LLM 本地部署与应用配置，属应用软件范畴，与「学 Linux 系统本身」定位不同 | 不覆盖 |
+| 第 23 章 | Understanding Basic Linux Security | [安全加固](../security/hardening.md)、[防火墙](../security/firewall.md) | 已覆盖 |
+| 第 24 章 | Understanding Advanced Linux Security | [加密与证书](../security/encryption.md)、[PAM 与 sudo](../security/pam-sudo.md) | 已覆盖 |
+| 第 25 章 | Enhancing Linux Security with SELinux | [SELinux 实战](../security/selinux.md)、[SELinux 概念](../basic/security/concept.md) | 已覆盖 |
+| 第 26 章 | Securing Linux on a Network | [防火墙](../network/firewall.md)、[SSH 远程登录](../server/ssh.md)（加固节） | 已覆盖 |
+| 第 27 章 | Shifting to Clouds and Containers | [云计算与 cloud-init](../server/cloud-computing.md)、[容器](../server/container/docker.md) | 已覆盖 |
+| 第 28 章 | Using Linux for Cloud Computing | [云计算与 cloud-init](../server/cloud-computing.md)（IaaS 模型、实例与镜像、安全组与 VPC） | 已覆盖 |
+| 第 29 章 | Deploying Linux to the Cloud | 云厂商（AWS 等）控制台与特定平台实操，超出单机学习定位；本仓云计算页只到概念与跨云通用机制 | 部分覆盖→登记不补 |
+| 第 30 章 | Automating Apps and Infrastructure with Ansible | [自动化运维](../system-management/automation.md) | 已覆盖 |
+| 第 31 章 | Deploying Applications as Containers with Kubernetes | 多节点编排无独立落点；[容器](../server/container/docker.md) Compose 节已写明「超出单机范围后再评估 Kubernetes」的边界判断 | 部分覆盖→登记不补 |
+
+31 章判定小计：已覆盖 27、部分覆盖→登记不补 2（云厂商控制台部署、Kubernetes 编排）、不覆盖 2（打印服务器、AI Chatbot）。
+
+## 9. 按应用场景核对
 
 场景要求见[应用场景调研](./application-scenarios.md) 第 2 节。
 
@@ -205,7 +271,7 @@
 | 运维自动化 | 调度、编排、监控、备份、账号一致性 | 自动化、监控、备份、排程四条主线已有；账号一致性已补 | 缺口→已补页 [LDAP 统一账号管理](../server/ldap.md) |
 | 安全合规 | MAC 强制访问控制在两套发行版上的差异 | SELinux 成体系，AppArmor 此前只有对照表一行 | 缺口→本轮补页 |
 
-## 8. 差异汇总
+## 10. 差异汇总
 
 | 类型 | 数量 | 明细 |
 |------|------|------|
@@ -215,5 +281,6 @@
 | 不覆盖（有意） | 4 类 | 笔记本适配、开发工具链、点对点/流媒体、VoIP |
 | 按 USAH/TLCL 逐章核对登记（2026-10-10） | 不补 6 类 | 打印 CUPS（USAH 第 12 章 / TLCL 第 22 章，桌面办公外围）、SSO 完整部署（USAH 第 17 章，需 KDC 与域环境）、readline 键绑定与 history 扩展（TLCL 第 8 章）、排版小工具（TLCL 第 21 章）、提示符个性化（TLCL 第 13 章）、shell 杂项技巧（TLCL 第 36 章）；另 USAH 第 30 章（机房设施）、第 31 章（组织流程）判不覆盖 |
 | 按 Debian Handbook 逐章核对登记（2026-10-10） | 不补 2 类 | 实时通信与代理服务（第 11 章的 Squid、SIP/XMPP/TURN——企业专用协议栈，与单机学习主线弱相关，Postfix/Apache/NFS/Samba/LDAP 五项已有独立页）、Debian 打包工作流（第 15 章，`dpkg-buildpackage` 属发行版打包者技能，非系统管理主线，源码编译已由 Tarball 页覆盖）；另第 2 章（案例叙事）、第 16 章（社区展望）判不覆盖 |
+| 按 How Linux Works / Linux Bible 逐章核对登记（2026-10-10 次轮） | 不补 4 类 | 设备文件与 udev（HLW 第 3 章，机制散见存储、systemd 与源码篇，规则细节属设备适配）、云厂商控制台部署（Linux Bible 第 29 章，特定平台实操）、Kubernetes 编排（Linux Bible 第 31 章与 HLW 第 17 章小节，容器页已有单机/多节点边界判断）、AI Chatbot 部署（Linux Bible 第 22 章，应用软件范畴）；另 HLW 第 15 章（开发工具链）沿用不覆盖判定，Linux Bible 第 16 章（打印服务器）沿用打印登记 |
 
 本轮补页与修订的执行记录见[缺口补全与核对修订](./gap-fill.md)。
