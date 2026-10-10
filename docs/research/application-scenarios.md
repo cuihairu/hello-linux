@@ -33,7 +33,7 @@ ArchWiki 目录页（镜像实取）把「视觉美化」（25 页）、「图�
 | 安全合规 | MAC 强制访问控制在两套发行版上的差异 | SELinux 5 页成体系，AppArmor 只有对照表一行 | 补页（AppArmor） |
 | 虚拟化 | KVM/libvirt 建机与网络，与容器的分工 | 硬件篇给了安装命令，服务器篇只有容器页 | 补页（KVM 虚拟化） |
 
-原先「记为缺口但本轮不补」的两项（嵌入式交叉编译专题、LDAP 统一账号）已在后续增量补齐，落成 [交叉编译与嵌入式](../source/cross-compile.md) 与 [LDAP 统一账号管理](../server/ldap.md) 两页；2026-10-10 差异表部分覆盖项 SSH 补独立页面 [SSH 远程登录](../server/ssh.md)，基础篇「第二十一章」补 [源码编译与 Tarball 安装](../basic/packages/tarball.md)，USAH 扩展选题补 [云计算与 cloud-init](../server/cloud-computing.md)、[CI/CD 与持续交付](../server/ci-cd.md) 两页；USAH 31 章与 TLCL 36 章逐条核对进[覆盖核对与差异表](./coverage-matrix.md) §4、§5；补全记录见 [缺口补全与核对修订](./gap-fill.md)。
+原先「记为缺口但本轮不补」的两项（嵌入式交叉编译专题、LDAP 统一账号）已在后续增量补齐，落成 [交叉编译与嵌入式](../source/cross-compile.md) 与 [LDAP 统一账号管理](../server/ldap.md) 两页；2026-10-10 差异表部分覆盖项 SSH 补独立页面 [SSH 远程登录](../server/ssh.md)，基础篇「第二十一章」补 [源码编译与 Tarball 安装](../basic/packages/tarball.md)，USAH 扩展选题补 [云计算与 cloud-init](../server/cloud-computing.md)、[CI/CD 与持续交付](../server/ci-cd.md) 两页；USAH 31 章、TLCL 36 章与 Debian Handbook 16 章逐条核对进[覆盖核对与差异表](./coverage-matrix.md) §4、§5、§6；补全记录见 [缺口补全与核对修订](./gap-fill.md)。
 
 ## 4. 场景阅读路径
 

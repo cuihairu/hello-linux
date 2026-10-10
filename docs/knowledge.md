@@ -66,7 +66,7 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 | How Linux Works | Brian Ward（No Starch Press） | C | 定位是机制解释基准；产品页无目录可取，只有书名与出版方可用 |
 | The Linux Bible | Christopher Negus（Wiley） | C | 定位是发行版广度基准；产品页目录由脚本渲染，静态抓取拿不到 |
 
-两本鸟哥对本仓的核对结论各有三条落点（源代码与 Tarball、X Window、虚拟机、LDAP 等），逐条表在[覆盖核对与差异表](./research/coverage-matrix.md) §1、§2。USAH 31 章与 TLCL 36 章已于 2026-10-10 逐条核对进差异表 §4、§5：USAH 的 Cloud Computing 与 Continuous Integration and Delivery 由[云计算与 cloud-init](./server/cloud-computing.md)、[CI/CD 与持续交付](./server/ci-cd.md)落点，其余章节绝大多数有既有页面支撑，打印、SSO 完整部署、提示符定制等 8 项登记不补。
+两本鸟哥对本仓的核对结论各有三条落点（源代码与 Tarball、X Window、虚拟机、LDAP 等），逐条表在[覆盖核对与差异表](./research/coverage-matrix.md) §1、§2。USAH 31 章、TLCL 36 章与 Debian Handbook 16 章已于 2026-10-10 逐条核对进差异表 §4、§5、§6：USAH 的 Cloud Computing 与 Continuous Integration and Delivery 由[云计算与 cloud-init](./server/cloud-computing.md)、[CI/CD 与持续交付](./server/ci-cd.md)落点，其余章节绝大多数有既有页面支撑，打印、SSO 完整部署、提示符定制、实时通信代理、Debian 打包等 10 项登记不补。
 
 ## 官方文档要点
 

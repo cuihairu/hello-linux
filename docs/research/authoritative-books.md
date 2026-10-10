@@ -72,7 +72,7 @@
 
 **The Debian Handbook**（16 章，章题照录自官方在线目录）：The Debian Project；Presenting the Case Study；Analyzing the Existing Setup and Migrating；Installation；Packaging System: Tools and Fundamental Principles；Maintenance and Updates: The APT Tools；Solving Problems and Finding Relevant Information；Basic Configuration: Network, Accounts, Printing…；Unix Services；Network Infrastructure；Network Services: Postfix, Apache, NFS, Samba, Squid, LDAP, SIP, XMPP, TURN；Advanced Administration；Workstation；Security；Creating a Debian Package；Conclusion: Debian's Future
 
-对照含义：TLCL 第 14 章（Package Management）、第 19–20 章（Regular Expressions、Text Processing）等与命令篇、脚本篇逐条对应；两书全部章节已逐条对照进[覆盖核对与差异表](./coverage-matrix.md)（USAH 见 §4、TLCL 见 §5），Cloud Computing 与 Continuous Integration and Delivery 已由 2026-10-10 补页落点。
+对照含义：TLCL 第 14 章（Package Management）、第 19–20 章（Regular Expressions、Text Processing）等与命令篇、脚本篇逐条对应；三本 A 级书的全部章节已逐条对照进[覆盖核对与差异表](./coverage-matrix.md)（USAH 见 §4、TLCL 见 §5、Debian Handbook 见 §6），Cloud Computing 与 Continuous Integration and Delivery 已由 2026-10-10 补页落点。
 
 ### 2.2 维持 C 级（官方页无目录可取）
 

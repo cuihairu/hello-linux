@@ -168,7 +168,32 @@
 
 36 章判定小计：已覆盖 31、部分覆盖→登记不补 3（readline/history、排版输出、shell 杂项）、不覆盖 2（提示符定制、打印）。
 
-## 6. 按应用场景核对
+## 6. 按 The Debian Handbook 核对（16 章）
+
+来源目录见[权威书籍调研](./authoritative-books.md) 2.1 节（debian-handbook.info 官方在线版目录，A 级，Bullseye 版）。此书是 Debian 系的入门到精通主线，逐章判定如下。
+
+| Debian Handbook 章节 | 主题 | 本仓落点 | 判定 |
+|----------------------|------|---------|------|
+| 第 1 章 | The Debian Project | [选择合适的发行版](../basic/installation/choose_distribution.md)、[Linux 简介](../basic/introduction.md) | 已覆盖 |
+| 第 2 章 | Presenting the Case Study | 书的连贯叙事载体（虚构主机 rolala 的安装与演进），非独立技术主题 | 不覆盖 |
+| 第 3 章 | Analyzing the Existing Setup and Migrating | [安装前的准备](../basic/installation/preparation.md)（硬件盘点与备份）、[备份与恢复](../system-management/backup-and-recovery.md)、存量迁移视角见[应用场景调研](./application-scenarios.md) §1.1 | 已覆盖 |
+| 第 4 章 | Installation | [安装 Linux](../basic/installation.md)（三页，三系并写） | 已覆盖 |
+| 第 5 章 | Packaging System: Tools and Fundamental Principles | [软件安装](../basic/packages.md)、[包管理命令](../commands/package/package.md)（dpkg/rpm/pacman 底层工具对照） | 已覆盖 |
+| 第 6 章 | Maintenance and Updates: The APT Tools | [APT 包管理](../basic/packages/apt.md) | 已覆盖 |
+| 第 7 章 | Solving Problems and Finding Relevant Information | [基本命令](../commands/basic.md)（man 求助）、[网络故障排除](../network/troubleshooting.md) 等各篇排错节 | 已覆盖 |
+| 第 8 章 | Basic Configuration: Network, Accounts, Printing… | [网络配置基础](../network/network-configuration.md)、[账号管理](../basic/users/account_management.md)；打印部分同 USAH 第 12 章判定 | 已覆盖（打印不覆盖登记） |
+| 第 9 章 | Unix Services | [系统服务管理](../basic/services/system_services.md)、[systemd 服务与程序管理](../system-management/services-systemd.md) | 已覆盖 |
+| 第 10 章 | Network Infrastructure | [DNS](../server/dns/bind.md)、[DHCP 服务器](../server/dhcp.md)、[NTP 时间服务](../server/ntp.md)、[路由与 NAT](../server/routing-nat.md) | 已覆盖 |
+| 第 11 章 | Network Services: Postfix, Apache, NFS, Samba, Squid, LDAP, SIP, XMPP, TURN | Postfix、Apache、NFS、Samba、LDAP 均有独立页；Squid 代理与 SIP/XMPP/TURN 实时通信协议无落点 | 部分覆盖→登记不补 |
+| 第 12 章 | Advanced Administration | [LVM 逻辑卷管理](../system-management/lvm.md)、[备份与恢复](../system-management/backup-and-recovery.md)、[性能优化](../system-management/performance.md) | 已覆盖 |
+| 第 13 章 | Workstation | [桌面图形栈](../hardware/desktop-stack.md) | 已覆盖 |
+| 第 14 章 | Security | [安全篇](../security/README.md)（加固、防火墙、两套 MAC、加密） | 已覆盖 |
+| 第 15 章 | Creating a Debian Package | Debian 打包工作流（`dpkg-buildpackage`、debhelper）全仓零落点；源码编译安装已由[源码编译与 Tarball 安装](../basic/packages/tarball.md)覆盖 | 部分覆盖→登记不补 |
+| 第 16 章 | Conclusion: Debian's Future | 社区展望，非系统技术主题 | 不覆盖 |
+
+16 章判定小计：已覆盖 12、部分覆盖→登记不补 2（实时通信与代理服务、Debian 打包工作流）、不覆盖 2（案例叙事章、社区展望章）。
+
+## 7. 按应用场景核对
 
 场景要求见[应用场景调研](./application-scenarios.md) 第 2 节。
 
@@ -180,7 +205,7 @@
 | 运维自动化 | 调度、编排、监控、备份、账号一致性 | 自动化、监控、备份、排程四条主线已有；账号一致性已补 | 缺口→已补页 [LDAP 统一账号管理](../server/ldap.md) |
 | 安全合规 | MAC 强制访问控制在两套发行版上的差异 | SELinux 成体系，AppArmor 此前只有对照表一行 | 缺口→本轮补页 |
 
-## 7. 差异汇总
+## 8. 差异汇总
 
 | 类型 | 数量 | 明细 |
 |------|------|------|
@@ -189,5 +214,6 @@
 | 部分覆盖→本轮修订与补页 | 4 | 存储篇 LVM 指向落地、基础篇软件安装章目录补第三系、systemd 官方文档引用补链（services-systemd、boot-process 两页）；源码编译与 Tarball 补页（2026-10-10） |
 | 不覆盖（有意） | 4 类 | 笔记本适配、开发工具链、点对点/流媒体、VoIP |
 | 按 USAH/TLCL 逐章核对登记（2026-10-10） | 不补 6 类 | 打印 CUPS（USAH 第 12 章 / TLCL 第 22 章，桌面办公外围）、SSO 完整部署（USAH 第 17 章，需 KDC 与域环境）、readline 键绑定与 history 扩展（TLCL 第 8 章）、排版小工具（TLCL 第 21 章）、提示符个性化（TLCL 第 13 章）、shell 杂项技巧（TLCL 第 36 章）；另 USAH 第 30 章（机房设施）、第 31 章（组织流程）判不覆盖 |
+| 按 Debian Handbook 逐章核对登记（2026-10-10） | 不补 2 类 | 实时通信与代理服务（第 11 章的 Squid、SIP/XMPP/TURN——企业专用协议栈，与单机学习主线弱相关，Postfix/Apache/NFS/Samba/LDAP 五项已有独立页）、Debian 打包工作流（第 15 章，`dpkg-buildpackage` 属发行版打包者技能，非系统管理主线，源码编译已由 Tarball 页覆盖）；另第 2 章（案例叙事）、第 16 章（社区展望）判不覆盖 |
 
 本轮补页与修订的执行记录见[缺口补全与核对修订](./gap-fill.md)。
