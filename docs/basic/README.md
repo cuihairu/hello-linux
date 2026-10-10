@@ -79,6 +79,8 @@
 - [软件安装](./packages.md) — 三系包管理器（APT / DNF / pacman）的原理与操作对照，外加源码编译与 Tarball 安装的兜底路线。
   - [APT 包管理](./packages/apt.md) — Debian/Ubuntu 的 `apt` 与 `dpkg`，仓库、依赖与源配置。
   - [YUM/DNF 包管理](./packages/yum.md) — RHEL/CentOS/Rocky 的 `dnf` 与 RPM，模块流与 EPEL。
+  - [Pacman 包管理](./packages/pacman.md) — Arch 的 `pacman` 与 AUR，滚动更新模型与部分升级的边界。
+  - [源码编译与 Tarball 安装](./packages/tarball.md) — 包管理器之外的兜底路线，六步标准流程与卸载清单。
 - [用户管理](./users.md) — 账号、组、权限如何构成多用户系统的第一道防线。
   - [账号管理](./users/account_management.md) — 用户与组的增删改查，`/etc/passwd` 等关键文件解读。
   - [ACL 权限控制](./users/acl_permissions.md) — 当 rwx 三位不够用时的精细授权。
@@ -112,7 +114,7 @@
 | 发布模型 | 固定周期（Ubuntu LTS 每两年） | 滚动更新，无版本号 | 固定周期（约 3 年，支持 10 年） |
 | 典型场景 | 桌面入门、通用服务器 | 学习、极简定制、滚动尝鲜 | 企业生产、认证生态 |
 
-需要注意两处本篇的覆盖范围：软件安装章以 APT、DNF、Pacman 三页对应三系（见[软件安装](./packages.md)），Arch 的 `pacman` 系统用法见 [Pacman 包管理](./packages/pacman.md)，[发行版简介](./introduction/distributions.md)另有发行版层面的对照；安全基础章的 SELinux 内容对 Debian/Ubuntu 和 Arch 同样适用，但那两个家族默认不启用，阅读时请把命令标注视为"启用后可用"。
+需要注意两处本篇的覆盖范围：软件安装章以 APT、DNF、Pacman 三页对应三系、另加源码编译与 Tarball 页兜底（见[软件安装](./packages.md)），Arch 的 `pacman` 系统用法见 [Pacman 包管理](./packages/pacman.md)，[发行版简介](./introduction/distributions.md)另有发行版层面的对照；安全基础章的 SELinux 内容对 Debian/Ubuntu 和 Arch 同样适用，但那两个家族默认不启用，阅读时请把命令标注视为"启用后可用"。
 
 ## 前置建议
 
