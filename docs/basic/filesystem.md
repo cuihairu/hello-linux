@@ -101,3 +101,12 @@ sudo lsof +L1           # 找出已删除但仍被进程持有的文件
 - Linux Kernel Documentation: Filesystems — [kernel.org](https://www.kernel.org/doc/html/latest/filesystems/)
 - 鸟哥的私房菜 - Linux 文件权限与目录配置 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0210filepermission.php)
 - Debian Reference - File system hierarchy — [debian.org](https://www.debian.org/doc/debian-reference/ch02.zh-cn.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [README](/hardware/README.md)
+- [storage](/hardware/storage.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [lvm](/system-management/lvm.md)

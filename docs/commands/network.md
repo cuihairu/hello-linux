@@ -253,3 +253,8 @@ Arch 常见 `nftables`/`iptables`（`nft list ruleset`）→
 - curl 手册 — [curl.se](https://curl.se/docs/manpage.html)
 - Red Hat 文档 - Configuring and managing networking — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/index)
 - Ubuntu - Netplan 文档 — [netplan.io](https://netplan.io/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)

@@ -266,3 +266,12 @@ UUID=... /srv  ext4  defaults,context="system_u:object_r:var_t:s0"  0 2
 - 服务域帮助页家族（`httpd_selinux`、`smbd_selinux` 等，RHEL 系安装策略后可用）— `man 8 httpd_selinux`
 - Arch Wiki: SELinux — [wiki.archlinux.org/title/SELinux](https://wiki.archlinux.org/title/SELinux)
 - 鸟哥的私房菜 — [linux.vbird.org](https://linux.vbird.org/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [apparmor](apparmor.md)
+- [hardening](hardening.md)

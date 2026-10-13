@@ -241,3 +241,11 @@ rfkill list all   # 0: WLAN Soft blocked: yes → rfkill unblock；Hard = 物理
 - iw(8) 手册 — [kernel.org](https://www.kernel.org/doc/html/latest/networking/regulatory.html)
 - 鸟哥的私房菜 - 连上因特网 — [linux.vbird.org](https://linux.vbird.org/linux_server/rocky9/0150networking.php)
 - Red Hat - RHEL 9 网络性能调优 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [architecture](architecture.md)
+- [storage](storage.md)
+- [coverage-matrix](/research/coverage-matrix.md)

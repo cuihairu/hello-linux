@@ -528,3 +528,11 @@ df -h .
 - Debian 手册 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - Rocky Linux 文档 — [docs.rockylinux.org](https://docs.rockylinux.org/)
 - Red Hat 文档 — [access.redhat.com](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [basic](/commands/basic.md)
+- [file](file.md)
+- [coverage-matrix](/research/coverage-matrix.md)

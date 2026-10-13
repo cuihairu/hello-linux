@@ -308,3 +308,21 @@ Breakpoint 1, start_kernel () at init/main.c:...
 - bpftrace 备忘单（Brendan Gregg）— [brendangregg.com/BPF/bpftrace-cheat-sheet.html](https://www.brendangregg.com/BPF/bpftrace-cheat-sheet.html)
 - strace 官网 — [strace.io](https://strace.io/)，另见 man strace
 - 鸟哥的私房菜（系统观测与程序追踪相关章节）— [linux.vbird.org](https://linux.vbird.org/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)
+- [build-and-modules](build-and-modules.md)
+- [cross-compile](cross-compile.md)
+- [driver-framework](driver-framework.md)
+- [interrupt-timers](interrupt-timers.md)
+- [ipc](ipc.md)
+- [memory-management](memory-management.md)
+- [network-stack](network-stack.md)
+- [process-scheduling](process-scheduling.md)
+- [source-tree](source-tree.md)
+- [syscall-path](syscall-path.md)
+- [userland](userland.md)
+- [vfs-ext4](vfs-ext4.md)

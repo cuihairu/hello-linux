@@ -339,3 +339,11 @@ dentry            1004904 1295994    192   21    1 : tunables    0    0    0 : s
 - Robert Love. 《Linux内核设计与实现》（Linux Kernel Development）— 书
 - Bovet, Cesati. 《深入理解Linux内核》（Understanding the Linux Kernel）— 书
 - Wolfgang Mauerer. 《深入Linux内核架构》（Professional Linux Kernel Architecture）— 书
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [process-scheduling](process-scheduling.md)
+- [tracing-tools](tracing-tools.md)
+- [vfs-ext4](vfs-ext4.md)

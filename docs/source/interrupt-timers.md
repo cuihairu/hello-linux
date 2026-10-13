@@ -339,3 +339,11 @@ CONFIG_HZ=1000
 - Daniel P. Bovet & Marco Cesati.《深入理解Linux内核》（Understanding the Linux Kernel, 3rd ed.）
 - 毛德操、胡希明.《Linux内核源代码情景分析》
 - Wolfgang Mauerer.《深入Linux内核架构》（Professional Linux Kernel Architecture）
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)
+- [syscall-path](syscall-path.md)
+- [tracing-tools](tracing-tools.md)

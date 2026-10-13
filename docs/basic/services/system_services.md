@@ -227,3 +227,18 @@ WantedBy=timers.target
 - 鸟哥训练教材 - 服务管理与开机流程管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic_train/centos8/unit13.php)
 - Red Hat 文档 - 配置基本系统设置（含 systemd 服务管理） — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/index)
 - systemctl 手册页 — [man7.org](https://man7.org/linux/man-pages/man1/systemctl.1.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [services](/basic/services.md)
+- [configuration_tools](configuration_tools.md)
+- [configuration-management](/commands/system/configuration-management.md)
+- [process](/commands/system/process.md)
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [routing-nat](/server/routing-nat.md)
+- [process-scheduling](/source/process-scheduling.md)
+- [scheduled-tasks](/system-management/scheduled-tasks.md)
+- [services-systemd](/system-management/services-systemd.md)

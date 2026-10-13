@@ -271,3 +271,13 @@ fio --name=rand_read --filename=/data/testfile --size=1G \
 - smartmontools Documentation — [smartmontools.org](https://www.smartmontools.org/)
 - 鸟哥的私房菜 - 磁盘与文件系统管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0230filesystem.php)
 - Red Hat - RHEL 9 存储管理 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/managing_storage_devices/index)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [architecture](architecture.md)
+- [memory](memory.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [lvm](/system-management/lvm.md)

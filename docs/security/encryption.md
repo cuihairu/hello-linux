@@ -297,3 +297,12 @@ LUKS2 是当前默认格式（`cryptsetup` 新版本默认 `--type luks2`），�
 - 鸟哥的私房菜 - 系统安全与权限 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0410accountmanager.php)
 - Red Hat - 使用 LUKS 对块设备加密 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/security_hardening/encrypting-block-devices-using-luks_security-hardening)
 - Let's Encrypt 文档 — [letsencrypt.org](https://letsencrypt.org/docs/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [hardening](hardening.md)
+- [intrusion-detection](intrusion-detection.md)
+- [ssh](/server/ssh.md)

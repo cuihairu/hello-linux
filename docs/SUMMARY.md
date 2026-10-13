@@ -176,3 +176,4 @@
 ## 知识点
 
 - [知识点整理](./knowledge.md)
+- [术语表](./glossary.md)

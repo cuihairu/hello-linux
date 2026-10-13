@@ -338,3 +338,16 @@ Wolfgang Mauerer《深入Linux内核架构》适合当字典查细节——本�
 - Robert Love.《Linux内核设计与实现》（Linux Kernel Development, 3rd ed.）系统调用一章
 - Daniel P. Bovet & Marco Cesati.《深入理解Linux内核》（Understanding the Linux Kernel, 3rd ed.）系统调用相关章节
 - 毛德操、胡希明.《Linux内核源代码情景分析》——情景跟踪方法的出处
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)
+- [driver-framework](driver-framework.md)
+- [interrupt-timers](interrupt-timers.md)
+- [ipc](ipc.md)
+- [process-scheduling](process-scheduling.md)
+- [tracing-tools](tracing-tools.md)
+- [userland](userland.md)
+- [vfs-ext4](vfs-ext4.md)

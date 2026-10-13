@@ -282,3 +282,9 @@ systemd 侧的延伸分两支。操作一支回 [systemd 进阶](../system-manag
 - systemd.unit 手册页 — [freedesktop.org/software/systemd/man/systemd.unit.html](https://www.freedesktop.org/software/systemd/man/systemd.unit.html)
 - Michael Kerrisk.《The Linux Programming Interface》（Linux 程序设计）— man 手册维护者所著，系统编程接口的权威参考
 - Linux 手册页 — [man7.org](https://man7.org/)（`man 2 write`、`man 7 vdso`、`man 7 system_data_types` 一族）
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)

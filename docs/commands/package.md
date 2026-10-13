@@ -256,3 +256,8 @@ Arch 改 `/etc/pacman.d/mirrorlist`（可用 `reflector` 自动筛选）。
 - Rocky Linux 文档 - 软件管理 — [docs.rockylinux.org](https://docs.rockylinux.org/)
 - Fedora 文档 - DNF — [docs.fedoraproject.org](https://docs.fedoraproject.org/en_US/quick-docs/dnf/)
 - `man apt`, `man dpkg`, `man dnf`, `man rpm`, `man pacman`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)

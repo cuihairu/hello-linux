@@ -220,3 +220,14 @@ inode 不会变的是硬链接（所以 `ls -li` 看两个硬链接 inode 相同
 - Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
 - GNU coreutils 手册 — [gnu.org](https://www.gnu.org/software/coreutils/manual/)
 - POSIX - rm/cp/mv/chmod — [pubs.opengroup.org](https://pubs.opengroup.org/onlinepubs/9699919799/)
+
+## 同层页面
+
+- [README](/commands/README.md)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [directory](/commands/basic/directory.md)
+- [coverage-matrix](/research/coverage-matrix.md)

@@ -142,3 +142,9 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 - [应用场景调研](./research/application-scenarios.md)——四类场景事实与完整阅读路径
 - [覆盖核对与差异表](./research/coverage-matrix.md)——四档判定逐条表
 - [缺口补全与核对修订](./research/gap-fill.md)——补页修订执行与复测记录
+- [术语速查：术语表](./glossary.md)（中英对照、一句话定义、权威出处与相关页）。
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/research/README.md)

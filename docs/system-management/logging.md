@@ -315,3 +315,13 @@ journal 侧查 `SystemMaxUse` 是否缺配、`/var/log/journal` 权限是否正�
 - Arch Wiki: systemd/Journal — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd/Journal)
 - 鸟哥的私房菜 — [linux.vbird.org](https://linux.vbird.org/)
 - man journalctl / man rsyslog.conf — 本机手册
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [selinux](/security/selinux.md)
+- [README](/source/README.md)
+- [driver-framework](/source/driver-framework.md)
+- [README](README.md)

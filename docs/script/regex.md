@@ -140,3 +140,14 @@ https://a.example https://b.example
 - Arch Wiki - Bash - Conditions（`=~`） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
 - 鸟哥的私房菜 - 正则表达式 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0330regularex.php)
 - regex101 在线调试 — [regex101.com](https://regex101.com/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [conditionals](conditionals.md)
+- [examples](examples.md)
+- [functions](functions.md)
+- [text-processing](text-processing.md)
+- [variables](variables.md)

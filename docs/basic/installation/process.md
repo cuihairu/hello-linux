@@ -247,3 +247,12 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 - Debian Installation Manual - Partitioning — [debian.org](https://www.debian.org/releases/stable/installmanual)
 - Rocky Linux Installation Guide — [docs.rockylinux.org](https://docs.rockylinux.org/guides/installation/)
 - 鸟哥的私房菜 - 安装多重引导 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0157installcentos7.php)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [installation](/basic/installation.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)

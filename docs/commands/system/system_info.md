@@ -325,3 +325,10 @@ Arch 注意事项：滚动更新下**先保证系统整体是最新的**再装�
 - uname(1) 手册页 — [man7.org](https://man7.org/linux/man-pages/man1/uname.1.html)
 - lscpu(1) 手册页 — [man7.org](https://man7.org/linux/man-pages/man1/lscpu.1.html)
 - /proc 文件系统文档 — [kernel.org](https://www.kernel.org/doc/html/latest/filesystems/proc.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [system](/commands/system.md)
+- [monitoring](monitoring.md)

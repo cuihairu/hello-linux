@@ -265,3 +265,12 @@ $ ntpq -p
 - 鸟哥的私房菜 - NTP 服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0440ntp.php)
 - man 手册 — [chrony.conf(5)](https://man.archlinux.org/man/chrony.conf.5.en)、[chronyc(1)](https://man.archlinux.org/man/chronyc.1.en)
 - timedatectl(1) — [freedesktop.org](https://www.freedesktop.org/software/systemd/man/timedatectl.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [network-parameters](network-parameters.md)
+- [logging](/system-management/logging.md)
+- [scheduled-tasks](/system-management/scheduled-tasks.md)

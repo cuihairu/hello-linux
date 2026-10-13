@@ -72,3 +72,10 @@ Linux 是多用户系统，从你按下开机键到看到登录提示符的那�
 - Debian 手册 - 用户与权限 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - RHEL 9 文档 - 管理用户和组 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/)
 - `man useradd`、`man usermod`、`man sudoers`、`man setfacl`、`man edquota`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [configuration-management](/commands/system/configuration-management.md)
+- [system_info](/commands/system/system_info.md)

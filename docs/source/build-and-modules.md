@@ -343,3 +343,18 @@ $ uname -r
 - Linux Kernel Module Programming Guide — [tldp.org/LDP/lkmpg/2.6/html/](https://tldp.org/LDP/lkmpg/2.6/html/)（TLDP 持续修订，跟新内核走）
 - 《Linux Device Drivers》3rd ed. — Jonathan Corbet, Alessandro Rubini, Greg Kroah-Hartman，第 2 章 Building and Running Modules
 - 鸟哥的私房菜 — [linux.vbird.org](https://linux.vbird.org/linux_server/)（编译内核章）
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [tarball](/basic/packages/tarball.md)
+- [glossary](/glossary.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [cross-compile](cross-compile.md)
+- [driver-framework](driver-framework.md)
+- [source-tree](source-tree.md)
+- [tracing-tools](tracing-tools.md)
+- [userland](userland.md)

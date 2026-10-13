@@ -484,3 +484,25 @@ failed
 - nftables wiki — [wiki.nftables.org](https://wiki.nftables.org/)
 - RHEL 9 使用 firewalld 配置防火墙 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_firewalls_and_packet_filters/)
 - `man ufw`、`man firewall-cmd`、`man nft`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [log](/basic/log.md)
+- [syslog](/basic/log/syslog.md)
+- [services](/basic/services.md)
+- [configuration_tools](/basic/services/configuration_tools.md)
+- [log_management](/basic/services/log_management.md)
+- [network-tools](/commands/network/network-tools.md)
+- [network](/commands/network/network.md)
+- [configuration-management](/commands/system/configuration-management.md)
+- [glossary](/glossary.md)
+- [network](/hardware/network.md)
+- [README](README.md)
+- [network-configuration](network-configuration.md)
+- [network-monitoring](network-monitoring.md)
+- [troubleshooting](troubleshooting.md)
+- [vpn](vpn.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](/security/README.md)
+- [firewall](/security/firewall.md)

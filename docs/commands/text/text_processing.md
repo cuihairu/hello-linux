@@ -362,3 +362,14 @@ grep -i error app.log | awk '{print $3}' | sort | uniq -c | sort -rn | head
 - man tee — [man.archlinux.org](https://man.archlinux.org/man/tee.1)
 - man diff — [man.archlinux.org](https://man.archlinux.org/man/diff.1)
 - Linux man pages (man7) — [man7.org](https://man7.org/linux/man-pages/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [directory](/commands/basic/directory.md)
+- [file](/commands/basic/file.md)
+- [text](/commands/text.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [text-processing](/script/text-processing.md)

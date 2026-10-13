@@ -298,3 +298,12 @@ Shell 没有一等函数对象——不能把函数塞进变量再当值传（Ba
 - ShellCheck wiki — 局部变量、退出码与 `local` 相关告警的触发条件与修复示例
 
 本章示例均按 Bash 4+（三系默认）书写；若需兼容 macOS 自带的 Bash 3.2，关联数组、`mapfile`、部分 `[[ ]]` 扩展需改写为 `case`/`while read` 等价形式，并在脚本头用 `BASH_VERSINFO` 做版本门槛。跨发行版分发前，对三种 `bash` 各跑一遍 `bash -n` 与 shellcheck，比只在开发机上测一轮可靠得多。
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [debugging](debugging.md)
+- [examples](examples.md)
+- [variables](variables.md)

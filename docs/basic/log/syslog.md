@@ -194,3 +194,16 @@ $ sudo journalctl --vacuum-time=14days
 - 鸟哥的私房菜 - 认识与分析登录档 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0570syslog.php)
 - journalctl 手册页 — [man7.org](https://man7.org/linux/man-pages/man1/journalctl.1.html)
 - journald.conf 手册页 — [man7.org](https://man7.org/linux/man-pages/man5/journald.conf.5.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [log](/basic/log.md)
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [pam-sudo](/security/pam-sudo.md)
+- [ntp](/server/ntp.md)
+- [logging](/system-management/logging.md)
+- [scheduled-tasks](/system-management/scheduled-tasks.md)
+- [services-systemd](/system-management/services-systemd.md)

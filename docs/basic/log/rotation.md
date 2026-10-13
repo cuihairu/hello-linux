@@ -172,3 +172,12 @@ $ sudo journalctl --vacuum-time=30days
 - Arch Wiki - Logrotate — [wiki.archlinux.org](https://wiki.archlinux.org/title/Logrotate)
 - Arch Wiki - systemd/Journal（journal 空间管理） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Systemd/Journal)
 - 鸟哥的私房菜 - 认识与分析登录档 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0570syslog.php)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [log](/basic/log.md)
+- [debugging](/script/debugging.md)
+- [examples](/script/examples.md)
+- [logging](/system-management/logging.md)

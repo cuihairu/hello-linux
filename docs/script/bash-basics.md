@@ -243,3 +243,13 @@ COMMENT
 - 鸟哥的私房菜 - 什么是 shell script — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0340bashshell-scripts.php)
 - Advanced Bash-Scripting Guide - Chapter 2 - Starting Out With a Shell Script — [tldp.org](https://tldp.org/LDP/abs/html/)
 - Google Shell Style Guide - Quoting Conventions — [google.github.io](https://google.github.io/styleguide/shellguide.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [process](/commands/system/process.md)
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [examples](examples.md)
+- [variables](variables.md)

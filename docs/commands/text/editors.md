@@ -324,3 +324,12 @@ command -v nano && nano file || command -v vim && vim file || vi file
 - Rocky Linux 文档 — [docs.rockylinux.org](https://docs.rockylinux.org/)
 - Red Hat 文档 — [access.redhat.com](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/)
 - 鸟哥的私房菜 - 文件与目录管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [text](/commands/text.md)
+- [text_processing](text_processing.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)

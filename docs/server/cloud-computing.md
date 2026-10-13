@@ -118,3 +118,13 @@ SSH 密钥的生成与 authorized_keys 语义见[SSH 远程登录](./ssh.md)，c
 - Debian 官方云镜像 — [cloud.debian.org](https://cloud.debian.org/)
 - NoCloud 数据源说明 — cloud-init 文档「datasources/nocloud」节
 - man 手册 — man cloud-init、man cloud-config
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [README](/research/README.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](README.md)

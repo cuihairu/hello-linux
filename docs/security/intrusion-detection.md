@@ -346,3 +346,13 @@ OSSEC/Wazuh 属于完整的 HIDS：日志分析 + 文件完整性 + 注册表式
 - OSSEC 文档 — [ossec.net](https://www.ossec.net/docs/)
 - rkhunter 手册 — [sourceforge.net](https://rkhunter.sourceforge.net/)
 - 鸟哥的私房菜 - 账号与权限管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0210filepermission.php)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [firewall](firewall.md)
+- [hardening](hardening.md)
+- [pam-sudo](pam-sudo.md)
+- [ssh](/server/ssh.md)

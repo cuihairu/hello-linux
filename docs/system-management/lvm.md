@@ -298,3 +298,13 @@ LVM 是块设备虚拟化的一层，它上面或下面还可以叠加密与冗�
 - Ubuntu Server 文档（LVM 指南） — [ubuntu.com/server/docs](https://ubuntu.com/server/docs)
 - `man pvcreate`、`man vgcreate`、`man lvcreate`（含 `-s` 快照）、`man lvextend`、`man lvreduce`、`man lvconvert`（`--merge`）
 - `man resize2fs`、`man xfs_growfs`、`man pvmove`、`man vgreduce`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [storage](/hardware/storage.md)
+- [knowledge](/knowledge.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](README.md)

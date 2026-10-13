@@ -391,3 +391,13 @@ smbclient //server/data -U smbuser -e
 - 鸟哥的私房菜 — [linux.vbird.org](https://linux.vbird.org/)
 - man smb.conf — [man.archlinux.org/man/smb.conf.5](https://man.archlinux.org/man/smb.conf.5)
 - man smbclient — [man.archlinux.org/man/smbclient.1](https://man.archlinux.org/man/smbclient.1)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [selinux](/security/selinux.md)
+- [README](README.md)
+- [ldap](ldap.md)
+- [nfs](nfs.md)

@@ -180,3 +180,13 @@ $ sudo -i        # 以 root 执行：交互式 root shell，会加载 root 的�
 - Debian 手册 - 系统管理员视角 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - RHEL 9 - 管理用户和组 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/)
 - `man useradd`、`man usermod`、`man userdel`、`man groupadd`、`man gpasswd`、`man sudoers`、`man visudo`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [users](/basic/users.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [pam-sudo](/security/pam-sudo.md)
+- [ldap](/server/ldap.md)

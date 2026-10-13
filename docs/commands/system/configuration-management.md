@@ -355,3 +355,11 @@ Master/Minion 架构、ZeroMQ 通道，`salt '*' test.ping` 级别的扇出速�
 - 系统配置工具（网络/时间/主机名详解） — [basic/services/configuration_tools.md](../../basic/services/configuration_tools.md)
 - 系统服务管理 — [basic/services/system_services.md](../../basic/services/system_services.md)
 - `man sysctl`、`man ansible-playbook`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [system](/commands/system.md)
+- [system_info](system_info.md)
+- [automation](/system-management/automation.md)

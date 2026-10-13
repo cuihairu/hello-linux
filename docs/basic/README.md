@@ -138,3 +138,9 @@
 - Fedora 文档 — [docs.fedoraproject.org](https://docs.fedoraproject.org/)
 - Linux 内核文档 — [kernel.org](https://www.kernel.org/doc/html/latest/)
 - DistroWatch — [distrowatch.com](https://distrowatch.com/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/hardware/README.md)
+- [README](/system-management/README.md)

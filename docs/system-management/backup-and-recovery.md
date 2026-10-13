@@ -529,3 +529,14 @@ echo "fresh"
 - Red Hat - System Backup and Recovery（System Administrator's Guide，RHEL 7 版，ReaR/备份概念仍适用） — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/system_administrators_guide/part-system_backup_and_recovery)
 - 鸟哥的私房菜 - 服务器篇（含备份相关单元） — [linux.vbird.org](https://linux.vbird.org/linux_server/)
 - `man rsync`、`man tar`、`man crontab`、`man dump`、`man restore`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [automation](automation.md)
+- [lvm](lvm.md)
+- [performance](performance.md)

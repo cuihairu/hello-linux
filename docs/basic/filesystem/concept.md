@@ -175,3 +175,13 @@ sudo umount -l /mnt                    # 懒卸载：等占用者释放后才真
 - Linux Kernel Documentation: VFS — [kernel.org/doc](https://www.kernel.org/doc/html/latest/filesystems/)
 - ext4 文档 — [kernel.org/doc](https://www.kernel.org/doc/html/latest/filesystems/ext4/)
 - `man mount`、`man fstab`、`man filesystems`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [filesystem](/basic/filesystem.md)
+- [glossary](/glossary.md)
+- [storage](/hardware/storage.md)
+- [vfs-ext4](/source/vfs-ext4.md)
+- [lvm](/system-management/lvm.md)

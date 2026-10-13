@@ -129,3 +129,13 @@ sudo dnf install bashdb
 - 鸟哥的私房菜 - script 的执行方式与建议 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0320bash.php)
 - Advanced Bash-Scripting Guide - Debugging — [tldp.org](https://tldp.org/LDP/abs/html/debugging.html)
 - bashdb 手册 — [bashdb.sourceforge.net](https://bashdb.sourceforge.net/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [bash-basics](bash-basics.md)
+- [examples](examples.md)
+- [functions](functions.md)
+- [automation](/system-management/automation.md)

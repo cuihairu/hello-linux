@@ -75,3 +75,9 @@
 - Wolfgang Mauerer.《深入Linux内核架构》（Professional Linux Kernel Architecture）
 - Mel Gorman.《深入理解Linux虚拟内存管理》（Understanding the Linux Virtual Memory Manager）
 - Jonathan Corbet, Alessandro Rubini, Greg Kroah-Hartman.《Linux Device Drivers》3rd ed. — [lwn.net/Kernel/LDD3](https://lwn.net/Kernel/LDD3/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [coverage-matrix](/research/coverage-matrix.md)

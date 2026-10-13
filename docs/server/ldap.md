@@ -298,3 +298,15 @@ $ sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f acl.ldif
 - Arch Wiki: OpenLDAP — [wiki.archlinux.org/title/OpenLDAP](https://wiki.archlinux.org/title/OpenLDAP)
 - Red Hat 文档（SSSD 与目录服务） — [docs.redhat.com](https://docs.redhat.com/)
 - man 手册 — man slapd-config、man sssd.conf、man sssd-ldap、man ldapsearch
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [README](/research/README.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [authoritative-books](/research/authoritative-books.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](README.md)
+- [ssh](ssh.md)

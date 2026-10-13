@@ -96,3 +96,10 @@ sudo wipefs -l /dev/sda  # 只读查看签名，不会改动
 - Ubuntu Desktop installation tutorial — [ubuntu.com](https://ubuntu.com/tutorials/install-ubuntu-desktop)
 - Rocky Linux installation guide — [docs.rockylinux.org](https://docs.rockylinux.org/guides/installation/)
 - 鸟哥的私房菜 - 安装多重引导与开机管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0157installcentos7.php)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)

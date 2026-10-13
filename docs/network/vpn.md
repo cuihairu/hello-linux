@@ -667,3 +667,9 @@ WireGuard 未握手的流量
 - RFC 7296（IKEv2）、
   RFC 4301/4303（IPsec 架构与 ESP）
 - `man wg`、`man wg-quick`、`man openvpn`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [troubleshooting](troubleshooting.md)

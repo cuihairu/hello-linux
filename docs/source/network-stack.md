@@ -338,3 +338,9 @@ TCP 行的 inuse 是 TCP_ESTABLISHED + LISTEN 的活跃套接字，tw 是 TIME_W
 | man 8 ss、man 8 tcpdump、man 7 tcp | 现行 | 工具输出与协议字段的权威语义 | 与 /proc/net/sockstat 交叉验证 |
 
 两句实话作为收尾。其一，四本中文可及的内核书没有一本基于 6.x，这是事实而非遗憾——它们提供的是结构与方法，坐标必须用 elixir 现查，本页第 6 节第一、二条坑就是坐标过期的现场。其二，网络栈的"下一课"在树内文档里就写好了：读完本页的收发两条链，接着读 Documentation/networking/napi.rst（NAPI 的现代形态与 GRO）和 ip-sysctl.rst（第 3 节各关卡的可调旋钮），再回到[跟踪工具](./tracing-tools.md)把 ftrace/bpftrace 的探针打到本页出现过的函数上——源码、文档、工具三角互证，是源码篇每一章共同的读法。
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)

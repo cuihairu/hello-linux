@@ -82,3 +82,10 @@
 - Rocky Linux 文档 - DNF — [docs.rockylinux.org](https://docs.rockylinux.org/guides/package_management/)
 - 鸟哥的私房菜 - 软件管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0520rpm_and_srpm.php)
 - `man apt`、`man dpkg`、`man dnf`、`man rpm`、`man pacman`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [package](/commands/package/package.md)
+- [coverage-matrix](/research/coverage-matrix.md)

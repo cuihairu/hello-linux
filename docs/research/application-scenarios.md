@@ -80,3 +80,11 @@ ArchWiki 目录页（镜像实取）把「视觉美化」（25 页）、「图�
 - ArchWiki 目录页（桌面与系统管理类目结构）— [wiki.archlinux.org](https://wiki.archlinux.org/title/Table_of_contents)，本轮经中文镜像 [wiki.archlinux.org.cn](https://wiki.archlinux.org.cn/title/Table_of_contents) 实取结构
 - 鸟哥的私房菜服务器架设篇（场景分部）— [vbird.org.cn/linux_server/rocky9/](https://vbird.org.cn/linux_server/rocky9/)，2026-10-08 实取
 - 本仓外链统计：本地扫描 `docs/**/*.md`，2026-10-08
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [README](README.md)
+- [coverage-matrix](coverage-matrix.md)
+- [gap-fill](gap-fill.md)

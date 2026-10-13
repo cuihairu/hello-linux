@@ -113,3 +113,13 @@ $ ./backup-type.sh bogus     # → 用法: ./backup-type.sh {full|incr}，$? = 2
 - 鸟哥的私房菜 - 条件判断式 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0320bash.php)
 - Advanced Bash-Scripting Guide - Tests — [tldp.org](https://tldp.org/LDP/abs/html/tests.html)
 - POSIX test — [pubs.opengroup.org](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/test.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [bash-basics](bash-basics.md)
+- [debugging](debugging.md)
+- [examples](examples.md)
+- [variables](variables.md)

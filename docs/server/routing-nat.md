@@ -316,3 +316,14 @@ $ echo 'nameserver 223.5.5.5' | sudo tee /etc/resolv.conf
 - Arch Wiki: Router — [wiki.archlinux.org/title/Router](https://wiki.archlinux.org/title/Router)
 - 鸟哥的私房菜 — 路由器与 NAT — [linux.vbird.org](https://linux.vbird.org/linux_server/)
 - man ip-route（路由表操作）/ man ip-rule（策略路由）/ man sysctl.d（内核参数持久化）
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [commands-practice](/network/commands-practice.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [cloud-computing](cloud-computing.md)
+- [dhcp](dhcp.md)
+- [network-parameters](network-parameters.md)
+- [kvm](/server/virtualization/kvm.md)

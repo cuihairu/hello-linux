@@ -342,3 +342,17 @@ Lynis 的 `suggestions` 会包含大量与业务无关的建议，**不要全盘
 - Ubuntu 服务器安全文档 — [ubuntu.com/server/docs/security](https://ubuntu.com/server/docs/security)
 - Red Hat - 安全强化指南 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/security_hardening/index)
 - Debian 安全手册 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [memory](/commands/system/memory.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [encryption](encryption.md)
+- [intrusion-detection](intrusion-detection.md)
+- [pam-sudo](pam-sudo.md)
+- [docker](/server/container/docker.md)
+- [ssh](/server/ssh.md)

@@ -117,3 +117,11 @@ done
 - Bryant & O'Hallaron《深入理解计算机系统》（CSAPP）
 - Intel® 64 and IA-32 Architectures Software Developer Manuals — [intel.com](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
 - AMD64 Architecture Programmer's Manual — [developer.amd.com](https://www.amd.com/en/support/tech-docs)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [architecture](architecture.md)
+- [cpu](cpu.md)
+- [network](network.md)
+- [storage](storage.md)

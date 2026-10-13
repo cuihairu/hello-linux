@@ -179,3 +179,14 @@ $ sudo apt --fix-broken install     # 再修复依赖关系
 - Arch Wiki - pacman（对照参考） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
 - 鸟哥的私房菜 - Debian 的软件管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/)
 - `man apt`、`man apt-get`、`man dpkg`、`man apt-mark`、`man sources.list`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [packages](/basic/packages.md)
+- [pacman](pacman.md)
+- [tarball](tarball.md)
+- [package](/commands/package/package.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [tracing-tools](/source/tracing-tools.md)

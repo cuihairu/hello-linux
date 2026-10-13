@@ -316,3 +316,16 @@ sudo dmidecode -t baseboard   # 主板型号；-t processor 看插槽上的 CPU
 - Linux Kernel Documentation — [kernel.org](https://www.kernel.org/doc/html/latest/)
 - dmidecode 项目主页 — [git.kernel.org](https://git.kernel.org/pub/scm/utils/dmidecode/dmidecode.git)
 - Wikipedia: Von Neumann architecture — [en.wikipedia.org](https://en.wikipedia.org/wiki/Von_Neumann_architecture)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)
+- [cpu](cpu.md)
+- [desktop-stack](desktop-stack.md)
+- [memory](memory.md)
+- [storage](storage.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [cross-compile](/source/cross-compile.md)

@@ -699,3 +699,10 @@ tar -cf - /path | pbzip2 > backup.tar.bz2
 - 鸟哥的私房菜 - 压缩与打包指令 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0240tarcompress.php)
 - Debian 手册 - 归档与压缩 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - GNU tar 手册 - 打包与压缩 — [gnu.org](https://www.gnu.org/software/tar/manual/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [tarball](/basic/packages/tarball.md)
+- [README](README.md)
+- [coverage-matrix](/research/coverage-matrix.md)

@@ -141,3 +141,13 @@
 ### 4.4 docs.kernel.org 文档分区取回（2026-10-10）
 
 §4 表中 docs.kernel.org「文档分区未逐条取回，维持 C 级」项当日续办：官方首页实取 200，21 个顶级分区与本仓 6 个引用区域（scheduler、process、networking、mm、kbuild、devicetree）均确认可达，[官方文档调研](./official-docs.md) §3 该行升 A。文档正文仍不逐篇引用——A 级升级只针对分区结构与入口，正文细节引用沿用内核源码（elixir）优先的既有纪律。
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [README](README.md)
+- [application-scenarios](application-scenarios.md)
+- [authoritative-books](authoritative-books.md)
+- [coverage-matrix](coverage-matrix.md)
+- [official-docs](official-docs.md)

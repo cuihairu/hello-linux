@@ -340,3 +340,12 @@ $ sudo grep COMMAND /var/log/auth.log | tail -3
 - Arch Wiki: Sudo — [wiki.archlinux.org/title/Sudo](https://wiki.archlinux.org/title/Sudo)
 - Arch Wiki: PAM — [wiki.archlinux.org/title/PAM](https://wiki.archlinux.org/title/PAM)
 - 鸟哥的私房菜 — 账号管理章 [linux.vbird.org](https://linux.vbird.org/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [ldap](/server/ldap.md)
+- [ssh](/server/ssh.md)

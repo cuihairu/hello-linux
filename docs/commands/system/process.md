@@ -306,3 +306,17 @@ $ atrm 1                # 删除
 - `man ps`、`man top`、`man kill`、`man pgrep`、`man nice`
 - signals(7) — [man7.org](https://man7.org/linux/man-pages/man7/signal.7.html)
 - 内存与 OOM 相关见 [内存管理](./memory.md)；监控读数见 [系统监控工具](./monitoring.md)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [system](/commands/system.md)
+- [monitoring](monitoring.md)
+- [system_info](system_info.md)
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](/source/README.md)
+- [ipc](/source/ipc.md)
+- [process-scheduling](/source/process-scheduling.md)

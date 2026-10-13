@@ -323,3 +323,16 @@ SSD/NVMe 上默认的 `mq-deadline` 或 `none`（多队列直通）通常无需�
 - [命令篇 · 系统管理](../commands/system.md)（命令语法与输出列速查）
 - [命令篇 · 内存管理](../commands/system/memory.md)（available/swappiness/OOM 专节）
 - `man mpstat`、`man iostat`、`man vmstat`、`man sar`、`man pidstat`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [cpu](/hardware/cpu.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [ipc](/source/ipc.md)
+- [memory-management](/source/memory-management.md)
+- [README](README.md)
+- [boot-process](boot-process.md)

@@ -229,3 +229,14 @@ X 转发适合"就想跑一下 `system-config-*` 这类图形配置工具"的场
 - Arch Wiki - Wayland — [wiki.archlinux.org](https://wiki.archlinux.org/title/Wayland)
 - freedesktop.org — [freedesktop.org](https://www.freedesktop.org/)
 - Ubuntu 桌面文档 — [ubuntu.com](https://ubuntu.com/desktop)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [authoritative-books](/research/authoritative-books.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [official-docs](/research/official-docs.md)

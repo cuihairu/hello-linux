@@ -156,3 +156,11 @@ $ sudo grep -n "error" /var/log/syslog
 - 鸟哥的私房菜 - 认识与分析登录档 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0570syslog.php)
 - journalctl 手册页 — [man7.org](https://man7.org/linux/man-pages/man1/journalctl.1.html)
 - journald.conf 手册页 — [man7.org](https://man7.org/linux/man-pages/man5/journald.conf.5.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [log](/basic/log.md)
+- [services](/basic/services.md)
+- [system_info](/commands/system/system_info.md)

@@ -138,3 +138,10 @@ Hello, World!
 - ShellCheck — [shellcheck.net](https://www.shellcheck.net/)
 - Google Shell Style Guide — [google.github.io](https://google.github.io/styleguide/shellguide.html)
 - `man bash`、`man sh`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](/system-management/README.md)
+- [automation](/system-management/automation.md)

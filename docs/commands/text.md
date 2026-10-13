@@ -225,3 +225,8 @@ Arch 和 RHEL 系则是标准的 `fd`。
 - GNU sed 手册 — [gnu.org](https://www.gnu.org/software/sed/manual/)
 - gawk 手册（GNU awk） — [gnu.org](https://www.gnu.org/software/gawk/manual/)
 - POSIX - Regular Expressions — [pubs.opengroup.org](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)

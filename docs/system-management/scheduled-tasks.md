@@ -253,3 +253,11 @@ $ systemd-analyze calendar "Tue *-*-* 03:17:00"
 - systemd.time（OnCalendar 语法） — [freedesktop.org/software/systemd/man/systemd.time.html](https://www.freedesktop.org/software/systemd/man/systemd.time.html)
 - Arch Wiki: Cron — [wiki.archlinux.org/title/Cron](https://wiki.archlinux.org/title/Cron)
 - 鸟哥的私房菜 — 例行性工作排程 — [linux.vbird.org](https://linux.vbird.org/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)

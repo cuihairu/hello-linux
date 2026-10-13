@@ -754,3 +754,8 @@ HAProxy 的 ` backlog`/`qcur`
 - Keepalived 官方文档 — [keepalived.org](https://keepalived.readthedocs.io/en/latest/)
 - `man haproxy`、`man ipvsadm`、
   `man nginx`、`man 8 keepalived`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)

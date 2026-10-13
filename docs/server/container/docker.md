@@ -274,3 +274,17 @@ Docker 不是和 systemd 抢活干的另一套 init：`docker.service` 本身就
 - Docker Hub — [hub.docker.com](https://hub.docker.com/)
 - Arch Wiki: Docker — [wiki.archlinux.org/title/Docker](https://wiki.archlinux.org/title/Docker)
 - containerd 文档 — [containerd.io/docs](https://containerd.io/docs/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [knowledge](/knowledge.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](/server/README.md)
+- [ci-cd](/server/ci-cd.md)
+- [ldap](/server/ldap.md)
+- [routing-nat](/server/routing-nat.md)
+- [kvm](/server/virtualization/kvm.md)
+- [automation](/system-management/automation.md)

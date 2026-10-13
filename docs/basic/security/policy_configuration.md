@@ -167,3 +167,12 @@ Debian/Ubuntu 的 AppArmor 对应概念是 **profile**（基于路径而非 type
 - `man matchpathcon`
 - Arch Wiki - SELinux（Policy / audit2allow 章节） — [wiki.archlinux.org](https://wiki.archlinux.org/title/SELinux)
 - Debian Wiki - SELinux — [wiki.debian.org](https://wiki.debian.org/SELinux)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [security](/basic/security.md)
+- [commands](commands.md)
+- [modes](modes.md)
+- [selinux](/security/selinux.md)

@@ -722,6 +722,17 @@ export default defineConfig({
             }
           ]
         }
+      ],
+      '/glossary/': [
+        {
+          text: '术语表',
+          items: [
+            {
+              text: '术语表',
+              link: '/glossary'
+            }
+          ]
+        }
       ]
       }).flat()
     ],

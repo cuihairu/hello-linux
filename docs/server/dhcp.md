@@ -295,3 +295,10 @@ kea-dhcp4: active                         # keactrl 统一管理 kea-dhcp4/-6 �
 - 鸟哥的私房菜 - DHCP 服务器 — [linux.vbird.org](https://linux.vbird.org/linux_server/)
 - man dhcpd.conf — 配置语法权威来源
 - man dhcpd.leases — 租约文件格式
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)

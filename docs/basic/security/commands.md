@@ -157,3 +157,11 @@ $ sudo restorecon -R /data/www/                                # 从此每次都
 - `man chcon` — [man7.org](https://man7.org/linux/man-pages/man1/chcon.1.html)
 - `man sestatus`
 - Arch Wiki - SELinux — [wiki.archlinux.org](https://wiki.archlinux.org/title/SELinux)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [security](/basic/security.md)
+- [concept](concept.md)
+- [selinux](/security/selinux.md)

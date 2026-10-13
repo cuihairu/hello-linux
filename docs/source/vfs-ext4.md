@@ -252,3 +252,15 @@ dentry             186001    232300    192   21:  192.0   # active 涨了
 - Wolfgang Mauerer.《深入Linux内核架构》（Professional Linux Kernel Architecture）——VFS 相关章，字段级细节当参考手册查
 - ext4 官方 wiki — [ext4.wiki.kernel.org](https://ext4.wiki.kernel.org/)
 - Linux v6.12 源码在线交叉引用 — [elixir.bootlin.com/linux/v6.12](https://elixir.bootlin.com/linux/v6.12/latest/source)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)
+- [driver-framework](driver-framework.md)
+- [memory-management](memory-management.md)
+- [source-tree](source-tree.md)
+- [syscall-path](syscall-path.md)
+- [tracing-tools](tracing-tools.md)
+- [userland](userland.md)

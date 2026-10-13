@@ -238,3 +238,14 @@ D      5102 io_schedule              dd
 - Daniel P. Bovet & Marco Cesati.《深入理解Linux内核》（Understanding the Linux Kernel, 3rd ed.）
 - Wolfgang Mauerer.《深入Linux内核架构》（Professional Linux Kernel Architecture）
 - 鸟哥的私房菜 — [linux.vbird.org](https://linux.vbird.org/)（进程与工作的概念框架）
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)
+- [interrupt-timers](interrupt-timers.md)
+- [ipc](ipc.md)
+- [memory-management](memory-management.md)
+- [source-tree](source-tree.md)
+- [tracing-tools](tracing-tools.md)

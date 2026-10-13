@@ -237,3 +237,10 @@ $ hostnamectl | head -3
 - Arch Wiki - Linux — [wiki.archlinux.org](https://wiki.archlinux.org/title/Linux)
 - Arch Wiki - pacman / 部分升级警告 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
 - Wikipedia: GNU/Linux naming controversy — [wikipedia.org](https://en.wikipedia.org/wiki/GNU/Linux_naming_controversy)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [introduction](/basic/introduction.md)
+- [packages](/basic/packages.md)

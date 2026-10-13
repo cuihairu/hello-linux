@@ -182,3 +182,13 @@ PKGBUILD 本质是 shell 脚本，`makepkg` 会以你的用户身份执行其中
 - Arch Wiki - System maintenance — [wiki.archlinux.org](https://wiki.archlinux.org/title/System_maintenance)
 - Arch Wiki - AUR — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_User_Repository)
 - `man pacman`、`man pacman.conf`、`man makepkg`、`man paccache`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [packages](/basic/packages.md)
+- [tarball](tarball.md)
+- [knowledge](/knowledge.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)

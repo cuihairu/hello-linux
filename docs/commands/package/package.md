@@ -259,3 +259,10 @@ sudo dnf install htop
 - DNF 文档（Fedora） — [dnf.readthedocs.io](https://dnf.readthedocs.io/)
 - Red Hat - Installing software packages with DNF — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_software_with_the_dnf_tool/index)
 - EPEL FAQ — [docs.fedoraproject.org](https://docs.fedoraproject.org/en-US/epel/faq)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [package](/commands/package.md)
+- [coverage-matrix](/research/coverage-matrix.md)

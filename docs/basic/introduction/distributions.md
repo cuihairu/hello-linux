@@ -400,3 +400,10 @@ f4c5431b6d4b1e4e7e3f6c8c0a9f...  ubuntu-24.04.2-desktop-amd64.iso
 - AUR — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_User_Repository)
 - 清华大学开源软件镜像站 — [mirrors.tuna.tsinghua.edu.cn](https://mirrors.tuna.tsinghua.edu.cn/)
 - DistroWatch — [distrowatch.com](https://distrowatch.com/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [introduction](/basic/introduction.md)
+- [history](history.md)

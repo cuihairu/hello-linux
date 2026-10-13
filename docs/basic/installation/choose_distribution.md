@@ -139,3 +139,12 @@ Arch 的 ISO 还提供 GPG 签名验证（`archlinux-*.iso.sig`），用发布�
 - Arch Linux 下载 — [archlinux.org](https://archlinux.org/download/)
 - Arch Wiki - Arch Linux — [wiki.archlinux.org](https://wiki.archlinux.org/title/Arch_Linux)（理解 Arch 设计哲学）
 - 鸟哥的私房菜 - 选择合适的 Linux 发行版 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0110whatislinux.php)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [installation](/basic/installation.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)

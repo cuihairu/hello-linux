@@ -275,3 +275,9 @@ Linux 内核早已不是个人爱好者的独角戏，而是大公司与社区�
 - Arch Wiki - pacman（滚动更新与部分升级） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
 - CentOS 项目说明（Stream 转型） — [centos.org](https://www.centos.org/)
 - DistroWatch — [distrowatch.com](https://distrowatch.com/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [introduction](/basic/introduction.md)

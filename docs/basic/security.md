@@ -100,3 +100,17 @@ Ubuntu 默认用 AppArmor 而非 SELinux。两者都是 LSM（Linux Security Mod
 - Ubuntu 社区 - AppArmor — [help.ubuntu.com](https://help.ubuntu.com/community/AppArmor)
 - AppArmor 官网 — [apparmor.net](https://apparmor.net/)
 - `man getenforce`、`man setenforce`、`man semanage`、`man ausearch`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [what_is_linux](/basic/introduction/what_is_linux.md)
+- [log](log.md)
+- [syslog](/basic/log/syslog.md)
+- [services](services.md)
+- [configuration_tools](/basic/services/configuration_tools.md)
+- [log_management](/basic/services/log_management.md)
+- [acl_permissions](/basic/users/acl_permissions.md)
+- [README](/security/README.md)
+- [hardening](/security/hardening.md)

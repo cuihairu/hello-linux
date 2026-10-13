@@ -201,3 +201,14 @@ $ rpm -V nginx                                 # 校验完整性，无输出 = �
 - Arch Wiki - pacman（对照参考） — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
 - 鸟哥的私房菜 - 软件管理 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0520rpm_and_srpm.php)
 - `man dnf`、`man rpm`、`man dnf-versionlock`、`man dnf.conf`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [packages](/basic/packages.md)
+- [apt](apt.md)
+- [pacman](pacman.md)
+- [tarball](tarball.md)
+- [package](/commands/package/package.md)
+- [coverage-matrix](/research/coverage-matrix.md)

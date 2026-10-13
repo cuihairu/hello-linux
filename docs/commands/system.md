@@ -258,3 +258,10 @@ Linux 会把暂时用不到的内存拿去做页缓存（buff/cache）加速磁�
 - sysstat 手册（iostat/vmstat/sar） — [sebastien.godard.pagesperso-orange.fr](https://github.com/sysstat/sysstat)
 - Red Hat 文档 - Monitoring and managing system status and performance — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index)
 - Ansible 官方文档 — [docs.ansible.com](https://docs.ansible.com/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [README](/system-management/README.md)
+- [performance](/system-management/performance.md)

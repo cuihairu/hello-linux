@@ -199,3 +199,8 @@ AppStream 直接提供的是最小化的 `ansible-core`，
 - systemd.timer(5) — [man7.org](https://man7.org/linux/man-pages/man5/systemd.timer.5.html)
 - Ansible 官方文档 — [docs.ansible.com](https://docs.ansible.com/)
 - `man crontab`、`man rsync`、`man tar`、`man systemd.timer`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)

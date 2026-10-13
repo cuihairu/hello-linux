@@ -338,3 +338,15 @@ $ grep -n "start_kernel" init/main.c | head -3   # 确认自己刚才读的是�
 - 源码树内文档：`Documentation/process/howto.rst`（如何参与内核开发）、`Documentation/admin-guide/README.rst`
 - 《Linux内核设计与实现》（Robert Love）——"从内核出发"相关章节，作为源码阅读方法与内核全景的背景书
 - 鸟哥的私房菜 — 开机流程章（`start_kernel` 启动主线的系统视角背景） — [linux.vbird.org](https://linux.vbird.org/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [build-and-modules](build-and-modules.md)
+- [ipc](ipc.md)
+- [network-stack](network-stack.md)
+- [process-scheduling](process-scheduling.md)
+- [syscall-path](syscall-path.md)
+- [tracing-tools](tracing-tools.md)
+- [userland](userland.md)

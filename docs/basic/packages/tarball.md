@@ -127,3 +127,15 @@ APT、DNF、pacman 三页（[APT](./apt.md)、[YUM/DNF](./yum.md)、[Pacman](./p
 - GNU stow — [gnu.org/software/stow](https://www.gnu.org/software/stow/)
 - 鸟哥的私房菜 - 软件安装：源代码与 Tarball — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0520source_code_and_tarball.php)
 - man 手册 — man gcc、man make、man ldconfig、man stow
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [packages](/basic/packages.md)
+- [README](/research/README.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [authoritative-books](/research/authoritative-books.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [cloud-computing](/server/cloud-computing.md)

@@ -111,3 +111,14 @@ jobs:
 - Jenkins 用户文档 — [jenkins.io/doc/](https://www.jenkins.io/doc/)
 - UNIX and Linux System Administration Handbook 第 5 版第 26 章（Continuous Integration and Delivery） — [admin.com](https://www.admin.com/)
 - man 手册 — man systemd.unit、man systemctl
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [README](/research/README.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](README.md)
+- [cloud-computing](cloud-computing.md)

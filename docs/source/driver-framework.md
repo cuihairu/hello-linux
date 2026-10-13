@@ -416,3 +416,13 @@ strace 这一侧只有系统调用与搬运的数据——`chrdev_open`、`misc_
 - 设备驱动 API 树内文档（含 misc_devices.rst、basics.rst、driver-model/）— [elixir.bootlin.com/linux/v6.12/source/Documentation/driver-api/](https://elixir.bootlin.com/linux/v6.12/source/Documentation/driver-api/)
 - 内核驱动模型总述（Documentation/driver-api/driver-model/）— [elixir.bootlin.com](https://elixir.bootlin.com/linux/v6.12/source/Documentation/driver-api/driver-model/)
 - 关键源码（v6.12 实测核对）— [drivers/char/misc.c](https://elixir.bootlin.com/linux/v6.12/source/drivers/char/misc.c)、[fs/char_dev.c](https://elixir.bootlin.com/linux/v6.12/source/fs/char_dev.c)、[drivers/base/dd.c](https://elixir.bootlin.com/linux/v6.12/source/drivers/base/dd.c)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [cross-compile](cross-compile.md)

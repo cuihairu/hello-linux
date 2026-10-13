@@ -256,3 +256,16 @@ $ virt-clone --original debian12 --name debian12-tpl --auto-clone
 - Arch Wiki: KVM — [wiki.archlinux.org/title/KVM](https://wiki.archlinux.org/title/KVM)
 - Arch Wiki: Libvirt — [wiki.archlinux.org/title/Libvirt](https://wiki.archlinux.org/title/Libvirt)
 - Red Hat 产品文档（虚拟化） — [docs.redhat.com](https://docs.redhat.com/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [authoritative-books](/research/authoritative-books.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](/server/README.md)
+- [cloud-computing](/server/cloud-computing.md)
+- [cross-compile](/source/cross-compile.md)

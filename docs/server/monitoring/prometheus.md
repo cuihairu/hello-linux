@@ -184,3 +184,16 @@ receivers:
 - node_exporter — [github.com/prometheus/node_exporter](https://github.com/prometheus/node_exporter)
 - Alertmanager — [prometheus.io/docs/alerting/latest/alertmanager/](https://prometheus.io/docs/alerting/latest/alertmanager/)
 - Arch Wiki: Prometheus — [wiki.archlinux.org/title/Prometheus](https://wiki.archlinux.org/title/Prometheus)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [monitoring](/commands/system/monitoring.md)
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](/server/README.md)
+- [ci-cd](/server/ci-cd.md)
+- [redis](/server/redis.md)
+- [automation](/system-management/automation.md)
+- [backup-and-recovery](/system-management/backup-and-recovery.md)

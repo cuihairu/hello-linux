@@ -285,3 +285,13 @@
 | 按 How Linux Works / Linux Bible 逐章核对登记（2026-10-10 次轮） | 不补 4 类 | 设备文件与 udev（HLW 第 3 章，机制散见存储、systemd 与源码篇，规则细节属设备适配）、云厂商控制台部署（Linux Bible 第 29 章，特定平台实操）、Kubernetes 编排（Linux Bible 第 31 章与 HLW 第 17 章小节，容器页已有单机/多节点边界判断）、AI Chatbot 部署（Linux Bible 第 22 章，应用软件范畴）；另 HLW 第 15 章（开发工具链）沿用不覆盖判定，Linux Bible 第 16 章（打印服务器）沿用打印登记 |
 
 本轮补页与修订的执行记录见[缺口补全与核对修订](./gap-fill.md)。
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [README](README.md)
+- [application-scenarios](application-scenarios.md)
+- [authoritative-books](authoritative-books.md)
+- [gap-fill](gap-fill.md)
+- [official-docs](official-docs.md)

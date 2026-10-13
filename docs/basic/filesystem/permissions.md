@@ -280,3 +280,12 @@ Arch 没有独立的"权限系统"，但社区与打包生态形成了几条稳�
 - Arch Wiki - makepkg、PKGBUILD 权限相关约定 — [wiki.archlinux.org](https://wiki.archlinux.org/title/PKGBUILD)
 - 鸟哥的私房菜 - Linux 文件权限 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0210filepermission.php)
 - Debian Administrator - POSIX ACL — [debian.org](https://www.debian.org/doc/manuals/debian-reference/ch06.zh-cn.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [filesystem](/basic/filesystem.md)
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [driver-framework](/source/driver-framework.md)

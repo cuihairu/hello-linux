@@ -265,3 +265,14 @@ multi-user.target +0.0s
 - systemd 启动流程官方说明 — [systemd.io/BOOT](https://systemd.io/BOOT)（固件之后到用户态的官方口径）
 - 鸟哥的私房菜 — 开机流程、关机流程 — [linux.vbird.org](https://linux.vbird.org/)
 - man dracut / man mkinitcpio / man initramfs-tools（三系 initramfs 工具各自的手册）
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [pam-sudo](/security/pam-sudo.md)
+- [build-and-modules](/source/build-and-modules.md)
+- [cross-compile](/source/cross-compile.md)
+- [README](README.md)
+- [lvm](lvm.md)

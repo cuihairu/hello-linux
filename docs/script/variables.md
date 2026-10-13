@@ -121,3 +121,13 @@ $ (( a += 3 )) && echo "$a"      # 算术后赋值 → 18
 - Arch Wiki - Bash - Variables — [wiki.archlinux.org](https://wiki.archlinux.org/title/Bash)
 - 鸟哥的私房菜 - 变量与环境变量 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0320bash.php)
 - Advanced Bash-Scripting Guide - Variables — [tldp.org](https://tldp.org/LDP/abs/html/variables.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](README.md)
+- [bash-basics](bash-basics.md)
+- [examples](examples.md)
+- [functions](functions.md)
+- [userland](/source/userland.md)

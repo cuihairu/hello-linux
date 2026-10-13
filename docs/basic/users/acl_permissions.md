@@ -131,3 +131,12 @@ $ getfacl -R /srv/projects | sudo setfacl --restore=/dev/stdin
 - `man getfacl`、`man setfacl`、`man acl`
 - Debian 手册 - 权限与 ACL — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - RHEL 9 - 使用 ACL — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/managing_storage_devices/index)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [users](/basic/users.md)
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [pam-sudo](/security/pam-sudo.md)

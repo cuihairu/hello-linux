@@ -286,3 +286,13 @@ Link 3 (ztksetoehl):
 - Ubuntu - Netplan 文档 — [netplan.io](https://netplan.io/)
 - systemd-resolved / resolvectl 手册 — [freedesktop.org](https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html)
 - Red Hat 文档 - Configuring and managing networking — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_networking/index)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [network](/commands/network.md)
+- [network-tools](network-tools.md)
+- [knowledge](/knowledge.md)
+- [commands-practice](/network/commands-practice.md)
+- [coverage-matrix](/research/coverage-matrix.md)

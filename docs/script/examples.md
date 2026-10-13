@@ -426,3 +426,11 @@ CPU 空闲: 63%
 若你维护多机环境，把案例四的 SSH 要点与主案例的退出码分层结合：每台结果写独立日志文件，汇总脚本只读退出码决定是否告警。需要更系统的文本流水线（状态码分布、UA 聚合）再回看 [文本处理](./text-processing.md)；需要在失败时精确定位行号与命令，接 [脚本调试](./debugging.md)的 `set -x`/bashdb 流程。三系依赖安装对照保留在第 0 节表中，分发前按目标发行版核对一次包名（注意 `pacman`、`apt`、`dnf` 的差异与 RHEL 系 `ShellCheck` 驼峰）即可；不确定的选项以对应发行版 `man` 页为准，不要凭记忆改生产参数。
 
 改完脚本若准备提交，最后再跑一遍本篇三个主案例的"不存在路径 / 空目录 / 正常目录"三种用例，并确认 `echo $?` 符合 0/1/2 约定——这一步比再加一段功能更值得花时间。
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](README.md)
+- [functions](functions.md)

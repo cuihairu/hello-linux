@@ -847,3 +847,9 @@ find /var/log -name "*.log" -mtime -3 -exec grep -l "timeout" {} +
 - fd 项目页 — [github.com](https://github.com/sharkdp/fd)
 - ripgrep 项目页 — [github.com](https://github.com/BurntSushi/ripgrep)
 - 鸟哥的私房菜 - 文件搜寻与挂载 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0220filemanager.php)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [coverage-matrix](/research/coverage-matrix.md)

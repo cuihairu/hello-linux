@@ -203,3 +203,11 @@ du -sh /var/cache/pacman/pkg          # Arch 包缓存大小
 - Arch Wiki - pacman/本地数据库 — [wiki.archlinux.org](https://wiki.archlinux.org/title/Pacman)
 - Debian Reference - 文件系统层次结构 — [debian.org](https://www.debian.org/doc/debian-reference/ch02.zh-cn.html)
 - `man hier`、`man 7 file-hierarchy`（systemd）
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [filesystem](/basic/filesystem.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)

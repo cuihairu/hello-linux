@@ -672,3 +672,12 @@ VPN 连通后各跑一遍，
 - RFC 791（Internet Protocol）、RFC 793（Transmission Control Protocol）
 - RFC 1918（私有地址空间）、RFC 1035（DNS 实现与规范）
 - `man ip`、`man ss`、`man nsswitch.conf`、`man resolv.conf`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)
+- [network-configuration](network-configuration.md)
+- [tcpip-essentials](tcpip-essentials.md)
+- [coverage-matrix](/research/coverage-matrix.md)

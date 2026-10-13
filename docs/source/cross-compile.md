@@ -203,3 +203,14 @@ $ gdb-multiarch build-arm64/vmlinux        # 用带调试信息的 vmlinux，不
 - U-Boot 官方文档 — [docs.u-boot.org](https://docs.u-boot.org/)（booti/bootz 与环境变量）
 - BusyBox — [busybox.net](https://busybox.net/)（构建与 CONFIG_STATIC、CONFIG_PREFIX）
 - QEMU 文档 — [www.qemu.org/docs/master/](https://www.qemu.org/docs/master/)（aarch64 virt 机型与 gdbstub）
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [tarball](/basic/packages/tarball.md)
+- [knowledge](/knowledge.md)
+- [README](/research/README.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](README.md)

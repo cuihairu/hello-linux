@@ -409,3 +409,11 @@ Nginx 的知识可以收成四条主线：进程与配置结构（master/worker�
 - Arch Wiki - Nginx — [wiki.archlinux.org](https://wiki.archlinux.org/title/Nginx)
 - Let's Encrypt — [letsencrypt.org](https://letsencrypt.org/)
 - Mozilla SSL Configuration Generator — [ssl-config.mozilla.org](https://ssl-config.mozilla.org/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](/server/README.md)

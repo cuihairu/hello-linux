@@ -137,3 +137,12 @@ Shell 处理命令行分两个阶段：**扩展阶段**（变量、命令替换�
 - 鸟哥的私房菜 - 循环 script — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0320bash.php)
 - Advanced Bash-Scripting Guide - Loops — [tldp.org](https://tldp.org/LDP/abs/html/loops1.html)
 - Google Shell Style Guide - 读取文件 — [google.github.io](https://google.github.io/styleguide/shellguide.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](README.md)
+- [examples](examples.md)
+- [text-processing](text-processing.md)

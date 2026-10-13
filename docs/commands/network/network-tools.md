@@ -219,3 +219,14 @@ nmcli 的常用句型可以收成五类：查状态 `general status`/`device sta
 - curl 手册 - 字典变量（-w） — [curl.se](https://curl.se/docs/manpage.html)
 - tcpdump 手册 — [tcpdump.org](https://www.tcpdump.org/manpages/tcpdump.1.html)
 - Red Hat - Monitoring and managing system status and performance — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [network](/commands/network.md)
+- [network](network.md)
+- [commands-practice](/network/commands-practice.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [routing-nat](/server/routing-nat.md)
+- [ssh](/server/ssh.md)

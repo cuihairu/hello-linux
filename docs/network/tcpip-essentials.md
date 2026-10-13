@@ -323,3 +323,13 @@ UDP 套接字没有 ESTAB 之类的状态（无连接），恒为 `UNCONN`；第
 - Linux 内核文档 ip-sysctl（tcp_tw_reuse / keepalive / syncookies 等参数）— [docs.kernel.org/networking/ip-sysctl.html](https://docs.kernel.org/networking/ip-sysctl.html)
 - 鸟哥的私房菜 — TCP/IP 与网络基础 — [linux.vbird.org](https://linux.vbird.org/linux_server/)
 - man 8 ss、man 8 tcpdump、man 8 ping — 各工具手册页
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)
+- [commands-practice](commands-practice.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](/source/README.md)
+- [network-stack](/source/network-stack.md)

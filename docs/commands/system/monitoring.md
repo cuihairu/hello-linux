@@ -293,3 +293,15 @@ ps aux --sort=-%mem | head -6
 - iostat(1)、mpstat(1)、sar(1)、vmstat(8)、top(1) 手册页 — [man7.org](https://man7.org/linux/man-pages/)
 - 用 USE 方法找瓶颈（Brendan Gregg） — [brendangregg.com/usemethod.html](https://www.brendangregg.com/usemethod.html)
 - Prometheus 监控体系（长期方案） — [server/monitoring/prometheus.md](../../server/monitoring/prometheus.md)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [system](/commands/system.md)
+- [memory](memory.md)
+- [process](process.md)
+- [system_info](system_info.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [automation](/system-management/automation.md)
+- [backup-and-recovery](/system-management/backup-and-recovery.md)

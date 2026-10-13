@@ -168,3 +168,15 @@ profile 放在 `/etc/apparmor.d/`，拒绝日志通常进 `/var/log/kern.log` �
 - Debian Wiki - SELinux — [wiki.debian.org](https://wiki.debian.org/SELinux)
 - Debian Wiki - AppArmor — [wiki.debian.org](https://wiki.debian.org/AppArmor)
 - `man ls`（`-Z`）、`man ps`（`-Z`）、`man audit2why`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [security](/basic/security.md)
+- [modes](modes.md)
+- [policy_configuration](policy_configuration.md)
+- [glossary](/glossary.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [selinux](/security/selinux.md)
+- [samba](/server/samba.md)

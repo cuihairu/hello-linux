@@ -329,3 +329,12 @@ numa_miss       12        9   # 溢到对端——持续涨才值得关注
 - Linux Kernel Documentation - Memory Management — [kernel.org](https://www.kernel.org/doc/html/latest/mm/index.html)
 - Linux Kernel Documentation - OOM Killer — [kernel.org](https://www.kernel.org/doc/html/latest/admin-guide/mm/concepts.html)
 - Red Hat - RHEL 9 内存管理与 tuning — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/index)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [architecture](architecture.md)
+- [cpu](cpu.md)
+- [storage](storage.md)
+- [README](/source/README.md)

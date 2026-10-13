@@ -76,3 +76,9 @@ ls --version | head -1
 - Red Hat 文档 — [docs.redhat.com](https://docs.redhat.com/)
 - DistroWatch — [distrowatch.com](https://distrowatch.com/)
 - 鸟哥的私房菜 - 基础篇首章 — [linux.vbird.org](https://linux.vbird.org/linux_basic/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [coverage-matrix](/research/coverage-matrix.md)

@@ -398,3 +398,9 @@ S     790667 sleep
 - 毛德操、胡希明.《Linux内核源代码情景分析》第 6、7 章（浙江大学出版社）
 - Robert Love.《Linux内核设计与实现》（Linux Kernel Development, 3rd ed.）
 - 内核 IPC 子系统文档索引 — [docs.kernel.org](https://docs.kernel.org/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [README](README.md)

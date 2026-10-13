@@ -135,3 +135,16 @@ RHEL 系改端口后漏掉 `semanage` 是最常见的「改完连不上」：ssh
 - Arch Wiki: OpenSSH — [wiki.archlinux.org/title/OpenSSH](https://wiki.archlinux.org/title/OpenSSH)
 - RHEL 文档（sshd 配置与 SELinux 端口标签） — [docs.redhat.com](https://docs.redhat.com/)
 - man 手册 — man sshd_config、man ssh_config、man ssh-keygen
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [README](/research/README.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [authoritative-books](/research/authoritative-books.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](README.md)
+- [ci-cd](ci-cd.md)
+- [cloud-computing](cloud-computing.md)

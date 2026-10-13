@@ -229,3 +229,12 @@ CSM（Compatibility Support Module）是 UEFI 固件里模拟 Legacy BIOS 的兼
 - 鸟哥的私房菜 - 开机流程分析（含 BIOS/UEFI 对比） — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0510osloader.php)
 - UEFI Forum 规范 — [uefi.org](https://uefi.org/)
 - `man efibootmgr`、`man fdisk`、`man gdisk`、`man lsblk`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [boot](/basic/boot.md)
+- [glossary](/glossary.md)
+- [storage](/hardware/storage.md)
+- [boot-process](/system-management/boot-process.md)

@@ -177,3 +177,11 @@ sudo reboot
 - `man sestatus`
 - Arch Wiki - SELinux — [wiki.archlinux.org](https://wiki.archlinux.org/title/SELinux)
 - Debian Wiki - SELinux — [wiki.debian.org](https://wiki.debian.org/SELinux)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [security](/basic/security.md)
+- [concept](concept.md)
+- [selinux](/security/selinux.md)

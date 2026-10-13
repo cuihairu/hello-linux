@@ -531,3 +531,14 @@ echo "deploy ok: $DATE"
 - 鸟哥的私房菜 - 例行性任务排程 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0430cron.php)
 - Red Hat - 自动化主题 — [redhat.com](https://www.redhat.com/en/topics/automation)
 - [脚本篇](../script/README.md)（Bash 语法、调试与 shellcheck）
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [application-scenarios](/research/application-scenarios.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [ci-cd](/server/ci-cd.md)
+- [ldap](/server/ldap.md)
+- [README](README.md)
+- [backup-and-recovery](backup-and-recovery.md)

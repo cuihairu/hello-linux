@@ -333,3 +333,15 @@ $ sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* { @[comm] = count(); }'
 - `man free`、`man vmstat`、`man sysctl`、`man swapon`、`man pmap`
 - bpftrace 参考指南 — [github.com/bpftrace/bpftrace](https://github.com/bpftrace/bpftrace)
 - valgrind 手册 — [valgrind.org](https://valgrind.org/docs/manual/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/commands/README.md)
+- [system](/commands/system.md)
+- [configuration-management](configuration-management.md)
+- [monitoring](monitoring.md)
+- [process](process.md)
+- [system_info](system_info.md)
+- [memory](/hardware/memory.md)
+- [performance](/system-management/performance.md)

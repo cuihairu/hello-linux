@@ -200,3 +200,11 @@ done
 - Netplan 官方文档 — [netplan.readthedocs.io](https://netplan.readthedocs.io/)
 - iproute2 手册页（`man ip`、`man ss`、`man tc`）
 - systemd.network(5)、systemd-resolved.service(8)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [services](/basic/services.md)
+- [README](/hardware/README.md)
+- [network](/hardware/network.md)
+- [README](/system-management/README.md)

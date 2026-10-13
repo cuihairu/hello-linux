@@ -76,3 +76,13 @@
 - `man journalctl`、`man rsyslog.conf`、`man logrotate`
 - journalctl 手册页 — [man7.org](https://man7.org/linux/man-pages/man1/journalctl.1.html)
 - logrotate 手册页 — [man7.org](https://man7.org/linux/man-pages/man5/logrotate.conf.5.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [services](services.md)
+- [README](/security/README.md)
+- [firewall](/security/firewall.md)
+- [intrusion-detection](/security/intrusion-detection.md)
+- [docker](/server/container/docker.md)

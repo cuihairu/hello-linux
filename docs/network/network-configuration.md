@@ -1044,3 +1044,20 @@ MAC 地址漂移、
 - 鸟哥的私房菜 - 网络配置 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0110network_basic.php)
 - `man ip`、`man nmcli`、`man netplan`、
   `man sysctl`、`man ethtool`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [configuration-management](/commands/system/configuration-management.md)
+- [system_info](/commands/system/system_info.md)
+- [network](/hardware/network.md)
+- [README](README.md)
+- [basics](basics.md)
+- [commands-practice](commands-practice.md)
+- [tcpip-essentials](tcpip-essentials.md)
+- [troubleshooting](troubleshooting.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [dhcp](/server/dhcp.md)
+- [network-parameters](/server/network-parameters.md)
+- [routing-nat](/server/routing-nat.md)
+- [network-stack](/source/network-stack.md)

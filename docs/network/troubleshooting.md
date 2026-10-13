@@ -846,3 +846,19 @@ $ iperf3 -c 192.168.1.200 -t 10
 - Red Hat - Troubleshooting network connectivity — [redhat.com](https://docs.redhat.com/)
 - Cisco - BGP 常见问题排查（排障方法论参考） — [cisco.com](https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/22166-bgp-trouble-main.html)
 - 鸟哥的私房菜 - 网络除错 — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0110network_basic.php)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [network](/hardware/network.md)
+- [README](README.md)
+- [basics](basics.md)
+- [commands-practice](commands-practice.md)
+- [firewall](firewall.md)
+- [network-configuration](network-configuration.md)
+- [network-monitoring](network-monitoring.md)
+- [tcpip-essentials](tcpip-essentials.md)
+- [vpn](vpn.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [network-parameters](/server/network-parameters.md)
+- [routing-nat](/server/routing-nat.md)

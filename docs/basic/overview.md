@@ -247,3 +247,10 @@ $ chsh -s /bin/zsh     # 切换默认 Shell（下次登录生效）
 - Arch Wiki - General recommendations — [wiki.archlinux.org](https://wiki.archlinux.org/title/General_recommendations)
 - The Linux Kernel documentation — [kernel.org](https://www.kernel.org/doc/html/latest/)
 - Linux man pages — [man7.org](https://man7.org/linux/man-pages/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [what_is_linux](/basic/introduction/what_is_linux.md)
+- [coverage-matrix](/research/coverage-matrix.md)

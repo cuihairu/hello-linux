@@ -348,3 +348,17 @@ $ systemctl analyze critical-chain nginx.service  # 它所在的真正关键路�
 - systemd 项目文档门户 — [systemd.io](https://systemd.io/)（设计文档与专题索引，含单元类型、cgroup 委派等主题）
 - man systemctl / man systemd-delta / man systemd.resource-control
 - 鸟哥的私房菜 — [linux.vbird.org](https://linux.vbird.org/)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [knowledge](/knowledge.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [ci-cd](/server/ci-cd.md)
+- [README](/source/README.md)
+- [tracing-tools](/source/tracing-tools.md)
+- [userland](/source/userland.md)
+- [README](README.md)
+- [boot-process](boot-process.md)

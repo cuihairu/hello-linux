@@ -149,3 +149,10 @@ macOS 自带的 `dd` 语法相同，但更推荐用 balenaEtcher——图形操�
 - Debian Installation Manual — [debian.org](https://www.debian.org/releases/stable/installmanual)
 - Ubuntu installation tutorial — [ubuntu.com](https://ubuntu.com/tutorials/install-ubuntu-desktop)
 - 鸟哥的私房菜 - 安装 Linux 前的准备 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0157installcentos7.php)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [installation](/basic/installation.md)
+- [coverage-matrix](/research/coverage-matrix.md)

@@ -132,3 +132,10 @@ TOP 5 IP:
 - 鸟哥的私房菜 - 文本处理器 — [linux.vbird.org](https://linux.vbird.org/linux_basic/centos7/0330regularex.php)
 - Arch Wiki - Core utilities — [wiki.archlinux.org](https://wiki.archlinux.org/title/Core_utilities)
 - 命令篇 - 文本处理命令 — [docs/commands/text/text_processing.md](../commands/text/text_processing.md)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [examples](examples.md)
+- [functions](functions.md)

@@ -162,3 +162,11 @@ $ resolvectl status / query example.com / flush-caches   # 状态、测试解析
 - `man timedatectl`、`man hostnamectl`、`man nmcli`、`man networkctl`
 - timedatectl 手册页 — [man7.org](https://man7.org/linux/man-pages/man1/timedatectl.1.html)
 - hostnamectl 手册页 — [man7.org](https://man7.org/linux/man-pages/man1/hostnamectl.1.html)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [services](/basic/services.md)
+- [configuration-management](/commands/system/configuration-management.md)
+- [coverage-matrix](/research/coverage-matrix.md)

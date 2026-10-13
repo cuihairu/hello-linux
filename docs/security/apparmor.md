@@ -318,3 +318,12 @@ $ docker run --security-opt apparmor=unconfined ...
 - Arch Wiki: AppArmor — [wiki.archlinux.org/title/AppArmor](https://wiki.archlinux.org/title/AppArmor)
 - AppArmor 手册页（`apparmor_parser`、`aa-status`、`aa-complain`、`aa-logprof` 等）— [manpages.ubuntu.com](https://manpages.ubuntu.com/)
 - `man 5 apparmor.d`（profile 语法）、`man 8 apparmor_parser`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [knowledge](/knowledge.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [gap-fill](/research/gap-fill.md)
+- [README](README.md)
+- [hardening](hardening.md)

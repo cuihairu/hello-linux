@@ -120,3 +120,10 @@ $ sudo edquota -g -p template_group developers
 - Debian 手册 - 磁盘配额 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - RHEL 9 - 配置配额 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/managing_storage_devices/index)
 - `man quota`、`man repquota`、`man edquota`、`man quotacheck`、`man quotaon`、`man xfs_quota`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](/basic/README.md)
+- [users](/basic/users.md)
+- [coverage-matrix](/research/coverage-matrix.md)

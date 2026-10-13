@@ -233,3 +233,16 @@ $ sudo journalctl -u named -f              # Debian unit 名为 bind9
 - 鸟哥的私房菜 - DNS — [linux.vbird.org](https://linux.vbird.org/linux_server/centos6/0350dns.php)
 - RFC 1034/1035 — DNS 规范
 - dig 手册 — [man dig](https://linux.die.net/man/1/dig)
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [glossary](/glossary.md)
+- [commands-practice](/network/commands-practice.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [README](/server/README.md)
+- [dhcp](/server/dhcp.md)
+- [postfix](/server/mail/postfix.md)
+- [network-parameters](/server/network-parameters.md)
+- [ntp](/server/ntp.md)
+- [scheduled-tasks](/system-management/scheduled-tasks.md)

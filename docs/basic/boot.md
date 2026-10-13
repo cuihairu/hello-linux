@@ -76,3 +76,9 @@ Windows 更新常会抢占 NVRAM 启动顺序，把 Windows Boot Manager 放回�
 - RHEL 9 - 在 UEFI 模式下安装 GRUB — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/interactively_installing_rhel_from_installation_media/)
 - Debian 手册 - 系统启动 — [debian.org](https://www.debian.org/doc/manuals/debian-handbook/)
 - `man efibootmgr`、`man grub-install`、`man grub-mkconfig`、`man dracut`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [coverage-matrix](/research/coverage-matrix.md)

@@ -669,3 +669,12 @@ agent、自动发现、模板、告警内置，
 - Arch Wiki - Prometheus — [wiki.archlinux.org](https://wiki.archlinux.org/title/Prometheus)
 - `man snmpget`、`man snmpwalk`、
   `man tcpdump`、`man vnstat`、`man iperf3`
+
+<!-- BACKLINKS-AUTO -->
+## 相关页面
+
+- [README](README.md)
+- [load-balancing](load-balancing.md)
+- [vpn](vpn.md)
+- [coverage-matrix](/research/coverage-matrix.md)
+- [performance](/system-management/performance.md)
