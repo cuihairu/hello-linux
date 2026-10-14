@@ -5,6 +5,13 @@ name: Deploy VitePress site to Pages
 on:
   # Runs on pushes targeting the `main` branch
   push:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "LICENSE"
+      - ".gitignore"
+      - "*.svg"
+      - ".editorconfig"
     branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
