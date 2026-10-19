@@ -1,6 +1,6 @@
 # 应用场景调研
 
-文档要服务谁，决定要写什么。本页按四类场景列出外部可核实的事实，再逐类给出对本仓的要求与阅读路径，结论直接进 [差异表](./coverage-matrix.md)。本页引用的站点在 2026-10-08 均为实取（A 级）。
+文档要服务谁，决定要写什么。本页按四类场景列出外部可核实的事实，再逐类给出对本仓内容的观察与相关页面索引，结论直接进[差异表](./coverage-matrix.md)。本页引用的站点在 2026-10-08 均为实取（A 级）。
 
 ## 1. 场景与事实
 
@@ -27,7 +27,7 @@ ArchWiki 目录页（镜像实取）把「视觉美化」（25 页）、「图�
 | 场景 | 关键要求 | 本仓现状 | 处置 |
 |------|---------|---------|------|
 | 服务器与云 | 三系命令并排、存量系统迁移视角、多架构 | 服务器篇 21 页 + 系统管理篇 9 页，三系对照贯穿全仓 | 已覆盖 |
-| 边缘与嵌入式 | 交叉编译、设备树、启动链路、无图形界面 | 此前只有设备树提及，无嵌入式入口 | 已补页（交叉编译与嵌入式），阅读路径见 4.2 节 |
+| 边缘与嵌入式 | 交叉编译、设备树、启动链路、无图形界面 | 此前只有设备树提及，无嵌入式入口 | 已补页，相关页面见 4.2 节 |
 | 桌面与开发 | Xorg/Wayland、显示管理器、桌面环境、输入法与字体 | 零散提及 | 已补页（桌面图形栈） |
 | 运维自动化 | 调度、编排、监控、备份、账号一致性 | 四条主线已有，账号一致性缺 | 已补页（LDAP 统一账号管理） |
 | 安全合规 | MAC 强制访问控制在两套发行版上的差异 | SELinux 5 页成体系，AppArmor 只有对照表一行 | 已补页（AppArmor 实战） |
@@ -35,43 +35,43 @@ ArchWiki 目录页（镜像实取）把「视觉美化」（25 页）、「图�
 
 原先「记为缺口但本轮不补」的两项（嵌入式交叉编译专题、LDAP 统一账号）已在后续增量补齐，落成 [交叉编译与嵌入式](../source/cross-compile.md) 与 [LDAP 统一账号管理](../server/ldap.md) 两页；2026-10-10 差异表部分覆盖项 SSH 补独立页面 [SSH 远程登录](../server/ssh.md)，基础篇「第二十一章」补 [源码编译与 Tarball 安装](../basic/packages/tarball.md)，USAH 扩展选题补 [云计算与 cloud-init](../server/cloud-computing.md)、[CI/CD 与持续交付](../server/ci-cd.md) 两页；USAH 31 章、TLCL 36 章与 Debian Handbook 16 章逐条核对进[覆盖核对与差异表](./coverage-matrix.md) §4、§5、§6；补全记录见 [缺口补全与核对修订](./gap-fill.md)。
 
-## 4. 场景阅读路径
+## 4. 按场景查找相关页面
 
-按第 1 节的四类场景，各给一条本仓页面的阅读顺序，从装机走到对应场景的进阶页。链接均指向仓库内页面，其中桌面一栏含本轮新增的[桌面图形栈](../hardware/desktop-stack.md)与[KVM 虚拟化](../server/virtualization/kvm.md)两页。
+以下按场景列出相关页面，作为查找索引，不规定阅读先后。链接均指向仓库内页面；桌面与开发一栏含[桌面图形栈](../hardware/desktop-stack.md)与[KVM 虚拟化](../server/virtualization/kvm.md)。
 
 ### 4.1 服务器与云
 
-1. [安装 Linux](../basic/installation.md)，先有一台能登录的机器
-2. [服务器网络参数配置](../server/network-parameters.md)，上线前配好地址、网关与 DNS
-3. [SSH 远程登录](../server/ssh.md)，把管理通道配成密钥认证
-4. [Nginx](../server/web/nginx.md)，搭一个对外的 Web 服务
-5. [性能优化](../system-management/performance.md)，负载上来之后的排查手段
-6. [安全加固](../security/hardening.md)，对外服务必须回头补的一课
+- [安装 Linux](../basic/installation.md)：装机与初始化
+- [服务器网络参数配置](../server/network-parameters.md)：地址、网关与 DNS
+- [SSH 远程登录](../server/ssh.md)：远程管理与密钥认证
+- [Nginx](../server/web/nginx.md)：Web 服务
+- [性能优化](../system-management/performance.md)：负载与排查
+- [安全加固](../security/hardening.md)：服务加固
 
 ### 4.2 边缘与嵌入式
 
-1. [计算机体系结构](../hardware/architecture.md)，ARM、RISC-V 等架构与设备树的硬件视角
-2. [设备驱动框架](../source/driver-framework.md)，设备树如何落到驱动
-3. [交叉编译与嵌入式](../source/cross-compile.md)，交叉工具链、内核裁剪、rootfs 与 U-Boot 启动链
-4. [内核编译与模块开发](../source/build-and-modules.md)，内核裁剪与编译的落点
-5. [开机流程与引导排错](../system-management/boot-process.md)，无图形界面设备的启动链路
+- [计算机体系结构](../hardware/architecture.md)：ARM、RISC-V 等架构与设备树
+- [设备驱动框架](../source/driver-framework.md)：设备树与驱动
+- [交叉编译与嵌入式](../source/cross-compile.md)：交叉工具链、内核裁剪、rootfs 与 U-Boot
+- [内核编译与模块开发](../source/build-and-modules.md)：内核裁剪与编译
+- [开机流程与引导排错](../system-management/boot-process.md)：无图形界面设备的启动链路
 
 ### 4.3 桌面与开发
 
-1. [选择合适的发行版](../basic/installation/choose_distribution.md)，桌面发行版怎么挑
-2. [安装过程](../basic/installation/process.md)，装出带桌面的系统
-3. [桌面图形栈](../hardware/desktop-stack.md)，Xorg/Wayland、显示管理器、字体与输入法
-4. [KVM 虚拟化](../server/virtualization/kvm.md)，开发测试用虚拟机的建法
-5. [文本编辑和查看工具](../commands/text/editors.md)，改配置、写代码的日用工具
+- [选择合适的发行版](../basic/installation/choose_distribution.md)：桌面发行版选择
+- [安装过程](../basic/installation/process.md)：安装与桌面环境
+- [桌面图形栈](../hardware/desktop-stack.md)：Xorg/Wayland、显示管理器、字体与输入法
+- [KVM 虚拟化](../server/virtualization/kvm.md)：开发测试用虚拟机
+- [文本编辑和查看工具](../commands/text/editors.md)：配置与代码编辑
 
 ### 4.4 运维自动化
 
-1. [自动化运维](../system-management/automation.md)，脚本与 Ansible 之间怎么选
-2. [例行性工作排程](../system-management/scheduled-tasks.md)，cron 与 systemd timer
-3. [Prometheus + Grafana](../server/monitoring/prometheus.md)，监控主线
-4. [备份与恢复](../system-management/backup-and-recovery.md)，故障前的兜底手段
-5. [账号管理](../basic/users/account_management.md)，单机账号是基线
-6. [LDAP 统一账号管理](../server/ldap.md)，多机账号一个出口管
+- [自动化运维](../system-management/automation.md)：脚本与 Ansible
+- [例行性工作排程](../system-management/scheduled-tasks.md)：cron 与 systemd timer
+- [Prometheus + Grafana](../server/monitoring/prometheus.md)：监控
+- [备份与恢复](../system-management/backup-and-recovery.md)：数据保护
+- [账号管理](../basic/users/account_management.md)：单机账号
+- [LDAP 统一账号管理](../server/ldap.md)：多机账号目录
 
 ## 5. 参考资料
 

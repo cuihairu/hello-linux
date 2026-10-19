@@ -107,3 +107,36 @@
 1. 在有依赖的环境重新运行 `npm ci`、`npm run docs:build` 与 `npm run docs:check`，确认新产物而非旧 dist 通过；当前构建因缺少 VitePress 未核实。
 2. 为 sidebar/SUMMARY 中同名的跨主题条目标明视角（优先防火墙），保持页面与 URL 不变，降低读者误认为重复内容的概率。
 3. 先做防火墙、开机、日志页面的逐段重合度与独有内容盘点，再由维护者决定是否需要二/三期路径调整或合并；当前证据不足以直接删并。
+
+## 收口执行记录（2026-10-19）
+
+以下为按本报告底稿执行后的复核结果。上文的 147 篇/145 条为底稿生成时的快照；审计报告自身进入侧栏与索引后，当前源文件数为 148 篇，内容条目为 146 篇。
+
+### A：导航真源与同步规则
+
+- `docs/.vitepress/config.mts` 是站点导航真源；`docs/SUMMARY.md:3` 现说明本页是派生的完整链接索引，维护时先改 sidebar、再同步 SUMMARY，并运行 `npm run docs:check` 对账。SUMMARY 保留，不再被误认为第二个导航真源。
+- sidebar 同名入口改为“防火墙（策略设计）”与“防火墙（连通排障）”，URL 仍分别是 `/security/firewall` 与 `/network/firewall`。
+- 已逐个 sidebar 分区检查内部路由重复；导航栏与侧栏共用路由、不同侧栏的路由复用都不计为同侧栏重复。单个侧栏未发现重复条目。
+
+### B：跨主题候选的逐组定性
+
+三组共享事实收敛到权威页；三组独特角度保留并互链，没有删除 Markdown 文件。
+
+| 候选组 | 分类与动作 | 两处文本对比证据 |
+|---|---|---|
+| 防火墙 | **真重复事实**：三系默认工具/启用状态以安全篇为权威；网络篇删除重复对照表，改为摘要和完整链接。**不同角度保留**：策略设计与连通性排障仍为两篇。 | `docs/security/firewall.md:3`：“安全策略视角……默认该拒绝什么、白名单怎么设计”；`docs/network/firewall.md:9-12`：“连通性与排障的视角……证明‘是/不是防火墙拦的’”。重复证据见基线 `6f24a13`：`docs/security/firewall.md:61-67` 与 `docs/network/firewall.md:86-90` 都列三系默认工具/状态；当前网络篇 `:83` 改为摘要并链接权威页。 |
+| 开机 | **真重复事实**：通用启动链以基础篇为权威；系统管理篇首段改为摘要链接。**不同角度保留**：基础篇讲启动构成/三系配置，系统管理篇讲卡点诊断、救援与启动性能。 | 基线 `6f24a13` 的 `docs/basic/boot.md:5`：“固件……引导加载器……内核和 initramfs……PID 1”；同一基线 `docs/system-management/boot-process.md:17-30` 用“五棒”列出固件、引导器、内核/initramfs、systemd、登录；当前管理篇 `:3` 链回基础篇并标明管理员排障角度，阶段诊断矩阵仍保留。 |
+| 日志 | **真重复事实**：journald/rsyslog 分工的概念解释以基础篇系统日志页为权威；管理篇保留摘要并指向完整解释。**不同角度保留**：基础篇讲链路、分类和轮转，系统管理篇讲检索、配额、接入与集中转发。 | `docs/basic/log/syslog.md:27-31` 定义 journald 采集、rsyslog 落盘及两者关系；基线 `6f24a13` 的 `docs/system-management/logging.md:16` 重述“journald 是……日志总线；rsyslog 是……文本日志路由器”；当前 `docs/system-management/logging.md:16` 改为摘要链接并转入检索和管线操作；`docs/basic/log.md:38` 标出两种内容分工并互链。 |
+
+### C：口径与发现性
+
+- `README.md:18,40`、`README.zh.md:18,40` 改为个人笔记/开发者实践定位，取消“从零学习”和“每章都有”的不准确承诺；中英文 README 中旧的 126/128 统计标为历史巡检快照。
+- `docs/index.md` 的主题卡片去掉把 Markdown 文件数称作“章”的旧数字；`docs/.vitepress/config.mts:5` 的站点描述同步为个人笔记口径。
+- `docs/knowledge.md` 与 `docs/research/application-scenarios.md` 将顺序型阅读路径改为按场景列出的相关页面索引；URL 不变。
+- 重要总览 `knowledge.md` 与本结构审计均加入 sidebar；SUMMARY 新增对应审计索引项。配置侧栏检查无死条目。
+
+### 本轮验收
+
+- `pnpm docs:build`：通过，VitePress 2.0.0-alpha.20 构建完成；出现一条 500 kB chunk 提示。
+- `npm run docs:check`：`issues=0`，`pass=33679 fail=0 total=33679 rate=100.0000%`；索引 `entries=146, listed=146, orphan=0, sidebar_ok=146, unlisted=0`；sitemap `locs=148, loc_ok=148, loc_dead=0, page_missing=0, missing_file=0`。
+- `git diff --diff-filter=D --name-only`：0 个删除路径；Markdown 删除数为 0。

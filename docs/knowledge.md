@@ -4,9 +4,9 @@
 
 ## 核心概念
 
-### 学习骨架：概念、命令、服务、排错
+### 内容脉络：概念、命令、服务、排错
 
-鸟哥两篇给出的顺序至今站得住：先建概念（磁盘、权限、进程），再逐条命令上手，然后是服务搭建，最后落到排错。本仓沿这条骨架走，改了两处——把 Debian/Ubuntu、RHEL 系、Arch 三系命令并排对照，把 CentOS 7 时代的操作坐标更新到 systemd 时代。骨架本身不挑发行版，挑的是写作时心里有没有放着另外两个发行版（来源：[权威书籍调研](./research/authoritative-books.md) §1、§3，A 级）。
+鸟哥两篇把概念（磁盘、权限、进程）、命令、服务与排错连成一条线。我整理这些主题时，常把 Debian/Ubuntu、RHEL 系、Arch 三系命令并排对照，也把 CentOS 7 时代的操作坐标更新到 systemd 时代；相关页面各自从不同问题切入，并不要求按固定顺序阅读（来源：[权威书籍调研](./research/authoritative-books.md) §1、§3，A 级）。
 
 ### 包管理三模型
 
@@ -97,12 +97,12 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 | 安全合规 | 两套 MAC 的发行版差异 | [AppArmor 实战](./security/apparmor.md) 与 SELinux 五页成两套 |
 | 虚拟化 | KVM/libvirt 建机与网络、与容器分工 | [KVM 虚拟化](./server/virtualization/kvm.md) |
 
-阅读路径按场景各给一条（从装机到进阶），完整版在[应用场景调研](./research/application-scenarios.md) §4：
+按场景整理的相关页面索引见[应用场景调研](./research/application-scenarios.md) §4：
 
-- 服务器与云：安装 → [网络参数](./server/network-parameters.md) → [SSH 远程登录](./server/ssh.md) → [Nginx](./server/web/nginx.md) → [性能优化](./system-management/performance.md) → [安全加固](./security/hardening.md)
-- 边缘与嵌入式：[体系结构](./hardware/architecture.md) → [驱动框架](./source/driver-framework.md) → [交叉编译](./source/cross-compile.md) → [内核编译](./source/build-and-modules.md)
-- 桌面与开发：[选发行版](./basic/installation/choose_distribution.md) → [安装过程](./basic/installation/process.md) → [桌面图形栈](./hardware/desktop-stack.md) → [KVM](./server/virtualization/kvm.md)
-- 运维自动化：[自动化运维](./system-management/automation.md) → [CI/CD 与持续交付](./server/ci-cd.md) → [排程](./system-management/scheduled-tasks.md) → [监控](./server/monitoring/prometheus.md) → [备份](./system-management/backup-and-recovery.md) → [LDAP](./server/ldap.md)
+- 服务器与云：[网络参数](./server/network-parameters.md)、[SSH 远程登录](./server/ssh.md)、[Nginx](./server/web/nginx.md)、[性能优化](./system-management/performance.md)、[安全加固](./security/hardening.md)
+- 边缘与嵌入式：[体系结构](./hardware/architecture.md)、[驱动框架](./source/driver-framework.md)、[交叉编译](./source/cross-compile.md)、[内核编译](./source/build-and-modules.md)
+- 桌面与开发：[选发行版](./basic/installation/choose_distribution.md)、[安装过程](./basic/installation/process.md)、[桌面图形栈](./hardware/desktop-stack.md)、[KVM](./server/virtualization/kvm.md)
+- 运维自动化：[自动化运维](./system-management/automation.md)、[CI/CD 与持续交付](./server/ci-cd.md)、[排程](./system-management/scheduled-tasks.md)、[监控](./server/monitoring/prometheus.md)、[备份](./system-management/backup-and-recovery.md)、[LDAP](./server/ldap.md)
 
 ## 常见坑与误区
 
@@ -139,7 +139,7 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 - [知识调查总览](./research/README.md)——四步方法与来源分级
 - [权威书籍调研](./research/authoritative-books.md)——七本书的目录原文与引用纪律
 - [官方文档调研](./research/official-docs.md)——九类官方来源与引用密度
-- [应用场景调研](./research/application-scenarios.md)——四类场景事实与完整阅读路径
+- [应用场景调研](./research/application-scenarios.md)——四类场景事实与相关页面索引
 - [覆盖核对与差异表](./research/coverage-matrix.md)——四档判定逐条表
 - [缺口补全与核对修订](./research/gap-fill.md)——补页修订执行与复测记录
 - [术语速查：术语表](./glossary.md)（中英对照、一句话定义、权威出处与相关页）。
