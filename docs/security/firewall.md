@@ -167,7 +167,7 @@ RHEL 系从 CentOS 7 起就把 firewalld 设为默认，它的设计出发点和
 
 firewalld 的核心概念是 **zone（区域）**：把网络接口/来源划分到不同信任级别的区域，每个 zone 有自己的服务与端口白名单。这解决了一个 ufw 难以优雅处理的问题——同一台机器双网卡，内网口走 `trusted`、外网口走 `public`，策略互不干扰。
 
-内置 zone 从宽松到严格大致是：`trusted`（全放行）→ `internal`/`home`/`work`（较宽松）→ `public`（默认，仅 ssh 等）→ `external`/`dmz` → `block`（拒绝并回 ICMP）→ `drop`（静默丢弃）。**新装系统的默认 zone 几乎总是 `public`**，它只放行 ssh 和 dhcpv6-client——这是 RHEL 系开箱比 Ubuntu"裸奔"更安全的直接原因。
+内置 zone 从宽松到严格大致是：`trusted`（全放行）→ `internal`/`home`/`work`（较宽松）→ `public`（默认，通常只放行少数服务）→ `external`/`dmz` → `block`（拒绝并回 ICMP）→ `drop`（静默丢弃）。**新装系统的默认 zone 几乎总是 `public`**；常见服务包括 `ssh` 和 `dhcpv6-client`，安装并启用 Web 控制台的环境还可能包含 `cockpit`。具体白名单随系统镜像与安装选项而异，不能从 zone 名推断，须以 `firewall-cmd --list-all` 的当前输出为准。相比 Ubuntu 默认未启用 ufw，这通常意味着 RHEL 系开箱已有 firewalld 在运行。
 
 zone 模型的实务要点有三条。其一，**接口决定 zone**：一个接口同一时刻只属于一个 zone，规则随接口走，换网卡名（云厂商常见）后绑定可能失效，需要回查。其二，**source 可以覆盖接口**：同一条网卡上，来自 192.168.1.0/24 的包可以走 `home`、其余走 `public`，用 `--add-source` 实现基于来源的策略分叉，这在"管理网和业务网共用一块网卡"的场景里非常实用。其三，**zone 名不是安全承诺**：把接口丢进 `trusted` 意味着全放行，和没有防火墙只差一个命令——误把生产网口设成 `trusted` 是 zone 模型特有的事故，改完务必 `--list-all` 复核。
 
@@ -183,7 +183,7 @@ public (active)
   rich rules:
 ```
 
-输出里 `services: ssh dhcpv6-client` 就是白名单本身；`masquerade: no` 说明未开 NAT（服务器不该开，除非它真是网关）。**每次登录新机器，把这条命令当防火墙的"体检报告"先读一遍**，比任何文档都可靠。加规则时注意 **runtime 与 permanent 两个视图**——firewalld 把"当前内存里的规则"和"重启后要加载的配置库"分成两套，这是它与 ufw（改了即持久）最大的操作差异：
+以上是一个精简示例，`services` 会因系统与安装选项不同而变化；例如 Red Hat 文档中的 RHEL 配置包含 `cockpit dhcpv6-client ssh`。输出中的服务列表就是当前白名单；`masquerade: no` 说明未开 NAT（服务器不该开，除非它真是网关）。**每次登录新机器，把这条命令当防火墙的"体检报告"先读一遍**，比任何文档都可靠。加规则时注意 **runtime 与 permanent 两个视图**——firewalld 把"当前内存里的规则"和"重启后要加载的配置库"分成两套，这是它与 ufw（改了即持久）最大的操作差异：
 
 ```bash
 # --permanent 只写配置库，不立即生效；漏掉 --reload 是最常见失误
@@ -306,7 +306,7 @@ Sep 22 10:14:02 web01 kernel: nft-input-dropped: IN=ens160 SRC=203.0.113.7 ...
 
 按安全视角给新服务器过一遍基线（三系殊途同归，命令按各自默认栈选）。清单刻意按执行顺序排列，理由在每步之后：
 
-1. 确认默认策略是拒绝入站：ufw 看 `Default: deny (incoming)`，firewalld 看 `public` zone 只有 `ssh`，nft 看 `policy drop`。**先读现状再动手**，避免在不知情的既有策略上叠加。
+1. 确认默认策略是拒绝入站：ufw 看 `Default: deny (incoming)`，firewalld 检查当前 `public` zone 的服务/端口白名单是否符合预期，nft 看 `policy drop`。**先读现状再动手**，避免在不知情的既有策略上叠加。
 2. **先**放行 SSH（有条件就限定来源网段或用 `ufw limit`），**再**启用防火墙。顺序理由见 3.1，这一步是整个清单里唯一可能把自己锁死的。
 3. 只放行业务端口 80/443；数据库、Redis 端口只允许内网来源。业务端口用服务名或端口皆可，但来源限定要写清楚——"对全网开放的 3306"比"没开 3306"更危险，因为它看起来已经"配过了"。
 4. 开启日志（`ufw logging on` / nft `log` / firewalld log-denied），确认 `journalctl -k` 能看到丢包记录。日志是后面所有检测与排障的数据源，没有它，封禁和复盘都无从谈起。
@@ -334,6 +334,7 @@ Sep 22 10:14:02 web01 kernel: nft-input-dropped: IN=ens160 SRC=203.0.113.7 ...
 - netfilter 项目与文档 — [netfilter.org](https://www.netfilter.org/documentation/)
 - 鸟哥的私房菜 - 系统安全与防火墙 — [linux.vbird.org](https://linux.vbird.org/linux_server/rocky9/0180firewall.php)
 - Red Hat - 用 firewalld 配置防火墙 — [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_firewalls_and_packet_filters/)
+- Red Hat - 查看 firewalld 当前设置（含 `cockpit dhcpv6-client ssh` 配置示例）— [docs.redhat.com](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_firewalls_and_packet_filters/using-and-configuring-firewalld)
 
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
