@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Hello Linux',
-  description: '从零开始学习 Linux',
+  description: '个人 Linux 笔记、心得与实践记录',
   base: '/hello-linux/',
   lang: 'zh-CN',
   cleanUrls: false,
@@ -552,7 +552,7 @@ export default defineConfig({
               link: '/security/README'
             },
             {
-              text: '防火墙',
+              text: '防火墙（策略设计）',
               link: '/security/firewall'
             },
             {
@@ -595,7 +595,7 @@ export default defineConfig({
               link: '/network/basics'
             },
             {
-              text: '防火墙',
+              text: '防火墙（连通排障）',
               link: '/network/firewall'
             },
             {
@@ -719,6 +719,28 @@ export default defineConfig({
             {
               text: '缺口补全与核对修订',
               link: '/research/gap-fill'
+            }
+          ]
+        }
+      ],
+      '/knowledge': [
+        {
+          text: '知识点整理',
+          items: [
+            {
+              text: '知识点整理',
+              link: '/knowledge'
+            }
+          ]
+        }
+      ],
+      '/review/': [
+        {
+          text: '结构审计',
+          items: [
+            {
+              text: '文档结构审计（2026-10-19）',
+              link: '/review/structure-audit-2026-10-19'
             }
           ]
         }

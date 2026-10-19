@@ -1,5 +1,7 @@
 # 目录
 
+> 本页是由 `docs/.vitepress/config.mts` 侧边栏派生的完整链接索引；侧边栏是站点导航真源，直接编辑本页不会改变站点导航。新增、移除或调整页面时，先改侧边栏，再同步本页对应条目，并运行 `npm run docs:check` 对账；不要只改其中一处。
+
 ## 基础篇
 
 - [基础篇](./basic/README.md)
@@ -126,7 +128,7 @@
 ## 安全篇
 
 - [安全篇](./security/README.md)
-- [防火墙](./security/firewall.md)
+- [防火墙（策略设计）](./security/firewall.md)
 - [入侵检测](./security/intrusion-detection.md)
 - [加密技术](./security/encryption.md)
 - [安全加固](./security/hardening.md)
@@ -138,7 +140,7 @@
 
 - [网络篇](./network/README.md)
 - [网络基础](./network/basics.md)
-- [防火墙](./network/firewall.md)
+- [防火墙（连通排障）](./network/firewall.md)
 - [VPN](./network/vpn.md)
 - [负载均衡](./network/load-balancing.md)
 - [网络监控](./network/network-monitoring.md)
@@ -177,3 +179,7 @@
 
 - [知识点整理](./knowledge.md)
 - [术语表](./glossary.md)
+
+## 结构审计
+
+- [文档结构审计（2026-10-19）](./review/structure-audit-2026-10-19.md)
