@@ -80,22 +80,7 @@ Linux 内核的包过滤发生在**钩子点**（hook）上：
 
 ## 2. 三发行版的默认状态
 
-三大发行版对防火墙的出厂态度完全不同，
-这是跨发行版维护时最常踩的坑：
-
-| 发行版 | 默认工具 | 默认状态 | 底层实现 |
-|--------|----------|----------|----------|
-| Debian/Ubuntu | `ufw` | 已安装，但默认 **inactive**（未启用） | `iptables`/`nftables` 后端 |
-| Arch | 无（自选） | 默认**不安装**任何防火墙 | 通常直接用 `nftables` 或 `ufw` |
-| RHEL/CentOS/Rocky | `firewalld` | 已安装并**默认运行**，默认区域 `public` | RHEL 8+ 底层为 `nftables` |
-
-由此产生的现象很直观：
-同一份服务器镜像，
-搬到 Ubuntu 上可能"全端口裸奔"
-（因为 ufw 没开），
-搬到 Rocky 上则"SSH 之外全被拦"
-（因为 firewalld 的 public 区
-默认只放行 ssh、dhcpv6-client、cockpit 等服务）。
+默认状态的事实与策略含义统一见[安全篇 · 防火墙](../security/firewall.md)：Ubuntu 的 ufw 通常未启用、Arch 默认不预装防火墙、RHEL 系通常启用 firewalld。本页只保留连通性侧的现场判断与验证方式，避免两页各维护一份发行版默认状态表。
 
 **新机器第一件事永远是确认防火墙现状**：
 
