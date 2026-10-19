@@ -4,11 +4,11 @@
 
 > 内容参考自 GNU 项目文档和 Linux 内核文档，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解内核与操作系统的区别，并能在真实终端上分别验证
-- 了解 GNU 项目与 Linux 的关系，理解 GNU/Linux 命名争议的实质
-- 掌握发行版的组成结构，知道每一层换掉会怎样
+- 理解内核与操作系统的区别
+- GNU 项目与 Linux 的关系
+- 熟悉发行版的组成结构
 - 认识三大包管理器（`apt`、`dnf`、`pacman`）的分工与差异
 
 ## 1. 内核 vs 操作系统
@@ -154,7 +154,7 @@ GNU 工具版本和内核版本**各自独立演化**：同一台机器上 coreu
 | 查文件属于哪个包 | `dpkg -S /usr/sbin/nginx` | `rpm -qf /usr/sbin/nginx` | `pacman -Qo /usr/bin/nginx` |
 | 包格式 | `.deb` | `.rpm` | `.pkg.tar.zst` |
 
-Arch 的 `pacman` 有一处必须单独强调：**滚动更新发行版没有"先 update 索引再 upgrade"的两段式区分**，`-Syu` 是原子操作——同步仓库数据库并升级全部已装软件。只执行 `sudo pacman -Sy` 而不跟 `-Su`（社区称为 "partial upgrade"，部分升级）会导致已升级的库与未升级的软件不兼容，是 Arch 上最经典的新手事故。Arch Wiki 用醒目的篇幅警告过这一点：
+Arch 的 `pacman` 有一处必须单独强调：**滚动更新发行版没有"先 update 索引再 upgrade"的两段式区分**，`-Syu` 是原子操作——同步仓库数据库并升级全部已装软件。只执行 `sudo pacman -Sy` 而不跟 `-Su`（社区称为 "partial upgrade"，部分升级）会导致已升级的库与未升级的软件不兼容，是 Arch 上最经典的常见事故。Arch Wiki 用醒目的篇幅警告过这一点：
 
 ```bash
 # Arch：正确的日常升级姿势（一条命令，不要拆开）
@@ -219,7 +219,7 @@ $ hostnamectl | head -3
 
 1. **把内核版本当发行版版本**。`uname -r` 输出 `6.8.0-45-generic`，这**不是**"Linux 6.8 系统"的完整身份——它没告诉你这是 Ubuntu 还是 Debian。发行版版本必须查 `/etc/os-release`。向别人描述问题时两个都带上（发行版 + 内核），响应速度会快很多。
 
-2. **把某一系的命令当成 Linux 标准**。在 Arch 上敲 `apt install` 会得到 `bash: apt: command not found`；在 Rocky 上找 PPA 会一无所获，因为那是 Debian 系的概念。反过来说，看到教程没标发行版就直接执行，是新手制造"配置损坏"的主要方式。
+2. **把某一系的命令当成 Linux 标准**。在 Arch 上敲 `apt install` 会得到 `bash: apt: command not found`；在 Rocky 上找 PPA 会一无所获，因为那是 Debian 系的概念。反过来说，看到文档没标发行版就直接执行，是常见制造"配置损坏"的主要方式。
 
 3. **在 Arch 上执行部分升级（`pacman -Sy 包名`）**。只刷新索引并安装单个包，会让这个包依赖的库版本与系统中其他旧软件不匹配，出现 `error while loading shared libraries` 之类的诡异错误。Arch 的正确做法永远是先 `sudo pacman -Syu` 全系统升级，再谈其他。
 

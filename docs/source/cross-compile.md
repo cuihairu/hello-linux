@@ -4,13 +4,13 @@
 
 > 内容参考自内核官方文档（Kernel Build System、devicetree）、U-Boot 与 QEMU 文档，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清三元组命名规则，装好并验证一套 aarch64 交叉工具链
 - 用 `ARCH=` 与 `CROSS_COMPILE=` 完成内核交叉编译，产出 Image、dtb 与模块树并装进目标 rootfs
-- 读懂 dts/dtsi/dtb 三层关系，会用 dtc 反编译一块现成设备的设备树
+- 读懂 dts/dtsi/dtb 三层关系
 - 用 BusyBox 手工组一个最小 rootfs，连同交叉编译的内核一起在 QEMU 里跑到 shell
-- 对比 U-Boot 与桌面机引导链的分工，会写一组 bootargs 让内核挂上根文件系统
+- 对比 U-Boot 与桌面机引导链的分工
 - 用 gdb-multiarch 加 QEMU gdbstub 或 gdbserver 调试异架构代码，预判五类高频故障
 
 ## 1. 交叉工具链：给目标架构配编译器

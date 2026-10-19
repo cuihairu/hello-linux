@@ -4,12 +4,12 @@
 
 > 内容参考自内核源码树（v6.12）、ext4 官方 wiki 与上述书目（概念框架），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清 VFS 五对象（super_block/inode/dentry/file/address_space）各自的职责与所在头文件
 - 走通 open 与 read 两条调用链，解释 `f_op->read_iter` 这一步的分派本质
 - 知道 ext4 的 `ext4_map_blocks` 如何把文件偏移翻译成磁盘块，日志为什么存在
-- 掌握 page cache 的三个实证实验（Cached 变化、二次读断崖、drop_caches 对照）
+- page cache 的三个实证实验（Cached 变化、二次读断崖、drop_caches 对照）
 - 会用 bpftrace/ftrace 对读路径做一次真实的函数级跟踪
 
 ## 1. 为什么要有 VFS
@@ -37,7 +37,7 @@ VFS 的五个对象各管一段生命周期，全部可以在两个头文件里�
 | `file` | include/linux/fs.h | 一次 `open` | 会话状态：`f_pos` 读游标、标志位、指向 `file_operations` |
 | `address_space` | include/linux/fs.h | 一个 inode 的页缓存 | 该文件所有缓存页的账本，`i_pages`（XArray）按页索引号组织 |
 
-五个对象的关系用一次 `cat /etc/passwd` 串起来最清楚：路径解析逐组件命中 dentry（`etc` 与 `passwd` 两个 dentry），每个 dentry 指向一个 inode；`passwd` 的 inode 挂着一个 address_space 管着它的缓存页；`open` 成功后内核再造一个 file 结构记录这次会话的游标与操作表。**inode 与 dentry 的分工是初学者第一个必须掰清的概念**：名字属于 dentry，内容元数据属于 inode。硬链接的本质由此一目了然——两个 dentry 指向同一个 inode，`inode->i_nlink` 计数加一；`rm` 只删 dentry 并递减计数，归零才真正释放 inode。这也解释了那个经典现象：进程打开着的文件被 `rm` 后，fd 依然可读可写——inode 只要还有引用（此处是 file 结构）就不会被回收，"文件没了"只是名字没了。
+五个对象的关系用一次 `cat /etc/passwd` 串起来最清楚：路径解析逐组件命中 dentry（`etc` 与 `passwd` 两个 dentry），每个 dentry 指向一个 inode；`passwd` 的 inode 挂着一个 address_space 管着它的缓存页；`open` 成功后内核再造一个 file 结构记录这次会话的游标与操作表。**inode 与 dentry 的分工是需要区分的关键概念**：名字属于 dentry，内容元数据属于 inode。硬链接的本质由此一目了然——两个 dentry 指向同一个 inode，`inode->i_nlink` 计数加一；`rm` 只删 dentry 并递减计数，归零才真正释放 inode。这也解释了那个经典现象：进程打开着的文件被 `rm` 后，fd 依然可读可写——inode 只要还有引用（此处是 file 结构）就不会被回收，"文件没了"只是名字没了。
 
 file 结构的 `f_pos` 游标还藏着 fork 的语义：父进程 `open` 后 `fork`，两个进程共享**同一个** file 结构，一方的读会推进另一方的游标——shell 里重定向的继承就建立在这之上；而各自独立 `open` 同一文件得到的是两个 file、两套游标，互不影响。多态的接口本体是三张函数指针表：`file_operations`（读写等会话操作）、`inode_operations`（创建/链接等名字空间操作）、`super_operations`（inode 的分配回收与回写）。ext4 源码里的 `ext4_file_operations`（fs/ext4/file.c）就是 `file_operations` 的一次填表——`.read_iter = ext4_file_read_iter` 一行，就把"ext4 的读"挂进了通用分派。
 

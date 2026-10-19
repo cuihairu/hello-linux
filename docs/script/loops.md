@@ -4,12 +4,12 @@
 
 > 内容参考自 Bash 手册、Arch Wiki 和 Advanced Bash-Scripting Guide，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 掌握 `for`（列表、范围、C 风格、文件 glob）、`while`、`until`
-- 会用 `break`/`continue` 控制循环，理解多层 `break N`
+- `for`（列表、范围、C 风格、文件 glob）、`while`、`until`
+- 会用 `break`/`continue` 控制循环
 - 理解管道子 shell 与重定向对变量作用域的影响
-- 掌握 `while read` 正确读取含空格/特殊字符的行与文件名
+- `while read` 正确读取含空格/特殊字符的行与文件名
 - 会写批量重命名、日志统计等实用循环
 
 ## 1. for 循环

@@ -4,11 +4,11 @@
 
 > 内容参考自 logrotate 手册与 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清为什么日志必须轮转，以及不轮转的两种典型事故（写满磁盘、查询变慢）
 - 读懂 logrotate 配置结构：全局段、应用段、每行选项各解决什么问题
-- 掌握 postrotate 与 copytruncate 的选择依据，知道程序握着旧句柄时怎么办
+- postrotate 与 copytruncate 的选择依据
 - 会为自己的服务写一条可用的轮转规则，并用 `logrotate -d` 验证
 - 分清 logrotate 管文本文件、journal 空间回收走 journald 的边界
 

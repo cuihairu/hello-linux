@@ -4,13 +4,13 @@
 
 > 内容参考自 Arch Wiki、`man 7 capabilities` 与鸟哥的私房菜，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 读懂 `ls -l` 每一列的含义，理解目录与文件在 rwx 语义上的关键差异
+- 读懂 `ls -l` 每一列的含义
 - 说清 umask 的计算方式与它作为"安全默认值"的作用
 - 判断 SUID/SGID/Sticky 何时该用、何时是提权漏洞
 - 会用 ACL 补足 rwx 表达不了的权限，并知道何时该用 ACL 而非 chmod 777
-- 了解 Arch 在权限方面的惯例（wheel/sudo、pacman 装包默认权限、.pacnew）
+- Arch 在权限方面的惯例（wheel/sudo、pacman 装包默认权限、.pacnew）
 
 ## 1. 权限基础：DAC 模型
 

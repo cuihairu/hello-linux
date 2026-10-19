@@ -4,11 +4,11 @@
 
 > 内容参考自 procps-ng、sysstat 手册、Brendan Gregg 方法论与 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 分清 top/htop（实时交互）、vmstat/iostat/mpstat（采样）、sar（历史）的分工
 - 读懂 vmstat、iostat、mpstat、sar 关键列，建立"异常阈值"直觉
-- 掌握 sysstat 三系安装与采集启用（含 Arch 的 pacman 与 systemd timer）
+- sysstat 三系安装与采集启用（含 Arch 的 pacman 与 systemd timer）
 - 能按"负载 → CPU → 内存 → IO"顺序做一次完整体检
 
 ## 1. 选型：瞬时、采样还是历史

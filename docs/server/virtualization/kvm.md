@@ -4,18 +4,18 @@
 
 > 内容参考自 libvirt 与 QEMU/KVM 官方文档、Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 分清 KVM、QEMU、libvirt、virsh 的层次关系，能顺着一条 `virsh start` 讲清命令最终落到哪一层
-- 会检查 CPU 虚拟化标志与内核模块状态，能在固件、内核两层之间定位"为什么开不了 KVM"
-- 掌握 Debian/Ubuntu、Arch、RHEL/Rocky 三系安装路径，理解 libvirt 组与 qemu:///system 的权限关系
-- 能配置默认 NAT 网络与桥接网络，知道虚拟机要拿局域网 IP 时改动落在哪一层配置
+- 分清 KVM、QEMU、libvirt、virsh 的层次关系
+- 会检查 CPU 虚拟化标志与内核模块状态
+- Debian/Ubuntu、Arch、RHEL/Rocky 三系安装路径
+- 能配置默认 NAT 网络与桥接网络
 - 会用 virt-install 建虚拟机、用 virsh 完成日常管理、用 qemu-img 管理镜像与快照
 - 能按"虚拟机 vs 容器"分工表对具体场景给出选型，并说明依据
 
 ## 1. 四个名字的关系：内核、设备、管理、前端
 
-初学者容易把 KVM、QEMU、libvirt、virsh 当成四个同类工具来比较，实际上它们是自下而上的四层，缺一层整条链路就不通：
+容易把 KVM、QEMU、libvirt、virsh 当成四个同类工具来比较，实际上它们是自下而上的四层，缺一层整条链路就不通：
 
 | 层 | 组件 | 职责 | 形态 |
 |---|------|------|------|

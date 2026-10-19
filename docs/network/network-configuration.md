@@ -26,13 +26,13 @@ Bonding 与 VLAN → 网络性能调优 →
 > NetworkManager 官方手册与 Arch Wiki，
 > 见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 判断一台机器当前由哪个网络管理器接管，
   避免多套体系打架
-- 掌握 Netplan、systemd-networkd、
+- Netplan、systemd-networkd、
   `nmcli`、ifcfg 四种配置方式的适用场景
-- 理解 DNS 从 `getaddrinfo()`
+- DNS 从 `getaddrinfo()`
   到 `/etc/resolv.conf` 的完整解析路径
 - 会配置静态地址、路由、bonding、VLAN
   与基础内核调优
@@ -1008,9 +1008,9 @@ MAC 地址漂移、
 这三页的共同方法可以概括成一句话：
 **先证明内核里发生了什么，
 再讨论应用为什么没响应**。
-配置页教你读地址与路由的事实，
-排障页教你读包与连接的事实，
-防火墙页教你读丢包决策的事实——
+配置页记录读地址与路由的事实，
+排障页记录读包与连接的事实，
+防火墙页记录读丢包决策的事实——
 三者拼起来，
 才构成对"网络"这一层完整的观察力。
 缺少其中任何一页，
@@ -1032,7 +1032,7 @@ MAC 地址漂移、
 两者都会在后续运维中反复出现。
 把差异记录进自己的环境笔记，
 半年后你会得到一份
-比任何通用教程都准确的"这台机器怎么组网"的记录。
+比任何通用文档都准确的"这台机器怎么组网"的记录。
 
 - Netplan 官方文档 — [netplan.readthedocs.io](https://netplan.readthedocs.io/)
 - systemd.network(5)、networkctl(1)、

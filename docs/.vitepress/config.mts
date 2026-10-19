@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Hello Linux',
-  description: '个人 Linux 笔记、心得与实践记录',
+  description: '游戏开发者的 Linux 实践笔记与踩坑记录',
   base: '/hello-linux/',
   lang: 'zh-CN',
   cleanUrls: false,

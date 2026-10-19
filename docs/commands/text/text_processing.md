@@ -4,12 +4,12 @@ Linux 运维与开发的大量工作，本质是"把一堆文本变成另一堆�
 
 > 示例输出来自真实 Ubuntu 26.04 环境。下列工具在 Debian/Ubuntu、RHEL/CentOS/Rocky、Arch 上默认均已安装。
 
-## 学习目标
+## 本篇覆盖
 
-- 掌握 `grep` 检索及退出码约定（0/1/2）
+- `grep` 检索及退出码约定（0/1/2）
 - 会用 `sed`/`awk` 做替换、删行、按列处理与简单统计
-- 熟悉 `sort`/`uniq`/`cut`/`tr`/`wc` 等管道积木
-- 了解 BRE/ERE 差异与 `egrep`/`fgrep` 的 POSIX 废弃背景
+- `sort`/`uniq`/`cut`/`tr`/`wc` 等管道积木
+- BRE/ERE 差异与 `egrep`/`fgrep` 的 POSIX 废弃背景
 
 ## 1. 文本查看
 
@@ -73,7 +73,7 @@ set +o pipefail
 
 ### 2.2 egrep / fgrep - POSIX 已废弃，改用 `grep -E` / `grep -F`
 
-`egrep` 与 `fgrep` 历史上分别是 `grep -E`（扩展正则）与 `grep -F`（固定字符串）的别名。**POSIX 已将它们标记为 deprecated（废弃）**，理由包括与 `grep -E/-F` 语义重复、历史实现行为不一致，以及 `egrep` 名称在新标准中带来的兼容包袱；部分系统文档与新发行版已不再推荐、甚至不再提供独立别名。因此：**新脚本与新教程一律写 `grep -E` / `grep -F`**，遇到旧代码里的 `egrep`/`fgrep` 应理解为同义并逐步替换。
+`egrep` 与 `fgrep` 历史上分别是 `grep -E`（扩展正则）与 `grep -F`（固定字符串）的别名。**POSIX 已将它们标记为 deprecated（废弃）**，理由包括与 `grep -E/-F` 语义重复、历史实现行为不一致，以及 `egrep` 名称在新标准中带来的兼容包袱；部分系统文档与新发行版已不再推荐、甚至不再提供独立别名。因此：**新脚本与新文档一律写 `grep -E` / `grep -F`**，遇到旧代码里的 `egrep`/`fgrep` 应理解为同义并逐步替换。
 
 ```bash
 grep -E "pattern1|pattern2" file.txt   # 等价于废弃的 egrep

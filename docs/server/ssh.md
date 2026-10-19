@@ -4,9 +4,9 @@
 
 > 内容参考自 OpenSSH 官方文档、Arch Wiki 与 RHEL 文档，见文末参考资料。包版本事实于 2026-10-10 经 Arch 官方包 API 与 CentOS Stream 9 镜像目录实取。
 
-## 学习目标
+## 本篇覆盖
 
-- 三系安装 openssh-server，说清服务名差异（`sshd` 与 `ssh`）与配置路径
+- 三系安装 openssh-server
 - 完成密钥认证闭环：生成、分发、禁用密码登录，每一步都知道为什么
 - 读懂 sshd_config 的核心项，改完用 `sshd -t` 与 `sshd -T` 回读
 - 用 `~/.ssh/config` 把别名、跳板、连接复用固化下来

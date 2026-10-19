@@ -4,11 +4,11 @@ Linux 遵循 FHS（Filesystem Hierarchy Standard）标准定义目录结构。FH
 
 > 内容参考自 FHS 3.0、Arch Wiki 与 Debian 手册，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清 FHS 每个顶级目录的存在理由与可变性（是否随重启清空）
-- 掌握 /etc、/usr、/var、/proc 的三系差异与典型文件
-- 理解 usr-merge（/bin → usr/bin）为什么成为三家共同选择
+- /etc、/usr、/var、/proc 的三系差异与典型文件
+- usr-merge（/bin → usr/bin）为什么成为三家共同选择
 
 ## 1. 目录结构总览
 

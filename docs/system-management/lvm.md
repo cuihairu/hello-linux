@@ -4,14 +4,14 @@
 
 > 内容参考自 LVM 项目文档与 man 手册（lvm(8)、pvcreate、vgcreate、lvcreate 等），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清 PV / VG / LV 三层抽象各自的边界，以及 PE 为什么决定卷的最终大小
 - 会读 `pvs`、`vgs`、`lvs` 与 `lsblk` 的输出，把逻辑卷一路定位到物理盘
 - 独立完成"PV → VG → LV → mkfs → 挂载"的建卷闭环，并写对 fstab
 - 分清 ext4 与 XFS 的在线扩容命令差异，以及扩完逻辑卷还要扩文件系统这一步
-- 会用 LVM 快照做备份前置冻结，理解快照空间打满会失效
-- 掌握 `pvmove`/`vgreduce` 做在线换盘，能对着现有机器判断 LVM 与 RAID、LUKS 的栈顺序
+- 会用 LVM 快照做备份前置冻结
+- `pvmove`/`vgreduce` 做在线换盘
 
 ## 1. 三层模型与 PE
 
@@ -260,7 +260,7 @@ LVM 是块设备虚拟化的一层，它上面或下面还可以叠加密与冗�
 
 ### 9.2 忘记 `xfs_growfs`，挂载点没变大
 
-`lvextend` 成功、`lvs` 显示 LV 已经变大、但 `df -h` 挂载点容量纹丝不动——这是 LVM 新手最高频的困惑。原因是**扩 LV 和扩文件系统是两件事**（第 3 节），LVM 不知道上层是 XFS 还是 ext4。补救很简单：ext4 跑 `resize2fs /dev/vg0/lvX`，XFS 跑 `xfs_growfs /挂载点`。
+`lvextend` 成功、`lvs` 显示 LV 已经变大、但 `df -h` 挂载点容量纹丝不动——这是 LVM 最常见的困惑之一。原因是**扩 LV 和扩文件系统是两件事**（第 3 节），LVM 不知道上层是 XFS 还是 ext4。补救很简单：ext4 跑 `resize2fs /dev/vg0/lvX`，XFS 跑 `xfs_growfs /挂载点`。
 
 把这个故障固化成一个习惯：**每次扩完都 `df -h` 核对，不核对不算做完**。一个真实的连锁反应是——有人扩了根分区以为解决 `/` 空间告警，结果告警没消继续报，回头才发现最后一步的 `xfs_growfs /` 漏了。
 

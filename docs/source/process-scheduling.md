@@ -4,11 +4,11 @@
 
 > 内容参考自 Linux 内核 v6.12 源码树（函数名/文件/行号均经 elixir 核对）与文末书目（概念框架），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 把 `ps` 的 STAT 字母与 nice 值对回内核的 `TASK_` 常量与权重表，说出 `task_struct` 五族关键字段的职责
 - 走通两条路径：fork 的 `kernel_clone` 链与调度的 `__schedule` 链，并备好与老书 `do_fork`/`_do_fork` 的对译表
-- 理解 6.6+ 的 EEVDF：`sched_entity` 的 `vlag`/`deadline`/`slice` 三件套如何决定"谁有资格跑、先跑谁"
+- 6.6+ 的 EEVDF：`sched_entity` 的 `vlag`/`deadline`/`slice` 三件套如何决定"谁有资格跑、先跑谁"
 - 用 `sched_switch` tracepoint、bpftrace、`/proc` 把每一次上下文切换亲眼看到
 - 会解读 D 状态、僵尸进程、`swapper/0` 这些高频现象在源码层的含义
 

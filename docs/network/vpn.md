@@ -21,15 +21,15 @@ VPN（虚拟专用网络）做的事情
 > Libreswan 官方文档与 Arch Wiki，
 > 见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解 VPN 隧道的工作原理：
+- VPN 隧道的工作原理：
   封装、加密、路由三者如何配合
-- 掌握 WireGuard 的密钥体系、
+- WireGuard 的密钥体系、
   配置语法与 `AllowedIPs` 语义
 - 能部署 OpenVPN（证书模式）
   并理解其适用场景
-- 了解 IPsec/IKE 的概念
+- IPsec/IKE 的概念
   与站点互联中的位置
 - 识别 VPN 高发故障：
   路由未放行、NAT 穿越、MTU 分片、

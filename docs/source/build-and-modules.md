@@ -4,14 +4,14 @@
 
 > 内容参考自内核自带 Documentation/ 与 TLDP 模块编程指南（概念框架参考《Linux Device Drivers》与鸟哥的私房菜），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 分清全量编译与模块开发两条路径，知道 headers 在链条中的位置
+- 分清全量编译与模块开发两条路径
 - 三发行版安装内核开发头文件，验证 build 链接就绪
 - 独立完成 hello-world 模块从源码、编译、加载到卸载的完整闭环
 - 用 module_param 与 modinfo 观察模块参数与元数据
-- 掌握 menuconfig / olddefconfig 到 make install 的全量流程与三系引导项差异
-- 预判六类高频故障，知道每类先看哪一行
+- menuconfig / olddefconfig 到 make install 的全量流程与三系引导项差异
+- 预判六类高频故障
 
 ## 1. 编译内核与写模块是两件事
 

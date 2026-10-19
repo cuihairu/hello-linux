@@ -4,7 +4,7 @@
 
 传统 Linux 权限（rwx + user/group）有一个结构性弱点：**root 说了算**。Web 服务被攻破时，攻击者拿到的往往是运行服务的那个进程的身份；如果进程以 root 运行、或恰好能通过 sudo 提权，DAC 权限模型就全线失守——文件权限挡不住一个已经是 root 的进程。强制访问控制（MAC）正是为此设计的第二道闸：即便进程拥有 uid 0，只要安全策略没写"允许它碰这个文件"，内核照样拒绝。
 
-本章讲 Linux 上最主流的 MAC 实现 SELinux：它是什么、三种模式怎么选、日常排障的标准命令流程，以及 file contexts 为什么比 `chcon` 更可靠。同时会对照 Debian/Ubuntu 的 AppArmor 与 Arch 的默认无 MAC 现状，帮你建立三系安全栈的全景认知，避免把 RHEL 文档的命令生搬到其他发行版上。
+本章记录 Linux 上最主流的 MAC 实现 SELinux：它是什么、三种模式怎么选、日常排障的标准命令流程，以及 file contexts 为什么比 `chcon` 更可靠。同时会对照 Debian/Ubuntu 的 AppArmor 与 Arch 的默认无 MAC 现状，梳理三系安全栈的全景认知，避免把 RHEL 文档的命令生搬到其他发行版上。
 
 安全基础不止 SELinux。本章从 DAC 的局限性出发引入 MAC 概念，再分四节展开 SELinux 的**概念**（安全上下文与 type enforcement）、**模式**（Enforcing/Permissive/Disabled 的取舍）、**基本命令**（ausearch/restorecon/semanage 的排障流程）和**策略配置**（fcontext 持久化、audit2allow 的正确用法）。每节都会对照说明三发行版的默认安全栈差异，确保你在 Ubuntu 上不会找不到 `getenforce`、在 Arch 上不会误以为 SELinux 默认开启。
 
@@ -38,13 +38,13 @@ DAC（Discretionary Access Control，自主访问控制）的规则很简单：�
 
 > 内容参考自 Red Hat SELinux 文档与 Arch Wiki，见各章节参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解 DAC 与 MAC 的本质区别，能用自己的话解释"为什么 root 也需要被 SELinux 约束"
-- 掌握 SELinux 三种模式（Enforcing/Permissive/Disabled）的行为差异与三系默认值
-- 掌握排障标准流程：确认模式 → `ausearch` 读拒绝日志 → 判断是布尔值/标签/策略缺口 → 选择最小改动修复
-- 理解 type enforcement 与安全上下文（`user:role:type:level`）的读法
-- 掌握 `semanage fcontext` + `restorecon` 的正确用法，明白为什么它优于 `chcon`
+- DAC 与 MAC 的本质区别
+- SELinux 三种模式（Enforcing/Permissive/Disabled）的行为差异与三系默认值
+- 熟悉排障标准流程：确认模式 → `ausearch` 读拒绝日志 → 判断是布尔值/标签/策略缺口 → 选择最小改动修复
+- type enforcement 与安全上下文（`user:role:type:level`）的读法
+- `semanage fcontext` + `restorecon` 的正确用法
 - 能说清 AppArmor（Debian/Ubuntu 默认）与 SELinux（RHEL 默认）的定位差异，Arch 为何选择不默认启用
 
 ## 子页导读
@@ -56,7 +56,7 @@ DAC（Discretionary Access Control，自主访问控制）的规则很简单：�
 | [SELinux 基本命令](./security/commands.md) | `ausearch`/`setenforce`/`restorecon`/`semanage`/布尔值/端口标签的实操；排障标准流程 | 服务被拒、需要动手排障时（本章实操核心） |
 | [SELinux 策略配置](./security/policy_configuration.md) | targeted/minimum/mls 策略差异；file contexts 与 fcontext 为何优于 chcon；audit2allow 的正确与危险用法 | 需要为自定义路径/端口持久化放行规则时 |
 
-阅读顺序建议按编号来；赶时间排障可直接跳到[基本命令](./security/commands.md)。
+页面按编号展示主题依赖；排障时也可直接查[基本命令](./security/commands.md)。
 
 ## 三系差异速览
 

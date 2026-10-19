@@ -4,12 +4,12 @@ NFS（Network File System）是 Unix 世界共享存储的原生方案：权限�
 
 > 内容参考自 Linux NFS 项目文档与 Arch Wiki（概念框架参考鸟哥的私房菜），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 分清 NFSv4 与 v3 的根本差异：伪根、端口与状态模型
 - 三发行版安装（apt / pacman / dnf），认准三系不同的服务单元名
 - 读懂 /etc/exports 每个选项的崩溃语义与安全含义，重点是 root_squash
-- 掌握 fsid=0 的路径映射，不再被"挂载路径与导出路径对不上"迷惑
+- fsid=0 的路径映射
 - 会用 exportfs / showmount / nfsstat / journalctl 完成验证与排错
 - 定位 UID 不一致、防火墙、fstab 卡开机等高频故障
 
@@ -84,7 +84,7 @@ $ sudo systemctl enable --now nfs-server && systemctl is-active nfs-server
 active
 ```
 
-Arch 的 `nfs-utils` 同时包含服务端与客户端工具（`nfsstat`、`showmount` 都在里面），一个包搞定两端。旧文档里的单元名 `nfs-utils.service` 已更名，现行是 `nfs-server.service`——照着老教程敲 `systemctl status nfs-utils` 会得到"找不到单元"，认准新名即可。Arch Wiki 的 NFS 页是本页配置细节的上游参考。
+Arch 的 `nfs-utils` 同时包含服务端与客户端工具（`nfsstat`、`showmount` 都在里面），一个包搞定两端。旧文档里的单元名 `nfs-utils.service` 已更名，现行是 `nfs-server.service`——照着旧资料敲 `systemctl status nfs-utils` 会得到"找不到单元"，认准新名即可。Arch Wiki 的 NFS 页是本页配置细节的上游参考。
 
 ### 2.3 RHEL/CentOS/Rocky
 
@@ -164,7 +164,7 @@ v4 伪根 "/"  ←── fsid=0 导出 /srv/data（服务端磁盘上的这个�
 └── /srv/share …… 不在根树内，v4 客户端看不见它
 ```
 
-于是挂载路径是这样映射的——注意与导出路径的错位正是新手第一坑：
+于是挂载路径是这样映射的——注意与导出路径的错位正是常见第一坑：
 
 ```bash
 # 正确：fsid=0 导出即伪根，路径不再带 /srv/data 前缀
@@ -217,7 +217,7 @@ server:/  /mnt/data  nfs  vers=4,_netdev,x-systemd.automount  0  0
 
 挂载选项里唯一需要认真权衡的是 hard 与 soft。默认 **hard**：服务端无响应时客户端进程**无限重试**，读写调用挂起直到恢复——宁可慢，不可错，文件系统一致性优先。**soft** 则在重试耗尽后向进程返回错误，好处是服务端宕机时应用不会僵死，坏处是写到一半的调用可能以 `EIO` 失败，应用若不处理就会把半截写当成功。二者的调节旋钮是 `timeo`（超时，单位 0.1 秒，`timeo=60` 即 6 秒）与 `retrans`（超时后重试次数）。结论是保守的：默认 hard 不动；只有当"存储机宕机时应用必须继续降级运行"有明确业务要求时才考虑 soft，且必须验证上层应用对 `EIO` 的处理——与"先想失败了怎么办，再调快"是同一种运维观。
 
-顺带回答两个高频调优问题。其一，`rsize/wsize`（读写块大小）现代内核默认已是 1048576（1 MiB），`mount` 输出里能看到——不要再照老教程手工调小，万兆网络下调小纯属自伤。其二，"NFS 突然变慢"先看客户端重传：`nfsstat -c` 里 `retrans` 计数持续增长，说明请求在网络层丢了又重发，嫌疑在网卡/交换机/丢包，而不是磁盘——先修链路再谈存储调优，方向反了会白忙一场。
+顺带回答两个高频调优问题。其一，`rsize/wsize`（读写块大小）现代内核默认已是 1048576（1 MiB），`mount` 输出里能看到——不要再照旧资料手工调小，万兆网络下调小纯属自伤。其二，"NFS 突然变慢"先看客户端重传：`nfsstat -c` 里 `retrans` 计数持续增长，说明请求在网络层丢了又重发，嫌疑在网卡/交换机/丢包，而不是磁盘——先修链路再谈存储调优，方向反了会白忙一场。
 
 ## 5. 权限映射：root_squash 与 UID 对齐
 

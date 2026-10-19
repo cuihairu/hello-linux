@@ -4,7 +4,7 @@
 
 > 与前一页的分工：[网络管理命令](./network.md)管"本机状态"（接口、路由、端口、配置入口、DNS 路径），本页管"主动探测与传输"（ping/trace/DNS 查询/HTTP/远程复制/抓包）。防火墙规则见[网络篇 · 防火墙](../../network/firewall.md)。除特别标注外，`ping`、`dig`、`curl`、`ssh`、`rsync`、`tcpdump` 在 **Debian/Ubuntu、Arch、RHEL/CentOS/Rocky** 上通用；`traceroute` 与 `nmap` 三系默认都不一定装，首次用前先装包。
 
-## 学习目标
+## 本篇覆盖
 
 - 建立"问题分层 → 对应工具"的决策习惯，不盲目重试同一条命令
 - 用 `ping`/`mtr`/`traceroute` 区分"不通在哪一段"

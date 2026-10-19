@@ -2,14 +2,14 @@
 
 安装本质上是一连串**不可逆决策**的执行：用哪块盘、分几个区、引导装到哪、装什么桌面。每一步安装器都会弹出选项，但很少告诉你"选错了会发生什么"。本节按真实装机顺序展开——从按电源键选引导介质开始，到装完系统第一次成功重启为止——重点讲清每个决策的后果，并分别覆盖 Debian/Ubuntu 图形安装器、RHEL/Rocky 的 Anaconda，以及 Arch 的 archinstall 与手动安装（pacstrap）思路。
 
-> 内容参考自 Arch Wiki Installation guide、Debian 安装手册与 Ubuntu 官方教程，见文末参考资料。
+> 内容参考自 Arch Wiki Installation guide、Debian 安装手册与 Ubuntu 官方文档，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解 UEFI 与 Legacy 两条引导路径的差异及其对分区方案的约束
+- UEFI 与 Legacy 两条引导路径的差异及其对分区方案的约束
 - 能解释每个分区（ESP、/boot、swap、/home、btrfs 子卷）为什么存在
 - 走通 Ubuntu/Debian/Rocky 图形安装流程与 Arch 的 archinstall、手动安装思路
-- 掌握装完必做的三件事：装 bootloader、配网络、做首次全量更新
+- 熟悉装完必做的三件事：装 bootloader、配网络、做首次全量更新
 
 ## 1. 引导安装程序
 
@@ -47,7 +47,7 @@
 | swap | = 内存 或 2~8 GB | swap | 无挂载点 | 内存不足时的溢出区；也用于休眠（休眠需要 swap ≥ 内存） |
 | home | 剩余全部 | 同 root 或任意 | `/home` | 用户数据独立，重装系统时可选择不格式化 |
 
-新手"清除整个磁盘"时，现代安装器（Ubuntu、Debian、Anaconda）会自动按上述结构切好，你只需确认 swap 大小。**把 /home 单独分区的价值在第一次重装时才会显现**：根分区格式化重来，文档、配置、SSH 密钥原封不动。
+常见"清除整个磁盘"时，现代安装器（Ubuntu、Debian、Anaconda）会自动按上述结构切好，你只需确认 swap 大小。**把 /home 单独分区的价值在第一次重装时才会显现**：根分区格式化重来，文档、配置、SSH 密钥原封不动。
 
 ### 3.2 为什么有人分出独立 /boot
 
@@ -108,7 +108,7 @@ sudo genfstab -U /mnt >> /mnt/etc/fstab
 
 ### 4.3 Arch：archinstall 与手动安装
 
-Arch 官方 ISO 提供两条路，对应两种学习目标。
+Arch 官方 ISO 提供两种安装路径，具体步骤见本篇对应章节。
 
 **路线 A：archinstall（引导式，适合快速用上）**
 
@@ -217,7 +217,7 @@ Arch 这里的 `pacman -Syu` 与 Debian 的 `apt update && apt upgrade` 语义�
 
 ## 6. 双系统注意事项
 
-装完 Linux 后 GRUB 菜单是唯一入口，掌握两个高频操作：
+装完 Linux 后 GRUB 菜单是唯一入口，熟悉两个高频操作：
 
 ```bash
 # Debian/Ubuntu 重新生成菜单（装了 Windows 或新内核后）：

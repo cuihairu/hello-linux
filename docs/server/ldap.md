@@ -4,7 +4,7 @@
 
 > 内容参考自 OpenLDAP 官方文档与 Ubuntu/RHEL/Arch 各自的目录服务文档，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 用树状命名空间（dc/ou/cn/uid）描述组织结构，读懂并书写 LDIF
 - 说清 schema、objectClass 与"目录能存什么属性"的约束关系

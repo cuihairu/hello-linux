@@ -6,13 +6,13 @@
 
 > 内容参考自 GNU GRUB 手册、Arch Wiki 与鸟哥的私房菜，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 分清 GRUB 的两级加载结构（BIOS 与 UEFI 路径差异）
-- 理解配置的三层来源，知道为什么不能直接编辑 `grub.cfg`
-- 掌握三系重新生成 GRUB 配置与重装 GRUB 的命令差异
+- 理解配置的三层来源
+- 熟悉三系重新生成 GRUB 配置与重装 GRUB 的命令差异
 - 会用 GRUB 菜单按 `e` 临时修改内核参数（进救援/单用户模式的标准入口）
-- 掌握 Live USB + chroot 的完整引导救援流程，区分 BIOS 与 UEFI 的 `grub-install` 参数
+- Live USB + chroot 的完整引导救援流程，区分 BIOS 与 UEFI 的 `grub-install` 参数
 
 ## 1. GRUB 的两级结构
 
@@ -37,7 +37,7 @@ grub.cfg  fonts  grubenv  locale  x86_64-efi/  i386-pc/
 
 ## 2. 配置的三层结构
 
-GRUB 的配置是**生成式**的，这也是新手最容易踩坑的地方：
+GRUB 的配置是**生成式**的，这也是最容易踩坑的地方：
 
 | 层 | 位置 | 你该不该改 |
 |----|------|-----------|

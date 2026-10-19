@@ -4,11 +4,11 @@
 
 > 内容参考自 DistroWatch、各发行版官方文档与 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 理解发行版之间真正的差异点（打包格式、更新节奏、支持周期）
-- 能按角色（桌面新手 / 开发者 / 服务器运维 / 学习目的）做出合理选择
-- 掌握国内镜像下载与 ISO 校验方法
+- 能按角色（桌面常见 / 开发者 / 服务器运维 / 学习目的）做出合理选择
+- 熟悉国内镜像下载与 ISO 校验方法
 
 ## 1. 三个核心差异维度
 
@@ -62,7 +62,7 @@ sudo pacman -S package    # 若同步数据库后直接装，等价于制造部�
 ```text
 你是谁？→ 选什么？
 ─────────────────────────────────────────
-学生/新手        → Ubuntu Desktop LTS
+学生/常见        → Ubuntu Desktop LTS
 开发者           → Ubuntu LTS / Fedora Workstation
 企业服务器       → Rocky Linux / AlmaLinux / Debian
 个人 VPS 小项目  → Debian minimal / Ubuntu Server
@@ -84,7 +84,7 @@ sudo pacman -S package    # 若同步数据库后直接装，等价于制造部�
 | 追求软件最新又不想全滚 | Fedora Workstation | 上游技术激进（Wayland、Btrfs 试点），半年一版 | 需要定期跨版本升级，支持期仅约 13 个月 |
 | 想要 macOS 式体验 | Ubuntu + GNOME | GNOME 手势/工作区接近 macOS | GNOME 内存占用较高 |
 
-**Arch 特别说明**：Arch 适合两类人——想通过"亲手装一遍"真正理解 Linux 启动链路的学习者，以及愿意持续跟踪上游、需要 AUR 里某个冷门软件的开发者。如果你只是想"快点用上 Linux 写代码"，Ubuntu/Fedora 会让你少走很多弯路。Arch 官方 Wiki 质量极高，即使最终不装 Arch，把它当参考手册读也极有价值。
+**Arch 特别说明**：Arch 适合两类人——想通过"亲手装一遍"真正理解 Linux 启动链路的开发者与运维人员，以及愿意持续跟踪上游、需要 AUR 里某个冷门软件的开发者。如果你只是想"快点用上 Linux 写代码"，Ubuntu/Fedora 会让你少走很多弯路。Arch 官方 Wiki 质量极高，即使最终不装 Arch，把它当参考手册读也极有价值。
 
 ## 4. 服务器用户推荐
 
@@ -120,7 +120,7 @@ sha256sum -c SHA256SUMS 2>&1 | grep ubuntu
 sha256sum ubuntu-24.04.2-desktop-amd64.iso
 ```
 
-Arch 的 ISO 还提供 GPG 签名验证（`archlinux-*.iso.sig`），用发布者公钥验证能防篡改，命令见 Arch Wiki 的 [Installation guide](https://wiki.archlinux.org/title/Installation_guide#Download_and_verify)。多数新手跳过校验，但当你用这个 U 盘装了三台机器之后就会明白：花两分钟校验，比装到 90% 报错省一小时。
+Arch 的 ISO 还提供 GPG 签名验证（`archlinux-*.iso.sig`），用发布者公钥验证能防篡改，命令见 Arch Wiki 的 [Installation guide](https://wiki.archlinux.org/title/Installation_guide#Download_and_verify)。多数常见跳过校验，但当你用这个 U 盘装了三台机器之后就会明白：花两分钟校验，比装到 90% 报错省一小时。
 
 ## 6. 常见误区
 

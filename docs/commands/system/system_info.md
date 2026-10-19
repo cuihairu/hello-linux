@@ -4,10 +4,10 @@
 
 > 内容参考自鸟哥的私房菜、Arch Wiki 与各工具 man 手册，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 理解"先查系统信息再动手"的排查习惯
-- 掌握 uname、lscpu、lsblk、df、ip 等核心命令的读法
+- uname、lscpu、lsblk、df、ip 等核心命令的读法
 - 能区分三发行版（Debian/Ubuntu、Arch、RHEL/CentOS/Rocky）的工具差异
 - 学会从负载、日志与登录记录快速建立系统画像
 
@@ -223,7 +223,7 @@ default via 192.168.10.1 dev enp3s0 proto dhcp src 192.168.10.5 metric 100
 
 ### 6.2 ifconfig — 为什么逐步退役
 
-`ifconfig` 老树盘根，新装的最小化系统往往**根本没装** `net-tools`，敲下去直接 `command not found`。即便装了，它也不支持 `ip addr` 那样的扩展语法（如 secondary 地址、策略路由）。教学与老文档里仍常见，实际运维请统一用 `ip`；接口的**持久化配置**按发行版走 Netplan/nmcli/networkd，见[配置管理工具](./configuration-management.md)与[网络配置基础](../../network/network-configuration.md)。
+`ifconfig` 老树盘根，新装的最小化系统往往**根本没装** `net-tools`，敲下去直接 `command not found`。即便装了，它也不支持 `ip addr` 那样的扩展语法（如 secondary 地址、策略路由）。旧文档与演示环境中仍能见到，实际运维请统一用 `ip`；接口的**持久化配置**按发行版走 Netplan/nmcli/networkd，见[配置管理工具](./configuration-management.md)与[网络配置基础](../../network/network-configuration.md)。
 
 ## 7. 系统状态与日志速览
 

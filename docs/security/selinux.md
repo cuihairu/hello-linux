@@ -1,14 +1,14 @@
 # SELinux 实战
 
-一台 Rocky 上的 httpd 部署完毕，防火墙放行、`chmod` 调到位、`curl` 本机一切正常，换到 `/srv/www` 立刻 403；Samba 共享本地读写全通，Windows 客户端一连就是"无权访问"——两种现场指向同一个嫌疑人：SELinux。它在传统权限（DAC）之上再加一层类型强制（MAC），拦你的时候不报权限错误、不改进程状态，只在审计日志里留下一条 AVC 拒绝，客户端侧看到的只有一句含糊的拒绝。基础篇已经讲过它是什么（[SELinux 概念](../basic/security/concept.md)、[模式](../basic/security/modes.md)、[命令](../basic/security/commands.md)、[策略配置](../basic/security/policy_configuration.md)），本页是服务器实战篇：RHEL/Rocky 生产机上被它拦住时的诊断与修正方法论，用 httpd、Samba、NFS 三个真实案例贯穿——学完这一页，`setenforce 0` 将从你的排障清单上消失。
+一台 Rocky 上的 httpd 部署完毕，防火墙放行、`chmod` 调到位、`curl` 本机一切正常，换到 `/srv/www` 立刻 403；Samba 共享本地读写全通，Windows 客户端一连就是"无权访问"——两种现场指向同一个嫌疑人：SELinux。它在传统权限（DAC）之上再加一层类型强制（MAC），拦你的时候不报权限错误、不改进程状态，只在审计日志里留下一条 AVC 拒绝，客户端侧看到的只有一句含糊的拒绝。基础篇已经讲过它是什么（[SELinux 概念](../basic/security/concept.md)、[模式](../basic/security/modes.md)、[命令](../basic/security/commands.md)、[策略配置](../basic/security/policy_configuration.md)），本页是服务器实战篇：RHEL/Rocky 生产机上被它拦住时的诊断与修正方法论，用 httpd、Samba、NFS 三个真实案例贯穿——读过这一页，`setenforce 0` 将从你的排障清单上消失。
 
 > 内容参考自 SELinux 项目 Notebook 与 Red Hat 官方文档（概念框架参考鸟哥的私房菜基础篇），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 把"服务不工作"拆成 DAC 与 MAC 两层，用 AVC 证据而不是猜来定位
 - 读懂 `ausearch` 的 scontext / tcontext / tclass 三元组，直接得出对症的修正手段
-- 掌握三级修正的优先序：改标签 > 开端口 > 开布尔，最后才是自建模块
+- 熟悉三级修正的优先序：改标签 > 开端口 > 开布尔，最后才是自建模块
 - 熟练 `semanage fcontext` + `restorecon` 的持久化组合，分清它与 `chcon` 的生命周期
 - 知道 `audit2allow` 的适用边界与本地模块的生命周期管理
 

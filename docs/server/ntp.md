@@ -4,12 +4,12 @@
 
 > 内容参考自 chrony 官方文档与 Arch Wiki（概念框架参考鸟哥的私房菜），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 分清 RTC、系统时钟与单调钟三种时间，说清 UTC 与时区的分工
-- 掌握三发行版安装与启用（apt / pacman / dnf），理清 timesyncd 与 chrony 的层级关系
+- 分清 RTC、系统时钟与单调钟三种时间
+- 熟悉三发行版安装与启用（apt / pacman / dnf），理清 timesyncd 与 chrony 的层级关系
 - 读懂 chrony.conf 的 pool/server、allow、local stratum、makestep、rtcsync
-- 会用 chronyc tracking 与 sources 判断同步健康度，掌握 makestep 的步进纪律
+- 会用 chronyc tracking 与 sources 判断同步健康度，熟悉 makestep 的步进纪律
 - 排查 reach 为 0、双客户端打架、时区错位、内网同步失败等高频坑
 
 ## 1. 为什么服务器的时钟不能漂

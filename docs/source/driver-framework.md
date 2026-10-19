@@ -4,10 +4,10 @@
 
 > 内容参考自 LDD3 与内核 Documentation/driver-api/（概念框架与机制细节），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清 bus/device/driver 三元模型各解决什么问题，以及 misc 路线与总线路线的分工
-- 掌握 `struct miscdevice`、`struct file_operations`、`struct cdev` 三个结构的关键字段与相互引用关系
+- `struct miscdevice`、`struct file_operations`、`struct cdev` 三个结构的关键字段与相互引用关系
 - 默画注册、使用、匹配三条调用链的关键函数名（`misc_register` / `chrdev_open` / `misc_open` / `really_probe`）
 - 独立完成 `hello_chr` 字符设备模块从源码到 `/dev/hello` 读写的完整闭环
 - 用 strace 与 ftrace 对**同一次 open** 做两面对照，解释 `replace_fops` 交接了什么
@@ -394,7 +394,7 @@ strace 这一侧只有系统调用与搬运的数据——`chrdev_open`、`misc_
 
 **打开设备报 `Permission denied`。** `miscdevice` 的 `mode` 字段没设时，devtmpfs 按默认 0600 建节点，只有 root 能开。实验代码显式写 `.mode = 0666`（`misc_devnode` 只在 `mode` 非 0 时才覆盖默认值），生产环境则应保持 0600/0660 并用 udev 规则改属组授权，属主与 ACL 的完整机制见[文件权限](../basic/filesystem/permissions.md)。
 
-**编译报 `too many arguments to function 'class_create'`。** 手抄了老教程的 `class_create(THIS_MODULE, "hello")`——**6.4 起 `class_create` 只剩单参数** `class_create(const char *name)`（`include/linux/device/class.h`，6.12 实测）。更根本的解法是别抄：misc 路线里 `misc_register` 内部已经 `device_create_with_groups` 建好类与节点，模块代码里出现 `class_create`/`device_create` 本身就说明走错了路线。
+**编译报 `too many arguments to function 'class_create'`。** 手抄了旧资料的 `class_create(THIS_MODULE, "hello")`——**6.4 起 `class_create` 只剩单参数** `class_create(const char *name)`（`include/linux/device/class.h`，6.12 实测）。更根本的解法是别抄：misc 路线里 `misc_register` 内部已经 `device_create_with_groups` 建好类与节点，模块代码里出现 `class_create`/`device_create` 本身就说明走错了路线。
 
 **`rmmod: ERROR: Module hello_chr is in use`。** 还有进程开着 `/dev/hello`——`.owner = THIS_MODULE` 让每次 open 都给模块引用计数 +1，框架拒绝卸载正在服役的代码。用 `fuser -v /dev/hello` 或 `lsof /dev/hello` 找到占用者（常是忘了关的 `tail -f`），关掉再卸；这个拦截是保护而非刁难，没有它，卸载后的函数指针会悬挂在别人的 `file` 结构里。
 

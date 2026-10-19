@@ -4,9 +4,9 @@
 
 > 内容参考自内核源码树（v6.12）与下列真实书目（概念框架），见文末参考资料。本页所有函数名、结构体字段、trace 事件路径均对照 v6.12 源码逐一核对，终端输出取自一台 14 核 x86-64 机器的真实采样。
 
-## 学习目标
+## 本篇覆盖
 
-- 说清上半部/下半部的经济学分界，知道为什么中断上下文里不能 `mutex_lock`
+- 说清上半部/下半部的经济学分界
 - 认出 `irq_desc`、`softirq_vec`、`work_struct`、`hrtimer`、`timer_list` 各自的适用场景与代码位置
 - 默画出"设备中断 → `common_interrupt` → `irq_desc->action->handler` → `invoke_softirq`"的调用链
 - 说出 hrtimer 与 timer_list 的分工：谁的到期在红黑树、谁的到期在时间轮、谁在管周期 tick

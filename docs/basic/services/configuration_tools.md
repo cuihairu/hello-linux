@@ -4,9 +4,9 @@ Linux 提供多种工具管理系统配置。绝大多数系统级配置最终�
 
 > 内容参考自 Arch Wiki 与各工具官方文档，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解"文本配置优先"的哲学，知道 GUI 只是生成文本的前端
+- 理解"文本配置优先"的哲学
 - 对照三发行版网络配置方式（Netplan / systemd-networkd / nmcli）
 - 会用 `timedatectl`、`hostnamectl`、`resolvectl` 完成时间、主机名、DNS 配置
 - 知道改完配置如何验证生效，避免"改了但没 reload"

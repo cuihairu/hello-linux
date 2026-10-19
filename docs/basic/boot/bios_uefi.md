@@ -4,12 +4,12 @@
 
 > 内容参考自 Arch Wiki、RHEL 官方文档与鸟哥的私房菜，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 分清 BIOS 与 UEFI 在分区表、引导路径、安全启动上的本质差异
-- 理解 **UEFI + NVRAM + ESP** 三位一体机制为什么缺一不可
+- **UEFI + NVRAM + ESP** 三位一体机制为什么缺一不可
 - 会用 `lsblk`、`fdisk -l`、`efibootmgr` 判断当前启动模式并定位 ESP
-- 掌握三系（Debian/Ubuntu、Arch、RHEL/CentOS/Rocky）的分区建议与挂载惯例
+- 熟悉三系（Debian/Ubuntu、Arch、RHEL/CentOS/Rocky）的分区建议与挂载惯例
 - 规避 CSM/Legacy-on-UEFI 混合模式的典型陷阱
 
 ## 1. BIOS 的历史包袱
@@ -126,7 +126,7 @@ EFI/ubuntu/grubx64.efi      ← 发行版自签，由 shim 验证
 EFI/BOOT/BOOTX64.EFI        ← 可移动介质回退路径（常是 shim 的副本）
 ```
 
-Debian/Ubuntu、RHEL/CentOS/Rocky 默认都支持 Secure Boot 开箱即用；Arch 默认不签名，若主板开着 Secure Boot 需自行配置 `sbsigntools` 或改用 `sbctl`，新手建议先在 BIOS 设置里关掉 Secure Boot。
+Debian/Ubuntu、RHEL/CentOS/Rocky 默认都支持 Secure Boot 开箱即用；Arch 默认不签名，若主板开着 Secure Boot 需自行配置 `sbsigntools` 或改用 `sbctl`，常见建议先在 BIOS 设置里关掉 Secure Boot。
 
 ## 3. 对照总表
 

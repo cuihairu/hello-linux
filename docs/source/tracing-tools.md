@@ -1,10 +1,10 @@
 # 内核跟踪工具箱
 
-读源码最忌"闭眼想象"：盯着 `vfs_write` 的代码猜它何时被调、参数是什么，不如让内核自己招供。跟踪工具就是插在内核与用户态边上的仪表盘——strace 站在系统调用面看"程序要求内核做什么"，ftrace 站在函数级看"内核内部走了哪条路"，bpftrace 把千百万次调用聚合成统计图，gdb 配合 QEMU 则能在任意一行内核代码上按下暂停键。这四层的侵入度、信息量、搭建成本各不相同，选错层级是排障效率的头号杀手——用 gdb 调"服务为什么慢"是大炮打蚊子，用 strace 问"内核为什么死锁"则是缘木求鱼。本页是源码篇的第三章：[源码导读](./source-tree.md)告诉你代码长在哪、[内核编译](./build-and-modules.md)让你拿到带符号的 vmlinux，本页教你把"看到的函数名"和"执行的路径"对上号——后续每个模块章的"实操跟踪"小节都建立在这套工具之上。
+读源码最忌"闭眼想象"：盯着 `vfs_write` 的代码猜它何时被调、参数是什么，不如让内核自己招供。跟踪工具就是插在内核与用户态边上的仪表盘——strace 站在系统调用面看"程序要求内核做什么"，ftrace 站在函数级看"内核内部走了哪条路"，bpftrace 把千百万次调用聚合成统计图，gdb 配合 QEMU 则能在任意一行内核代码上按下暂停键。这四层的侵入度、信息量、搭建成本各不相同，选错层级是排障效率的头号杀手——用 gdb 调"服务为什么慢"是大炮打蚊子，用 strace 问"内核为什么死锁"则是缘木求鱼。本页是源码篇的第三章：[源码导读](./source-tree.md)告诉你代码长在哪、[内核编译](./build-and-modules.md)让你拿到带符号的 vmlinux，本页记录把"看到的函数名"和"执行的路径"对上号——后续每个模块章的"实操跟踪"小节都建立在这套工具之上。
 
 > 内容参考自内核官方 trace 文档与 bpftrace 项目文档，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 建立"观察层级"的选型直觉：什么问题用 strace，什么问题必须上 ftrace/bpftrace
 - 会用 ftrace 的 function/function_graph tracer 与 set_ftrace_filter 收窄观察面
@@ -94,7 +94,7 @@ available_filter_functions  kprobe_events   set_ftrace_filter     trace_pipe
 buffer_size_kb        current_tracer        set_graph_function    tracing_on
 ```
 
-老文档里的 `/sys/kernel/debug/tracing` 是同一个文件系统的旧挂载点（藏在 debugfs 下），新内核统一推荐 `/sys/kernel/tracing`，两个路径的内容完全一致——抄旧教程时把路径替换掉即可。这个目录就是一块控制面板：`current_tracer` 选跟踪器，`set_ftrace_filter` 收窄到指定函数，`trace` 读结果，`tracing_on` 是总开关。所有交互都是普通的文件读写（echo/cat），这意味着 ftrace 天然可脚本化——这与其说是个工具，不如说是一组/sys 接口，trace-cmd 只是给它套了层更好用的壳。
+老文档里的 `/sys/kernel/debug/tracing` 是同一个文件系统的旧挂载点（藏在 debugfs 下），新内核统一推荐 `/sys/kernel/tracing`，两个路径的内容完全一致——抄旧资料时把路径替换掉即可。这个目录就是一块控制面板：`current_tracer` 选跟踪器，`set_ftrace_filter` 收窄到指定函数，`trace` 读结果，`tracing_on` 是总开关。所有交互都是普通的文件读写（echo/cat），这意味着 ftrace 天然可脚本化——这与其说是个工具，不如说是一组/sys 接口，trace-cmd 只是给它套了层更好用的壳。
 
 ### 3.2 function tracer：函数调用流
 
@@ -260,7 +260,7 @@ Breakpoint 1, start_kernel () at init/main.c:...
 
 ### 5.3 KASLR：断点不命中的头号元凶
 
-现代内核默认开启地址随机化（KASLR），每次启动内核代码被搬到随机地址，而 gdb 手里的符号表记录的是编译时地址——两边对不上，断点自然打空。解法就是上面命令行里那个不起眼的 `nokaslr`：把它加进 `-append` 的内核命令行，内核回到编译时的原点，符号即地址。生产内核不允许关 KASLR（那是安全特性），所以调试用的内核命令行与生产不同是常态；反过来说，在 gdb 里 `info breakpoints` 看到断点地址、`cat /proc/kallsyms | grep start_kernel` 看实际地址，两者对齐与否就是 KASLR 是否生效的判据。这个细节吞噬过无数初学者的第一个下午——符号明明加载了、断点就是不中，九成是它。
+现代内核默认开启地址随机化（KASLR），每次启动内核代码被搬到随机地址，而 gdb 手里的符号表记录的是编译时地址——两边对不上，断点自然打空。解法就是上面命令行里那个不起眼的 `nokaslr`：把它加进 `-append` 的内核命令行，内核回到编译时的原点，符号即地址。生产内核不允许关 KASLR（那是安全特性），所以调试用的内核命令行与生产不同是常态；反过来说，在 gdb 里 `info breakpoints` 看到断点地址、`cat /proc/kallsyms | grep start_kernel` 看实际地址，两者对齐与否就是 KASLR 是否生效的判据。这个细节让不少人第一次调试时耗掉一个下午——符号明明加载了、断点就是不中，九成是它。
 
 ## 6. 组合战例：一次"写文件周期性卡顿"的完整排查
 

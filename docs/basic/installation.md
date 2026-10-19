@@ -1,15 +1,15 @@
 # 安装 Linux
 
-安装是进入 Linux 世界的第一道门槛，也是最容易"一失足成千古恨"的一步：选错发行版会让后续两年都在与不适合自己的工具搏斗，分错区可能丢数据，引导装错则开机就进不去系统。本章不追求背下安装器的每一个按钮，而是帮你建立一套可迁移的决策框架——理解每个步骤**为什么**这么做之后，面对 Ubuntu 的图形安装器、Arch 的 archinstall 脚本或是 Rocky 的 Anaconda，你都能看懂它们在问什么。
+安装是进入 Linux 世界的第一道门槛，也是最容易"一失足成千古恨"的一步：选错发行版会让后续两年都在与不适合自己的工具搏斗，分错区可能丢数据，引导装错则开机就进不去系统。本章不追求背下安装器的每一个按钮，而是梳理一套可迁移的决策框架——理解每个步骤**为什么**这么做之后，面对 Ubuntu 的图形安装器、Arch 的 archinstall 脚本或是 Rocky 的 Anaconda，你都能看懂它们在问什么。
 
 > 内容参考自 Arch Wiki Installation guide、Debian 安装手册与鸟哥的私房菜，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解三大发行版家族的定位差异，能按用途而非流行度选择发行版
-- 掌握安装前的硬件确认、启动模式判断和数据备份方法
-- 吃透分区方案的取舍逻辑（EFI、swap、/home、btrfs 子卷），能解释每一块分区存在的理由
-- 走完 UEFI/Legacy 两条引导路径，理解 bootloader、网络、首更这三件"装完必做"的事
+- 理解三大发行版家族的定位差异
+- 熟悉安装前的硬件确认、启动模式判断和数据备份方法
+- 吃透分区方案的取舍逻辑（EFI、swap、/home、btrfs 子卷）
+- 走完 UEFI/Legacy 两条引导路径
 - 知道 Arch 的 archinstall 与手动安装（pacstrap）分别适合什么人
 
 ## 子页导读
@@ -20,7 +20,7 @@
 | [安装前的准备](./installation/preparation.md) | 查硬件、判 UEFI/Legacy、做启动盘、备份数据，把不可逆操作的前置条件全部确认 | "为什么安装器看不到我的硬盘 / 装完开不了机？" |
 | [安装过程](./installation/process.md) | 从引导到分区、装 bootloader、配网络、首更的完整流程，覆盖图形安装器与 Arch 手动思路 | "每一步在做什么？分区为什么这样分？" |
 
-阅读顺序建议按上表依次进行。若你已经选定发行版，也可以直接跳到第三篇对照操作，但**第二篇的启动模式判断和备份清单不要跳过**——绝大多数"装机事故"都源于这里。
+上表按选型、准备、安装排列。已选定发行版时可直接查对应安装流程；启动模式与数据备份仍是安装前的关键检查项，许多装机问题都出在这两处。
 
 ## 安装前检查清单
 
@@ -73,7 +73,7 @@ sudo wipefs -l /dev/sda  # 只读查看签名，不会改动
 | 2. 确认网络服务 | `systemctl status NetworkManager` 或 `netplan status` | `systemctl status systemd-networkd` / `dhcpcd` | `systemctl status NetworkManager` |
 | 3. 确认 SSH 可用（服务器） | `sudo apt install openssh-server && sudo systemctl enable --now ssh` | `sudo pacman -S openssh && sudo systemctl enable --now sshd` | `sudo dnf install openssh-server && sudo systemctl enable --now sshd` |
 
-注意 Arch 的 `pacman -Syu`：滚动发行版**禁止部分升级**（只 `-Sy` 不 `-u`），否则容易出现库版本不一致导致的半升级状态——这是 Arch 新手最经典的第一个坑。RHEL 系还要留意 `dnf update` 与 `dnf upgrade` 在旧版 CentOS 上的语义差异，Rocky/新 RHEL 中两者已趋于一致。
+注意 Arch 的 `pacman -Syu`：滚动发行版**禁止部分升级**（只 `-Sy` 不 `-u`），否则容易出现库版本不一致导致的半升级状态——这是 Arch 最常见的坑之一。RHEL 系还要留意 `dnf update` 与 `dnf upgrade` 在旧版 CentOS 上的语义差异，Rocky/新 RHEL 中两者已趋于一致。
 
 ## 常见问题预览
 

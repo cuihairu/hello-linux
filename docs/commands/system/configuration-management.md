@@ -4,12 +4,12 @@
 
 > 内容参考自 Ansible、Puppet、Chef、SaltStack 官方文档与 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 理解为什么文本配置优于 GUI，以及单机配置的三系入口
-- 掌握 sysctl 持久化在三系的路径差异与验证方法
-- 掌握 Ansible 清单、ad-hoc、Playbook、角色的主线用法
-- 了解 Puppet/Chef/Salt 的定位差异，能按场景选型
+- sysctl 持久化在三系的路径差异与验证方法
+- Ansible 清单、ad-hoc、Playbook、角色的主线用法
+- Puppet/Chef/Salt 的定位差异
 - 形成"改配置 → 验证 → 可回滚"的操作习惯
 
 ## 1. 为什么需要配置管理
@@ -83,7 +83,7 @@ $ sudo sysctl -p /etc/sysctl.d/99-forward.conf   # 不重启先生效
 | 事项 | Debian/Ubuntu | Arch | RHEL/CentOS/Rocky |
 |------|---------------|------|-------------------|
 | 推荐路径 | `/etc/sysctl.d/*.conf` | `/etc/sysctl.d/*.conf` | `/etc/sysctl.d/*.conf` |
-| 遗留 `/etc/sysctl.conf` | `sysctl -p` 默认读取 | 不推荐使用 | 老教程常见，仍可能残留 |
+| 遗留 `/etc/sysctl.conf` | `sysctl -p` 默认读取 | 不推荐使用 | 旧资料常见，仍可能残留 |
 | 开机加载 | systemd-sysctl | 同左 | 同左 |
 
 **坑**：`echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf` 在只认 `.d` 目录的加载链上可能**重启后丢失**；改完务必 `sysctl --system` 或重启后复查。内存相关的 swappiness/vfs_cache_pressure 同理，完整讨论见[内存管理](./memory.md)。
@@ -101,7 +101,7 @@ $ sudo sysctl -p /etc/sysctl.d/99-forward.conf   # 不重启先生效
 | Chef | Ruby | C/S（client） | 数千～数万 | 中高 | DevOps 深度集成、Ruby 技术栈 |
 | SaltStack | Python | C/S（minion），ZeroMQ | 数万、分钟级下发 | 中 | 大规模、需要高并发执行的环境 |
 
-选型不必纠结"谁更强"：**没有代理 + YAML + 巨量现成模块**让 Ansible 成为事实默认；已有 Puppet/Chef 资产的组织继续深耕即可；Salt 在"万级机器同时跑命令"时性能优势明显。新手与本文其余示例均以 Ansible 为主线——它也是唯一能让你在五分钟后就跑通第一条 ad-hoc 的选项，学习反馈最快。
+选型不必纠结"谁更强"：**没有代理 + YAML + 巨量现成模块**让 Ansible 成为事实默认；已有 Puppet/Chef 资产的组织继续深耕即可；Salt 在"万级机器同时跑命令"时性能优势明显。常见与本文其余示例均以 Ansible 为主线——它也是唯一能让你在五分钟后就跑通第一条 ad-hoc 的选项，学习反馈最快。
 
 ## 3. Ansible：无代理自动化
 

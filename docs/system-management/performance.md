@@ -12,14 +12,14 @@
 > 单条命令的语法与输出列含义见
 > [命令篇 · 系统管理](../commands/system.md)，本页不重复展开。
 
-## 学习目标
+## 本篇覆盖
 
 - 理解为什么"先观测、再假设、最后才动手"，以及反着做的代价
-- 掌握"负载 / 内存 / IO"三角的判定路径，会用最少的命令走完一轮筛查
+- 熟悉"负载 / 内存 / IO"三角的判定路径
 - 纠正常见误读：`load average` 不是 CPU%、`available` 才是内存答案
 - 会用 USE 方法把资源逐项过一遍，把"感觉慢"变成一张填了值的表
 - 在有证据之后再做调优，并知道哪些"经典调优"其实是坑
-- 掌握三发行版（Debian/Ubuntu、Arch、RHEL/CentOS/Rocky）观测工具的安装差异
+- 熟悉三发行版（Debian/Ubuntu、Arch、RHEL/CentOS/Rocky）观测工具的安装差异
 
 ## 1. 为什么观测优先于调优
 
@@ -266,7 +266,7 @@ $ sudo cpupower frequency-set -g performance
 `vm.swappiness` 的语义是"回收时偏向换出匿名页的程度"而非"是否用 swap"，
 0 也不等于永不换出。
 只有在 `si/so` 持续非零、`available` 常期贴地被证实后才值得调整；
-持久化写入 `/etc/sysctl.d/99-*.conf` 而不是追加老教程里的 `/etc/sysctl.conf`，
+持久化写入 `/etc/sysctl.d/99-*.conf` 而不是追加旧资料里的 `/etc/sysctl.conf`，
 改完 `sysctl --system` 验证——
 逐列解释与完整推导见[内存管理](../commands/system/memory.md)。
 

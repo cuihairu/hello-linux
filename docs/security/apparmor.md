@@ -6,13 +6,13 @@
 
 > 内容参考自 AppArmor 项目文档与 Ubuntu/Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 说清 AppArmor 用路径强制、SELinux 用标签强制的差别，知道该看哪份日志
+- 说清 AppArmor 用路径强制、SELinux 用标签强制的差别
 - 读懂 `operation=` / `profile=` / `name=` 三个字段，从一条 denial 直接得出改哪条规则
 - 会用 `aa-status`、`aa-complain`、`aa-enforce` 在 enforce 与 complain 之间安全切换
 - 能写出一个最小可用 profile（文件 `rwk`、`network`、`capability`），并 `apparmor_parser -r` 重载验证
-- 理解 Docker 的 `docker-default` profile 与 `--security-opt apparmor=` 的边界
+- Docker 的 `docker-default` profile 与 `--security-opt apparmor=` 的边界
 - 分清 Ubuntu/Debian、Arch、RHEL 系对 AppArmor 的默认态度，不套错发行版
 
 ## 1. AppArmor 的模型：绑程序，不绑文件

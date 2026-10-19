@@ -54,7 +54,7 @@
    你在包管理章节看到的每个安装包，
    底层都是本章的工具。
 
-鸟哥的教程把这条链总结为：
+鸟哥的资料将这条链总结为：
 **打包 = 装箱，
 压缩 = 抽真空**。
 先装箱（tar），
@@ -66,9 +66,9 @@
 
 > 示例输出来自真实 Ubuntu 26.04 环境，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- **掌握 tar 全流程**：
+- **熟悉 tar 全流程**：
   创建（`-c`）、
   查看（`-t`）、
   解压（`-x`）、
@@ -174,7 +174,7 @@ drwxrwxr-x cui/cui           0 2026-09-22 05:33 tardemo/app/logs/
 | `--exclude` | 排除匹配的路径 | 可多次使用 |
 | `-p`/`--preserve-permissions` | 保留权限位 | root 解压备份时默认保留 |
 
-老教程里的 `-z` 已可被新版 GNU tar 的自动识别取代（`tar -xvf foo.tar.gz` 能自己发现是 gzip），
+旧资料里的 `-z` 已可被新版 GNU tar 的自动识别取代（`tar -xvf foo.tar.gz` 能自己发现是 gzip），
 但**显式写出 `-z` 更利于移植**，
 在精简环境和非 GNU tar（如某些 BSD 场景）上更稳。
 
@@ -450,7 +450,7 @@ RHEL/CentOS/Rocky** 上全部预装，
   无需额外并行包。
 - **RHEL/CentOS 的部分包在 EPEL**（如 `pbzip2`）：
   先 `sudo dnf install epel-release` 再安装。
-- **Arch 的 `7z` 命令由 `7zip` 包提供**（老教程的 `p7zip` 已进入弃用状态，
+- **Arch 的 `7z` 命令由 `7zip` 包提供**（旧资料的 `p7zip` 已进入弃用状态，
   `pacman -S 7zip` 即可）。
 - 验证工具是否可用：`command -v pigz pbzip2 7z zstd`，缺哪个装哪个，不要假设三系命令集相同。
 

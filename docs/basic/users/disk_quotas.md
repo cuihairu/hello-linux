@@ -4,7 +4,7 @@
 
 > 内容参考自 Arch Wiki、鸟哥的私房菜与各发行版 `man` 手册，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清配额防的是什么问题，以及它统计的两类资源（块与 inode）
 - 区分软限制（soft，可暂时超过）与硬限制（hard，绝对上限）的语义
@@ -71,7 +71,7 @@ $ sudo xfs_quota -x -c 'limit -u alice 20g 30g' /data   # 软 20g，硬 30g，�
 $ sudo xfs_quota -x -c 'report -h' /data
 ```
 
-Fedora/RHEL 系允许同时存在 XFS 与 ext4 分区，但**同一分区只能用一套配额工具**——按 `df -T` 先确认文件系统类型，再决定走第 3 节还是第 4 节。RHEL/CentOS/Rocky 默认根与 `/home` 常为 XFS，Debian/Ubuntu 与 Arch 默认 ext4，这也是"教程不标发行版就会翻车"的典型例子。
+Fedora/RHEL 系允许同时存在 XFS 与 ext4 分区，但**同一分区只能用一套配额工具**——按 `df -T` 先确认文件系统类型，再决定走第 3 节还是第 4 节。RHEL/CentOS/Rocky 默认根与 `/home` 常为 XFS，Debian/Ubuntu 与 Arch 默认 ext4，这也是"文档不标发行版就会翻车"的典型例子。
 
 ## 5. 查看与审计
 

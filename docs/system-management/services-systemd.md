@@ -4,12 +4,12 @@
 
 > 内容参考自 systemd 官方文档与 Arch Wiki（概念框架参考鸟哥的私房菜），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 读懂 unit 文件的三层查找顺序与生效判定，升级后本地定制不丢
-- 分清 `Wants` / `Requires` / `BindsTo` 的失败传染语义，理解 `After` 只管顺序不产生依赖
-- 用 drop-in 覆盖与模板单元管理定制与多实例，不再直接改包管理器领地的文件
-- 理解 cgroup 进程归属，会用 `systemctl kill` 与资源限制指令管住服务
+- 分清 `Wants` / `Requires` / `BindsTo` 的失败传染语义
+- 用 drop-in 覆盖与模板单元管理定制与多实例
+- cgroup 进程归属
 - 建立 `status → journal → analyze` 的诊断动线，读懂退出码与重启限速
 
 ## 1. 从"会用"到"管好"

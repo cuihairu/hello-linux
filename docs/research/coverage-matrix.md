@@ -170,7 +170,7 @@
 
 ## 6. 按 The Debian Handbook 核对（16 章）
 
-来源目录见[权威书籍调研](./authoritative-books.md) 2.1 节（debian-handbook.info 官方在线版目录，A 级，Bullseye 版）。此书是 Debian 系的入门到精通主线，逐章判定如下。
+来源目录见[权威书籍调研](./authoritative-books.md) 2.1 节（debian-handbook.info 官方在线版目录，A 级，Bullseye 版）。此书是 Debian 系的系统化参考主线，逐章判定如下。
 
 | Debian Handbook 章节 | 主题 | 本仓落点 | 判定 |
 |----------------------|------|---------|------|

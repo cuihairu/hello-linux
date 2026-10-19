@@ -4,12 +4,12 @@ FTP（File Transfer Protocol，RFC 959）是互联网上最早一批应用层协
 
 > 内容参考自 vsftpd、ProFTPD 官方文档与 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清 FTP 控制连接与数据连接的分工，以及主动/被动模式各自适合的网络环境
-- 理解生产环境转向 SFTP 的原因，能在 FTP 与 SFTP 之间做出有依据的选型
+- 理解生产环境转向 SFTP 的原因
 - 对比 vsftpd 与 ProFTPD 的定位差异，完成三发行版安装（apt / pacman / dnf）
-- 配置被动端口范围、chroot 与 TLS，掌握虚拟用户方案
+- 配置被动端口范围、chroot 与 TLS，熟悉虚拟用户方案
 - 排查 PASV 地址错误、chroot 拒绝启动、LIST 断连等高频故障
 
 ## 1. FTP 如何工作：两条连接的学问
@@ -180,10 +180,10 @@ $ sudo chown -R ftpupload:ftpupload /var/www/html
 
 ### 5.2 虚拟用户：三种发行版的现实差异
 
-虚拟用户把"FTP 账号"与"系统账号"解耦——账号存在数据库/文件里，登录后统一映射到一个低权限系统用户，即使泄露也无法 SSH 上机。但三系的 PAM 生态不同，方案必须分开说，照抄跨发行版教程会直接失败：
+虚拟用户把"FTP 账号"与"系统账号"解耦——账号存在数据库/文件里，登录后统一映射到一个低权限系统用户，即使泄露也无法 SSH 上机。但三系的 PAM 生态不同，方案必须分开说，照抄跨发行版文档会直接失败：
 
 - **Debian/Ubuntu**：`db-util` 提供 `db_load`，可把明文账号文件转成 `pam_userdb` 认读的 `.db` 数据库；PAM 配置 `auth required pam_userdb.so db=/etc/vsftpd/virtual_users`。
-- **Arch**：当前 PAM 不再自带 `pam_userdb.so`，Arch Wiki 的推荐路线是 `libpam_pwdfile` + `htpasswd` 生成密码文件，PAM 写 `auth required pam_pwdfile.so pwdfile /etc/vsftpd/.passwd`。别在 Arch 上照搬 Debian 的 `db_load` 教程。
+- **Arch**：当前 PAM 不再自带 `pam_userdb.so`，Arch Wiki 的推荐路线是 `libpam_pwdfile` + `htpasswd` 生成密码文件，PAM 写 `auth required pam_pwdfile.so pwdfile /etc/vsftpd/.passwd`。别在 Arch 上照搬 Debian 的 `db_load` 文档。
 - **RHEL/CentOS/Rocky**：与 Debian 同属 `pam_userdb` 路线，`db_load` 由 `libdb-utils` 提供（包名与 Debian 的 `db-util` 不同）。
 
 Debian 上生成虚拟用户数据库的流程如下（其余发行版按上文换工具）：
@@ -220,7 +220,7 @@ $ curl -s ftp://user@203.0.113.10/ --user user:secret -o /dev/null -w '%{http_co
 
 **改了配置不生效。** vsftpd 无热加载：`systemctl restart vsftpd` 必做；改错配置它会直接退出，用 `journalctl -u vsftpd -e` 看最后几行。三系排查思路一致，Arch 用户重装验证可用 `pacman -S vsftpd` 覆盖本地改动（有本地修改时 `pacman` 会先提示冲突），Debian 对应 `apt reinstall vsftpd`，RHEL 对应 `dnf reinstall vsftpd`。
 
-**部署顺序踩坑。** 先 `pacman -Syu`（或 `apt full-upgrade`、`dnf upgrade`）把系统与 vsftpd 升到当前版本，再改配置——拿着五年前的教程对今天的版本逐行核对，是 FTP 故障单里最常见的浪费。升级后用 `pacman -Ql vsftpd` 或对应工具复核配置文件路径有没有变，再对照[参考资料](https://wiki.archlinux.org/title/Very_Secure_FTP_Daemon)里的变更说明。
+**部署顺序踩坑。** 先 `pacman -Syu`（或 `apt full-upgrade`、`dnf upgrade`）把系统与 vsftpd 升到当前版本，再改配置——拿着五年前的文档对今天的版本逐行核对，是 FTP 故障单里最常见的浪费。升级后用 `pacman -Ql vsftpd` 或对应工具复核配置文件路径有没有变，再对照[参考资料](https://wiki.archlinux.org/title/Very_Secure_FTP_Daemon)里的变更说明。
 
 ## 8. 日志与排障入口
 

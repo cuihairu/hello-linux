@@ -1,16 +1,16 @@
 # 日志管理
 
-服务出问题时，第一个动作永远是看日志：进程有没有启动、启动时报了什么错、运行中又抛出了什么异常。Linux 上这套日志由 journald 收集、rsyslog 落盘，两者分工明确；本章讲清楚日志从产生到落盘的完整链路，以及三发行版下该去哪里找日志。
+服务出问题时，我通常先查日志：确认进程是否启动、启动时报错内容和运行中的异常。Linux 上的日志由 journald 收集、rsyslog 落盘；本章记录日志从产生到落盘的链路，以及三发行版中的查询入口。
 
 > 内容参考自 Arch Wiki、rsyslog 文档与鸟哥的私房菜，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 说清 journald 收集与 rsyslog 落盘的两层分工，知道该去哪层找日志
+- 说清 journald 收集与 rsyslog 落盘的两层分工
 - 对照三发行版日志文件位置（`auth.log` / `secure` / journal）
-- 熟练使用 `journalctl -u` 按服务查日志，掌握时间范围与优先级过滤
-- 理解 journal 持久化的意义，会开启并限制大小
-- 会查看传统文本日志，知道 postrotate 类"轮转后不写"问题的成因
+- 熟练使用 `journalctl -u` 按服务查日志，熟悉时间范围与优先级过滤
+- journal 持久化的意义
+- 会查看传统文本日志
 
 ## 1. 为什么日志链路有两层
 
@@ -72,7 +72,7 @@ journalctl -u nginx -p warning..alert
 journalctl -u nginx --grep "bind\(\) to"
 ```
 
-输出格式也值得掌握：`-o short-precise` 带微秒时间戳，`-o json-pretty` 方便脚本解析，`-x` 附带消息目录里的解释文字（提交 bug 时不要用 `-x`）。
+输出格式也值得熟悉：`-o short-precise` 带微秒时间戳，`-o json-pretty` 方便脚本解析，`-x` 附带消息目录里的解释文字（提交 bug 时不要用 `-x`）。
 
 ## 4. 持久化：为什么以及怎么做
 

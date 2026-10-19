@@ -8,19 +8,19 @@ MySQL 是全球最流行的开源关系型数据库，广泛应用于 Web 应用
 
 > 内容参考自 MySQL 官方文档、鸟哥的私房菜和实际运维经验，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 掌握 MySQL/MariaDB 在 Debian、RHEL 系、Arch 上的安装差异
+- MySQL/MariaDB 在 Debian、RHEL 系、Arch 上的安装差异
 - 理解初始 root 认证方式与安全配置
-- 掌握数据库、用户、权限管理
+- 熟悉数据库、用户、权限管理
 - 了解备份恢复、主从复制和故障排查
 
 ## 1. 安装
 
-安装阶段就要决定三件事：用哪个分支、服务叫什么名、初始 root 怎么进。这三件事决定后面所有 systemctl 与排障命令的写法。跟着跨发行版教程抄命令是最常见的浪费时间方式——在 Debian 上敲 `systemctl start mariadb` 会 unit not found，在 Arch 上找 `/var/log/mysqld.log` 也会扑空。装完先做一次"版本 + 服务状态 + 本地登录"三连验证，再进入安全配置，避免在半初始化状态上调权限。
+安装阶段就要决定三件事：用哪个分支、服务叫什么名、初始 root 怎么进。这三件事决定后面所有 systemctl 与排障命令的写法。跟着跨发行版文档抄命令是最常见的浪费时间方式——在 Debian 上敲 `systemctl start mariadb` 会 unit not found，在 Arch 上找 `/var/log/mysqld.log` 也会扑空。装完先做一次"版本 + 服务状态 + 本地登录"三连验证，再进入安全配置，避免在半初始化状态上调权限。
 
 
-先明确关键差异：**Debian/Ubuntu 仓库默认是 Oracle MySQL（`mysql-server`）；RHEL/CentOS/Rocky/Alma 与 Arch 官方仓库默认是 MariaDB（`mariadb-server`/`mariadb`）**。客户端命令与 SQL 大多兼容，但服务名、日志路径、临时密码机制不同——跟着教程敲命令前先确认发行版与分支，否则 `systemctl start mysql` 会直接 unit not found。Fedora 也可能只带 MariaDB。需要原厂 MySQL 时，RHEL 系可加官方仓库，Arch 通常走 AUR 或自编译——先想清楚"要不要原厂"，再动手，能少走很多弯路。MariaDB 与 MySQL 在视图、插件、权限细节上仍有分叉，锁死一种分支写文档与运维手册，比在两套语义之间来回翻译更省心。
+先明确关键差异：**Debian/Ubuntu 仓库默认是 Oracle MySQL（`mysql-server`）；RHEL/CentOS/Rocky/Alma 与 Arch 官方仓库默认是 MariaDB（`mariadb-server`/`mariadb`）**。客户端命令与 SQL 大多兼容，但服务名、日志路径、临时密码机制不同——跟着文档敲命令前先确认发行版与分支，否则 `systemctl start mysql` 会直接 unit not found。Fedora 也可能只带 MariaDB。需要原厂 MySQL 时，RHEL 系可加官方仓库，Arch 通常走 AUR 或自编译——先想清楚"要不要原厂"，再动手，能少走很多弯路。MariaDB 与 MySQL 在视图、插件、权限细节上仍有分叉，锁死一种分支写文档与运维手册，比在两套语义之间来回翻译更省心。
 
 | 发行版 | 包名 | 服务名 | 初始 root |
 |--------|------|--------|-----------|
@@ -31,7 +31,7 @@ MySQL 是全球最流行的开源关系型数据库，广泛应用于 Web 应用
 
 ### 1.1 Debian/Ubuntu
 
-Debian 系 root 默认走 `auth_socket`（Unix socket 免密），装完直接 `sudo mysql` 即可以 root 进入，**没有 temporary password**。按 RHEL 文档去日志找临时密码会扑空，这是两边最大的体验差异——先分清发行版再跟教程，能省掉半小时无头绪排查。安装命令是 `sudo apt update && sudo apt install mysql-server`，随后 `sudo systemctl enable --now mysql`。装完应立刻设 root 密码，并确认插件（8.0 默认 `caching_sha2_password`）与旧客户端是否兼容，不兼容时再评估是否改兼容插件（注意各版本对该插件的废弃策略不同）。auth_socket 只保护本机 root，应用账号仍要走密码与 host 限制，不要把两者混为一谈。
+Debian 系 root 默认走 `auth_socket`（Unix socket 免密），装完直接 `sudo mysql` 即可以 root 进入，**没有 temporary password**。按 RHEL 文档去日志找临时密码会扑空，这是两边最大的体验差异——先分清发行版再跟文档，能省掉半小时无头绪排查。安装命令是 `sudo apt update && sudo apt install mysql-server`，随后 `sudo systemctl enable --now mysql`。装完应立刻设 root 密码，并确认插件（8.0 默认 `caching_sha2_password`）与旧客户端是否兼容，不兼容时再评估是否改兼容插件（注意各版本对该插件的废弃策略不同）。auth_socket 只保护本机 root，应用账号仍要走密码与 host 限制，不要把两者混为一谈。
 
 ### 1.2 RHEL/CentOS/Fedora（MariaDB 默认）
 
@@ -256,7 +256,7 @@ SHOW REPLICA STATUS\G
 内存配置的核心是让热数据尽量落在缓冲池，同时给操作系统与连接开销留出余量。专用库给 50%–70% 是经验起点，不是圣旨：同机还跑着应用、监控或日志采集时要下调；数据量远小于缓冲池时再调大也只是浪费。`max_connections`、排序缓冲等"每连接"参数与缓冲池相乘才是真实占用，改之前心算一遍上限内存。所有涉及重启的参数变更，安排在维护窗并准备好回滚值，避免半夜改错把库改挂。
 
 
-InnoDB 缓冲池是最大头，专用数据库机常给物理内存 50%–70%，改后需重启才生效——热改不生效是很多"参数没用"错觉的来源。`max_connections` 不是越大越好——应用层应用连接池，服务端只留余量；连接暴涨往往是泄漏，不是需要更大上限。MySQL 8.0 已移除查询缓存，不要再抄老教程的 `query_cache_size`，写了只会得到 unknown variable。`sort_buffer_size`/`join_buffer_size` 是**每连接**分配的量，盲目调大乘上连接数会把内存吃穿；小内存机器上宁可让排序走磁盘，也不要让 OOM Killer 杀 mysqld。
+InnoDB 缓冲池是最大头，专用数据库机常给物理内存 50%–70%，改后需重启才生效——热改不生效是很多"参数没用"错觉的来源。`max_connections` 不是越大越好——应用层应用连接池，服务端只留余量；连接暴涨往往是泄漏，不是需要更大上限。MySQL 8.0 已移除查询缓存，不要再抄旧资料的 `query_cache_size`，写了只会得到 unknown variable。`sort_buffer_size`/`join_buffer_size` 是**每连接**分配的量，盲目调大乘上连接数会把内存吃穿；小内存机器上宁可让排序走磁盘，也不要让 OOM Killer 杀 mysqld。
 
 ```ini
 [mysqld]

@@ -4,11 +4,11 @@
 
 > 内容参考自 Arch Wiki Installation guide#Pre-installation、Debian 安装手册与鸟哥的私房菜，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 会用 `lscpu`、`free -h`、`lsblk` 快速评估硬件是否够用
 - 能区分 UEFI 与 Legacy BIOS，并判断当前机器实际运行在哪种模式
-- 掌握 Windows/macOS/Linux 三种环境下的启动盘制作方法，理解 `dd` 写错设备的严重性
+- Windows/macOS/Linux 三种环境下的启动盘制作方法
 - 建立"动盘之前先备份"的肌肉记忆
 
 ## 1. 硬件确认：为什么先看配置

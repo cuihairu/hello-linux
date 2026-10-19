@@ -4,12 +4,12 @@
 
 > 内容参考自 Postfix 官方文档与 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 画清 MUA/MTA/MDA 分工，理解队列在投递中的角色
-- 掌握三发行版安装（apt / pacman / dnf），读懂 postqueue -p 队列输出
+- 画清 MUA/MTA/MDA 分工
+- 熟悉三发行版安装（apt / pacman / dnf），读懂 postqueue -p 队列输出
 - 配好 main.cf 核心参数与别名，验证 mydestination/mynetworks 边界
-- 理解 SPF/DKIM/DMARC 各自防什么，能读懂 TXT 记录
+- SPF/DKIM/DMARC 各自防什么
 - 识别开放中继、证书过期、队列堆积等高频故障并收敛
 
 ## 1. 邮件系统为什么分成这么多角色

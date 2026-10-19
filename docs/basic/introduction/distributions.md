@@ -1,15 +1,15 @@
 # Linux 发行版简介
 
-Linux 发行版有数百种，但对绝大多数使用场景，真正需要认真考虑的是三大阵营：**Debian/Ubuntu 系**（APT、`.deb`）、**RHEL/CentOS/Rocky 系**（DNF、`.rpm`）、**Arch 系**（`pacman`、滚动更新）。本章介绍它们的来龙去脉、包管理差异和适用场景——这不是简单的"哪个更好"的排名，而是"什么节奏匹配你的需求"的匹配问题。在一台要求五年不中断的生产服务器上追新内核，和在一台每天折腾的个人机上锁死三年前的软件版本，都会带来真实的痛苦。选型做对了，后面所有章节的操作都能对号入座；选错了，你将一直与自己的工具链搏斗。
+Linux 发行版有数百种，但对绝大多数使用场景，真正需要认真考虑的是三大阵营：**Debian/Ubuntu 系**（APT、`.deb`）、**RHEL/CentOS/Rocky 系**（DNF、`.rpm`）、**Arch 系**（`pacman`、滚动更新）。本章记录这三大家族的沿革、包管理差异和适用场景，重点在于发行节奏与实际需求如何匹配。在一台要求五年不中断的生产服务器上追新内核，和在一台每天折腾的个人机上锁死三年前的软件版本，都会带来真实的痛苦。选型做对了，后面所有章节的操作都能对号入座；选错了，你将一直与自己的工具链搏斗。
 
 > 内容参考自各发行版官方文档、Arch Wiki 和 DistroWatch，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 理解发行版的分类维度（发布模型、用途）及其背后的运维含义
-- 掌握 Debian/Ubuntu、RHEL 系、Arch 三大家族的特点、谱系与包管理差异
+- Debian/Ubuntu、RHEL 系、Arch 三大家族的特点、谱系与包管理差异
 - 能在真实终端上区分三系并执行对应的软件安装/升级操作（`apt` / `dnf` / `pacman`）
-- 学会根据用途与经验选择发行版，并识别常见选型误区
+- 根据用途与经验选择发行版，并识别常见选型误区
 
 ## 1. 发行版分类
 
@@ -287,8 +287,8 @@ Net Upgrade Size:       0.45 MiB
 
 ### 4.3 Arch 的适用与不适用
 
-- **适合**：想彻底理解系统组装过程的学习者、追求极简与最新软件的个人机、愿意每周花十分钟做完整升级的用户
-- **不适合**：要求三年不动的生产服务器（官方明确不提供长期支持的稳定分支）、不打算碰命令行的桌面新手、依赖商业认证软件的企业环境
+- **适合**：想彻底理解系统组装过程的开发者与运维人员、追求极简与最新软件的个人机、愿意每周花十分钟做完整升级的用户
+- **不适合**：要求三年不动的生产服务器（官方明确不提供长期支持的稳定分支）、不打算碰命令行的桌面常见、依赖商业认证软件的企业环境
 
 ## 5. 三系横向对比
 
@@ -315,7 +315,7 @@ Net Upgrade Size:       0.45 MiB
 | 默认 Shell | bash | bash | bash |
 | 配置风格 | 官方集成、有 `debconf` 问答回放 | 手写配置文件为主 | 官方集成，强调 `firewall-cmd`/`nmcli` 等工具 |
 
-表中每一行都对应一类真实故障：把 RHEL 教程里的 `firewall-cmd` 跑到 Ubuntu 上会提示找不到命令；在 Rocky 上遇到"权限对却 502"，第一嫌疑人常是 SELinux 而不是应用本身；Arch 上网络不通，先确认你到底配了 `systemd-networkd` 还是 NetworkManager——它俩都装着但只能一个在管事。
+表中每一行都对应一类真实故障：把 RHEL 资料里的 `firewall-cmd` 跑到 Ubuntu 上会提示找不到命令；在 Rocky 上遇到"权限对却 502"，第一嫌疑人常是 SELinux 而不是应用本身；Arch 上网络不通，先确认你到底配了 `systemd-networkd` 还是 NetworkManager——它俩都装着但只能一个在管事。
 
 ### 5.3 软件源
 
@@ -337,7 +337,7 @@ Net Upgrade Size:       0.45 MiB
 | 桌面开发 | Ubuntu LTS / Fedora Workstation | 工具链较新，容器生态友好 |
 | 企业服务器 | RHEL/Rocky Linux/AlmaLinux | 长期支持、认证生态、可预期的升级路径 |
 | Web / 通用服务器 | Ubuntu Server / Debian stable | 稳定、软件仓库丰富、文档完善 |
-| 深入理解系统 | Arch Linux | 安装即教学，Arch Wiki 质量极高 |
+| 深入理解系统 | Arch Linux | 安装流程能展示系统组装过程，Arch Wiki 资料完整 |
 | 安全测试 | Kali Linux | 预装安全工具（基于 Debian） |
 | 嵌入式 / 极小镜像 | Alpine / Debian minimal | 体积小或生态全，按需取舍 |
 
@@ -345,7 +345,7 @@ Net Upgrade Size:       0.45 MiB
 
 | 经验 | 推荐 | 理由 |
 |------|------|------|
-| 完全新手 | Ubuntu Desktop LTS | 图形安装器 + 自动分区 + 默认可用的桌面 |
+| 完全常见 | Ubuntu Desktop LTS | 图形安装器 + 自动分区 + 默认可用的桌面 |
 | 有 Windows 经验 | Linux Mint | 界面布局类似 Windows，底层仍是 Ubuntu 仓库 |
 | 想深入学习 | Arch（动手型）/ Debian·Fedora（上游型） | 前者拆开给你看，后者接近上游开发节奏 |
 | 追求极简 | Arch Linux | 从零构建，无强加的桌面与厂商工具 |
@@ -373,9 +373,9 @@ f4c5431b6d4b1e4e7e3f6c8c0a9f...  ubuntu-24.04.2-desktop-amd64.iso
 
 1. **选错更新模型**。想要"五年不用管"却装了 Arch，或者想要最新工具却选了 Debian stable——两者都会在一周内让你想换系统。先回答"我多久愿意做一次系统升级、我能接受软件旧多久"，再选阵营。
 
-2. **把 APT/DNF 的习惯平移成"Linux 标准"**。`apt update && apt upgrade` 在 Debian/Ubuntu 正确，在 Arch 上正确对应物是单条 `sudo pacman -Syu`；`sudo yum install` 到了 Arch 上直接 command not found。执行任何教程命令前，先 `cat /etc/os-release` 确认 `ID`。
+2. **把 APT/DNF 的习惯平移成"Linux 标准"**。`apt update && apt upgrade` 在 Debian/Ubuntu 正确，在 Arch 上正确对应物是单条 `sudo pacman -Syu`；`sudo yum install` 到了 Arch 上直接 command not found。执行任何资料中的命令前，先 `cat /etc/os-release` 确认 `ID`。
 
-3. **认为 CentOS 还是免费 RHEL**。CentOS 8 已于 2021 年底停止维护，项目转向上游的 CentOS Stream；要下游兼容请用 Rocky Linux 或 AlmaLinux。新部署照抄旧教程装 CentOS，会拿到一个不再收安全更新的系统。
+3. **认为 CentOS 还是免费 RHEL**。CentOS 8 已于 2021 年底停止维护，项目转向上游的 CentOS Stream；要下游兼容请用 Rocky Linux 或 AlmaLinux。新部署照抄旧资料装 CentOS，会拿到一个不再收安全更新的系统。
 
 4. **在 RHEL/Debian 之外的机器上找 SELinux/AppArmor 救命**。SELinux 在 RHEL 系默认 enforcing，Debian/Ubuntu 默认启用的是 AppArmor，Arch 默认两者都不配。排障时先确认"这台机器到底有没有强制访问控制在拦你"，否则会在权限位上空转半天。
 

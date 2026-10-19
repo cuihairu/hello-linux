@@ -4,10 +4,10 @@ Apache HTTP Server（httpd）是历史最悠久、生态最丰富的 Web 服务�
 
 > 内容参考自 Apache 官方文档、鸟哥的私房菜和实际运维经验，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解 Apache 架构和 MPM 工作原理
-- 掌握虚拟主机、模块启用和 SSL 配置
+- Apache 架构和 MPM 工作原理
+- 熟悉虚拟主机、模块启用和 SSL 配置
 - 学会在 Debian/Ubuntu、RHEL 系、Arch 上安装与排障
 - 学会性能调优和安全加固（含 SELinux/AppArmor 衔接）
 
@@ -48,13 +48,13 @@ MPM（Multi-Processing Module）决定子进程如何组织，是 Apache 性能�
 
 ## 2. 安装
 
-三大发行版的包名不同：Debian/Ubuntu 叫 `apache2`，RHEL 系叫 `httpd`，Arch 的包名是 `apache`。Debian 与 RHEL 的服务名与包名一致（Arch 的服务名为 `httpd`），排错时 `systemctl status` 的目标要对号入座——教程写 `systemctl status httpd`，你在 Debian 上会得到 unit not found。装完后用 `curl -I http://localhost` 验证默认页；打不开先分清是服务没起、防火墙没放行，还是云安全组没开 80，三层从内到外查。
+三大发行版的包名不同：Debian/Ubuntu 叫 `apache2`，RHEL 系叫 `httpd`，Arch 的包名是 `apache`。Debian 与 RHEL 的服务名与包名一致（Arch 的服务名为 `httpd`），排错时 `systemctl status` 的目标要对号入座——文档写 `systemctl status httpd`，你在 Debian 上会得到 unit not found。装完后用 `curl -I http://localhost` 验证默认页；打不开先分清是服务没起、防火墙没放行，还是云安全组没开 80，三层从内到外查。
 
 Debian/Ubuntu 包与服务名均为 `apache2`。先 `sudo apt update` 刷新索引，再 `sudo apt install apache2` 安装，接着用 `sudo systemctl enable --now apache2` 一次完成启用与启动——`enable --now` 等价于先 enable 再 start，是 systemd 下最省事的写法。验证分两步：`apache2 -v` 看版本与编译参数，`curl -I http://localhost` 看默认站点是否响应 200。两步都过了，才说明"装上了且在听"；只跑第一步成功会把"服务没起"误判成"装好了"。
 
 RHEL/CentOS/Fedora 包与服务名均为 `httpd`，把 apt 换成 `sudo dnf install httpd`、服务名换成 `httpd` 即可，其余 systemctl 与 curl 步骤完全相同。SELinux 默认 Enforcing 的机器，后面站点目录还要补上下文，否则会遇到"权限全对仍 403"——这不是 Apache 配置错误，是强制访问控制在拦，详见安全加固节。
 
-Arch Linux 官方仓库的包名为 `apache`，用 `sudo pacman -S apache` 安装，服务单元仍叫 `httpd.service`。Arch 的配置是单文件 `httpd.conf` 加 `conf.d` 片段，没有 Debian 的 `a2ensite` 软链接体系，启用站点等于把 conf 放进目录并 reload。默认站点根目录是 `/srv/http`，与 Debian/RHEL 的 `/var/www/html` 不同，抄路径时注意；这也是 Arch 用户照搬教程时最容易踩的路径坑。无论哪一系，防火墙都要显式放行：firewalld 用 `firewall-cmd --permanent --add-service=http` 后 reload，UFW 用 `ufw allow 80`；云主机再查安全组——服务启动但 curl 超时时，问题几乎总在网络层而不是 Apache 配置。下面按发行版给出最小安装命令，启动与验证逻辑三系一致。
+Arch Linux 官方仓库的包名为 `apache`，用 `sudo pacman -S apache` 安装，服务单元仍叫 `httpd.service`。Arch 的配置是单文件 `httpd.conf` 加 `conf.d` 片段，没有 Debian 的 `a2ensite` 软链接体系，启用站点等于把 conf 放进目录并 reload。默认站点根目录是 `/srv/http`，与 Debian/RHEL 的 `/var/www/html` 不同，抄路径时注意；这也是 Arch 用户照搬旧资料时最容易踩的路径坑。无论哪一系，防火墙都要显式放行：firewalld 用 `firewall-cmd --permanent --add-service=http` 后 reload，UFW 用 `ufw allow 80`；云主机再查安全组——服务启动但 curl 超时时，问题几乎总在网络层而不是 Apache 配置。下面按发行版给出最小安装命令，启动与验证逻辑三系一致。
 
 ## 3. 配置文件
 
@@ -74,7 +74,7 @@ Apache 的配置布局按发行版分成两派：Debian 系拆成多文件用软
 
 ### 3.2 配置结构
 
-主配置从上到下依次是全局指令（运行用户、日志、超时）、模块加载（`LoadModule`）、默认虚拟主机与包含指令。顺序很关键：`LoadModule` 之前写的模块指令不会生效，Include 片段按出现位置参与合并。新手常见错误是把 `RewriteEngine On` 写在 mod_rewrite 加载之前，规则"写了没反应"。改完配置不要直接重启，先语法检查（见第 10 节），通过后再 reload；语法错误时 reload 会失败并保留旧配置继续服务，这是保护机制——但也不要跳过检查直接 restart，把可回滚的小错变成宕机。运行用户（Debian `www-data`、RHEL/Arch `httpd`）决定了子进程读站点文件的身份，改错会导致全局 403。
+主配置从上到下依次是全局指令（运行用户、日志、超时）、模块加载（`LoadModule`）、默认虚拟主机与包含指令。顺序很关键：`LoadModule` 之前写的模块指令不会生效，Include 片段按出现位置参与合并。常见错误是把 `RewriteEngine On` 写在 mod_rewrite 加载之前，规则"写了没反应"。改完配置不要直接重启，先语法检查（见第 10 节），通过后再 reload；语法错误时 reload 会失败并保留旧配置继续服务，这是保护机制——但也不要跳过检查直接 restart，把可回滚的小错变成宕机。运行用户（Debian `www-data`、RHEL/Arch `httpd`）决定了子进程读站点文件的身份，改错会导致全局 403。
 
 典型骨架：`ServerRoot` 指向配置根目录，`User`/`Group` 设定子进程身份，随后按需 `LoadModule`，最后用 `<VirtualHost *:80>` 声明默认或首个站点（`ServerName` + `DocumentRoot`）。理解这个顺序后，往下加站点与模块就是重复同一模式，不必每次整文件照抄。
 
@@ -260,7 +260,7 @@ sudo systemctl reload apache2   # 或 httpd
 - 403 但 `ls -la` 正常：查 SELinux `ls -Z`/`restorecon`，以及父目录缺不缺 `x`。
 - 证书不完整：中间证书没打进 fullchain，或私钥与证书不匹配。
 - 2.2 升 2.4 后大片 403：全面替换 Order/Allow/Deny 为 Require。
-- `pacman -S apache` 后路径对不上教程：Arch 是 `/etc/httpd`，站点进 `conf.d`，无 a2ensite。
+- `pacman -S apache` 后路径对不上文档：Arch 是 `/etc/httpd`，站点进 `conf.d`，无 a2ensite。
 
 ## 参考资料
 

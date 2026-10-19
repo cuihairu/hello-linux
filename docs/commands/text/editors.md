@@ -4,12 +4,12 @@
 
 > 编辑器在各发行版**默认未必安装**，安装方式见第 1.1 节；`cat`/`less`/`more`/`head`/`tail` 来自 coreutils/less，一般开箱即用。
 
-## 学习目标
+## 本篇覆盖
 
 - 明确各发行版默认编辑器与安装方法（含 Arch `pacman` 包名）
-- 掌握 Vim 模式切换、移动、编辑、搜索替换与常用配置
+- Vim 模式切换、移动、编辑、搜索替换与常用配置
 - 会用 nano 快速编辑，用 less/cat/head/tail 高效查看
-- 了解 `vi`/`editor` 替代名机制与实战场景
+- `vi`/`editor` 替代名机制与实战场景
 
 ## 1. Vim 编辑器
 
@@ -206,7 +206,7 @@ more file.txt / more +10 file.txt
 # more from util-linux 2.41.3
 ```
 
-新脚本与文档优先推荐 `less`；交互教学可按"more 会用即可，less 必须会"掌握。
+新脚本与文档优先推荐 `less`；交互教学可按"more 会用即可，less 必须会"熟悉。
 
 ## 7. head / tail - 首尾与实时日志
 

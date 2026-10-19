@@ -1,14 +1,14 @@
 # 内存管理命令
 
-"内存不够用"是新手最容易误判的告警：`free` 里 `free` 列很小，不代表机器快挂了；swap 用了几 MB，也不代表出了大问题。内存管理的第一课是**读懂内核到底把字节放在了哪里**，第二课才是调参与排障。
+"内存不够用"是最容易误判的告警：`free` 里 `free` 列很小，不代表机器快挂了；swap 用了几 MB，也不代表出了大问题。内存管理的第一课是**读懂内核到底把字节放在了哪里**，第二课才是调参与排障。
 
 > 内容参考自鸟哥的私房菜、Arch Wiki（Memory/Swap/OOM Killer）与 kernel.org 文档，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 分清 `free` 中 available 与 free 的差别，会正确评估内存压力
-- 会读 swap 使用率与 si/so，理解 swappiness 的真实含义
-- 掌握 OOM Killer 的触发条件、日志定位与 oom_score_adj 调节
+- 分清 `free` 中 available 与 free 的差别
+- 会读 swap 使用率与 si/so
+- OOM Killer 的触发条件、日志定位与 oom_score_adj 调节
 - 会用 sysctl 持久化内核参数（含三系路径差异）与 pmap/valgrind/perf/bpftrace 做进阶分析
 
 ## 1. free -h：available 与 free 为什么差这么多
@@ -179,11 +179,11 @@ $ sudo reboot                                  # 或重启后 sysctl vm.swappine
 | 项目 | Debian/Ubuntu | Arch | RHEL/CentOS/Rocky |
 |------|---------------|------|-------------------|
 | 推荐持久化位置 | `/etc/sysctl.d/*.conf` | `/etc/sysctl.d/*.conf`（Wiki 推荐） | `/etc/sysctl.d/*.conf` |
-| 旧入口 `/etc/sysctl.conf` | 仍存在；`sysctl -p` 默认读它 | 一般不使用，建议 `.d` | 历史包袱重，老教程常见 |
+| 旧入口 `/etc/sysctl.conf` | 仍存在；`sysctl -p` 默认读它 | 一般不使用，建议 `.d` | 历史包袱重，旧资料常见 |
 | 无参数 `sysctl -p` | 读 `/etc/sysctl.conf` | 同左 | 同左 |
 | 开机加载者 | systemd-sysctl | systemd-sysctl | systemd-sysctl |
 
-**坑**：很多老教程写 `echo "vm.swappiness=10" >> /etc/sysctl.conf`。在只认 `/etc/sysctl.d/` 的环境里这行**不会开机生效**，重启后参数回退。稳妥做法是统一写 `/etc/sysctl.d/99-*.conf`，用 `sysctl --system` 确认出现在输出里。安全加固类参数（`kernel.kptr_restrict`、`net.ipv4.tcp_syncookies` 等）同理，见[安全加固](../../security/hardening.md)。
+**坑**：很多旧资料写 `echo "vm.swappiness=10" >> /etc/sysctl.conf`。在只认 `/etc/sysctl.d/` 的环境里这行**不会开机生效**，重启后参数回退。稳妥做法是统一写 `/etc/sysctl.d/99-*.conf`，用 `sysctl --system` 确认出现在输出里。安全加固类参数（`kernel.kptr_restrict`、`net.ipv4.tcp_syncookies` 等）同理，见[安全加固](../../security/hardening.md)。
 
 ### 4.3 drop_caches：能用但别当日常操作
 

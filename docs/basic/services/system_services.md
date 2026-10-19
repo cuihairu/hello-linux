@@ -1,15 +1,15 @@
 # 系统服务管理
 
-一台服务器能否在断电重启后自动恢复业务，取决于服务是否被正确"启用"；一个服务出问题时能否快速定位，取决于你是否会查它的日志。这两件事在 systemd 时代有统一答案：`systemctl` 负责启停与开机自启，`journalctl` 负责把服务输出按 unit 收拢。本页从"为什么 systemd 取代了 SysV init"讲起，拆解 unit 文件结构与依赖声明，重点厘清新手最容易混的 `enable` 与 `start`，再展开 `journalctl` 的常用查询姿势，最后对照三发行版在默认服务名（如 Debian 的 `ssh` vs 其他系的 `sshd`）与防火墙上的差异——命令本身三系高度一致，分水岭在默认值与包名。
+一台服务器能否在断电重启后自动恢复业务，取决于服务是否被正确"启用"；一个服务出问题时能否快速定位，取决于你是否会查它的日志。这两件事在 systemd 时代有统一答案：`systemctl` 负责启停与开机自启，`journalctl` 负责把服务输出按 unit 收拢。本页从"为什么 systemd 取代了 SysV init"讲起，拆解 unit 文件结构与依赖声明，重点厘清最容易混的 `enable` 与 `start`，再展开 `journalctl` 的常用查询姿势，最后对照三发行版在默认服务名（如 Debian 的 `ssh` vs 其他系的 `sshd`）与防火墙上的差异——命令本身三系高度一致，分水岭在默认值与包名。
 
 > 内容参考自 Arch Wiki systemd 文档与鸟哥的私房菜，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解 systemd 取代 SysV init 的动机，读懂 unit 文件结构与依赖声明
+- systemd 取代 SysV init 的动机，读懂 unit 文件结构与依赖声明
 - 熟练使用 `systemctl`，准确区分 `enable` 与 `start`（最高频的坑）
-- 掌握 `journalctl` 查服务日志的常用姿势
-- 理解 target 取代运行级别、timer 取代 cron 的对应关系
+- `journalctl` 查服务日志的常用姿势
+- target 取代运行级别、timer 取代 cron 的对应关系
 - 对照三发行版默认服务与防火墙差异，避免拿一系命令去另一系执行
 
 ## 1. 为什么 systemd 取代了 SysV init
@@ -38,7 +38,7 @@ $ systemctl status sshd
 Sep 21 08:15:03 web01 systemd[1]: Started OpenSSH server daemon.
 ```
 
-常用操作按语义分两类，混用是新手最常见的错误来源：
+常用操作按语义分两类，混用是最常见的错误来源：
 
 ```bash
 # —— 改变"当下状态"，重启即失效 ——

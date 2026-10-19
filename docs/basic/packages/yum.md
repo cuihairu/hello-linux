@@ -1,14 +1,14 @@
 # YUM/DNF 包管理
 
-RHEL/CentOS/Rocky 家族的包管理在 2015 年经历了一次核心更替：**YUM**（Yellowdog Updater Modified）基于 Python 2 编写，依赖解析慢、内存占用高，逐渐难以应付 Fedora/RHEL 8 起的模块化仓库；**DNF**（Dandified YUM）作为其继任者用 Python 3 重写，接口大部分兼容、速度显著提升，如今已是 RHEL 8+/Fedora/Rocky 9 的默认前端，而旧的 `yum` 命令在多数系统上只是指向 DNF 的兼容链接或由 `dnf-yum` 插件提供。本页以 **DNF 为主线**讲解，凡是与 YUM 行为一致的地方会注明"YUM 兼容"，个别差异（如 `yum update` 的废弃警告）单独标出，避免你对着 CentOS 7 时代的旧教程困惑。底层始终是 **RPM**——理解 DNF 与 RPM 的分层，和理解 APT 与 dpkg 的分层是同一件事。
+RHEL/CentOS/Rocky 家族的包管理在 2015 年经历了一次核心更替：**YUM**（Yellowdog Updater Modified）基于 Python 2 编写，依赖解析慢、内存占用高，逐渐难以应付 Fedora/RHEL 8 起的模块化仓库；**DNF**（Dandified YUM）作为其继任者用 Python 3 重写，接口大部分兼容、速度显著提升，如今已是 RHEL 8+/Fedora/Rocky 9 的默认前端，而旧的 `yum` 命令在多数系统上只是指向 DNF 的兼容链接或由 `dnf-yum` 插件提供。本页以 **DNF 为主线**讲解，凡是与 YUM 行为一致的地方会注明"YUM 兼容"，个别差异（如 `yum update` 的废弃警告）单独标出，避免你对着 CentOS 7 时代的旧资料困惑。底层始终是 **RPM**——理解 DNF 与 RPM 的分层，和理解 APT 与 dpkg 的分层是同一件事。
 
 > 内容参考自 RHEL 9 官方文档与 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 分清 DNF、YUM、RPM 三者关系，知道 `yum` 命令今天还意味着什么
-- 掌握 DNF 安装/升级/搜索/仓库/缓存/锁定六类核心操作
-- 会配置 EPEL 等扩展源与国内镜像，理解模块流（module stream）概念
+- 分清 DNF、YUM、RPM 三者关系
+- DNF 安装/升级/搜索/仓库/缓存/锁定六类核心操作
+- 会配置 EPEL 等扩展源与国内镜像
 - 能把 DNF 命令与 APT、Arch `pacman` 逐项对照
 
 ## 1. DNF 与 YUM 的关系
@@ -23,7 +23,7 @@ $ dnf --version | head -1
 4.14.0
 ```
 
-这意味着：**日常文档里写 `yum install` 在现代 RHEL 系上仍然有效**，但新脚本、新教程一律推荐写 `dnf`，语义更明确，也不再依赖兼容层。真正需要区分 YUM 与 DNF 行为的场景主要在 CentOS 7（纯 YUM，Python 2）与个别废弃选项上——本页所有主命令以 DNF 为准，YUM 差异随文标注。
+这意味着：**日常文档里写 `yum install` 在现代 RHEL 系上仍然有效**，但新脚本、新文档一律推荐写 `dnf`，语义更明确，也不再依赖兼容层。真正需要区分 YUM 与 DNF 行为的场景主要在 CentOS 7（纯 YUM，Python 2）与个别废弃选项上——本页所有主命令以 DNF 为准，YUM 差异随文标注。
 
 DNF 与底层 RPM 的分层完全对应 APT/dpkg：RPM 只负责本地包的安装、查询、卸载与校验，不解决远程依赖；DNF 在其上维护仓库索引、解析依赖、下载并按序调用 RPM 完成事务。因此遇到 `rpm -ivh` 报依赖错误时，正确反应是换 `dnf install` 让 DNF 去算，而不是继续 `--nodeps` 强装——强装会留下"数据库认为已装、实际链接缺失"的坏账。
 
@@ -63,7 +63,7 @@ nginx.x86_64: A high performance web server and reverse proxy server
 | 文件属于哪个包 | `rpm -qf /usr/sbin/nginx` | RPM 层查询 |
 | 包内文件列表 | `rpm -ql nginx` | 反查安装了哪些路径 |
 
-YUM 兼容说明：`yum update` 在 DNF 下仍可用但语义被映射为 `dnf upgrade`；`yum install`/`yum search`/`yum remove` 同理完全兼容。唯一要留意的是老教程里的 `yum clean all`、`yum makecache` 在 DNF 下分别对应 `dnf clean all`、`dnf makecache`，命令名换掉即可。
+YUM 兼容说明：`yum update` 在 DNF 下仍可用但语义被映射为 `dnf upgrade`；`yum install`/`yum search`/`yum remove` 同理完全兼容。唯一要留意的是旧资料里的 `yum clean all`、`yum makecache` 在 DNF 下分别对应 `dnf clean all`、`dnf makecache`，命令名换掉即可。
 
 ## 3. 仓库与扩展源
 
@@ -176,11 +176,11 @@ $ rpm -V nginx                                 # 校验完整性，无输出 = �
 | 扩展源 | PPA | AUR（`yay`/`paru`） | EPEL、RPM Fusion |
 | 包格式 | `.deb` | `.pkg.tar.zst` | `.rpm` |
 
-除了命令本身，升级纪律的差异最需要记住：APT/DNF 可以"先刷新索引、稍后升级"分两步安全执行，Arch 的 `pacman -Sy` 之后若不跟 `-Su` 就构成 partial upgrade，是该系统最经典的新手事故。换发行版做自动化脚本时，这条差异比命令拼写更容易造成生产问题。
+除了命令本身，升级纪律的差异最需要记住：APT/DNF 可以"先刷新索引、稍后升级"分两步安全执行，Arch 的 `pacman -Sy` 之后若不跟 `-Su` 就构成 partial upgrade，是该系统最经典的常见事故。换发行版做自动化脚本时，这条差异比命令拼写更容易造成生产问题。
 
 ## 8. 常见坑
 
-1. **把 CentOS 7 时代的 `yum` 教程直接套到 Rocky 9**。命令名多数兼容，但仓库布局（`dnf repolist` vs `yum repolist` 输出格式）、模块流等概念已变。先 `cat /etc/os-release` 确认系统版本再动手。
+1. **把 CentOS 7 时代的 `yum` 文档直接套到 Rocky 9**。命令名多数兼容，但仓库布局（`dnf repolist` vs `yum repolist` 输出格式）、模块流等概念已变。先 `cat /etc/os-release` 确认系统版本再动手。
 
 2. **`dnf` 报 `Metadata cache expired` 或下载失败**。先 `sudo dnf clean all && sudo dnf makecache` 重建元数据；仍失败则检查 `.repo` 文件里 `mirrorlist` 是否指向了不可达的官方域名，必要时注释掉改用 `baseurl` 指向国内镜像。
 

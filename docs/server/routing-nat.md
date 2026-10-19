@@ -4,12 +4,12 @@
 
 > 内容参考自 nftables 官方 Wiki 与 Arch Wiki（概念框架参考鸟哥的私房菜），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清"同网段走 ARP、跨网段走网关"的分界，以及 `ip_forward` 在其中的角色
 - 会判读 `ip route` 每一列，临时增删静态路由，并知道去哪里做持久化
-- 理解 snat 与 masquerade 的取舍，独立写出一个可跑的 nftables NAT 网关配置
-- 掌握 DNAT 端口映射及其转发放行，理解非对称路由为什么会断
+- snat 与 masquerade 的取舍，独立写出一个可跑的 nftables NAT 网关配置
+- DNAT 端口映射及其转发放行
 - 按"网关 → 外网 IP → 域名"的分跳顺序定位 NAT 网关故障
 
 ## 1. 为什么需要一台路由器
@@ -218,7 +218,7 @@ $ sudo nft list ruleset                # 验证内核里的完整规则
 
 ### 4.5 iptables-nft 兼容层
 
-三系的 `iptables` 命令如今默认走 iptables-nft 后端，规则最终进同一个内核 nftables 引擎，`nft list ruleset` 里能看到它们变成的链。所以老教程里的 `iptables -t nat -A POSTROUTING -j MASQUERADE` 照抄能用；但两套语法混管同一张表，很快就说不清"这条规则谁加的、归谁删"，新配置建议直接用 nft 原生语法，把 iptables 只当作读老资料的翻译层。
+三系的 `iptables` 命令如今默认走 iptables-nft 后端，规则最终进同一个内核 nftables 引擎，`nft list ruleset` 里能看到它们变成的链。所以旧资料里的 `iptables -t nat -A POSTROUTING -j MASQUERADE` 照抄能用；但两套语法混管同一张表，很快就说不清"这条规则谁加的、归谁删"，新配置建议直接用 nft 原生语法，把 iptables 只当作读老资料的翻译层。
 
 ## 5. 防火墙最小基线
 

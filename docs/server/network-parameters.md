@@ -4,13 +4,13 @@
 
 > 内容参考自 Arch Wiki 与 systemd 官方文档（概念框架参考鸟哥的私房菜），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 理解主机名、FQDN 与 `/etc/hosts` 三者的关系，以及为什么 Samba/Kerberos 类服务对此敏感
-- 分清 `resolv.conf` 的三种管理者（systemd-resolved、NetworkManager、传统直写），会判断自己机器属于哪一态
+- 分清 `resolv.conf` 的三种管理者（systemd-resolved、NetworkManager、传统直写）
 - 会用 `ip -br addr` 与 `ip route` 快速判读地址、前缀与默认路由的健康状态
 - 养成"先看监听面再放行防火墙"的顺序习惯，分清 `0.0.0.0` 与指定地址监听的安全含义
-- 掌握一张上线前的网络参数检查单，把排障分层法提前到部署阶段
+- 熟悉一张上线前的网络参数检查单，把排障分层法提前到部署阶段
 
 ## 1. 为什么参数先于服务
 
@@ -42,7 +42,7 @@ web01.example.com
 $ sudo hostnamectl set-hostname web01
 ```
 
-三系差异集中在"谁可能在别处也记了名字"：Debian/Ubuntu 旧教程里的 `/etc/hostname` 直改法仍有效（systemd 兼容读取），但 `hostnamectl` 是正路；RHEL/Rocky 的 `hostnamectl` 行为一致，额外注意 `/etc/sysconfig/network` 里的 `HOSTNAME=` 是前 systemd 时代遗物，改它不生效；Arch 无额外文件，`hostnamectl` 即全部。云主机还有一个常见干扰：云镜像的 cloud-init 在首次启动时会按实例名重设主机名，改完名字重启被"改回去"，先 `systemctl status cloud-init` 确认它是否在管这件事。
+三系差异集中在"谁可能在别处也记了名字"：Debian/Ubuntu 旧资料里的 `/etc/hostname` 直改法仍有效（systemd 兼容读取），但 `hostnamectl` 是正路；RHEL/Rocky 的 `hostnamectl` 行为一致，额外注意 `/etc/sysconfig/network` 里的 `HOSTNAME=` 是前 systemd 时代遗物，改它不生效；Arch 无额外文件，`hostnamectl` 即全部。云主机还有一个常见干扰：云镜像的 cloud-init 在首次启动时会按实例名重设主机名，改完名字重启被"改回去"，先 `systemctl status cloud-init` 确认它是否在管这件事。
 
 ### 2.2 /etc/hosts 与 FQDN 的对齐
 
@@ -71,7 +71,7 @@ Samba 与 Kerberos 这类协议在握手时互报 FQDN，并用名字反查地�
 
 ### 3.1 resolv.conf 的三种管理者
 
-`/etc/resolv.conf` 在现代发行版上有三种存在形态，先判断自己处于哪一态，再谈修改——对着 systemd-resolved 管的文件手改，重启或重连后被改回去，是新手最常见的一坑：
+`/etc/resolv.conf` 在现代发行版上有三种存在形态，先判断自己处于哪一态，再谈修改——对着 systemd-resolved 管的文件手改，重启或重连后被改回去，是最常见的一坑：
 
 | 形态 | 识别特征 | 谁在写它 |
 |------|---------|---------|

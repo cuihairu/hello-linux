@@ -12,11 +12,11 @@
 > Bash 语法、调试与 shellcheck 属于[脚本篇](../script/README.md)，
 > 本页只讲选型与调度，语法问题请回脚本篇查表。
 
-## 学习目标
+## 本篇覆盖
 
 - 能在"写脚本、用 Ansible、继续手工"三条路之间做出有依据的选择
-- 理解幂等为什么是自动化的生命线，会识别非幂等写法
-- 掌握 cron 与 systemd timer 的语义差异及三发行版默认状态
+- 理解幂等为什么是自动化的生命线
+- cron 与 systemd timer 的语义差异及三发行版默认状态
 - 理解流水线（CI/CD）与本机定时器的分工边界
 - 会写最小可用的 Ansible playbook，并读懂 changed/ok 的反馈
 

@@ -4,7 +4,7 @@ layout: home
 hero:
   name: Hello Linux
   text: Linux 笔记
-  tagline: 个人笔记、心得与实践记录
+  tagline: 游戏开发者的 Linux 实践笔记与踩坑记录
   actions:
     - theme: brand
       text: 浏览笔记

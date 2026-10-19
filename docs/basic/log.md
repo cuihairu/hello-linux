@@ -2,7 +2,7 @@
 
 ## 本章导语
 
-故障排查、容量告警、安全审计——运维工作中最常见的三类问题，最终都要落到日志上才能定位。Linux 的日志体系由三块拼成：**journald** 负责收集结构化日志并提供 `journalctl` 查询，**rsyslog/syslog-ng** 负责按规则把消息落盘成 `/var/log` 下的文本文件，**logrotate** 负责在文件长得太大之前完成轮转、压缩和清理。本章把日志协议、优先级/facility 分类、rsyslog 配置和轮转策略讲透，帮你建立"日志从产生到落盘、再到过期回收"的完整链路认知。
+故障排查、容量告警和安全审计最终都要回到日志。Linux 的日志体系由三块拼成：**journald** 负责收集结构化日志并提供 `journalctl` 查询，**rsyslog/syslog-ng** 负责按规则把消息落盘成 `/var/log` 下的文本文件，**logrotate** 负责轮转、压缩和清理。本章记录日志协议、优先级/facility 分类、rsyslog 配置和轮转策略，以及日志从产生到回收的链路。
 
 "服务起不来"、"凌晨磁盘满了"、"有人试图爆破 SSH"——这些场景的共同点是：没有日志，你只能靠猜。本章不重复[系统服务](./services.md)章已讲过的 `journalctl -u` 服务排查流程，而是聚焦日志体系本身的结构与维护：日志协议如何定义消息的来源与严重程度，rsyslog 如何按规则把消息分流到不同文件，logrotate 如何在文件撑爆磁盘之前完成轮转。理解这三层分工后，无论换哪个发行版、哪种日志工具，你都能快速判断"日志去哪了"和"该看哪里"。
 
@@ -20,13 +20,13 @@
 
 > 内容参考自 systemd/journald、syslog 与 Arch Wiki，见各章节参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解 journald 与 rsyslog/syslog-ng 的分工：谁收集、谁落盘、为什么两者常常并存
-- 掌握 syslog 的 facility 与 severity 分类，能读懂 rsyslog 配置规则
+- journald 与 rsyslog/syslog-ng 的分工：谁收集、谁落盘、为什么两者常常并存
+- syslog 的 facility 与 severity 分类
 - 熟练使用 `journalctl` 的常用查询：按 unit、按时间、按优先级、按内容检索
-- 理解 journal 持久化的意义，知道如何开启、限制大小和手动清理
-- 掌握 logrotate 的轮转策略设计：为什么需要大小/时间双条件、压缩与 delaycompress 的取舍、postrotate 的正确用法
+- journal 持久化的意义
+- logrotate 的轮转策略设计：为什么需要大小/时间双条件、压缩与 delaycompress 的取舍、postrotate 的正确用法
 
 ## 子页导读
 

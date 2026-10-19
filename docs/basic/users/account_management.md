@@ -4,12 +4,12 @@ Linux 从设计之初就是多用户系统：每个进程在内核里都挂着�
 
 > 内容参考自 Arch Wiki、鸟哥的私房菜和各发行版 man 手册，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解 UID/GID、主组与补充组的设计动机，并能在终端上验证
+- UID/GID、主组与补充组的设计动机
 - 看懂 `/etc/passwd`、`/etc/shadow`、`/etc/group` 每个字段的含义
-- 掌握 `useradd`/`usermod`/`userdel` 的高频场景（含 `-aG` 的正确用法）
-- 分清 sudo 与直接 root 的利弊，掌握三系（含 Arch 的 wheel 惯例）sudo 配置
+- `useradd`/`usermod`/`userdel` 的高频场景（含 `-aG` 的正确用法）
+- 分清 sudo 与直接 root 的利弊，熟悉三系（含 Arch 的 wheel 惯例）sudo 配置
 
 ## 1. 为什么需要用户与组
 
@@ -116,7 +116,7 @@ $ sudo groupdel devops                     # 组内还有成员时会拒绝，�
 
 **为什么推荐 sudo 而不是一直用 root**：root（UID 0）没有权限边界，一条手滑的 `rm -rf /var/lib/mysql` 就是生产事故。`sudo` 带来三个 root 直接登录没有的好处：每次提权都有明确的触发动作（可审计）、只在需要时短暂拥有特权（最小权限）、并且默认在超时后自动收回凭证（通常 15 分钟）。审计日志位置因系而异——Debian/Ubuntu 在 `/var/log/auth.log`，RHEL/CentOS/Rocky 与 Arch 在 `/var/log/secure`（Arch 默认可能只写 journal，可用 `journalctl -t sudo` 查看）。
 
-三系的 sudo 资格组约定不同，这是新手跨发行版最容易踩的坑：
+三系的 sudo 资格组约定不同，这是跨发行版时最容易踩的坑：
 
 | 发行版家族 | 资格组 | 默认 sudoers 规则 |
 |-----------|--------|------------------|
@@ -170,7 +170,7 @@ $ sudo -i        # 以 root 执行：交互式 root shell，会加载 root 的�
 
 5. **把系统账号的 Shell 改成交互式**。给 `www-data` 之类的账号开放 `/bin/bash` 会扩大攻击面——一旦 Web 应用被 GetShell，攻击者直接获得可交互 shell。系统账号保持 `/usr/sbin/nologin`。
 
-6. **在 Arch 上照抄 Debian 教程加 `sudo` 组**。Arch 的资格组是 `wheel`，`usermod -aG sudo` 在 Arch 上会因为组不存在而直接报错（或建出一个无用的新组），随后你会发现 sudo 依然不可用。
+6. **在 Arch 上照抄 Debian 文档加 `sudo` 组**。Arch 的资格组是 `wheel`，`usermod -aG sudo` 在 Arch 上会因为组不存在而直接报错（或建出一个无用的新组），随后你会发现 sudo 依然不可用。
 
 ## 参考资料
 

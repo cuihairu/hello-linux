@@ -4,12 +4,12 @@
 
 > 内容参考自 Arch Wiki 与 `man setfacl`/`man getfacl`，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说清 ACL 解决了传统 rwx 的什么盲区
 - 读懂 `getfacl` 输出中每一行（尤其是 `mask`）的含义
-- 掌握 `setfacl` 的修改、递归与默认（default）ACL
-- 会备份/恢复目录 ACL，知道 ext4 与 XFS 的支持情况
+- `setfacl` 的修改、递归与默认（default）ACL
+- 会备份/恢复目录 ACL
 
 ## 1. 为什么需要 ACL
 

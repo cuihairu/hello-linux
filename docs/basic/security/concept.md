@@ -1,16 +1,16 @@
 # SELinux 概念
 
-传统 Linux 权限（rwx + user/group）有一个结构性弱点：**root 说了算**。Web 服务被攻破时，攻击者拿到的往往是运行服务的进程身份；只要进程是 root、或能通过 sudo 提权，DAC 就全线失守——文件权限挡不住一个已经是 root 的进程。强制访问控制（MAC）正是为此设计的第二道闸：即便进程 uid 为 0，只要安全策略没写"允许它碰这个文件"，内核照样拒绝。SELinux（Security-Enhanced Linux）是 Linux 内核里实现 MAC 的主流框架，由 NSA 主导开发并合入主线，今天是 RHEL 系发行版的默认安全栈；本页从 DAC 的缺陷讲起，拆解安全上下文与类型强制（Type Enforcement），并对照 Debian/Ubuntu 的 AppArmor 与 Arch 的默认无 MAC 现状，帮你建立三系安全栈的全景。
+传统 Linux 权限（rwx + user/group）有一个结构性弱点：**root 说了算**。Web 服务被攻破时，攻击者拿到的往往是运行服务的进程身份；只要进程是 root、或能通过 sudo 提权，DAC 就全线失守——文件权限挡不住一个已经是 root 的进程。强制访问控制（MAC）正是为此设计的第二道闸：即便进程 uid 为 0，只要安全策略没写"允许它碰这个文件"，内核照样拒绝。SELinux（Security-Enhanced Linux）是 Linux 内核里实现 MAC 的主流框架，由 NSA 主导开发并合入主线，今天是 RHEL 系发行版的默认安全栈；本页从 DAC 的缺陷出发，整理安全上下文与类型强制（Type Enforcement），并对照 Debian/Ubuntu 的 AppArmor 与 Arch 的默认无 MAC 现状，梳理三系安全栈的全景。
 
 > 内容参考自 Red Hat SELinux 文档与 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 说清 DAC 的结构性缺陷，能解释为什么 root 也需要被 MAC 约束
-- 读懂安全上下文 `user:role:type:level` 各字段含义，会用 `ls -Z` 验证
+- 说清 DAC 的结构性缺陷
+- 读懂安全上下文 `user:role:type:level` 各字段含义
 - 理解类型强制（Type Enforcement）如何用一条 allow 规则做访问决定
 - 画出 SELinux 完整决策流程：标签匹配 → 规则查找 → 允许/拒绝
-- 对照三发行版 MAC 全景，知道 RHEL 用 SELinux、Ubuntu 用 AppArmor、Arch 默认无
+- 对照三发行版 MAC 全景
 
 ## 1. 为什么需要 MAC：DAC 的结构性缺陷
 

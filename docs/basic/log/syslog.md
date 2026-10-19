@@ -1,16 +1,16 @@
 # 系统日志
 
-"服务起不来先看日志"是共识，但真正打开 `/var/log` 的人往往会被两个问题绊住：日志到底是谁写进去的？`auth`、`daemon`、`kern` 这些 facility 又是从哪冒出来的？答案是一条固定链路——应用把消息丢给 `/dev/log` 或直接写 stdout，**journald** 作为 systemd 自带的采集器先落一份结构化二进制 journal，再由 **rsyslog** 按 `/etc/rsyslog.conf` 的规则分流成 `/var/log/syslog`、`messages`、`secure` 等文本文件。本页讲清这条链路的上下游关系、syslog 协议的 severity/facility 分类、rsyslog 规则与远程转发，以及 Arch 默认只装 journald 时的差异；同时覆盖 `journalctl` 的常用查询与 journal 持久化——不理解持久化，断电后你连昨晚的日志都找不到。
+"服务起不来先看日志"是共识，但真正打开 `/var/log` 的人往往会被两个问题绊住：日志到底是谁写进去的？`auth`、`daemon`、`kern` 这些 facility 又是从哪冒出来的？答案是一条固定链路——应用把消息丢给 `/dev/log` 或直接写 stdout，**journald** 作为 systemd 自带的采集器先落一份结构化二进制 journal，再由 **rsyslog** 按 `/etc/rsyslog.conf` 的规则分流成 `/var/log/syslog`、`messages`、`secure` 等文本文件。本页整理这条链路的上下游关系、syslog 协议的 severity/facility 分类、rsyslog 规则与远程转发，以及 Arch 默认只装 journald 时的差异；同时覆盖 `journalctl` 的常用查询与 journal 持久化——不理解持久化，断电后你连昨晚的日志都找不到。
 
 > 内容参考自 rsyslog 文档、Arch Wiki 与鸟哥的私房菜，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 画出 journald → rsyslog → 文本文件的日志链路，说清两者是上下游而非竞争
-- 掌握 syslog 的 severity（0–7）与 facility 分类，能读懂 rsyslog 规则
+- 画出 journald → rsyslog → 文本文件的日志链路
+- syslog 的 severity（0–7）与 facility 分类
 - 会配置 rsyslog 分流、远程转发，并知道 Arch 默认只装 journald 的差异
 - 熟练使用 `journalctl` 按 unit、时间、优先级、内容检索
-- 理解 journal 持久化的意义，会开启、限大小、清理
+- journal 持久化的意义
 
 ## 1. 日志链路：journald 与 rsyslog 的分工
 

@@ -2,26 +2,26 @@
 
 ## 本章导语
 
-装软件是使用 Linux 后你执行得最频繁的操作，也是三大发行版家族差异最刺眼的地方：同一句"装个 nginx"，在 Debian/Ubuntu 上要敲 `sudo apt install nginx`，在 Rocky 上是 `sudo dnf install nginx`，到了 Arch 则是 `sudo pacman -S nginx`——三条命令背后是三套互不兼容的包格式（`.deb` / `.rpm` / `.pkg.tar.zst`）、三个独立维护的软件仓库、三种截然不同的升级哲学。把 APT 的命令复制到 Arch 上只会得到 `command not found`，这几乎是每个新手的必经之坑。更隐蔽的坑在升级环节：APT 和 DNF 允许"先刷新索引、稍后再升级"分两步走，而 Arch 的滚动更新模型要求 `pacman -Syu` 必须原子完成——只刷新索引不升级（社区称为 partial upgrade）会让新库配旧软件，造出一堆 `error while loading shared libraries` 式的诡异故障。这些差异不是命令风格问题，而是发布模型的直接结果，本章的目标就是让你知其然也知其所以然。
+装软件是使用 Linux 后你执行得最频繁的操作，也是三大发行版家族差异最刺眼的地方：同一句"装个 nginx"，在 Debian/Ubuntu 上要敲 `sudo apt install nginx`，在 Rocky 上是 `sudo dnf install nginx`，到了 Arch 则是 `sudo pacman -S nginx`——三条命令背后是三套互不兼容的包格式（`.deb` / `.rpm` / `.pkg.tar.zst`）、三个独立维护的软件仓库、三种截然不同的升级哲学。把 APT 的命令复制到 Arch 上只会得到 `command not found`，这几乎是每个常见的必经之坑。更隐蔽的坑在升级环节：APT 和 DNF 允许"先刷新索引、稍后再升级"分两步走，而 Arch 的滚动更新模型要求 `pacman -Syu` 必须原子完成——只刷新索引不升级（社区称为 partial upgrade）会让新库配旧软件，造出一堆 `error while loading shared libraries` 式的诡异故障。这些差异不是命令风格问题，而是发布模型的直接结果，本章的目标就是让你知其然也知其所以然。
 
 本章四页：APT 页讲透 Debian/Ubuntu 家族从 `apt` 到 `dpkg` 的分层、仓库与缓存、版本锁定；YUM/DNF 页以 DNF 为主线（注明与旧 YUM 的兼容关系），覆盖 RPM 底层、EPEL 扩展源与版本锁；Pacman 页补齐 Arch 系，讲滚动更新模型、`-Syu` 的原子性与 AUR 的边界；源码编译与 Tarball 页接住包管理器覆盖不到的三种情况（仓库没有、版本太旧、要改代码），给出从 configure 到卸载清单的完整流程。前三页都会给出与另外两系的对照表，确保你在三系之间切换时不再靠猜。
 
 > 本页以 **Debian/Ubuntu、Arch、RHEL/CentOS/Rocky** 三大发行版家族为主线对照讲解，凡涉及具体命令或默认行为差异都会标注所属家族。内容参考自 Debian 手册、RHEL 文档与 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-学完本章四页内容后，你应当能够：
+本章记录的内容包括四页内容后，页面涉及：
 
 1. **判断该用哪个包管理器**：在陌生机器上先 `cat /etc/os-release` 看 `ID` 字段，再决定用 `apt`、`dnf` 还是 `pacman`，而不是凭记忆硬敲。
 2. **完成六类核心操作**：对任意一系，都能独立完成安装、升级、搜索、仓库管理、缓存清理、版本锁定，并说出对应命令。
 3. **理解分层结构**：知道 `apt`/`dnf`/`pacman` 是高层工具，底层分别是 `dpkg`/`rpm`/`pacman` 自身，依赖解析发生在哪一层、什么时候发生。
 4. **说清仓库与缓存的区别**：索引（index/cache）只是"菜单"，不等于已安装软件；三系刷新索引的命令分别是 `apt update`、`dnf makecache`、`pacman -Sy`。
-5. **掌握版本锁定**：在需要钉死某个包版本（如内核、glibc）时，用 `apt-mark hold`、`dnf versionlock`、`pacman -Q` 相关机制阻止意外升级。
+5. **熟悉版本锁定**：在需要钉死某个包版本（如内核、glibc）时，用 `apt-mark hold`、`dnf versionlock`、`pacman -Q` 相关机制阻止意外升级。
 6. **避开升级事故**：不在 Arch 上执行 partial upgrade，不在生产环境直接 `apt full-upgrade` 而不看变更列表。
 
 ## 子页导读
 
-本章由四页构成，建议按顺序阅读，每页约 12–18 分钟：
+本章四页按包管理场景排列（每页约 12–18 分钟）：
 
 - **[APT 包管理](./packages/apt.md)** — Debian/Ubuntu 家族主线。从"为什么要分 `apt` 与 `dpkg` 两层"讲起，覆盖安装/升级/搜索/卸载全套命令并附真实终端输出，拆解 `/etc/apt/sources.list`（旧格式）与 `ubuntu.sources`（Ubuntu 24.04+ deb822 格式）的差异、PPA 与国内镜像源配置，缓存清理（`clean`/`autoclean`）与 `apt-mark hold` 版本锁定，最后给出与 DNF、`pacman` 的逐项对照及 `dpkg` 中断修复等常见坑。本页解决"Debian/Ubuntu 上怎么装软件"。
 

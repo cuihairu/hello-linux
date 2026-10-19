@@ -4,13 +4,13 @@ pacman 是 Arch Linux 的官方包管理器，官方仓库里的所有包都以 
 
 > 内容参考自 Arch Linux 官方文档（Arch Wiki / pacman 手册页），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 说出 pacman 与 Arch 滚动更新模型的绑定关系，解释为什么"部分升级"被官方列为不支持行为
-- 掌握 `-S`/`-R`/`-Q` 三个动词及常用组合（`-Syu`、`-Rs`、`-Qo`、`-Ss`），独立完成安装、卸载、查询、升级
-- 理解 `/etc/pacman.conf` 里的仓库定义（core/extra/multilib）与镜像文件 mirrorlist 的优先级规则
+- `-S`/`-R`/`-Q` 三个动词及常用组合（`-Syu`、`-Rs`、`-Qo`、`-Ss`），独立完成安装、卸载、查询、升级
+- `/etc/pacman.conf` 里的仓库定义（core/extra/multilib）与镜像文件 mirrorlist 的优先级规则
 - 会用 `paccache` 控制包缓存占用，并理解"保留几个旧版本"对滚动系统回滚的价值
-- 了解 AUR 的定位与 `git clone` + `makepkg -si` 构建流程，划清它与官方仓库的边界
+- AUR 的定位与 `git clone` + `makepkg -si` 构建流程，划清它与官方仓库的边界
 - 能与 [APT](./apt.md)、[YUM/DNF](./yum.md) 逐项对照，在跨发行版脚本里写对分支
 
 ## 1. pacman 与滚动更新模型
@@ -42,7 +42,7 @@ Include = /etc/pacman.d/mirrorlist      # extra：桌面、应用等其余官方
 #Include = /etc/pacman.d/mirrorlist     # multilib：x86_64 上的 32 位库，默认注释未启用
 ```
 
-三个官方仓库的分工：core 收录基本系统运行所必需的包（glibc、systemd、内核）；extra 收录其余官方软件，桌面环境和大多数服务器软件都在这里；multilib 提供 32 位兼容库，运行 Wine、Steam 这类含 32 位组件的程序时才需要，默认不启用。老教程里的 `[community]` 仓库已于 2023 年并入 `[extra]`，索引里搜不到 community 属正常现象。
+三个官方仓库的分工：core 收录基本系统运行所必需的包（glibc、systemd、内核）；extra 收录其余官方软件，桌面环境和大多数服务器软件都在这里；multilib 提供 32 位兼容库，运行 Wine、Steam 这类含 32 位组件的程序时才需要，默认不启用。旧资料里的 `[community]` 仓库已于 2023 年并入 `[extra]`，索引里搜不到 community 属正常现象。
 
 国内镜像加速不靠 sed 替换 URL，而是把镜像条目在 mirrorlist 里的位置挪到前面（pacman 按文件顺序取用），改完执行一次 `pacman -Syu` 验证。
 

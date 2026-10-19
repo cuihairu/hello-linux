@@ -4,13 +4,13 @@
 
 > 内容参考自 Bash 手册、ShellCheck 文档和 Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 掌握严格模式 `set -euo pipefail` 的每个选项与副作用
+- 熟悉严格模式 `set -euo pipefail` 的每个选项与副作用
 - 会用 `set -x` / `bash -x` 定位执行路径与展开结果
 - 三系安装并使用 shellcheck，读懂常见告警
 - 会用 `trap` 处理 EXIT/ERR/INT，编写错误处理与日志
-- 了解 bashdb 基本断点与单步操作
+- bashdb 基本断点与单步操作
 
 ## 1. 严格模式：set -euo pipefail
 
@@ -50,7 +50,7 @@ sudo dnf install ShellCheck
 
 注意 RHEL 系包名是 `ShellCheck`（驼峰，与二进制名 `shellcheck` 不同），Debian/Arch 是全小写——包名拼错会 `No match`，这是三系对照时最容易卡住的一步。
 
-基本用法：`shellcheck script.sh` 直接列出告警（如 SC2086 提醒给变量加引号）；`-f gcc` 输出 GCC 风格便于编辑器跳转；`-f json` 供 CI 解析；`-S error` 只看 error 级别；`-e SC2086` 排除特定规则。**纳入工作流**：编辑器插件实时提示；CI 里对 `*.sh` 跑 `shellcheck -S warning` 并让告警导致构建失败。本教程所有示例都应能通过 shellcheck 的核心规则（SC2086 加引号、SC2046 命令替换加引号等）。
+基本用法：`shellcheck script.sh` 直接列出告警（如 SC2086 提醒给变量加引号）；`-f gcc` 输出 GCC 风格便于编辑器跳转；`-f json` 供 CI 解析；`-S error` 只看 error 级别；`-e SC2086` 排除特定规则。**纳入工作流**：编辑器插件实时提示；CI 里对 `*.sh` 跑 `shellcheck -S warning` 并让告警导致构建失败。这些笔记所有示例都应能通过 shellcheck 的核心规则（SC2086 加引号、SC2046 命令替换加引号等）。
 
 ### 2.3 调试友好的输出习惯
 

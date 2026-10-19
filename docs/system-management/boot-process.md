@@ -4,11 +4,11 @@
 
 > 内容参考自 Arch Wiki 与 systemd 官方文档（概念框架参考鸟哥的私房菜），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 把开机过程拆成五棒接力，说出每一棒的交接物与典型卡死现场
 - 会用 GRUB 菜单临时改内核参数救急（去 quiet、nomodeset、进 initramfs shell）
-- 分清三系 initramfs 工具（initramfs-tools / dracut / mkinitcpio），知道何时必须重建
+- 分清三系 initramfs 工具（initramfs-tools / dracut / mkinitcpio）
 - 能诊断 systemd 阶段的 job 卡住与 90 秒超时，分清 rescue 与 emergency
 - 会用 systemd-analyze 三板斧定位启动慢的真凶，不被 blame 误导
 
@@ -29,7 +29,7 @@
 | 4 | systemd | 按 default.target 拉起服务 | "A start job is running for…" 90 秒倒计时 |
 | 5 | 登录 | getty 或显示管理器出登录框 | 黑屏有鼠标指针、无登录界面 |
 
-排错的总纲就藏在这张表里：**先定位卡在第几棒，再查那一棒的处置**。每一棒都有自己的观察窗口——固件的自检画面与蜂鸣、GRUB 的菜单与提示符、内核解压后的滚动输出、systemd 的绿色 `[ OK ]` 行；在第四棒的 journalctl 里找第一棒的病，是新手最常走的弯路。判断依据是"屏幕上最后出现了谁"：什么都没有是第一棒，停在 grub> 是第二棒，panic 打印是第三棒，job 倒计时是第四棒，有输出但无登录框是第五棒。
+排错的总纲就藏在这张表里：**先定位卡在第几棒，再查那一棒的处置**。每一棒都有自己的观察窗口——固件的自检画面与蜂鸣、GRUB 的菜单与提示符、内核解压后的滚动输出、systemd 的绿色 `[ OK ]` 行；在第四棒的 journalctl 里找第一棒的病，是最常走的弯路。判断依据是"屏幕上最后出现了谁"：什么都没有是第一棒，停在 grub> 是第二棒，panic 打印是第三棒，job 倒计时是第四棒，有输出但无登录框是第五棒。
 
 ### 1.2 一条会反复用到的纪律
 

@@ -4,17 +4,17 @@
 
 > 本页命令 `ip`、`ss`、`resolvectl` 在 **Debian/Ubuntu、Arch、RHEL/CentOS/Rocky** 三系上通用；差异集中在**持久化配置写在哪、用哪个守护进程管理网络、DNS 谁在代答**，文中会逐处标注。输出均来自真实终端（Ubuntu 26.04 + systemd-networkd + systemd-resolved 环境），你机器上的地址与进程名会不同，格式一致即可对照。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解为什么现代发行版用 `ip`/`ss` 取代 `ifconfig`/`netstat`，能在新系统上直接上手新命令
+- 理解为什么现代发行版用 `ip`/`ss` 取代 `ifconfig`/`netstat`
 - 用 `ip link`/`ip addr`/`ip route`/`ip neigh` 回答"接口开着吗、地址是什么、包从哪走、邻居是谁"
 - 用 `ss` 按状态/端口/进程过滤连接，读懂 `Recv-Q`/`Send-Q` 与 TIME-WAIT
-- 分清三系持久化入口：Netplan、systemd-networkd、NetworkManager（nmcli），知道"临时改"和"重启还在"的区别
+- 分清三系持久化入口：Netplan、systemd-networkd、NetworkManager（nmcli）
 - 画出本机 DNS 解析路径：`nsswitch.conf` → `/etc/hosts` → systemd-resolved stub → 上游 DNS，并会用 `resolvectl` 排查
 
 ## 1. 为什么用 ip/ss 替代 ifconfig/netstat
 
-`ifconfig` 和 `netstat` 来自 1980 年代的 net-tools 包，长期缺乏维护：接口统计语义含糊、不支持策略路由与网络命名空间等内核新特性、在高连接数机器上扫 `/proc` 极慢。iproute2（`ip`、`ss`）是内核 netlink 接口的直接封装，功能超集、三系默认预装，且与 `nftables`、cgroup、network namespace 同一时代。Arch 官方仓库已不再默认提供 net-tools；Debian/Ubuntu 上 `ifconfig` 往往要手动 `sudo apt install net-tools` 才出现——你在老教程里看到的命令，在新装的服务器上可能根本不存在。
+`ifconfig` 和 `netstat` 来自 1980 年代的 net-tools 包，长期缺乏维护：接口统计语义含糊、不支持策略路由与网络命名空间等内核新特性、在高连接数机器上扫 `/proc` 极慢。iproute2（`ip`、`ss`）是内核 netlink 接口的直接封装，功能超集、三系默认预装，且与 `nftables`、cgroup、network namespace 同一时代。Arch 官方仓库已不再默认提供 net-tools；Debian/Ubuntu 上 `ifconfig` 往往要手动 `sudo apt install net-tools` 才出现——你在旧资料里看到的命令，在新装的服务器上可能根本不存在。
 
 同一件事的对照，一目了然：
 
@@ -39,7 +39,7 @@ ens18            UP             192.168.5.188/24 metric 100 fe80::be24:11ff:fec2
 ztksetoehl       UNKNOWN        10.147.19.84/24 fe80::40f:3dff:feb1:93f0/64
 ```
 
-`-br`（brief）把每个接口压成一行：名称、状态、MAC、IP。排障时先跑这一条，比逐行读 `ifconfig` 快得多。`UNKNOWN` 不表示故障，只表示该接口当前没有"运营中"的二层语义（回环、点到点隧道常如此），真正要看的是有没有 `UP` 标志和 IP。很多新手看到 `UNKNOWN` 就以为网卡坏了，其实隧道、veth、回环几乎永远显示 `UNKNOWN`，只要能 `ip addr` 看到地址、能通信，就不用管这个状态词。
+`-br`（brief）把每个接口压成一行：名称、状态、MAC、IP。排障时先跑这一条，比逐行读 `ifconfig` 快得多。`UNKNOWN` 不表示故障，只表示该接口当前没有"运营中"的二层语义（回环、点到点隧道常如此），真正要看的是有没有 `UP` 标志和 IP。看到 `UNKNOWN` 就以为网卡坏了，其实隧道、veth、回环几乎永远显示 `UNKNOWN`，只要能 `ip addr` 看到地址、能通信，就不用管这个状态词。
 
 另一行 `ztksetoehl` 是典型的点到点/隧道设备（名字不是 `ens`/`enp` 前缀），它没有全局 IPv4 网段里的"广播域"语义，所以也常显示 `UNKNOWN`。读 `-br addr` 时按三问走：**状态是不是 UP、有没有 IPv4、有没有默认路由**（路由看下一节）。三问里缺哪一问，就只在对应层深挖，不要一上来怀疑 DNS 或防火墙。
 
@@ -150,7 +150,7 @@ fe80::5 dev ens18 lladdr 94:28:6f:bf:d1:35 router STALE
 
 两个必须记住的版本事实：
 
-1. **RHEL 9 起不再提供 `network-scripts` 包**，老教程里的 `/etc/sysconfig/network-scripts/ifcfg-eth0` 写法在新系统上没有落点，统一改用 `nmcli`/NetworkManager keyfile。
+1. **RHEL 9 起不再提供 `network-scripts` 包**，旧资料里的 `/etc/sysconfig/network-scripts/ifcfg-eth0` 写法在新系统上没有落点，统一改用 `nmcli`/NetworkManager keyfile。
 2. **Netplan 本身不配置网卡，只生成后端配置**。`netplan status` 里 `ens18 ... (networkd: ens18)` 就表示 YAML 由 netplan 生成、实际由 systemd-networkd 执行；同一台 Ubuntu 也可能看到 `NetworkManager` 字样，取决于 `renderer` 设置。
 
 本机（Ubuntu + networkd）的真实状态可以归纳为三句话：回环与隧道由内核/其他组件管理，Netplan 不碰；物理网卡 `ens18` 状态 UP、地址来自 DHCP、默认路由经 `192.168.5.11`；DNS 下发了四条（含链路本地），所以 `resolvectl dns` 会看到多个 nameserver。`Online state: online` 只说明管理器认为配置已满足，**不等于业务连通**——它是"配置层健康"，连通性仍要靠 ping/curl 验证。把这两种健康分开，是避免"状态明明 online 却上不了网"式困惑的关键。
@@ -265,7 +265,7 @@ Link 3 (ztksetoehl):
 
 5. **多网卡时默认路由走错口**。`ip route show` 看 `metric`，`ip route get 目标` 看最终决策；临时修正可 `ip route change default via 网关 dev 网卡`，长期修正改 Netplan/NM/networkd 的 `metric`/`route` 字段。
 
-6. **接口名不再是 eth0**。现代发行版用 predictable naming（`ens18`、`enp3s0`）。用 `ip -br link` 确认，不要照抄教程里的 `eth0`；容器/云镜像里常见 `eth0`，KVM/物理机多半不是。
+6. **接口名不再是 eth0**。现代发行版用 predictable naming（`ens18`、`enp3s0`）。用 `ip -br link` 确认，不要照抄资料里的 `eth0`；容器/云镜像里常见 `eth0`，KVM/物理机多半不是。
 
 7. **把 127.0.0.53 当故障**。它是 systemd-resolved 的本地 stub；`127.0.0.54` 则是 mDNS/LLMNR 相关回环。二者同时监听属正常，除非你在自建权威 DNS 并需要独占 53。
 

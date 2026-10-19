@@ -4,12 +4,12 @@ Linux 里"程序"躺在磁盘上，"进程"是程序跑起来之后的样子：�
 
 > 内容参考自鸟哥的私房菜、Arch Wiki 与 systemd 官方文档，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
 - 分清 ps、top、htop 的适用场景并会选
-- 理解 SIGTERM/SIGKILL/SIGHUP 的语义与选用顺序
+- SIGTERM/SIGKILL/SIGHUP 的语义与选用顺序
 - 知道僵尸进程为什么产生、为什么 kill 不掉
-- 理解 systemd 单元与进程树、cgroup 的关系
+- systemd 单元与进程树、cgroup 的关系
 
 ## 1. 进程是什么：为什么需要管理它
 
@@ -103,7 +103,7 @@ $ pgrep -u www-data -f "php-fpm"   # 按用户与完整命令行过滤
 
 ## 4. kill 与信号：TERM / KILL / HUP 怎么选
 
-`kill` 名字里有 kill，本质却是**发信号**（`kill -l` 列出全部）。默认信号是 `SIGTERM`（15），不是 `SIGKILL`（9）——这是新手与老手的第一个分水岭。
+`kill` 名字里有 kill，本质却是**发信号**（`kill -l` 列出全部）。默认信号是 `SIGTERM`（15），不是 `SIGKILL`（9）——这是常见与老手的第一个分水岭。
 
 ### 4.1 三类核心信号
 
@@ -283,7 +283,7 @@ $ atrm 1                # 删除
 | 服务进程关系 | `systemctl`（systemd） | 同左 | 同左 |
 | 定时任务 | cron 预装 | `pacman -S cronie` 并 enable | `dnf install cronie`（或 systemd timer） |
 
-说明：Arch 最小安装不含 cron，需要 cron 类能力时装 `cronie` 并 `systemctl enable --now crond`；RHEL 系常见 `crond` 默认启用。`bpftrace` 用于内核态动态追踪（谁在读哪个文件、哪个函数最热），需要较新内核与 root；入门监控先掌握 top/vmstat/iostat 即可，bpftrace 属于进阶武器，三系包名一致、安装命令随包管理器切换。
+说明：Arch 最小安装不含 cron，需要 cron 类能力时装 `cronie` 并 `systemctl enable --now crond`；RHEL 系常见 `crond` 默认启用。`bpftrace` 用于内核态动态追踪（谁在读哪个文件、哪个函数最热），需要较新内核与 root；入门监控先熟悉 top/vmstat/iostat 即可，bpftrace 属于进阶武器，三系包名一致、安装命令随包管理器切换。
 
 ## 12. 常见坑
 

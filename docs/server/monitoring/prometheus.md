@@ -4,10 +4,10 @@
 
 > 内容参考自 Prometheus 与 Grafana 官方文档、Arch Wiki，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 理解 pull 模型与 scrape 配置如何同时完成"采集"与"存活探测"
-- 掌握三发行版安装（apt / pacman / dnf），读懂 `systemctl` 与 `/metrics` 验收输出
+- pull 模型与 scrape 配置如何同时完成"采集"与"存活探测"
+- 熟悉三发行版安装（apt / pacman / dnf），读懂 `systemctl` 与 `/metrics` 验收输出
 - 部署 node_exporter 并说清它与 Prometheus 本体的职责分界
 - 写出常用 PromQL（rate/irate/sum/topk），区分 counter 与 gauge
 - 在 Grafana 接数据源、导仪表盘，并配置可触发的告警规则
@@ -93,7 +93,7 @@ $ curl -s localhost:9100/metrics | head -3
 
 ### 4.1 认识两类指标
 
-Prometheus 里最要紧的类型区分是 **counter**（只增不减的累计值，如 `node_cpu_seconds_total`）与 **gauge**（可增可减的瞬时值，如 `node_memory_MemAvailable_bytes`）。counter 必须搭配 `rate()`/`irate()` 取区间斜率才是"每秒速率"，直接看原始值只会得到一条一路爬升的曲线——这是新手第一坑，也是 `rate` 与 `irate` 存在的全部理由：前者窗口平均更稳，后者对尖刺更敏感，告警常用前者、排障瞬时值可用后者。
+Prometheus 里最要紧的类型区分是 **counter**（只增不减的累计值，如 `node_cpu_seconds_total`）与 **gauge**（可增可减的瞬时值，如 `node_memory_MemAvailable_bytes`）。counter 必须搭配 `rate()`/`irate()` 取区间斜率才是"每秒速率"，直接看原始值只会得到一条一路爬升的曲线——这是常见第一坑，也是 `rate` 与 `irate` 存在的全部理由：前者窗口平均更稳，后者对尖刺更敏感，告警常用前者、排障瞬时值可用后者。
 
 ### 4.2 常用表达式
 

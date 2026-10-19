@@ -4,12 +4,12 @@
 
 > 三系对照涉及的命令在 **Debian/Ubuntu（apt/dpkg）、RHEL/CentOS/Rocky（dnf/rpm）、Arch（pacman）** 上分别给出；一条命令同时出现在两系的，表格里会并列。所有 APT/dpkg 输出来自真实 Ubuntu 26.04 环境；dnf 与 pacman 输出按各系稳定版本的标准格式给出，若你机器版本较新，列名可能略有出入，语义一致。
 
-## 学习目标
+## 本篇覆盖
 
 - 30 秒内判断当前系统属于哪一家族、该用哪套命令（含最小化安装/容器的例外）
 - 按"安装 / 升级 / 搜索 / 仓库 / 缓存 / 锁定"六个维度对照 apt、dnf、pacman 的等价操作
-- 理解 `dpkg`/`rpm` 与上层前端的关系：什么时候必须下沉一层
-- 正确使用 PPA（Debian/Ubuntu）、EPEL（RHEL 系）、AUR（Arch），知道它们各自的信任边界与风险
+- `dpkg`/`rpm` 与上层前端的关系：什么时候必须下沉一层
+- 正确使用 PPA（Debian/Ubuntu）、EPEL（RHEL 系）、AUR（Arch）
 - 用 `apt-mark`、`dnf` 版本锁、`pacman -IgnorePkg` 避免关键包被自动升级打坏
 
 ## 1. 先认清系统：该敲哪套命令
@@ -62,7 +62,7 @@ $ pacman --version
 | 自动清依赖 | `sudo apt autoremove` | `sudo dnf autoremove` | `sudo pacman -Qdtq \| sudo pacman -Rns -` |
 | 重装 | `sudo apt install --reinstall 包名` | `sudo dnf reinstall 包名` | `sudo pacman -S 包名`（损坏用 `pacman -Syyu 包名`） |
 
-Arch 这一列里 `pacman` 出现密度最高，原因是它的参数是**动词组合**而非英文单词：`-S`（Sync，装/升级）、`-R`（Remove，卸）、`-Q`（Query，查）、`-Syyu` 强制刷新元数据并全升。大小写必须准确——`-S` 与 `-s` 是不同操作（后者是"仅搜索"），新手最常见的错误就是少了大写 `S`。
+Arch 这一列里 `pacman` 出现密度最高，原因是它的参数是**动词组合**而非英文单词：`-S`（Sync，装/升级）、`-R`（Remove，卸）、`-Q`（Query，查）、`-Syyu` 强制刷新元数据并全升。大小写必须准确——`-S` 与 `-s` 是不同操作（后者是"仅搜索"），最常见的错误就是少了大写 `S`。
 
 Debian/Ubuntu 的 `full-upgrade` 与 `upgrade` 差别：前者允许为升级**移除冲突的旧包**，在发行版跨版本（如 `do-release-upgrade` 前）时更彻底；日常 `apt upgrade` 更保守。RHEL 侧对应 `dnf upgrade` 与 `dnf distro-sync`（后者把版本对齐仓库，跨小版本更常用）。Arch 因为滚动更新，官方强调**永远整系统 `pacman -Syu`**，反对只升单包的"部分升级"——那会制造依赖地狱。
 
@@ -139,7 +139,7 @@ extra/vim 9.1.1231-1
 
 ## 3. APT 与 dpkg：Debian/Ubuntu
 
-`apt` 是交互式高层前端，`apt-get`/`apt-cache` 是稳定脚本接口（老教程全是它们），`dpkg` 是**底层安装器**——不解析依赖、不访问网络，只管 `.deb` 文件本身。关系可以记成：**apt ≈ dpkg + 依赖求解 + 仓库索引**。日常三条主线：刷新索引用 `apt update`，安装/升级/卸载用 `apt install|full-upgrade|remove|purge`，修依赖与半安装用 `apt install -f`；脚本里把交互式 `apt` 换成 `apt-get -y`（以及 `apt-get update` 分行写），避免提示符卡住 CI。
+`apt` 是交互式高层前端，`apt-get`/`apt-cache` 是稳定脚本接口（旧资料全是它们），`dpkg` 是**底层安装器**——不解析依赖、不访问网络，只管 `.deb` 文件本身。关系可以记成：**apt ≈ dpkg + 依赖求解 + 仓库索引**。日常三条主线：刷新索引用 `apt update`，安装/升级/卸载用 `apt install|full-upgrade|remove|purge`，修依赖与半安装用 `apt install -f`；脚本里把交互式 `apt` 换成 `apt-get -y`（以及 `apt-get update` 分行写），避免提示符卡住 CI。
 
 底层 `dpkg` 只在三种场合出手：装本地 `.deb`（`dpkg -i`）、查状态与归属（`dpkg -l/-S/-L`）、修复被中断的配置（`dpkg --configure -a`）。`apt-cache policy`/`search`/`depends` 则在**不安装**的前提下回答"候选版本、依赖图"——排障时先 policy 后 install 是标准姿势，能挡住九成"装错版本"。`dpkg -l` 状态码值得背两个：`ii` 正常安装，`rc` 已卸载但残留配置，`iU`/`iF` 表示未解包/未配置（半安装），用 `apt install -f` 或 `dpkg --configure -a` 收尾。
 

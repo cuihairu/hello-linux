@@ -4,12 +4,12 @@ APT（Advanced Package Tool）是 Debian 与 Ubuntu 全家桶的官方前端，�
 
 > 内容参考自 Debian 手册与 Ubuntu 官方文档，见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 分清 `apt` 与 `dpkg` 的职责边界，知道何时该用哪个
-- 掌握安装/升级/搜索/卸载/清理全套命令并读懂真实输出
+- 分清 `apt` 与 `dpkg` 的职责边界
+- 熟悉安装/升级/搜索/卸载/清理全套命令并读懂真实输出
 - 会配置 sources.list（旧格式）与 ubuntu.sources（deb822 格式）、国内镜像与 PPA
-- 会用 `apt-mark hold` 锁版本，并能与 DNF、`pacman` 对照
+- 会用 `apt-mark hold` 锁版本
 
 ## 1. 为什么分 apt 和 dpkg 两层
 
@@ -64,7 +64,7 @@ nginx: configuration file test is successful
 
 ## 3. 仓库与源配置
 
-APT 的仓库定义在两类位置：单行格式的老文件 `/etc/apt/sources.list`，以及 Debian 12+/Ubuntu 24.04+ 推荐的 **deb822 格式**（`.sources` 文件，字段分行书写、更易解析）。Ubuntu 24.04 起默认源文件已迁移到 `/etc/apt/sources.list.d/ubuntu.sources`，照着老教程改 `sources.list` 会发现改了没反应——这是该版本最高频的配置踩坑。PPA 与第三方仓库生成的文件也统一落在 `/etc/apt/sources.list.d/` 目录里，与默认源并存。
+APT 的仓库定义在两类位置：单行格式的老文件 `/etc/apt/sources.list`，以及 Debian 12+/Ubuntu 24.04+ 推荐的 **deb822 格式**（`.sources` 文件，字段分行书写、更易解析）。Ubuntu 24.04 起默认源文件已迁移到 `/etc/apt/sources.list.d/ubuntu.sources`，照着旧资料改 `sources.list` 会发现改了没反应——这是该版本最高频的配置踩坑。PPA 与第三方仓库生成的文件也统一落在 `/etc/apt/sources.list.d/` 目录里，与默认源并存。
 
 ```bash
 # Ubuntu 24.04+ deb822 格式（默认路径）

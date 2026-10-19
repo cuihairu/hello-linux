@@ -4,13 +4,13 @@
 
 > 内容参考自 Samba 官方文档与 Arch Wiki（概念框架参考鸟哥的私房菜），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 分清 Samba 与 NFS 的适用边界，理解 Samba 为何维护独立于系统账号的 passdb
-- 掌握三发行版安装与服务启停，记住 smbd/nmbd 两守护进程在三系的 unit 名差异
+- 分清 Samba 与 NFS 的适用边界
+- 熟悉三发行版安装与服务启停，记住 smbd/nmbd 两守护进程在三系的 unit 名差异
 - 读懂 `[global]` 与共享定义，把 testparm 变成改配置的固定前奏
-- 独立搭建组可写与匿名只读两种共享，理解 create mask 与系统权限的叠加关系
-- 会处理 RHEL 系的 SELinux 上下文，能用 smbclient 与 CIFS 挂载完成端到端验证
+- 独立搭建组可写与匿名只读两种共享
+- 会处理 RHEL 系的 SELinux 上下文
 
 ## 1. 为什么是 Samba
 
@@ -29,7 +29,7 @@ SMB（Server Message Block）诞生于二十世纪八十年代的 IBM，后经�
 
 ### 1.2 两本账本：passdb 独立于系统账号
 
-Samba 最让初学者困惑的设计是：**Samba 密码不是系统密码**。Windows 客户端连共享时输入的密码，由 Samba 自己的账号数据库（passdb，默认后端是 tdbsam，落在 `/var/lib/samba/private/passdb.tdb`）核验，与 `/etc/shadow` 里的登录密码是两本独立的账。两本账共享"户名"——Samba 账号必须挂在一个同名的系统用户身上，因为文件落盘时的属主最终要解析成 uid，但密码可以各改各的。这样设计的收益是解耦："能访问共享盘"和"能 SSH 登录机器"的凭据轮换策略互不牵连，员工的共享盘密码泄露不必连累服务器登录口令；代价是要习惯双账本的记账动作——`passwd` 改的是系统账，`smbpasswd` 改的是 Samba 账，改错一本是排错时的高频乌龙。理解了这两本账，后面 `smbpasswd -a` 为什么要求系统用户先存在、为什么禁用系统账号会连带锁死共享访问，就都不再是需要背的规则，而是自然推论。
+Samba 中一个容易混淆的设计是：**Samba 密码不是系统密码**。Windows 客户端连共享时输入的密码，由 Samba 自己的账号数据库（passdb，默认后端是 tdbsam，落在 `/var/lib/samba/private/passdb.tdb`）核验，与 `/etc/shadow` 里的登录密码是两本独立的账。两本账共享"户名"——Samba 账号必须挂在一个同名的系统用户身上，因为文件落盘时的属主最终要解析成 uid，但密码可以各改各的。这样设计的收益是解耦："能访问共享盘"和"能 SSH 登录机器"的凭据轮换策略互不牵连，员工的共享盘密码泄露不必连累服务器登录口令；代价是要习惯双账本的记账动作——`passwd` 改的是系统账，`smbpasswd` 改的是 Samba 账，改错一本是排错时的高频乌龙。理解了这两本账，后面 `smbpasswd -a` 为什么要求系统用户先存在、为什么禁用系统账号会连带锁死共享访问，就都不再是需要背的规则，而是自然推论。
 
 ```text
 Windows / macOS / Linux 桌面
@@ -94,7 +94,7 @@ $ firewall-cmd --permanent --add-service=samba && sudo firewall-cmd --reload
 success
 ```
 
-RHEL 系的 unit 名是 `smb`/`nmb`，与 Debian 差一个字母，跨系照抄教程时这是头号翻车点。防火墙侧 `samba` 服务一次性放行 445/TCP 与 137-138/UDP；若是 nftables/ufw 环境，对应端口清单相同，完整策略设计与三系差异见[防火墙篇](../security/firewall.md)。RHEL 还多一层 SELinux：目录标签不对时 smbd 会"服务正常、访问被拒"，这一层留给第 5 节专门展开——在 Debian/Arch 上默认无此机制，迁移脚本时别把 RHEL 的 restorecon 习惯当成普适步骤。
+RHEL 系的 unit 名是 `smb`/`nmb`，与 Debian 差一个字母，跨系照抄旧资料时这是头号翻车点。防火墙侧 `samba` 服务一次性放行 445/TCP 与 137-138/UDP；若是 nftables/ufw 环境，对应端口清单相同，完整策略设计与三系差异见[防火墙篇](../security/firewall.md)。RHEL 还多一层 SELinux：目录标签不对时 smbd 会"服务正常、访问被拒"，这一层留给第 5 节专门展开——在 Debian/Arch 上默认无此机制，迁移脚本时别把 RHEL 的 restorecon 习惯当成普适步骤。
 
 ## 3. 全局配置
 
@@ -346,7 +346,7 @@ Windows 资源管理器地址栏直接输 `\\192.168.1.100\data`，弹出的认�
 
 **IP 连得上，主机名连不上。** `\\192.168.1.100\data` 正常而 `\\fs-01\data` 报找不到——问题不在 Samba，在名称解析。依次确认：DNS 里有没有这条 A 记录（现代环境的首选路径）；nmbd 是否在跑、`systemctl status nmb`（Debian 系 `nmbd`）是否 active——NetBIOS 短名解析靠它；客户端是否还依赖早已关闭的 SMB1 浏览。把名字换成 IP 试一次就能把故障面从"Samba 服务"收窄到"名字到地址这一段"，这是所有名称类问题的第一刀。
 
-**中文文件名在 Windows 侧乱码。** 现代 Samba 的磁盘字符集（unix charset）默认 UTF-8，与 Linux 文件系统一致，正常不需要动；乱码多发生在两种边角：共享目录里躺着早年 GBK 时代落盘的旧文件名，或 smb.conf 被人按老教程显式写了 `unix charset = GB2312` 之类的过时值。处置原则是"以 UTF-8 为唯一真相"：删掉可疑的 charset 覆盖让默认值生效，旧文件用 `convmv -f GBK -t UTF-8 -r --notest 目录` 批量转码——先去掉 `--notest` 干跑一遍看清影响面，再实转，与改任何批量数据的纪律一致。客户端侧（Windows 10+/macOS）对 UTF-8 over SMB 的支持早已默认开启，不需要在两端做"对齐编码"的多余配置。
+**中文文件名在 Windows 侧乱码。** 现代 Samba 的磁盘字符集（unix charset）默认 UTF-8，与 Linux 文件系统一致，正常不需要动；乱码多发生在两种边角：共享目录里躺着早年 GBK 时代落盘的旧文件名，或 smb.conf 被人按旧资料显式写了 `unix charset = GB2312` 之类的过时值。处置原则是"以 UTF-8 为唯一真相"：删掉可疑的 charset 覆盖让默认值生效，旧文件用 `convmv -f GBK -t UTF-8 -r --notest 目录` 批量转码——先去掉 `--notest` 干跑一遍看清影响面，再实转，与改任何批量数据的纪律一致。客户端侧（Windows 10+/macOS）对 UTF-8 over SMB 的支持早已默认开启，不需要在两端做"对齐编码"的多余配置。
 
 **共享里的符号链接跟不过去。** 客户端点开共享里的软链报找不到目标——这是安全设计而非故障：链接的目标可能在共享根之外，Samba 默认不跟随（`wide links` 与 `unix extensions` 的交互决定行为），防止客户端借链接越权读到服务器上任意路径。正确做法是把真实数据放进共享树内、用目录替代软链组织结构；确有跨目录聚合需求时，了解 `allow insecure wide links` 的风险再显式开启，并配合 SELinux 与文件权限双保险——"默认不给"与"显式开口"的取舍，和防火墙的默认拒绝模型是同一课。
 

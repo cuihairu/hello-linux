@@ -4,10 +4,10 @@
 
 > 内容参考自内核源码树（v6.12）与上述书目（概念框架），见文末参考资料。
 
-## 学习目标
+## 本篇覆盖
 
-- 说清 memblock → buddy → slub 三层账本的分工，理解虚拟地址与物理页为何是两本账
-- 读懂 `struct page`、`zone`/`free_area`、VMA、`kmem_cache` 四个核心结构，能把 `/proc` 输出与源码字段对上
+- 说清 memblock → buddy → slub 三层账本的分工
+- 读懂 `struct page`、`zone`/`free_area`、VMA、`kmem_cache` 四个核心结构
 - 默画缺页从 `exc_page_fault` 到 `do_wp_page` 的主干，以及 buddy、slub 两条分配路的调用链
 - 用 minflt 计数、smaps、bpftrace 实证按需分页与写时复制——结论靠证据，不靠背诵
 - 避开 min_flt/maj_flt 混淆、slab 三实现老黄历、smaps 口径不清等高频坑
