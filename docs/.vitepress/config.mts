@@ -741,6 +741,10 @@ export default defineConfig({
             {
               text: '文档结构审计（2026-10-19）',
               link: '/review/structure-audit-2026-10-19'
+            },
+            {
+              text: '内容复核（2026-10-19）',
+              link: '/review/content-review-2026-10-19'
             }
           ]
         }
