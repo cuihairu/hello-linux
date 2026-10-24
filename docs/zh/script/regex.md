@@ -144,7 +144,7 @@ https://a.example https://b.example
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [conditionals](conditionals.md)
 - [examples](examples.md)

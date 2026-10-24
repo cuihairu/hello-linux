@@ -138,6 +138,6 @@ Hello, World!
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
-- [README](/system-management/README.md)
-- [automation](/system-management/automation.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [README](/zh/system-management/README.md)
+- [automation](/zh/system-management/automation.md)

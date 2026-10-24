@@ -125,9 +125,9 @@ $ (( a += 3 )) && echo "$a"      # 算术后赋值 → 18
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [bash-basics](bash-basics.md)
 - [examples](examples.md)
 - [functions](functions.md)
-- [userland](/source/userland.md)
+- [userland](/zh/source/userland.md)

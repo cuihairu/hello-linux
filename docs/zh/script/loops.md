@@ -141,8 +141,8 @@ Shell 处理命令行分两个阶段：**扩展阶段**（变量、命令替换�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
 - [README](README.md)
 - [examples](examples.md)
 - [text-processing](text-processing.md)

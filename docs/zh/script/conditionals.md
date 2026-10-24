@@ -117,7 +117,7 @@ $ ./backup-type.sh bogus     # → 用法: ./backup-type.sh {full|incr}，$? = 2
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [bash-basics](bash-basics.md)
 - [debugging](debugging.md)

@@ -302,7 +302,7 @@ Shell 没有一等函数对象——不能把函数塞进变量再当值传（Ba
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [debugging](debugging.md)
 - [examples](examples.md)

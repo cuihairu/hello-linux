@@ -247,9 +247,9 @@ COMMENT
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [process](/commands/system/process.md)
-- [glossary](/glossary.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [process](/zh/commands/system/process.md)
+- [glossary](/zh/glossary.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [examples](examples.md)
 - [variables](variables.md)
