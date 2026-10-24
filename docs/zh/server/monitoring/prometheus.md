@@ -188,12 +188,12 @@ receivers:
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [monitoring](/commands/system/monitoring.md)
-- [knowledge](/knowledge.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [README](/server/README.md)
-- [ci-cd](/server/ci-cd.md)
-- [redis](/server/redis.md)
-- [automation](/system-management/automation.md)
-- [backup-and-recovery](/system-management/backup-and-recovery.md)
+- [monitoring](/zh/commands/system/monitoring.md)
+- [knowledge](/zh/knowledge.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [README](/zh/server/README.md)
+- [ci-cd](/zh/server/ci-cd.md)
+- [redis](/zh/server/redis.md)
+- [automation](/zh/system-management/automation.md)
+- [backup-and-recovery](/zh/system-management/backup-and-recovery.md)

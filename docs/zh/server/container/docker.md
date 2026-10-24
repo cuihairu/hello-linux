@@ -278,13 +278,13 @@ Docker 不是和 systemd 抢活干的另一套 init：`docker.service` 本身就
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [knowledge](/knowledge.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
-- [README](/server/README.md)
-- [ci-cd](/server/ci-cd.md)
-- [ldap](/server/ldap.md)
-- [routing-nat](/server/routing-nat.md)
-- [kvm](/server/virtualization/kvm.md)
-- [automation](/system-management/automation.md)
+- [glossary](/zh/glossary.md)
+- [knowledge](/zh/knowledge.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
+- [README](/zh/server/README.md)
+- [ci-cd](/zh/server/ci-cd.md)
+- [ldap](/zh/server/ldap.md)
+- [routing-nat](/zh/server/routing-nat.md)
+- [kvm](/zh/server/virtualization/kvm.md)
+- [automation](/zh/system-management/automation.md)

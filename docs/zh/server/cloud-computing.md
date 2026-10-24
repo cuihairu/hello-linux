@@ -122,9 +122,9 @@ SSH 密钥的生成与 authorized_keys 语义见[SSH 远程登录](./ssh.md)，c
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
-- [README](/research/README.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
+- [knowledge](/zh/knowledge.md)
+- [README](/zh/research/README.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
 - [README](README.md)

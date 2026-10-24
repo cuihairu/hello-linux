@@ -413,7 +413,7 @@ Nginx 的知识可以收成四条主线：进程与配置结构（master/worker�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [README](/server/README.md)
+- [knowledge](/zh/knowledge.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [README](/zh/server/README.md)

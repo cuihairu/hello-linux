@@ -304,8 +304,8 @@ $ dmesg | tail -2
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
-- [selinux](/security/selinux.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [selinux](/zh/security/selinux.md)
 - [README](README.md)
 - [ldap](ldap.md)
 - [samba](samba.md)

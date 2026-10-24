@@ -260,12 +260,12 @@ $ virt-clone --original debian12 --name debian12-tpl --auto-clone
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [knowledge](/knowledge.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [authoritative-books](/research/authoritative-books.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
-- [README](/server/README.md)
-- [cloud-computing](/server/cloud-computing.md)
-- [cross-compile](/source/cross-compile.md)
+- [glossary](/zh/glossary.md)
+- [knowledge](/zh/knowledge.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [authoritative-books](/zh/research/authoritative-books.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
+- [README](/zh/server/README.md)
+- [cloud-computing](/zh/server/cloud-computing.md)
+- [cross-compile](/zh/source/cross-compile.md)

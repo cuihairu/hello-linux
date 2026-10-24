@@ -320,10 +320,10 @@ $ echo 'nameserver 223.5.5.5' | sudo tee /etc/resolv.conf
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [commands-practice](/network/commands-practice.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [commands-practice](/zh/network/commands-practice.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [cloud-computing](cloud-computing.md)
 - [dhcp](dhcp.md)
 - [network-parameters](network-parameters.md)
-- [kvm](/server/virtualization/kvm.md)
+- [kvm](/zh/server/virtualization/kvm.md)

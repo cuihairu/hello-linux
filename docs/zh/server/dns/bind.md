@@ -237,12 +237,12 @@ $ sudo journalctl -u named -f              # Debian unit 名为 bind9
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [commands-practice](/network/commands-practice.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [README](/server/README.md)
-- [dhcp](/server/dhcp.md)
-- [postfix](/server/mail/postfix.md)
-- [network-parameters](/server/network-parameters.md)
-- [ntp](/server/ntp.md)
-- [scheduled-tasks](/system-management/scheduled-tasks.md)
+- [glossary](/zh/glossary.md)
+- [commands-practice](/zh/network/commands-practice.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [README](/zh/server/README.md)
+- [dhcp](/zh/server/dhcp.md)
+- [postfix](/zh/server/mail/postfix.md)
+- [network-parameters](/zh/server/network-parameters.md)
+- [ntp](/zh/server/ntp.md)
+- [scheduled-tasks](/zh/system-management/scheduled-tasks.md)

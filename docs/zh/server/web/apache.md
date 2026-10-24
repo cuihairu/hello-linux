@@ -273,5 +273,5 @@ sudo systemctl reload apache2   # 或 httpd
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
-- [README](/server/README.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [README](/zh/server/README.md)

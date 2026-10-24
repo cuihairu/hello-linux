@@ -299,6 +299,6 @@ kea-dhcp4: active                         # keactrl 统一管理 kea-dhcp4/-6 �
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [glossary](/zh/glossary.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)

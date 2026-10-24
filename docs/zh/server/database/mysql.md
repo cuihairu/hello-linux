@@ -348,4 +348,4 @@ MySQL 运维可以收成四条主线：装对分支（MySQL vs MariaDB、包名�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/server/README.md)
+- [README](/zh/server/README.md)

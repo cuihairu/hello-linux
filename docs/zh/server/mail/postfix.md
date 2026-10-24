@@ -227,6 +227,6 @@ $ sudo tail -f /var/log/mail.log     # Debian 布局
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
-- [README](/server/README.md)
-- [prometheus](/server/monitoring/prometheus.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [README](/zh/server/README.md)
+- [prometheus](/zh/server/monitoring/prometheus.md)

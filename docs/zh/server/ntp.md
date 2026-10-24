@@ -269,8 +269,8 @@ $ ntpq -p
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [network-parameters](network-parameters.md)
-- [logging](/system-management/logging.md)
-- [scheduled-tasks](/system-management/scheduled-tasks.md)
+- [logging](/zh/system-management/logging.md)
+- [scheduled-tasks](/zh/system-management/scheduled-tasks.md)

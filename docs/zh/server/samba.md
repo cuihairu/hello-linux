@@ -395,9 +395,9 @@ smbclient //server/data -U smbuser -e
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [selinux](/security/selinux.md)
+- [glossary](/zh/glossary.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [selinux](/zh/security/selinux.md)
 - [README](README.md)
 - [ldap](ldap.md)
 - [nfs](nfs.md)

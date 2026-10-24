@@ -139,12 +139,12 @@ RHEL 系改端口后漏掉 `semanage` 是最常见的「改完连不上」：ssh
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
-- [README](/research/README.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [authoritative-books](/research/authoritative-books.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
+- [knowledge](/zh/knowledge.md)
+- [README](/zh/research/README.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [authoritative-books](/zh/research/authoritative-books.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
 - [README](README.md)
 - [ci-cd](ci-cd.md)
 - [cloud-computing](cloud-computing.md)
