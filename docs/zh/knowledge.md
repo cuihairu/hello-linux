@@ -147,4 +147,4 @@ simple bind 的密码明文进网，这是协议层事实。加密两条路：ld
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/research/README.md)
+- [README](/zh/research/README.md)
