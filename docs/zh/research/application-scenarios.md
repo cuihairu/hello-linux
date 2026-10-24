@@ -84,7 +84,7 @@ ArchWiki 目录页（镜像实取）把「视觉美化」（25 页）、「图�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
+- [knowledge](/zh/knowledge.md)
 - [README](README.md)
 - [coverage-matrix](coverage-matrix.md)
 - [gap-fill](gap-fill.md)

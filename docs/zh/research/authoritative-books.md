@@ -125,7 +125,7 @@
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
+- [knowledge](/zh/knowledge.md)
 - [README](README.md)
 - [coverage-matrix](coverage-matrix.md)
 - [gap-fill](gap-fill.md)

@@ -145,7 +145,7 @@
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
+- [knowledge](/zh/knowledge.md)
 - [README](README.md)
 - [application-scenarios](application-scenarios.md)
 - [authoritative-books](authoritative-books.md)
