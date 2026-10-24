@@ -263,6 +263,6 @@ sudo dnf install htop
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [package](/commands/package.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [README](/zh/commands/README.md)
+- [package](/zh/commands/package.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

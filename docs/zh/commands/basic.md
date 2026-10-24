@@ -223,11 +223,11 @@ inode 不会变的是硬链接（所以 `ls -li` 看两个硬链接 inode 相同
 
 ## 同层页面
 
-- [README](/commands/README.md)
+- [README](/zh/commands/README.md)
 
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
 - [README](README.md)
-- [directory](/commands/basic/directory.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [directory](/zh/commands/basic/directory.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

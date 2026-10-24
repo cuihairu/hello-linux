@@ -297,11 +297,11 @@ ps aux --sort=-%mem | head -6
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [system](/commands/system.md)
+- [README](/zh/commands/README.md)
+- [system](/zh/commands/system.md)
 - [memory](memory.md)
 - [process](process.md)
 - [system_info](system_info.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [automation](/system-management/automation.md)
-- [backup-and-recovery](/system-management/backup-and-recovery.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [automation](/zh/system-management/automation.md)
+- [backup-and-recovery](/zh/system-management/backup-and-recovery.md)

@@ -366,10 +366,10 @@ grep -i error app.log | awk '{print $3}' | sort | uniq -c | sort -rn | head
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [directory](/commands/basic/directory.md)
-- [file](/commands/basic/file.md)
-- [text](/commands/text.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
-- [text-processing](/script/text-processing.md)
+- [README](/zh/commands/README.md)
+- [directory](/zh/commands/basic/directory.md)
+- [file](/zh/commands/basic/file.md)
+- [text](/zh/commands/text.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
+- [text-processing](/zh/script/text-processing.md)

@@ -328,8 +328,8 @@ command -v nano && nano file || command -v vim && vim file || vi file
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [text](/commands/text.md)
+- [README](/zh/commands/README.md)
+- [text](/zh/commands/text.md)
 - [text_processing](text_processing.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

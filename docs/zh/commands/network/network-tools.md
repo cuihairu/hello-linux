@@ -223,10 +223,10 @@ nmcli 的常用句型可以收成五类：查状态 `general status`/`device sta
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [network](/commands/network.md)
+- [README](/zh/commands/README.md)
+- [network](/zh/commands/network.md)
 - [network](network.md)
-- [commands-practice](/network/commands-practice.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [routing-nat](/server/routing-nat.md)
-- [ssh](/server/ssh.md)
+- [commands-practice](/zh/network/commands-practice.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [routing-nat](/zh/server/routing-nat.md)
+- [ssh](/zh/server/ssh.md)

@@ -337,11 +337,11 @@ $ sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* { @[comm] = count(); }'
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [system](/commands/system.md)
+- [README](/zh/commands/README.md)
+- [system](/zh/commands/system.md)
 - [configuration-management](configuration-management.md)
 - [monitoring](monitoring.md)
 - [process](process.md)
 - [system_info](system_info.md)
-- [memory](/hardware/memory.md)
-- [performance](/system-management/performance.md)
+- [memory](/zh/hardware/memory.md)
+- [performance](/zh/system-management/performance.md)

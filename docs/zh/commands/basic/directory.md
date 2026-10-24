@@ -532,7 +532,7 @@ df -h .
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [basic](/commands/basic.md)
+- [README](/zh/commands/README.md)
+- [basic](/zh/commands/basic.md)
 - [file](file.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

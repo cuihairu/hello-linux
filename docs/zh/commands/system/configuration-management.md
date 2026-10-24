@@ -359,7 +359,7 @@ Master/Minion 架构、ZeroMQ 通道，`salt '*' test.ping` 级别的扇出速�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [system](/commands/system.md)
+- [README](/zh/commands/README.md)
+- [system](/zh/commands/system.md)
 - [system_info](system_info.md)
-- [automation](/system-management/automation.md)
+- [automation](/zh/system-management/automation.md)

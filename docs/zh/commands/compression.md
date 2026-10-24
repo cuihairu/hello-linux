@@ -703,6 +703,6 @@ tar -cf - /path | pbzip2 > backup.tar.bz2
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [tarball](/basic/packages/tarball.md)
+- [tarball](/zh/basic/packages/tarball.md)
 - [README](README.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

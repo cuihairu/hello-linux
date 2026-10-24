@@ -273,10 +273,10 @@ GNU 工具（Linux 上的主流）支持 `--long-option` 和 `-abc` 合并短选
 
 ## 同层页面
 
-- [basic](/commands/basic.md)
-- [compression](/commands/compression.md)
-- [system](/commands/system.md)
-- [text](/commands/text.md)
+- [basic](/zh/commands/basic.md)
+- [compression](/zh/commands/compression.md)
+- [system](/zh/commands/system.md)
+- [text](/zh/commands/text.md)
 
 <!-- BACKLINKS-AUTO -->
 ## 相关页面

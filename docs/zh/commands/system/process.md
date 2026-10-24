@@ -310,13 +310,13 @@ $ atrm 1                # 删除
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [system](/commands/system.md)
+- [README](/zh/commands/README.md)
+- [system](/zh/commands/system.md)
 - [monitoring](monitoring.md)
 - [system_info](system_info.md)
-- [glossary](/glossary.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
-- [README](/source/README.md)
-- [ipc](/source/ipc.md)
-- [process-scheduling](/source/process-scheduling.md)
+- [glossary](/zh/glossary.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
+- [README](/zh/source/README.md)
+- [ipc](/zh/source/ipc.md)
+- [process-scheduling](/zh/source/process-scheduling.md)

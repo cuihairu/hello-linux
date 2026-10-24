@@ -329,6 +329,6 @@ Arch 注意事项：滚动更新下**先保证系统整体是最新的**再装�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [system](/commands/system.md)
+- [README](/zh/commands/README.md)
+- [system](/zh/commands/system.md)
 - [monitoring](monitoring.md)

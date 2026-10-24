@@ -290,9 +290,9 @@ Link 3 (ztksetoehl):
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [README](/commands/README.md)
-- [network](/commands/network.md)
+- [README](/zh/commands/README.md)
+- [network](/zh/commands/network.md)
 - [network-tools](network-tools.md)
-- [knowledge](/knowledge.md)
-- [commands-practice](/network/commands-practice.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [knowledge](/zh/knowledge.md)
+- [commands-practice](/zh/network/commands-practice.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

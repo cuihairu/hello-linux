@@ -263,5 +263,5 @@ Linux 会把暂时用不到的内存拿去做页缓存（buff/cache）加速磁�
 ## 相关页面
 
 - [README](README.md)
-- [README](/system-management/README.md)
-- [performance](/system-management/performance.md)
+- [README](/zh/system-management/README.md)
+- [performance](/zh/system-management/performance.md)
