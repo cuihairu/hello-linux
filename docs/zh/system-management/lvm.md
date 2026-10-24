@@ -302,9 +302,9 @@ LVM 是块设备虚拟化的一层，它上面或下面还可以叠加密与冗�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [storage](/hardware/storage.md)
-- [knowledge](/knowledge.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
+- [glossary](/zh/glossary.md)
+- [storage](/zh/hardware/storage.md)
+- [knowledge](/zh/knowledge.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
 - [README](README.md)

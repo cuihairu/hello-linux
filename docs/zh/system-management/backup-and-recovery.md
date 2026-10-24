@@ -533,9 +533,9 @@ echo "fresh"
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [knowledge](/zh/knowledge.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [automation](automation.md)
 - [lvm](lvm.md)

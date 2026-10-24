@@ -327,12 +327,12 @@ SSD/NVMe 上默认的 `mq-deadline` 或 `none`（多队列直通）通常无需�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [cpu](/hardware/cpu.md)
-- [knowledge](/knowledge.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [ipc](/source/ipc.md)
-- [memory-management](/source/memory-management.md)
+- [glossary](/zh/glossary.md)
+- [cpu](/zh/hardware/cpu.md)
+- [knowledge](/zh/knowledge.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [ipc](/zh/source/ipc.md)
+- [memory-management](/zh/source/memory-management.md)
 - [README](README.md)
 - [boot-process](boot-process.md)

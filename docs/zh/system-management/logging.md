@@ -319,9 +319,9 @@ journal 侧查 `SystemMaxUse` 是否缺配、`/var/log/journal` 权限是否正�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [selinux](/security/selinux.md)
-- [README](/source/README.md)
-- [driver-framework](/source/driver-framework.md)
+- [glossary](/zh/glossary.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [selinux](/zh/security/selinux.md)
+- [README](/zh/source/README.md)
+- [driver-framework](/zh/source/driver-framework.md)
 - [README](README.md)

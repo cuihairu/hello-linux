@@ -535,10 +535,10 @@ echo "deploy ok: $DATE"
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [ci-cd](/server/ci-cd.md)
-- [ldap](/server/ldap.md)
+- [knowledge](/zh/knowledge.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [ci-cd](/zh/server/ci-cd.md)
+- [ldap](/zh/server/ldap.md)
 - [README](README.md)
 - [backup-and-recovery](backup-and-recovery.md)

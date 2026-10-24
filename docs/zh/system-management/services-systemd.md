@@ -352,13 +352,13 @@ $ systemctl analyze critical-chain nginx.service  # 它所在的真正关键路�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [knowledge](/knowledge.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
-- [ci-cd](/server/ci-cd.md)
-- [README](/source/README.md)
-- [tracing-tools](/source/tracing-tools.md)
-- [userland](/source/userland.md)
+- [glossary](/zh/glossary.md)
+- [knowledge](/zh/knowledge.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
+- [ci-cd](/zh/server/ci-cd.md)
+- [README](/zh/source/README.md)
+- [tracing-tools](/zh/source/tracing-tools.md)
+- [userland](/zh/source/userland.md)
 - [README](README.md)
 - [boot-process](boot-process.md)

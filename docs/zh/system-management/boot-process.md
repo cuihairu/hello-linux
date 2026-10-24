@@ -269,10 +269,10 @@ multi-user.target +0.0s
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [pam-sudo](/security/pam-sudo.md)
-- [build-and-modules](/source/build-and-modules.md)
-- [cross-compile](/source/cross-compile.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [pam-sudo](/zh/security/pam-sudo.md)
+- [build-and-modules](/zh/source/build-and-modules.md)
+- [cross-compile](/zh/source/cross-compile.md)
 - [README](README.md)
 - [lvm](lvm.md)

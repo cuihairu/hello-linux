@@ -195,4 +195,4 @@ AppStream 直接提供的是最小化的 `ansible-core`，
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
