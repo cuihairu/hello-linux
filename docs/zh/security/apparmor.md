@@ -322,8 +322,8 @@ $ docker run --security-opt apparmor=unconfined ...
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
+- [knowledge](/zh/knowledge.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
 - [README](README.md)
 - [hardening](hardening.md)

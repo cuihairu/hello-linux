@@ -350,9 +350,9 @@ OSSEC/Wazuh 属于完整的 HIDS：日志分析 + 文件完整性 + 注册表式
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [firewall](firewall.md)
 - [hardening](hardening.md)
 - [pam-sudo](pam-sudo.md)
-- [ssh](/server/ssh.md)
+- [ssh](/zh/server/ssh.md)

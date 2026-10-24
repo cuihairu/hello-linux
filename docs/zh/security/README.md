@@ -113,9 +113,9 @@ sudo dnf install firewalld aide fail2ban lynis gnupg2
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [services](/basic/services.md)
-- [log_management](/basic/services/log_management.md)
-- [README](/hardware/README.md)
-- [README](/network/README.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [README](/system-management/README.md)
+- [services](/zh/basic/services.md)
+- [log_management](/zh/basic/services/log_management.md)
+- [README](/zh/hardware/README.md)
+- [README](/zh/network/README.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [README](/zh/system-management/README.md)

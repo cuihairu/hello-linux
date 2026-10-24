@@ -270,8 +270,8 @@ UUID=... /srv  ext4  defaults,context="system_u:object_r:var_t:s0"  0 2
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [glossary](/zh/glossary.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [apparmor](apparmor.md)
 - [hardening](hardening.md)

@@ -344,8 +344,8 @@ $ sudo grep COMMAND /var/log/auth.log | tail -3
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [glossary](/zh/glossary.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
-- [ldap](/server/ldap.md)
-- [ssh](/server/ssh.md)
+- [ldap](/zh/server/ldap.md)
+- [ssh](/zh/server/ssh.md)

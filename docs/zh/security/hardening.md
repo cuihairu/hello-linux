@@ -346,13 +346,13 @@ Lynis 的 `suggestions` 会包含大量与业务无关的建议，**不要全盘
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [memory](/commands/system/memory.md)
-- [knowledge](/knowledge.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [memory](/zh/commands/system/memory.md)
+- [knowledge](/zh/knowledge.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [encryption](encryption.md)
 - [intrusion-detection](intrusion-detection.md)
 - [pam-sudo](pam-sudo.md)
-- [docker](/server/container/docker.md)
-- [ssh](/server/ssh.md)
+- [docker](/zh/server/container/docker.md)
+- [ssh](/zh/server/ssh.md)

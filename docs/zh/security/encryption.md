@@ -301,8 +301,8 @@ LUKS2 是当前默认格式（`cryptsetup` 新版本默认 `--type luks2`），�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
 - [README](README.md)
 - [hardening](hardening.md)
 - [intrusion-detection](intrusion-detection.md)
-- [ssh](/server/ssh.md)
+- [ssh](/zh/server/ssh.md)
