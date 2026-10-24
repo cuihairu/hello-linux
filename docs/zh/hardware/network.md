@@ -248,4 +248,4 @@ rfkill list all   # 0: WLAN Soft blocked: yes → rfkill unblock；Hard = 物理
 - [README](README.md)
 - [architecture](architecture.md)
 - [storage](storage.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

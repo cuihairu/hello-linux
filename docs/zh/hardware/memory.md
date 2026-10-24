@@ -337,4 +337,4 @@ numa_miss       12        9   # 溢到对端——持续涨才值得关注
 - [architecture](architecture.md)
 - [cpu](cpu.md)
 - [storage](storage.md)
-- [README](/source/README.md)
+- [README](/zh/source/README.md)

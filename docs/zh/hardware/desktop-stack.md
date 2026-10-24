@@ -234,9 +234,9 @@ X 转发适合"就想跑一下 `system-config-*` 这类图形配置工具"的场
 ## 相关页面
 
 - [README](README.md)
-- [knowledge](/knowledge.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [authoritative-books](/research/authoritative-books.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
-- [official-docs](/research/official-docs.md)
+- [knowledge](/zh/knowledge.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [authoritative-books](/zh/research/authoritative-books.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
+- [official-docs](/zh/research/official-docs.md)

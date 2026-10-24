@@ -278,4 +278,4 @@ command -v numactl >/dev/null && numactl --hardware   # 多路才用得上；单
 - [README](README.md)
 - [architecture](architecture.md)
 - [memory](memory.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

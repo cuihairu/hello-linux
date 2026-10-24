@@ -320,12 +320,12 @@ sudo dmidecode -t baseboard   # 主板型号；-t processor 看插槽上的 CPU
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)
 - [cpu](cpu.md)
 - [desktop-stack](desktop-stack.md)
 - [memory](memory.md)
 - [storage](storage.md)
-- [knowledge](/knowledge.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [cross-compile](/source/cross-compile.md)
+- [knowledge](/zh/knowledge.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [cross-compile](/zh/source/cross-compile.md)
