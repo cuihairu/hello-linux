@@ -1263,6 +1263,66 @@ def test_check_index_flags_unlisted_route(site):
     assert stats["index_unlisted"] == 1
 
 
+def test_check_index_checks_both_locale_trees(site):
+    """双语树：根 SUMMARY 只核对英文页，zh/SUMMARY 只核对 /zh/ 下的中文页。"""
+    write_md(site.docs, "index.md", "# I\n")
+    write_md(site.docs, "guide.md", "# G\n")
+    write_md(site.docs, "zh/index.md", "# 中文首页\n")
+    write_md(site.docs, "zh/guide.md", "# 中文指南\n")
+    write_md(site.docs, "zh/SUMMARY.md", "- [指南](./guide.md)\n")
+    (site.docs / "SUMMARY.md").write_text("- [G](./guide.md)\n", encoding="utf-8")
+    (site.vpc / "config.mts").write_text(
+        "themeConfig: { nav: [{ link: '/guide' }] }", encoding="utf-8"
+    )
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_index(issues, stats)
+    assert issues == []
+    assert stats["index_entries"] == 2  # 每棵树一个条目
+    assert stats["index_listed"] == 2
+    assert stats["index_exempt"] == 4  # 两棵树各自的 index.md + SUMMARY.md
+    assert stats["index_orphan"] == 0
+    assert stats["index_sidebar_ok"] == 2  # 同一 config route 命中两棵树
+    assert stats["index_unlisted"] == 0
+
+
+def test_check_index_flags_zh_orphan(site):
+    """/zh/ 下的孤儿页由 zh/SUMMARY.md 报出，不波及根树。"""
+    write_md(site.docs, "index.md", "# I\n")
+    write_md(site.docs, "zh/zh-orphan.md", "# H\n")
+    write_md(site.docs, "zh/SUMMARY.md", "# 中文目录\n")
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_index(issues, stats)
+    assert (
+        "docs/zh/zh-orphan.md",
+        "index",
+        "orphan-page",
+        "not in SUMMARY.md",
+    ) in issues
+    assert stats["index_orphan"] == 1
+    assert stats["index_listed"] == 0
+    assert stats["index_exempt"] == 1  # 仅 zh/SUMMARY.md；根树无 SUMMARY 整树跳过
+
+
+def test_check_index_zh_tree_without_summary_is_skipped(site):
+    """只有根 SUMMARY 时，zh/ 整树不参与索引核对。"""
+    write_md(site.docs, "index.md", "# I\n")
+    write_md(site.docs, "listed.md", "# L\n")
+    write_md(site.docs, "zh/hidden.md", "# H\n")
+    (site.docs / "SUMMARY.md").write_text("- [L](./listed.md)\n", encoding="utf-8")
+    (site.vpc / "config.mts").write_text(
+        "themeConfig: { nav: [{ link: '/listed' }] }", encoding="utf-8"
+    )
+    issues: list[tuple] = []
+    stats: Counter = Counter()
+    cl.check_index(issues, stats)
+    assert issues == []  # zh/ 无 SUMMARY ⇒ 整树跳过
+    assert stats["index_listed"] == 1
+    assert stats["index_orphan"] == 0
+    assert stats["index_exempt"] == 2  # 根 index.md + SUMMARY.md
+
+
 # ---------------------------------------------------------------------------
 # check_sitemap
 # ---------------------------------------------------------------------------
@@ -1391,7 +1451,7 @@ def test_no_cover_pragmas_are_registered_with_reason():
             # 不可测点必须随行登记不可达理由（不许无理由排除）
             assert "不可达" in line, f"L{i + 1} pragma 缺少理由"
     # 不可测点全集：2 处控制流不可达的防御分支；增删必须同步本清单与登记
-    assert pragma_lines == [208, 251]
+    assert pragma_lines == [209, 252]
     notes = Path(__file__).read_text(encoding="utf-8")
     for ln in pragma_lines:
         assert f"L{ln}-{ln + 1}" in notes, f"pragma L{ln} 未在 COVERAGE_NOTES 登记"
@@ -1401,12 +1461,12 @@ def test_no_cover_pragmas_are_registered_with_reason():
 # COVERAGE_NOTES — 不可达分支（pragma 已在源码标注）
 # ---------------------------------------------------------------------------
 #
-# 1) check_source.check() L208-209 `if not path: return`
+# 1) check_source.check() L209-210 `if not path: return`
 #    可达条件：target 含 '#' 且 split 首段为空 ⇒ target 以 '#' 开头。
 #    但 L188 已对 startswith('#') 整支 return，L180 已吞空串。
 #    ⇒ 此防御分支在控制流上不可达。源码标 `# pragma: no cover`。
 #
-# 2) check_source README L251-252 `if not path: continue`
+# 2) check_source README L252-253 `if not path: continue`
 #    path = unquote(t.split('#')[0])。t 不以 '#' 开头（L247 已 continue）
 #    且非空（LINK_RE 要求 [^)\s]+），则 split 首段非空；unquote 不会把
 #    非空串解码为空串 ⇒ 不可达。源码标 `# pragma: no cover`。

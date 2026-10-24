@@ -3,8 +3,9 @@
 
 模式：
   1) 源码级：扫描 docs/**/*.md 的内部链接、锚点、图片（围栏内跳过）
-  2) 索引级：SUMMARY.md 必须覆盖全部内容页（无孤儿页），且每个条目都出现在
-     config.mts 的 nav/sidebar 中（无目录外页面）；首页与 SUMMARY 自身豁免
+  2) 索引级：每棵语言树（根目录与 zh/）的 SUMMARY.md 必须覆盖该树全部内容页
+     （无孤儿页），且每个条目都出现在 config.mts 的 nav/sidebar 中（无目录外
+     页面）；两棵树的首页与 SUMMARY 自身豁免
   3) 产物级（可选）：docs/.vitepress/dist 存在时，校验全部 HTML 的 href/src/id，
      并与 sitemap.xml 双向对账（每条 loc 可达、每个页面在册、404 豁免）
 
@@ -303,47 +304,66 @@ def check_config(issues: list[tuple], stats: Counter) -> None:
             )
 
 
+# Locale trees: each tree holds its own SUMMARY.md whose links are relative
+# to that tree. config.mts declares the routes once (root locale) and
+# projects the zh tree under /zh/, so both SUMMARY trees are reconciled
+# against the same route set.
+LOCALE_ROOTS = ("", "zh/")
+
+
+def tree_of(rel: str) -> str:
+    """Locale tree a docs-relative path belongs to: 'zh/' or '' for the root."""
+    for root in LOCALE_ROOTS:
+        if root and rel.startswith(root):
+            return root
+    return ""
+
+
 def check_index(issues: list[tuple], stats: Counter) -> None:
-    summary = DOCS / "SUMMARY.md"
-    if not summary.exists():
-        return
-
-    entries: set[str] = set()
-    text = blank_fences(summary.read_text(encoding="utf-8"))
-    for m in LINK_RE.finditer(text):
-        target = m.group(2)
-        if is_external(target):
-            stats["external"] += 1
-            continue
-        rel = unquote(target.split("#", 1)[0]).lstrip("./")
-        if rel:
-            entries.add(rel)
-    stats["index_entries"] = len(entries)
-
     config_routes: set[str] = set()
     cfg = DOCS / ".vitepress" / "config.mts"
     if cfg.exists():
         for link in re.findall(r"link:\s*'([^']+)'", cfg.read_text(encoding="utf-8")):
-            config_routes.add(link.split("#", 1)[0].rstrip("/"))
+            config_routes.add(link.split("#", 1)[0].rstrip("/").lstrip("/"))
 
-    for p in md_files():
-        rel = p.relative_to(DOCS).as_posix()
-        if rel in ("SUMMARY.md", "index.md"):
-            stats["index_exempt"] += 1
+    for root in LOCALE_ROOTS:
+        summary = DOCS / root / "SUMMARY.md"
+        if not summary.exists():
             continue
-        if rel in entries:
-            stats["index_listed"] += 1
-        else:
-            issues.append((f"docs/{rel}", "index", "orphan-page", "not in SUMMARY.md"))
-            stats["index_orphan"] += 1
 
-    for rel in sorted(entries):
-        route = "/" + rel.removesuffix(".md")
-        if route in config_routes:
-            stats["index_sidebar_ok"] += 1
-        else:
-            issues.append(("docs/SUMMARY.md", "index", "not-in-sidebar", route))
-            stats["index_unlisted"] += 1
+        entries: set[str] = set()
+        text = blank_fences(summary.read_text(encoding="utf-8"))
+        for m in LINK_RE.finditer(text):
+            target = m.group(2)
+            if is_external(target):
+                stats["external"] += 1
+                continue
+            rel = unquote(target.split("#", 1)[0]).lstrip("./")
+            if rel:
+                entries.add(rel)
+        stats["index_entries"] += len(entries)
+
+        for p in md_files():
+            rel = p.relative_to(DOCS).as_posix()
+            if tree_of(rel) != root:
+                continue
+            local = rel[len(root):]
+            if local in ("SUMMARY.md", "index.md"):
+                stats["index_exempt"] += 1
+                continue
+            if local in entries:
+                stats["index_listed"] += 1
+            else:
+                issues.append((f"docs/{rel}", "index", "orphan-page", "not in SUMMARY.md"))
+                stats["index_orphan"] += 1
+
+        for rel in sorted(entries):
+            route = "/" + rel.removesuffix(".md")
+            if route.lstrip("/") in config_routes:
+                stats["index_sidebar_ok"] += 1
+            else:
+                issues.append((f"docs/{root}SUMMARY.md", "index", "not-in-sidebar", route))
+                stats["index_unlisted"] += 1
 
 
 def route_of(h: Path) -> str:
