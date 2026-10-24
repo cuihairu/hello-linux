@@ -185,7 +185,7 @@ done
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [services](/basic/services.md)
-- [README](/hardware/README.md)
-- [network](/hardware/network.md)
-- [README](/system-management/README.md)
+- [services](/zh/basic/services.md)
+- [README](/zh/hardware/README.md)
+- [network](/zh/hardware/network.md)
+- [README](/zh/system-management/README.md)

@@ -676,5 +676,5 @@ agent、自动发现、模板、告警内置，
 - [README](README.md)
 - [load-balancing](load-balancing.md)
 - [vpn](vpn.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [performance](/system-management/performance.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [performance](/zh/system-management/performance.md)

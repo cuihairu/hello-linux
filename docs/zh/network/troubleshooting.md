@@ -850,7 +850,7 @@ $ iperf3 -c 192.168.1.200 -t 10
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [network](/hardware/network.md)
+- [network](/zh/hardware/network.md)
 - [README](README.md)
 - [basics](basics.md)
 - [commands-practice](commands-practice.md)
@@ -859,6 +859,6 @@ $ iperf3 -c 192.168.1.200 -t 10
 - [network-monitoring](network-monitoring.md)
 - [tcpip-essentials](tcpip-essentials.md)
 - [vpn](vpn.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [network-parameters](/server/network-parameters.md)
-- [routing-nat](/server/routing-nat.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [network-parameters](/zh/server/network-parameters.md)
+- [routing-nat](/zh/server/routing-nat.md)

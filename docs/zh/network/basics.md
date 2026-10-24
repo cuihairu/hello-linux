@@ -676,8 +676,8 @@ VPN 连通后各跑一遍，
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)
 - [network-configuration](network-configuration.md)
 - [tcpip-essentials](tcpip-essentials.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

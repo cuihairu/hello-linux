@@ -327,9 +327,9 @@ UDP 套接字没有 ESTAB 之类的状态（无连接），恒为 `UNCONN`；第
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)
 - [commands-practice](commands-practice.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [README](/source/README.md)
-- [network-stack](/source/network-stack.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [README](/zh/source/README.md)
+- [network-stack](/zh/source/network-stack.md)
