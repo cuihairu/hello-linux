@@ -334,6 +334,78 @@ const SIDEBAR: NavNode[] = [
   }
 ]
 
+// The locale layer is merged over the site config as a whole, so each locale
+// below carries a COMPLETE themeConfig (shared bits come from sharedTheme).
+
+const sharedTheme = {
+  logo: '/logo.svg',
+  siteTitle: 'Hello Linux',
+  socialLinks: [{ icon: 'github', link: 'https://github.com/cuihairu/hello-linux' }]
+}
+
+function themeFor(zh: boolean) {
+  if (zh) {
+    return {
+      ...sharedTheme,
+      nav: project(NAV, true) as NavItem[],
+      sidebar: project(SIDEBAR, true),
+      outline: { level: [2, 3], label: '页面导航' },
+      lastUpdated: { text: '最后更新' },
+      docFooter: { prev: '上一篇', next: '下一篇' },
+      editLink: {
+        pattern: 'https://github.com/cuihairu/hello-linux/edit/main/docs/:path',
+        text: '在 GitHub 上编辑此页面'
+      },
+      footer: {
+        message: '基于 Apache License 2.0 许可发布',
+        copyright: '© 2024-2026 Hello Linux'
+      },
+      search: {
+        provider: 'local',
+        options: {
+          translations: {
+            button: { buttonText: '搜索文档' },
+            modal: {
+              noResultsText: '没有找到结果',
+              resetButtonTitle: '清除查询',
+              footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' }
+            }
+          }
+        }
+      }
+    }
+  }
+  return {
+    ...sharedTheme,
+    nav: project(NAV, false) as NavItem[],
+    sidebar: project(SIDEBAR, false),
+    outline: { level: [2, 3], label: 'On this page' },
+    lastUpdated: { text: 'Last updated' },
+    docFooter: { prev: 'Previous page', next: 'Next page' },
+    editLink: {
+      pattern: 'https://github.com/cuihairu/hello-linux/edit/main/docs/:path',
+      text: 'Edit this page on GitHub'
+    },
+    footer: {
+      message: 'Released under the Apache License 2.0.',
+      copyright: '© 2024-2026 Hello Linux'
+    },
+    search: {
+      provider: 'local',
+      options: {
+        translations: {
+          button: { buttonText: 'Search docs' },
+          modal: {
+            noResultsText: 'No results found',
+            resetButtonTitle: 'Clear query',
+            footer: { selectText: 'Select', navigateText: 'Navigate', closeText: 'Close' }
+          }
+        }
+      }
+    }
+  }
+}
+
 export default defineConfig({
   title: 'Hello Linux',
   description: 'Linux practice notes and war stories from a game developer',
@@ -345,6 +417,20 @@ export default defineConfig({
   // until every zh page has an English counterpart, then remove it so the
   // build fails on any dead link again.
   ignoreDeadLinks: true,
+  locales: {
+    root: {
+      label: 'English',
+      lang: 'en-US',
+      themeConfig: themeFor(false)
+    },
+    zh: {
+      label: '简体中文',
+      lang: 'zh-CN',
+      link: '/zh/',
+      themeConfig: themeFor(true)
+    }
+  },
+  themeConfig: sharedTheme,
   sitemap: {
     hostname: 'https://cuihairu.github.io',
     // sub-path 站点：new URL 的基准语义会丢弃 hostname 中的路径，
@@ -357,91 +443,5 @@ export default defineConfig({
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap' }]
-  ],
-  themeConfig: {
-    logo: '/logo.svg',
-    siteTitle: 'Hello Linux',
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/cuihairu/hello-linux' }
-    ],
-    locales: {
-      root: {
-        label: 'English',
-        lang: 'en-US',
-        nav: project(NAV, false) as NavItem[],
-        sidebar: project(SIDEBAR, false),
-        outline: {
-          level: [2, 3],
-          label: 'On this page'
-        },
-        lastUpdated: {
-          text: 'Last updated'
-        },
-        docFooter: {
-          prev: 'Previous page',
-          next: 'Next page'
-        },
-        editLink: {
-          pattern: 'https://github.com/cuihairu/hello-linux/edit/main/docs/:path',
-          text: 'Edit this page on GitHub'
-        },
-        footer: {
-          message: 'Released under the Apache License 2.0.',
-          copyright: '© 2024-2026 Hello Linux'
-        },
-        search: {
-          provider: 'local',
-          options: {
-            translations: {
-              button: { buttonText: 'Search docs' },
-              modal: {
-                noResultsText: 'No results found',
-                resetButtonTitle: 'Clear query',
-                footer: { selectText: 'Select', navigateText: 'Navigate', closeText: 'Close' }
-              }
-            }
-          }
-        }
-      },
-      zh: {
-        label: '简体中文',
-        lang: 'zh-CN',
-        link: '/zh/',
-        nav: project(NAV, true) as NavItem[],
-        sidebar: project(SIDEBAR, true),
-        outline: {
-          level: [2, 3],
-          label: '页面导航'
-        },
-        lastUpdated: {
-          text: '最后更新'
-        },
-        docFooter: {
-          prev: '上一篇',
-          next: '下一篇'
-        },
-        editLink: {
-          pattern: 'https://github.com/cuihairu/hello-linux/edit/main/docs/:path',
-          text: '在 GitHub 上编辑此页面'
-        },
-        footer: {
-          message: '基于 Apache License 2.0 许可发布',
-          copyright: '© 2024-2026 Hello Linux'
-        },
-        search: {
-          provider: 'local',
-          options: {
-            translations: {
-              button: { buttonText: '搜索文档' },
-              modal: {
-                noResultsText: '没有找到结果',
-                resetButtonTitle: '清除查询',
-                footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+  ]
 })
