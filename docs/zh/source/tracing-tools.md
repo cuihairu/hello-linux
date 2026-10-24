@@ -312,7 +312,7 @@ Breakpoint 1, start_kernel () at init/main.c:...
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)
 - [build-and-modules](build-and-modules.md)
 - [cross-compile](cross-compile.md)

@@ -256,7 +256,7 @@ dentry             186001    232300    192   21:  192.0   # active 涨了
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)
 - [driver-framework](driver-framework.md)
 - [memory-management](memory-management.md)

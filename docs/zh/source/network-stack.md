@@ -342,5 +342,5 @@ TCP 行的 inuse 是 TCP_ESTABLISHED + LISTEN 的活跃套接字，tw 是 TIME_W
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)

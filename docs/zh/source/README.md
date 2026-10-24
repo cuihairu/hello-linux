@@ -79,5 +79,5 @@
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [knowledge](/knowledge.md)
-- [coverage-matrix](/research/coverage-matrix.md)
+- [knowledge](/zh/knowledge.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)

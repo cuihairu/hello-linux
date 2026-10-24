@@ -343,7 +343,7 @@ CONFIG_HZ=1000
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)
 - [syscall-path](syscall-path.md)
 - [tracing-tools](tracing-tools.md)

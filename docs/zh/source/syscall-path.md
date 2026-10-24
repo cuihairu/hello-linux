@@ -342,7 +342,7 @@ Wolfgang Mauerer《深入Linux内核架构》适合当字典查细节——本�
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)
 - [driver-framework](driver-framework.md)
 - [interrupt-timers](interrupt-timers.md)

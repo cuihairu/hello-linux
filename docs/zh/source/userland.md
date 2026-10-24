@@ -286,5 +286,5 @@ systemd 侧的延伸分两支。操作一支回 [systemd 进阶](../system-manag
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)

@@ -242,7 +242,7 @@ D      5102 io_schedule              dd
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [glossary](/glossary.md)
+- [glossary](/zh/glossary.md)
 - [README](README.md)
 - [interrupt-timers](interrupt-timers.md)
 - [ipc](ipc.md)

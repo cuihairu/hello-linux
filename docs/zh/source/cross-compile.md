@@ -207,10 +207,10 @@ $ gdb-multiarch build-arm64/vmlinux        # 用带调试信息的 vmlinux，不
 <!-- BACKLINKS-AUTO -->
 ## 相关页面
 
-- [tarball](/basic/packages/tarball.md)
-- [knowledge](/knowledge.md)
-- [README](/research/README.md)
-- [application-scenarios](/research/application-scenarios.md)
-- [coverage-matrix](/research/coverage-matrix.md)
-- [gap-fill](/research/gap-fill.md)
+- [tarball](/zh/basic/packages/tarball.md)
+- [knowledge](/zh/knowledge.md)
+- [README](/zh/research/README.md)
+- [application-scenarios](/zh/research/application-scenarios.md)
+- [coverage-matrix](/zh/research/coverage-matrix.md)
+- [gap-fill](/zh/research/gap-fill.md)
 - [README](README.md)
