@@ -89,3 +89,16 @@ The English edition is being ported chapter by chapter from the Chinese edition;
 - [Managing Services with systemd](./system-management/services-systemd.md)
 - [Log Administration](./system-management/logging.md)
 - [The Boot Process and Boot Repair](./system-management/boot-process.md)
+
+## Scripting
+
+- [Scripting](./script/README.md)
+- [Bash Basics](./script/bash-basics.md)
+- [Variables and Data Types](./script/variables.md)
+- [Conditionals](./script/conditionals.md)
+- [Loops](./script/loops.md)
+- [Functions](./script/functions.md)
+- [Text Processing](./script/text-processing.md)
+- [Regular Expressions](./script/regex.md)
+- [Script Debugging](./script/debugging.md)
+- [Practical Examples](./script/examples.md)
