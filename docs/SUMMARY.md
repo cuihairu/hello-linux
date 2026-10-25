@@ -77,3 +77,15 @@ The English edition is being ported chapter by chapter from the Chinese edition;
 - [Storage Devices](./hardware/storage.md)
 - [The Desktop Graphics Stack](./hardware/desktop-stack.md)
 - [Network Devices](./hardware/network.md)
+
+## System Administration
+
+- [System Administration](./system-management/README.md)
+- [Performance Tuning](./system-management/performance.md)
+- [Backup and Recovery](./system-management/backup-and-recovery.md)
+- [LVM Logical Volume Management](./system-management/lvm.md)
+- [Operations Automation](./system-management/automation.md)
+- [Scheduled Tasks](./system-management/scheduled-tasks.md)
+- [Managing Services with systemd](./system-management/services-systemd.md)
+- [Log Administration](./system-management/logging.md)
+- [The Boot Process and Boot Repair](./system-management/boot-process.md)
