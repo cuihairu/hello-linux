@@ -67,3 +67,13 @@ The English edition is being ported chapter by chapter from the Chinese edition;
   - [Network Tools](./commands/network/network-tools.md)
 - [Package Management](./commands/package.md)
   - [Package Management Commands](./commands/package/package.md)
+
+## Hardware
+
+- [Hardware](./hardware/README.md)
+- [Computer Architecture](./hardware/architecture.md)
+- [CPU](./hardware/cpu.md)
+- [Memory](./hardware/memory.md)
+- [Storage Devices](./hardware/storage.md)
+- [The Desktop Graphics Stack](./hardware/desktop-stack.md)
+- [Network Devices](./hardware/network.md)
