@@ -90,6 +90,30 @@ The English edition is being ported chapter by chapter from the Chinese edition;
 - [Log Administration](./system-management/logging.md)
 - [The Boot Process and Boot Repair](./system-management/boot-process.md)
 
+
+## Servers
+
+- [The Servers Section](./server/README.md)
+- [Server Network Parameter Configuration](./server/network-parameters.md)
+- [Routers and NAT](./server/routing-nat.md)
+- [SSH Remote Login](./server/ssh.md)
+- [Nginx](./server/web/nginx.md)
+- [Apache](./server/web/apache.md)
+- [MySQL](./server/database/mysql.md)
+- [Redis](./server/redis.md)
+- [FTP Server](./server/ftp.md)
+- [Docker](./server/container/docker.md)
+- [KVM Virtualization](./server/virtualization/kvm.md)
+- [Cloud Computing and cloud-init](./server/cloud-computing.md)
+- [CI/CD and Continuous Delivery](./server/ci-cd.md)
+- [LDAP Unified Account Management](./server/ldap.md)
+- [Prometheus + Grafana](./server/monitoring/prometheus.md)
+- [DNS Server (BIND)](./server/dns/bind.md)
+- [Mail Server (Postfix)](./server/mail/postfix.md)
+- [DHCP Server (dhcpd / Kea)](./server/dhcp.md)
+- [File Sharing Server (Samba)](./server/samba.md)
+- [NFS Server](./server/nfs.md)
+- [NTP Time Service (chrony)](./server/ntp.md)
 ## Scripting
 
 - [Scripting](./script/README.md)
@@ -102,3 +126,63 @@ The English edition is being ported chapter by chapter from the Chinese edition;
 - [Regular Expressions](./script/regex.md)
 - [Script Debugging](./script/debugging.md)
 - [Practical Examples](./script/examples.md)
+
+## Security
+
+- [Security](./security/README.md)
+- [Firewall](./security/firewall.md)
+- [Intrusion Detection](./security/intrusion-detection.md)
+- [Encryption](./security/encryption.md)
+- [Hardening](./security/hardening.md)
+- [Advanced Account Privileges: PAM and sudo](./security/pam-sudo.md)
+- [SELinux in Practice](./security/selinux.md)
+- [AppArmor in Practice](./security/apparmor.md)
+
+## Networking
+
+- [The Network Chapter](./network/README.md)
+- [Network Basics](./network/basics.md)
+- [Firewall](./network/firewall.md)
+- [VPN](./network/vpn.md)
+- [Load Balancing](./network/load-balancing.md)
+- [Network Monitoring](./network/network-monitoring.md)
+- [Network Configuration Basics](./network/network-configuration.md)
+- [Network Troubleshooting](./network/troubleshooting.md)
+- [TCP/IP Essentials: Connections and Packets](./network/tcpip-essentials.md)
+- [Hands-On Practice with Everyday Network Commands](./network/commands-practice.md)
+
+## Kernel Source
+
+- [Kernel Source](./source/README.md)
+- [Getting the Source and Reading the Directory Layout](./source/source-tree.md)
+- [Kernel Build and Module Development](./source/build-and-modules.md)
+- [Cross-Compilation and Embedded](./source/cross-compile.md)
+- [Kernel Tracing Toolbox](./source/tracing-tools.md)
+- [System Calls: The Full Journey of One write()](./source/syscall-path.md)
+- [Process Management and Scheduling (Source Part)](./source/process-scheduling.md)
+- [Memory Management](./source/memory-management.md)
+- [VFS and ext4: A Source Tour](./source/vfs-ext4.md)
+- [Network Stack](./source/network-stack.md)
+- [Interrupts and Timers](./source/interrupt-timers.md)
+- [Device Driver Framework](./source/driver-framework.md)
+- [Inter-Process Communication (IPC)](./source/ipc.md)
+- [Selected Readings in User-Space Source](./source/userland.md)
+
+## Research
+
+- [Research Overview](./research/README.md)
+- [Authoritative Books Survey](./research/authoritative-books.md)
+- [Official Documentation Survey](./research/official-docs.md)
+- [Application Scenarios Survey](./research/application-scenarios.md)
+- [Coverage Matrix and Gap Table](./research/coverage-matrix.md)
+- [Gap Fill and Revision Log](./research/gap-fill.md)
+
+## Knowledge
+
+- [Knowledge Base](./knowledge.md)
+- [Glossary](./glossary.md)
+
+## Structure Audit
+
+- [hello-linux Documentation Structure Audit (2026-10-19)](./review/structure-audit-2026-10-19.md)
+- [Content Review (2026-10-19)](./review/content-review-2026-10-19.md)
