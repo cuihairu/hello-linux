@@ -1,20 +1,10 @@
 [English](README.md) | [中文](README.zh.md)
 
-<p align="center"><img src="docs/public/logo.svg" width="64" height="64" alt="logo" /> <a href="https://cuihairu.github.io/hello-linux//"><img src="https://img.shields.io/badge/docs-blue" alt="docs"></a>
-</p>
+<p align="center"><img src="docs/public/logo.svg" width="64" height="64" alt="logo" /></p>
 
 # Hello Linux
 
-<p align="center">
-  <img src="docs/public/badges/topic.svg" alt="topic" />
-  <img src="docs/public/badges/docs.svg" alt="docs" />
-  <img src="docs/public/badges/license.svg" alt="license" />
-  <img src="docs/public/badges/langs.svg" alt="langs" />
-</p>
-
-<div align="center">
-
-</div>
+<p align="center"><a href="https://cuihairu.github.io/hello-linux/"><img src="https://img.shields.io/badge/docs-blue" alt="docs"></a> <img src="docs/public/badges/topic.svg" alt="topic" /> <img src="docs/public/badges/docs.svg" alt="docs" /> <img src="docs/public/badges/license.svg" alt="license" /> <img src="docs/public/badges/langs.svg" alt="langs" /></p>
 
 Personal Linux notes, working observations, and experience from a game developer's point of view. The notes draw on VBird's Linux notes and the Arch Wiki, and compare Debian/Ubuntu, Arch, and RHEL/CentOS/Rocky where useful.
 
