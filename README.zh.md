@@ -1,10 +1,21 @@
+<div align="center">
+
 [English](README.md) | [中文](README.zh.md)
 
 <p align="center"><img src="docs/public/logo.svg" width="64" height="64" alt="logo" /></p>
 
 # Hello Linux
 
-<p align="center"><a href="https://cuihairu.github.io/hello-linux/zh/"><img src="https://img.shields.io/badge/%E6%96%87%E6%A1%A3-blue" alt="docs"></a> <img src="docs/public/badges/topic.svg" alt="topic" /> <img src="docs/public/badges/docs.svg" alt="docs" /> <img src="docs/public/badges/license.svg" alt="license" /> <img src="docs/public/badges/langs.svg" alt="langs" /></p>
+<p align="center">
+  <img src="docs/public/badges/topic.svg" alt="topic" />
+  <img src="docs/public/badges/docs.svg" alt="docs" />
+  <img src="docs/public/badges/license.svg" alt="license" />
+  <img src="docs/public/badges/langs.svg" alt="langs" />
+</p>
+
+</div>
+
+---
 
 个人 Linux 笔记、心得与实践经验，以游戏开发者的视角记录。内容参考鸟哥的私房菜和 Arch Wiki，并在合适处对照 Debian/Ubuntu、Arch、RHEL/CentOS/Rocky 三系。
 
@@ -36,30 +47,30 @@
 ## 本地运行
 
 ```bash
-npm install
-npm run docs:dev
+pnpm install
+pnpm run docs:dev
 ```
 
 构建与预览：
 
 ```bash
-npm run docs:build
-npm run docs:preview
+pnpm run docs:build
+pnpm run docs:preview
 ```
 
 链接检查与测试（CI 同款门禁）：
 
 ```bash
-npm run docs:check   # 需先 docs:build 才含产物级 HTML 校验
-npm run docs:test    # 单测
-npm run docs:cov     # 覆盖率：check_links 与 tree_art 行+分支 100% 门禁（fail_under=100）
+pnpm run docs:check   # 需先 docs:build 才含产物级 HTML 校验
+pnpm run docs:test    # 单测
+pnpm run docs:cov     # 覆盖率：check_links 与 tree_art 行+分支 100% 门禁（fail_under=100）
 ```
 
 ## 仓库脚本
 
 | 脚本 | 用途 |
 |------|------|
-| `scripts/check_links.py` | 链接检查器：源码级（md 链接/锚点/图片）+ 索引级（SUMMARY 必须覆盖全部内容页、每个条目均出现在 nav/sidebar）+ 产物级（HTML 链接/锚点/资源）+ sitemap 对账（每条 loc 可达、每个页面在册）。`npm run docs:check` 即调用它，CI 额外加 `--require-html` 强制产物级校验 |
+| `scripts/check_links.py` | 链接检查器：源码级（md 链接/锚点/图片）+ 索引级（SUMMARY 必须覆盖全部内容页、每个条目均出现在 nav/sidebar）+ 产物级（HTML 链接/锚点/资源）+ sitemap 对账（每条 loc 可达、每个页面在册）。`pnpm run docs:check` 即调用它，CI 额外加 `--require-html` 强制产物级校验 |
 | `scripts/tree_art.py` | 多色字符画树渲染器：种子化高程 + 湿度双场生成岛屿世界，河流刻蚀入海，quadtree 字符组合叠加地形/水系/生物群落三通道配色。零第三方依赖，`--seed` 决定世界、同种子输出可复现 |
 
 `tree_art.py` 用法（均已实跑验证）：

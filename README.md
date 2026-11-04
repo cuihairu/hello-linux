@@ -1,10 +1,21 @@
+<div align="center">
+
 [English](README.md) | [中文](README.zh.md)
 
 <p align="center"><img src="docs/public/logo.svg" width="64" height="64" alt="logo" /></p>
 
 # Hello Linux
 
-<p align="center"><a href="https://cuihairu.github.io/hello-linux/"><img src="https://img.shields.io/badge/docs-blue" alt="docs"></a> <img src="docs/public/badges/topic.svg" alt="topic" /> <img src="docs/public/badges/docs.svg" alt="docs" /> <img src="docs/public/badges/license.svg" alt="license" /> <img src="docs/public/badges/langs.svg" alt="langs" /></p>
+<p align="center">
+  <img src="docs/public/badges/topic.svg" alt="topic" />
+  <img src="docs/public/badges/docs.svg" alt="docs" />
+  <img src="docs/public/badges/license.svg" alt="license" />
+  <img src="docs/public/badges/langs.svg" alt="langs" />
+</p>
+
+</div>
+
+---
 
 Personal Linux notes, working observations, and experience from a game developer's point of view. The notes draw on VBird's Linux notes and the Arch Wiki, and compare Debian/Ubuntu, Arch, and RHEL/CentOS/Rocky where useful.
 
@@ -36,30 +47,30 @@ The full table of contents is at [SUMMARY](https://cuihairu.github.io/hello-linu
 ## Run locally
 
 ```bash
-npm install
-npm run docs:dev
+pnpm install
+pnpm run docs:dev
 ```
 
 Build and preview:
 
 ```bash
-npm run docs:build
-npm run docs:preview
+pnpm run docs:build
+pnpm run docs:preview
 ```
 
 Link checks and tests (the same gates CI runs):
 
 ```bash
-npm run docs:check   # run docs:build first to include the artifact-level HTML checks
-npm run docs:test    # unit tests
-npm run docs:cov     # coverage: 100% line+branch gate over check_links and tree_art (fail_under=100)
+pnpm run docs:check   # run docs:build first to include the artifact-level HTML checks
+pnpm run docs:test    # unit tests
+pnpm run docs:cov     # coverage: 100% line+branch gate over check_links and tree_art (fail_under=100)
 ```
 
 ## Scripts in this repo
 
 | Script | Purpose |
 |------|------|
-| `scripts/check_links.py` | Link checker: source level (md links/anchors/images) + index level (SUMMARY must cover every content page, and every entry must appear in the nav/sidebar) + artifact level (HTML links/anchors/resources) + sitemap reconciliation (every loc resolvable, every page listed). `npm run docs:check` invokes it; CI additionally passes `--require-html` to enforce the artifact-level checks |
+| `scripts/check_links.py` | Link checker: source level (md links/anchors/images) + index level (SUMMARY must cover every content page, and every entry must appear in the nav/sidebar) + artifact level (HTML links/anchors/resources) + sitemap reconciliation (every loc resolvable, every page listed). `pnpm run docs:check` invokes it; CI additionally passes `--require-html` to enforce the artifact-level checks |
 | `scripts/tree_art.py` | Multi-color ASCII-art tree renderer: seeded elevation and humidity fields generate an island world, rivers carve their way to the sea, and quadtree character composition layers three color channels (terrain, water, biomes). No third-party dependencies; `--seed` determines the world, and the same seed reproduces the same output |
 
 Usage of `tree_art.py` (all commands below have been run and verified):
