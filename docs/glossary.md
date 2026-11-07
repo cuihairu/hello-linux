@@ -250,6 +250,24 @@ Samba's password ledger, independent of system accounts (tdbsam backend by defau
 **Source**: [Samba official documentation](https://www.samba.org/samba/docs/)
 **Related pages**: [Samba File Sharing](/server/samba.md)
 
+## Repository Source Layers (2026-11-08)
+
+These terms describe this repository's implementation layers rather than Linux itself. The linked evidence is the source-of-truth entry point for each concept.
+
+| 术语 | 英文 | 定义 | file:line |
+|---|---|---|---|
+| 文档产品 | Documentation Product | 以中英双语 Markdown 语料承载 Linux 教学、机制解释和本仓库研究内容。 | `docs/source/README.md:23` |
+| 内容单元 | Content Unit | 一个具有标题、内部链接和稳定路由的 Markdown 页面，是站点与完整性检查的最小内容单元。 | `scripts/check_links.py:113` |
+| 站点呈现与语言投影 | Site Presentation and Locale Projection | 把共享根路由和双语标签递归转换成英文/中文导航树。 | `docs/.vitepress/config.mts:16` |
+| 路由清单 | Route Manifest | `NAV`、`SIDEBAR` 和两棵 `SUMMARY.md` 形成的可浏览路由集合，构建与检查都必须与之对齐。 | `scripts/check_links.py:322` |
+| 构建产物 | Build Artifact | VitePress 单次生成的静态 HTML、资源和 sitemap，位于 `docs/.vitepress/dist`。 | `scripts/check_links.py:26` |
+| 发布流水线 | Release Pipeline | 构建、上传并部署同一次 Pages 产物的 workflow 生命周期。 | `.github/workflows/deploy.yml:63` |
+| 站点完整性服务 | Site Integrity Service | 用源码、索引、sitemap 和 HTML 对账证明站点内部引用与发布面一致。 | `scripts/check_links.py:511` |
+| Sitemap 对账 | Sitemap Reconciliation | 要求每条 `<loc>` 可达产物，且每个产物页面都出现在 sitemap 中。 | `scripts/check_links.py:383` |
+| 确定性插画服务 | Deterministic Illustration Service | 由种子生成地形、河流、生物群落数并组合为可复现字符画。 | `scripts/tree_art.py:103` |
+| 工具验证装置 | Tool Verification Harness | 用 pytest、临时假站点和 monkeypatch 隔离验证两个 Python 工具。 | `tests/test_check_links.py:31` |
+| 覆盖门槛 | Coverage Gate | 对 `check_links` 与 `tree_art` 强制 100% 行与分支覆盖的仓库级约束。 | `.coveragerc:10` |
+
 ---
 
 **Maintenance rule**: every new entry must carry a clickable authoritative source (official documentation / specification / official manual / authoritative encyclopedia); if none can be found, write "no authoritative source found (pending verification)" -- never invent a link from memory.
@@ -258,3 +276,4 @@ Samba's password ledger, independent of system accounts (tdbsam backend by defau
 ## Related Pages
 
 - [knowledge](knowledge.md)
+- [Source Layer Analysis (2026-11-08)](/review/source-layer-analysis.md)

@@ -186,3 +186,4 @@ The English edition is being ported chapter by chapter from the Chinese edition;
 
 - [hello-linux Documentation Structure Audit (2026-10-19)](./review/structure-audit-2026-10-19.md)
 - [Content Review (2026-10-19)](./review/content-review-2026-10-19.md)
+- [Source Layer Analysis (2026-11-08)](./review/source-layer-analysis.md)

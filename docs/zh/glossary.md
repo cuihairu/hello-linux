@@ -251,6 +251,24 @@ Samba 独立于系统账号的密码账本（默认 tdbsam 后端）：共享访
 **出处**：[Samba 官方文档](https://www.samba.org/samba/docs/)
 **相关页**：[Samba 文件共享](/zh/server/samba.md)
 
+## 仓库源码分层（2026-11-08）
+
+这些术语描述本仓库的实现分层，而不是 Linux 本体。链接到的 file:line 是每个概念的源码事实入口。
+
+| 术语 | 英文 | 定义 | file:line |
+|---|---|---|---|
+| 文档产品 | Documentation Product | 以中英双语 Markdown 语料承载 Linux 教学、机制解释和本仓库研究内容。 | `docs/source/README.md:23` |
+| 内容单元 | Content Unit | 一个具有标题、内部链接和稳定路由的 Markdown 页面，是站点与完整性检查的最小内容单元。 | `scripts/check_links.py:113` |
+| 站点呈现与语言投影 | Site Presentation and Locale Projection | 把共享根路由和双语标签递归转换成英文/中文导航树。 | `docs/.vitepress/config.mts:16` |
+| 路由清单 | Route Manifest | `NAV`、`SIDEBAR` 和两棵 `SUMMARY.md` 形成的可浏览路由集合，构建与检查都必须与之对齐。 | `scripts/check_links.py:322` |
+| 构建产物 | Build Artifact | VitePress 单次生成的静态 HTML、资源和 sitemap，位于 `docs/.vitepress/dist`。 | `scripts/check_links.py:26` |
+| 发布流水线 | Release Pipeline | 构建、上传并部署同一次 Pages 产物的 workflow 生命周期。 | `.github/workflows/deploy.yml:63` |
+| 站点完整性服务 | Site Integrity Service | 用源码、索引、sitemap 和 HTML 对账证明站点内部引用与发布面一致。 | `scripts/check_links.py:511` |
+| Sitemap 对账 | Sitemap Reconciliation | 要求每条 `<loc>` 可达产物，且每个产物页面都出现在 sitemap 中。 | `scripts/check_links.py:383` |
+| 确定性插画服务 | Deterministic Illustration Service | 由种子生成地形、河流、生物群落数并组合为可复现字符画。 | `scripts/tree_art.py:103` |
+| 工具验证装置 | Tool Verification Harness | 用 pytest、临时假站点和 monkeypatch 隔离验证两个 Python 工具。 | `tests/test_check_links.py:31` |
+| 覆盖门槛 | Coverage Gate | 对 `check_links` 与 `tree_art` 强制 100% 行与分支覆盖的仓库级约束。 | `.coveragerc:10` |
+
 ---
 
 **维护口径**：新增条目必须给出可点的权威出处（官方文档/规范/官方手册/权威百科）；查不到就写「未找到权威出处（待核）」，不得凭印象编造链接。
@@ -259,3 +277,4 @@ Samba 独立于系统账号的密码账本（默认 tdbsam 后端）：共享访
 ## 相关页面
 
 - [knowledge](knowledge.md)
+- [源码分层分析（2026-11-08）](/zh/review/source-layer-analysis.md)

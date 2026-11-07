@@ -329,6 +329,10 @@ const SIDEBAR: NavNode[] = [
     ]
   },
   {
+    text: ['Architecture', '架构'],
+    items: [{ text: ['Source Layer Analysis (2026-11-08)', '源码分层分析（2026-11-08）'], link: '/review/source-layer-analysis' }]
+  },
+  {
     text: ['Glossary', '术语表'],
     items: [{ text: ['Glossary', '术语表'], link: '/glossary' }]
   }
