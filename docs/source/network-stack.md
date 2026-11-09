@@ -191,7 +191,7 @@ The last leading character only needs recognition:
 `struct net` encapsulates an entire set of network devices, routing tables, iptables rules, and socket hash tables;
 `clone(CLONE_NEWNET)` creates a new netns and `ip netns exec` enters it.
 Container networking (veth pairs, bridges) is all built on this foundation;
-this page does not elaborate -- see the boundary discussion in Section 10 of [Network Configuration](../network/network-configuration.md).
+this page does not elaborate -- see the boundary discussion in [Bonding, VLANs and Performance Tuning](../network/network-configuration/advanced-topology.md).
 There is only one practical effect on reading source:
 when you see `dev_net(skb->dev)` or `sock_net(sk)` in functions like `tcp_v4_rcv`,
 remember this is fetching "which network namespace this packet / this socket belongs to" --

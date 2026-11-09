@@ -282,6 +282,19 @@ const SIDEBAR: NavNode[] = [
       { text: ['Load Balancing', '负载均衡'], link: '/network/load-balancing' },
       { text: ['Network Monitoring', '网络监控'], link: '/network/network-monitoring' },
       { text: ['Network Configuration Basics', '网络配置基础'], link: '/network/network-configuration' },
+      {
+        text: ['Network Configuration Basics', '网络配置基础'],
+        link: '/network/network-configuration',
+        collapsed: false,
+        items: [
+          { text: ['Who Is Managing Your NIC', '谁在管理你的网卡'], link: '/network/network-configuration/manager-detection' },
+          { text: ['Persistent Config: Three Families', '持久配置：三系对照'], link: '/network/network-configuration/persistent-config' },
+          { text: ['Routing Configuration', '路由配置'], link: '/network/network-configuration/routing' },
+          { text: ['DNS and the Resolution Path', 'DNS 与解析路径'], link: '/network/network-configuration/dns' },
+          { text: ['Bonding, VLANs and Tuning', '绑定、VLAN 与调优'], link: '/network/network-configuration/advanced-topology' },
+          { text: ['Worked Cases and Pitfalls', '实战案例与常见坑'], link: '/network/network-configuration/troubleshooting-playbook' }
+        ]
+      },
       { text: ['Network Troubleshooting', '网络故障排除'], link: '/network/troubleshooting' },
       { text: ['TCP/IP Essentials', 'TCP/IP 要点'], link: '/network/tcpip-essentials' },
       { text: ['Network Commands in Practice', '网络命令实战'], link: '/network/commands-practice' }

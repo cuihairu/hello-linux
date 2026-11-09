@@ -102,7 +102,7 @@ $ ip route get 198.51.100.8
 $ sudo ip route replace default via 203.0.113.254 dev ens36
 ```
 
-注意 `ip route add` 同样只改运行时，重启即失；持久化要写进所属发行版的网络配置体系——Netplan、NetworkManager 或 systemd-networkd 的写法在[网络配置基础](../network/network-configuration.md)第 4 节有三系对照，本页不重复。
+注意 `ip route add` 同样只改运行时，重启即失；持久化要写进所属发行版的网络配置体系——Netplan、NetworkManager 或 systemd-networkd 的写法在[路由配置](../network/network-configuration/routing.md)有三系对照，本页不重复。
 
 ### 3.3 策略路由：按"谁发的"选表
 

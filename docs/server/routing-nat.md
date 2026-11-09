@@ -102,7 +102,7 @@ $ ip route get 198.51.100.8
 $ sudo ip route replace default via 203.0.113.254 dev ens36
 ```
 
-Note that `ip route add` likewise only changes the runtime and is lost on reboot; persistence must go into your distro's network configuration system -- Netplan, NetworkManager, and systemd-networkd are compared for the three families in section 4 of [Network Configuration Fundamentals](../network/network-configuration.md), and are not repeated here.
+Note that `ip route add` likewise only changes the runtime and is lost on reboot; persistence must go into your distro's network configuration system -- Netplan, NetworkManager, and systemd-networkd are compared for the three families in [Routing Configuration](../network/network-configuration/routing.md), and are not repeated here.
 
 ### 3.3 Policy Routing: Choose the Table by "Who Sent It"
 

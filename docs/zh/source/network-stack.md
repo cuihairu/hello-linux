@@ -97,7 +97,7 @@ struct net_device（include/linux/netdevice.h）代表一块网卡——物理�
 
 ### 2.4 net_namespace：容器网络的地基
 
-最后一号主角只需认识：struct net 资源隔离了整套网络设备、路由表、iptables 规则与 socket 哈希表，clone(CLONE_NEWNET) 创建新 netns，`ip netns exec` 进入其中。容器网络（veth 对、bridge）全部搭在这块地基上，本页不展开，见[网络配置基础](../network/network-configuration.md)第 10 节的边界讨论。对读源码的实际影响只有一条：在 tcp_v4_rcv 这类函数里看到 dev_net(skb->dev) 或 sock_net(sk) 时，记住这是在取"这个包/这个 socket 属于哪个网络命名空间"——同一台宿主机上两个容器互 ping，收发两条链的代码完全相同，分叉只发生在这些取 net 的地方。
+最后一号主角只需认识：struct net 资源隔离了整套网络设备、路由表、iptables 规则与 socket 哈希表，clone(CLONE_NEWNET) 创建新 netns，`ip netns exec` 进入其中。容器网络（veth 对、bridge）全部搭在这块地基上，本页不展开，见[绑定、VLAN 与性能调优](../network/network-configuration/advanced-topology.md)的边界讨论。对读源码的实际影响只有一条：在 tcp_v4_rcv 这类函数里看到 dev_net(skb->dev) 或 sock_net(sk) 时，记住这是在取"这个包/这个 socket 属于哪个网络命名空间"——同一台宿主机上两个容器互 ping，收发两条链的代码完全相同，分叉只发生在这些取 net 的地方。
 
 ## 3. 关键函数调用路径（五段式 ②）
 

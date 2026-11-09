@@ -93,7 +93,7 @@ Current DNS Server: 192.168.56.2
          DNS Servers: 192.168.56.2 223.5.5.5
 ```
 
-`resolvectl status` 的判读要点：`resolv.conf mode` 告诉你 stub 与否；`DNS Servers` 才是真实上游（stub 地址 127.0.0.53 只是本地代理）；`+DNSOverTLS` 标记上游是否加密（内网 DNS 一般没有，属正常）。要改真实上游，在 resolved 形态下用 `resolvectl dns` 临时改、或改 `resolved.conf`/对应连接配置持久化——细节见[网络配置基础](../network/network-configuration.md)第 5 节。
+`resolvectl status` 的判读要点：`resolv.conf mode` 告诉你 stub 与否；`DNS Servers` 才是真实上游（stub 地址 127.0.0.53 只是本地代理）；`+DNSOverTLS` 标记上游是否加密（内网 DNS 一般没有，属正常）。要改真实上游，在 resolved 形态下用 `resolvectl dns` 临时改、或改 `resolved.conf`/对应连接配置持久化——细节见[DNS 配置与解析路径](../network/network-configuration/dns.md)。
 
 ### 3.2 nsswitch 的顺序语义
 

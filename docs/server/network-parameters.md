@@ -93,7 +93,7 @@ Current DNS Server: 192.168.56.2
          DNS Servers: 192.168.56.2 223.5.5.5
 ```
 
-How to read `resolvectl status`: `resolv.conf mode` tells you whether it is a stub; `DNS Servers` is the real upstream (the stub address 127.0.0.53 is only a local proxy); `+DNSOverTLS` marks whether the upstream is encrypted (internal DNS usually is not, which is normal). To change the real upstream in resolved form, use `resolvectl dns` for a temporary change, or edit `resolved.conf`/the connection profile to persist it -- details are in [Network Configuration Fundamentals](../network/network-configuration.md), section 5.
+How to read `resolvectl status`: `resolv.conf mode` tells you whether it is a stub; `DNS Servers` is the real upstream (the stub address 127.0.0.53 is only a local proxy); `+DNSOverTLS` marks whether the upstream is encrypted (internal DNS usually is not, which is normal). To change the real upstream in resolved form, use `resolvectl dns` for a temporary change, or edit `resolved.conf`/the connection profile to persist it -- details are in [DNS and the Resolution Path](../network/network-configuration/dns.md).
 
 ### 3.2 The Order Semantics of nsswitch
 
