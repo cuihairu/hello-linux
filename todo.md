@@ -13,7 +13,7 @@
 
 ### b) 超大文件候选
 
-- [ ] LAY-001 [P1] 拆分 `tests/test_check_links.py`（1480 行）——按 fixture、Markdown/协议解析、索引、sitemap、HTML 与 CLI 场景分组。（`tests/test_check_links.py:31`）
+- [x] LAY-001 [P1] 拆分 `tests/test_check_links.py`（1480 行）——按 fixture、Markdown/协议解析、索引、sitemap、HTML 与 CLI 场景分组。（拆为 conftest 装置 + helpers_cl + parsing/source_config/html/index/sitemap/cli 七文件，151 用例与 100% 覆盖率不变）
 - [ ] LAY-002 [P1] 拆分 `docs/network/network-configuration.md`（1060 行）——按管理器识别、持久配置、DNS、路由、高级拓扑/性能和排障经验拆成子页。（`docs/network/network-configuration.md:29`）
 - [ ] LAY-003 [P1] 拆分 `docs/zh/network/network-configuration.md`（1063 行）——与英文版同步拆成同构子页，保持跨语言链接稳定。（`docs/zh/network/network-configuration.md:29`）
 
